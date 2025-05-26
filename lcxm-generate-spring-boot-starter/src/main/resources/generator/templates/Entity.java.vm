@@ -1,0 +1,81 @@
+package $!{package}.$!{moduleName}.model;
+
+import cn.xuqiudong.common.base.model.BaseGenericEntity;
+#if($!{table.hasDate})
+import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
+#end
+#if($!{hasBigDecimal})
+import java.math.BigDecimal;
+#end
+#if($!{table.hasPic})
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import pers.vic.base.annoation.AttachmentFlag;
+import pers.vic.base.annoation.AttachmentFlag.AttachmenType;
+import pers.vic.base.handle.convert.AttachmentMutliConver;
+import pers.vic.base.handle.convert.AttachmentSingleConver;
+#end
+
+/**
+ * $!{comments} 实体类
+ *
+ * @author $!{author}
+ */
+public class $!{className} extends  BaseGenericEntity<$!pk.attrType> {
+
+    private static final long serialVersionUID = 1L;
+
+    #foreach ($column in $columns)
+        #if(!$column.entityIgnore)
+            /**
+             * $!column.comments
+             */
+            #if($column.attrType == 'Date')
+            @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            #end
+            #if($column.extend.type == 2)
+            @JsonSerialize(using = AttachmentSingleConver.class)
+            @AttachmentFlag(AttachmenType.SIGN)
+            #end
+            #if($column.extend.type == 3)
+            @JsonSerialize(using = AttachmentMutliConver.class)
+            @AttachmentFlag(AttachmenType.SIGNS)
+            #end
+            #if($column.extend.type == 4)
+            @AttachmentFlag(AttachmenType.CONTENT)
+            #end
+        private $!column.attrType $!column.attrname;
+        #end
+    #end
+
+    /***************** set|get start **************************************/
+    #foreach ($column in $columns)
+        #if(!$column.entityIgnore)
+
+            /**
+             * set：$!{column.comments}
+             */
+    public $!{className} set$!{column.attrName}($!column.attrType $!column.attrname) {
+            this.$!column.attrname = $!column.attrname;
+            return this;
+        }
+
+            /**
+             * get：$!{column.comments}
+             */
+            #if($column.extend.type == 2)
+                @JsonProperty("$!{column.attrName}Url")
+            #end
+            #if($column.extend.type == 3)
+                @JsonProperty("$!{column.attrName}Urls")
+            #end
+            public $!column.attrType get$!{column.attrName}() {
+            return $!column.attrname;
+        }
+        #end
+    #end
+    /***************** set|get end **************************************/
+}

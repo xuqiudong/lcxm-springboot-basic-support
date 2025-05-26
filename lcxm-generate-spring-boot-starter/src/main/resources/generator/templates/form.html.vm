@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>$!{comments}-新增</title>
+		<script type="text/javascript" src="../../commonFragment/header.js"></script>
+		<script type="text/javascript" src="../../commonFragment/nojs.header.js" ></script>
+	</head>
+	<body>
+		<div class="container-fluid p-t-15">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<form class="form-horizontal validate" role="form vue-form" method="post" action="/$!{moduleName}/$!{classname}/save"
+							 data-form-url="/$!{moduleName}/$!{classname}/detail">
+								<div class="form-group hide">
+									<label for="parentId" class="col-sm-2 control-label">隐藏的*</label>
+									<div class="col-sm-6 ">
+										<input type="text" id="id" name="id" :value="id" />
+									</div>
+									<div class="col-sm-4  help-inline form-control-static"></div>
+								</div>
+								#foreach($column in $columns)
+								#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+								<div class="form-group">
+									<label for="$!column.attrname" class="col-sm-2 control-label">$!{column.comments}*</label>
+									<div class="col-sm-8 ">
+										<input type="text" class="form-control" id="$!column.attrname" name="$!column.attrname" :value="$!column.attrname" 
+										 data-rule-required="true" 
+										 placeholder="请输入$!{column.comments}" 
+										 autocomplete="off"/>
+									</div>
+									<div class="col-sm-2  help-inline form-control-static"></div>
+								</div>
+								#end
+								#end
+
+								<div class="form-group clearfix">
+									<div class="col-sm-offset-3 col-sm-9">
+										<button type="button" class="btn btn-primary action-ajax-form">
+											<i class="glyphicon glyphicon-ok"></i> 提交
+										</button>
+										<button type="button" class="btn btn-info action-close-tab">
+											<i class="glyphicon glyphicon-repeat"></i> 返回
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

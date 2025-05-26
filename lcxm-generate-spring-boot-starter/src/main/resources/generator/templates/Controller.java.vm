@@ -1,0 +1,22 @@
+package $!{package}.$!{moduleName}.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import cn.xuqiudong.common.base.controller.BaseGenericController;
+
+import $!{package}.$!{moduleName}.service.$!{className}Service;  
+import $!{package}.$!{moduleName}.model.$!{className};
+
+#if($!{table.hasPic})
+import pers.vic.base.attachment.service.AttachmentService;
+#end
+/**
+ *功能: :$!{comments} 控制层
+ * @author $!{author}
+ * @since  $!{datetime}
+ */
+@RestController
+@RequestMapping("/$!{moduleName}/$!{classname}")
+public class $!{className}Controller extends BaseGenericController<$!{className}Service, $!{className}, $!pk.attrType>{
+
+}

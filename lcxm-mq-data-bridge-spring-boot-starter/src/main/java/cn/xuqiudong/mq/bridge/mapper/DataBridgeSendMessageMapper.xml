@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xuqiudong.mq.bridge.mapper.DataBridgeSendMessageMapper">
+    <resultMap id="BaseResultMap" type="cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+    </resultMap>
+
+
+    <!-- 列表数据列 -->
+    <sql id="base_list">
+        a.id AS `id` ,
+        a.message_id AS `messageId` ,
+        a.queue_name AS `queueName` ,
+        a.module AS `module` ,
+        a.action AS `action` ,
+        a.message AS `message` ,
+        a.status AS `status` ,
+        a.retry_count AS `retryCount` ,
+        a.create_time AS `createTime` ,
+        a.update_time AS `updateTime` ,
+        a.is_enable AS `enable` ,
+        a.is_delete AS `delete` ,
+        a.create_id AS `createId` ,
+        a.update_id AS `updateId` ,
+        a.note AS `note` ,
+        a.flag AS `flag`
+    </sql>
+
+    <!-- 详情数据列 -->
+    <sql id="detail_list">
+        a.id AS `id` ,
+        a.message_id AS `messageId` ,
+        a.queue_name AS `queueName` ,
+        a.module AS `module` ,
+        a.action AS `action` ,
+        a.message AS `message` ,
+        a.status AS `status` ,
+        a.retry_count AS `retryCount` ,
+        a.create_time AS `createTime` ,
+        a.update_time AS `updateTime` ,
+        a.is_enable AS `enable` ,
+        a.is_delete AS `delete` ,
+        a.create_id AS `createId` ,
+        a.update_id AS `updateId` ,
+        a.note AS `note` ,
+        a.flag AS `flag`
+    </sql>
+
+    <!--查询列表 -->
+    <select id="list" resultType="cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage">
+        SELECT
+        <include refid="base_list"/>
+        FROM t_data_bridge_send_message a
+        WHERE 1=1
+
+        <if test="messageId !=null and messageId !=''">
+            AND a.`message_id` LIKE CONCAT('%', #{messageId}, '%')
+        </if>
+        <if test="queueName !=null and queueName !=''">
+            AND a.`queue_name` LIKE CONCAT('%', #{queueName}, '%')
+        </if>
+        <if test="module !=null and module !=''">
+            AND a.`module` LIKE CONCAT('%', #{module}, '%')
+        </if>
+        <if test="action !=null and action !=''">
+            AND a.`action` LIKE CONCAT('%', #{action}, '%')
+        </if>
+        <if test="status !=null ">
+            AND a.`status` = #{status}
+        </if>
+        <if test="retryCount !=null ">
+            AND a.`retry_count` = #{retryCount}
+        </if>
+
+        <if test="enable !=null ">
+            AND a.`is_enable` = #{enable}
+        </if>
+        <if test="delete !=null ">
+            AND a.`is_delete` = #{delete}
+        </if>
+        <if test="note !=null and note !=''">
+            AND a.`note` LIKE CONCAT('%', #{note}, '%')
+        </if>
+        <if test="flag !=null and flag !=''">
+            AND a.`flag` = #{flag}
+        </if>
+        <!-- 排序 -->
+        <choose>
+            <when test="sortColumn != null and sortColumn != '' and  sortOrder != null and sortOrder!= ''">
+                order by ${sortColumn} ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY a.id DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--根据主键查询对象 -->
+    <select id="findById" resultType="cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage">
+        SELECT
+        <include refid="detail_list"/>
+        FROM t_data_bridge_send_message a
+        WHERE a.id = #{id}
+    </select>
+
+    <!--批量查询对象 -->
+    <select id="findByIds" resultType="cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage">
+        SELECT
+        <include refid="detail_list"/>
+        FROM t_data_bridge_send_message a
+        WHERE a.id in
+        <foreach item="item" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <!--新增数据 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into t_data_bridge_send_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="messageId !=null ">`message_id`,</if>
+            <if test="queueName !=null ">`queue_name`,</if>
+            <if test="module !=null ">`module`,</if>
+            <if test="action !=null ">`action`,</if>
+            <if test="message !=null ">`message`,</if>
+            <if test="status !=null ">`status`,</if>
+            <if test="retryCount !=null ">`retry_count`,</if>
+            <if test="createTime !=null ">`create_time`,</if>
+            <if test="updateTime !=null ">`update_time`,</if>
+            <if test="enable !=null ">`is_enable`,</if>
+            <if test="delete !=null ">`is_delete`,</if>
+            <if test="createId !=null ">`create_id`,</if>
+            <if test="updateId !=null ">`update_id`,</if>
+            <if test="note !=null ">`note`,</if>
+            <if test="flag !=null ">`flag`</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="messageId !=null  ">#{messageId},</if>
+            <if test="queueName !=null  ">#{queueName},</if>
+            <if test="module !=null  ">#{module},</if>
+            <if test="action !=null  ">#{action},</if>
+            <if test="message !=null  ">#{message},</if>
+            <if test="status !=null  ">#{status},</if>
+            <if test="retryCount !=null  ">#{retryCount},</if>
+            <if test="createTime !=null  ">#{createTime},</if>
+            <if test="updateTime !=null  ">#{updateTime},</if>
+            <if test="enable !=null  ">#{enable},</if>
+            <if test="delete !=null  ">#{delete},</if>
+            <if test="createId !=null  ">#{createId},</if>
+            <if test="updateId !=null  ">#{updateId},</if>
+            <if test="note !=null  ">#{note},</if>
+            <if test="flag !=null  ">#{flag}</if>
+        </trim>
+    </insert>
+
+    <!--批量新增数据 -->
+    <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
+        insert into t_data_bridge_send_message
+        (
+
+        `message_id` ,
+        `queue_name` ,
+        `module` ,
+        `action` ,
+        `message` ,
+        `status` ,
+        `retry_count` ,
+        `create_time` ,
+        `update_time` ,
+        `is_enable` ,
+        `is_delete` ,
+        `create_id` ,
+        `update_id` ,
+        `note` ,
+        `flag`
+        ) VALUES
+        <foreach collection="list" separator="," item="item">
+            (
+
+            #{item.messageId} ,
+            #{item.queueName} ,
+            #{item.module} ,
+            #{item.action} ,
+            #{item.message} ,
+            #{item.status} ,
+            #{item.retryCount} ,
+            #{item.createTime} ,
+            #{item.updateTime} ,
+            #{item.enable} ,
+            #{item.delete} ,
+            #{item.createId} ,
+            #{item.updateId} ,
+            #{item.note} ,
+            #{item.flag}
+            )
+        </foreach>
+    </insert>
+
+    <!--更新数据 -->
+    <update id="update" parameterType="cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage">
+        update t_data_bridge_send_message
+        <set>
+            <if test="messageId != null">`message_id` = #{messageId},</if>
+            <if test="queueName != null">`queue_name` = #{queueName},</if>
+            <if test="module != null">`module` = #{module},</if>
+            <if test="action != null">`action` = #{action},</if>
+            <if test="message != null">`message` = #{message},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="retryCount != null">`retry_count` = #{retryCount},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="enable != null">`is_enable` = #{enable},</if>
+            <if test="delete != null">`is_delete` = #{delete},</if>
+            <if test="createId != null">`create_id` = #{createId},</if>
+            <if test="updateId != null">`update_id` = #{updateId},</if>
+            <if test="note != null">`note` = #{note},</if>
+            <if test="flag != null">`flag` = #{flag}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--删除数据 -->
+    <delete id="delete">
+        delete from t_data_bridge_send_message where id in
+        <foreach item="item" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--查询字段是否未重复 -->
+    <select id="countByColumnValue" resultType="long">
+        SELECT COUNT(1) FROM t_data_bridge_send_message WHERE ${column} = #{value}
+        <if test="id !=null">
+            AND id!= #{id}
+        </if>
+    </select>
+
+    <!-- ******************************通用代码end************************** -->
+
+    <select id="fetchMessageToSend" resultType="cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage">
+        SELECT
+        <include refid="detail_list"/>
+        FROM t_data_bridge_send_message a
+        WHERE 1=1
+        AND a.status in ('INITIAL', 'AMENDED')
+        <if test="lastTimeId !=null">
+            AND a.`id` &gt; #{lastTimeId}
+        </if>
+        <if test="flag !=null and flag !=''">
+            AND a.`flag` = #{flag}
+        </if>
+        ORDER BY a.id asc
+        LIMIT ${size}
+    </select>
+</mapper>

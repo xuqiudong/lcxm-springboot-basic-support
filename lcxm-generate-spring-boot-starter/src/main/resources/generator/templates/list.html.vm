@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="Expires" content="0">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-control" content="no-cache">
+		<meta http-equiv="Cache" content="no-cache">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>$!{comments}列表</title>
+		<script type="text/javascript" src="../../commonFragment/header.js"></script>
+		<script type="text/javascript" src="../../commonFragment/nojs.header.js"></script>
+	</head>
+	<body>
+		<div class="container-fluid p-t-15">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<form id="toolbar" class="form-inline">
+								<!-- 操作按钮 -->
+								<div class="form-group btn-group btn-group-sm " >
+									<button type="button" class="btn  btn-success add-multitab" data-id="add-user-form" data-url="module/$!{moduleName}/$!{classname}_form.html"
+									 data-title="新增$!{comments}">
+										<i class="glyphicon glyphicon-plus"></i> 添加
+									</button>
+
+									<button class="btn btn-danger bootable-action-post" type="button" data-table="#table" data-href="/$!{moduleName}/$!{classname}/batchDelete"
+									 data-confirm="确认删除吗">
+										<span class="glyphicon glyphicon-trash"></span> 删除
+									</button>
+								</div>
+								<!-- 查询条件 -->
+								#foreach($column in $columns)
+								#if($column.extend.show)
+								<div class="form-group">
+									<label class="sr-only" for="$!column.attrname">$!{column.comments}</label>
+									<input type="text" class="form-control input-sm" id="$!column.attrname" name="$!column.attrname" placeholder="请输入$!{column.comments}"
+									 autocomplete="off">
+								</div>
+								#end
+								#end
+
+								<div class="form-group">
+									<label class="sr-only" for="engine">是否启用</label>
+									<select class="form-control input-sm" id="enable" name="enable" data-value="">
+										<option value="">--请选择是否启用--</option>
+										<option value="0">否</option>
+										<option value="1">是</option>
+									</select>
+								</div>
+
+								<div class="form-group ">
+									<button type="button" class="btn btn-primary btn-sm query">
+										<i class="glyphicon glyphicon-search"></i> 查询
+									</button>
+									<button type="button" class="btn btn-info btn-sm reset">
+										<i class="glyphicon glyphicon-refresh"></i> 重置
+									</button>
+								</div>
+
+							</form>
+							<table id="table" class="table table-bordered table-hover table-striped bootstrapTable" data-list-url="/$!{moduleName}/$!{classname}/list"
+							 data-form-url="module/$!{moduleName}/$!{classname}_form.html" data-del-url="/$!{moduleName}/$!{classname}/delete" data-toolbar="#toolbar">
+								<thead>
+									<tr>
+										<th data-checkbox="true"></th>
+										#foreach($column in $columns)
+										#if($column.extend.show)
+										<th data-field="$!column.attrname" data-sortable="true">$!{column.comments}</th>
+										#end
+										#end
+										<th data-field="enable" data-formatter="showEnbale" data-sortable="true">状态</th>
+										<th data-field="createTime" data-sortable="true">创建时间</th>
+										<th data-field="operate" data-formatter="defaultOperate" data-events="defaultOperateEvent">操作</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

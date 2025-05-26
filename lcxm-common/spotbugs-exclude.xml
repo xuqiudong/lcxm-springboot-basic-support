@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 排除一些spotbugs不检测的规则-->
+<FindBugsFilter>
+    <Match>
+        <Class name="~.*"/>
+        <Bug pattern="MS_SHOULD_BE_FINAL"/>
+    </Match>
+    <Match>
+        <Class name="cn.xuqiudong.common.util.poi.export.ExportExcel"/>
+    </Match>
+</FindBugsFilter>

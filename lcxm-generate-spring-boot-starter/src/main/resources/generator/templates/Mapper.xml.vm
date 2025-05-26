@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    ## <!--@formatter:off-->
+<mapper namespace="$!{package}.$!{moduleName}.mapper.$!{className}Mapper">
+
+    <resultMap id="BaseResultMap" type="$!{package}.$!{moduleName}.model.$!{className}">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+    </resultMap>
+
+
+    <sql id="tableName">$!{tableName}</sql>
+
+    <!-- 列表数据列 -->
+    <sql id="base_list">
+#foreach($column in $listColumns)
+        a.$!column.columnName AS ${dialect.quotation}$!column.attrname${dialect.quotation} #if($velocityCount != $listColumns.size()),
+#end
+#end
+
+    </sql>
+
+    <!-- 详情数据列 -->
+    <sql id="detail_list">
+#foreach($column in $columns)
+        a.$!column.columnName AS ${dialect.quotation}$!column.attrname${dialect.quotation} #if($velocityCount != $columns.size()),
+#end
+#end
+
+    </sql>
+
+    <!--查询列表 -->
+    <select id="list" resultType="$!{package}.$!{moduleName}.model.$!{className}">
+        SELECT
+        <include refid="base_list"/>
+        FROM $!{tableName} a
+        WHERE 1=1
+#foreach($column in $columns)
+#if($column.extend.where)
+#if($column.extend.condition==1)
+        <if test="$!column.attrname !=null and $!column.attrname !=''">
+            AND a.${dialect.quotation}$!column.columnName${dialect.quotation} LIKE #LikeJoint($!column.attrname)
+        </if>
+#else
+        <if test="$!column.attrname !=null and $!column.attrname !=''">
+            AND a.${dialect.quotation}$!column.columnName${dialect.quotation} = #{$!column.attrname}
+        </if>
+#end
+#end
+#end
+        <!-- 排序 -->
+        <choose>
+            <when test="sortColumn != null and sortColumn != '' and  sortOrder != null and sortOrder!= ''">
+                order by ${sortColumn} ${sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY a.$!{pk.columnName} DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--根据主键查询对象 -->
+    <select id="findById" resultType="$!{package}.$!{moduleName}.model.$!{className}">
+        SELECT
+        <include refid="detail_list"/>
+        FROM $!{tableName} a
+        WHERE a.$!{pk.columnName} = #{id}
+    </select>
+
+    <!--批量查询对象 -->
+    <select id="findByIds" resultType="$!{package}.$!{moduleName}.model.$!{className}">
+        SELECT
+        <include refid="detail_list"/>
+        FROM $!{tableName} a
+        WHERE a.$!{pk.columnName} in
+        <foreach item="item" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <!--新增数据 -->
+    <insert id="insert" #if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$!pk.attrname"#end>
+        insert into $!{tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+            <if test="$!column.attrname !=null ">${dialect.quotation}$!column.columnName${dialect.quotation}#if($velocityCount != $columns.size()), #end</if>
+#end
+#end
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+            <if test="$!column.attrname !=null  ">#{$!column.attrname}#if($velocityCount != $!columns.size()), #end</if>
+#end
+#end
+        </trim>
+    </insert>
+
+    <!--批量新增数据 -->
+    <insert id="batchInsert" #if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$!pk.attrname"#end>
+        insert into $!{tableName}
+        (
+        #foreach($column in $columns)
+            #if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+    ${dialect.quotation}$!column.columnName${dialect.quotation} #if($velocityCount != $columns.size()),#end
+            #end
+
+        #end
+        ) VALUES
+        <foreach collection="list" separator="," item="item">
+            (
+            #foreach($column in $columns)
+                #if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+                   #{item.$!column.attrname} #if($velocityCount != $columns.size()), #end
+                #end
+
+            #end
+            )
+        </foreach>
+    </insert>
+
+    <!--更新数据 -->
+    <update id="update" parameterType="$!{package}.$!{moduleName}.model.$!{className}">
+        update $!{tableName}
+        <set>
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName)
+            <if test="$!column.attrname != null">${dialect.quotation}$!column.columnName${dialect.quotation} = #{$!column.attrname}#if($velocityCount != $columns.size()), #end</if>
+#end
+#end
+        </set>
+        where $!{pk.columnName} = #{$!{pk.attrname}}
+    </update>
+
+    <!--删除数据 -->
+    <delete id="delete">
+        delete from $!{tableName} where $!{pk.columnName} in
+        <foreach item="item" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--查询字段是否未重复 -->
+    <select id="countByColumnValue" resultType="long">
+        SELECT COUNT(1) FROM $!{tableName} WHERE ${column} = #{value}
+        <if test="id !=null">
+            AND id!= #{id}
+        </if>
+    </select>
+
+    <!-- ******************************通用代码end************************** -->
+</mapper>

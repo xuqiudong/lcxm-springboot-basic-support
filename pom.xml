@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.xuqiudong.basic</groupId>
+    <artifactId>lcxm-springboot-parent</artifactId>
+    <version>2.7.3-jdk8-1.0.0</version>
+    <packaging>pom</packaging>
+
+    <!-- sonatype: 下列三项是需要的 -->
+    <name>lcxm-springboot-basic-support</name>
+    <description>springboot2.7.3版本的依赖管理,发布信息</description>
+    <url>https://gitee.com/${project.git.name}</url>
+
+    <modules>
+        <module>lcxm-common</module>
+        <module>lcxm-generate-spring-boot-starter</module>
+        <module>lcxm-mq-data-bridge-spring-boot-starter</module>
+        <module>lcxm-quartz-spring-boot-starter</module>
+    </modules>
+
+    <properties>
+        <!--用于拼接sonatype信息中关于git 仓库地址相关信息的遍历-->
+        <project.git.name>${project.name}</project.git.name>
+        <spring.boot.version>2.7.3</spring.boot.version>
+
+        <!--system properties ↓ ↓ ↓-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.encoding>UTF-8</project.encoding>
+        <!--system properties ↑ ↑ ↑-->
+        <!--spring and common middleware version ↓ ↓ ↓-->
+        <!--redisson 3.17.7 之后对应的就是redisson-spring-data-3x 也即springboot3.x -->
+        <redisson-spring-boot.version>3.17.7</redisson-spring-boot.version>
+        <javax.servlet>4.0.0</javax.servlet>
+        <validation.version>2.0.1.Final</validation.version>
+        <shiro-spring.version>1.7.1</shiro-spring.version>
+        <mybatis.starter.version>2.2.2</mybatis.starter.version>
+        <pagehelper.starter.version>1.4.2</pagehelper.starter.version>
+        <odbc.version>21.1.0.0</odbc.version>
+        <elasticsearch.version>7.7.1</elasticsearch.version>
+
+        <!--spring and common middleware version ↑ ↑ ↑-->
+        <!--util version ↓ ↓ ↓-->
+        <commons.lang3.version>3.12.0</commons.lang3.version>
+        <commons-validator.version>1.7</commons-validator.version>
+        <commons.fileupload.version>1.3.1</commons.fileupload.version>
+        <commons.io.version>2.4</commons.io.version>
+        <commons.codec.version>1.9</commons.codec.version>
+        <commons.text.version>1.9</commons.text.version>
+        <commons.collections4.version>4.1</commons.collections4.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <commons.configuration2.version>2.7</commons.configuration2.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <commons.lang.version>2.6</commons.lang.version>
+        <velocity.version>1.7</velocity.version>
+        <poi.version>4.1.2</poi.version>
+        <pinyin4j.version>2.5.1</pinyin4j.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
+        <jsoup.version>1.13.1</jsoup.version>
+        <httpclient.version>4.5.13</httpclient.version>
+        <jsqlparser.version>4.2</jsqlparser.version>
+        <!--util version ↑ ↑ ↑-->
+        <!--maven plugin version ↓ ↓ ↓ -->
+        <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <!--将项目代码库中的代码发布到SCM的新版本   2.5.3-->
+        <maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
+        <maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
+        <!-- 此版本被spring-boot使用 当前2.6.7 中定义的为3.2.2 -->
+        <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
+        <!-- 打包时把源码打到本地 -->
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <!-- copy resources 3.2.0 报错  Input length = 1 -->
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <!-- spring boot  跟springboot版本走-->
+        <!--<spring-boot-maven-plugin.version>2.7.2</spring-boot-maven-plugin.version>-->
+        <!-- pmd-->
+        <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>
+        <p3c-pmd.version>2.1.1</p3c-pmd.version>
+
+        <spotbugs-maven-plugin.version>4.7.3.0</spotbugs-maven-plugin.version>
+        <spotbugs.version>4.7.3</spotbugs.version>
+        <!--maven plugin version ↑ ↑ ↑-->
+
+        <!-- skip for  plugin  start ↓ ↓ ↓ -->
+        <skip.pmd>true</skip.pmd>
+        <skip.spotbugs>false</skip.spotbugs>
+        <!-- skip for  plugin  end   ↑ ↑ ↑ -->
+
+    </properties>
+
+    <!--版本控制-->
+    <dependencyManagement>
+        <dependencies>
+            <!-- SpringBoot依赖 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+
+            <!--redisson
+              注意官网的版本提示： https://github.com/redisson/redisson/tree/master/redisson-spring-boot-starter
+              redisson-spring-data	 Spring Boot
+              redisson-spring-data-18	 1.5.y
+              redisson-spring-data-2x	 2.x.y
+              redisson-spring-data-3x	 3.x.y
+             -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson-spring-boot.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
+
+            <!-- mybatis starter -->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.starter.version}</version>
+            </dependency>
+
+            <!-- pagehelper分页插件依赖 -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.starter.version}</version>
+            </dependency>
+
+            <!-- shiro-spring -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro-spring.version}</version>
+            </dependency>
+
+
+            <!-- servlet -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation.version}</version>
+            </dependency>
+
+            <!-- odbc -->
+            <dependency>
+                <groupId>com.oracle.database.jdbc</groupId>
+                <artifactId>ojdbc8</artifactId>
+                <version>${odbc.version}</version>
+            </dependency>
+
+            <!-- 重新定义es的版本依赖 start -->
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <!-- 重新定义es的版本依赖 end -->
+
+
+            <!-- util  start-->
+            <!-- COMMONS工具类 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons.lang.version}</version>
+            </dependency>
+
+            <!-- GenericValidator -->
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>${commons-validator.version}</version>
+            </dependency>
+
+
+            <!-- file upload -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons.fileupload.version}</version>
+            </dependency>
+
+            <!-- IO -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+
+            <!-- 摘要运算、编码解码 -->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons.codec.version}</version>
+                <type>jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons.text.version}</version>
+            </dependency>
+
+            <!-- commons-collections4 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons.collections4.version}</version>
+            </dependency>
+
+            <!-- 消除commons-beanutils 和 velocity 对 commons-collections 传递依赖的冲突 -->
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
+
+            <!-- 读取配置文件 http://commons.apache.org/proper/commons-configuration/userguide/quick_start.html -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>${commons.configuration2.version}</version>
+            </dependency>
+            <!-- commons-configuration2 也需要此依赖 -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+
+
+            <!-- velocity -->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>${velocity.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-collections</groupId>
+                        <artifactId>commons-collections</artifactId>
+                    </exclusion>
+                    <!-- 此处引入commons-lang2.4 和commons-configuration引入的2.6 冲突 -->
+                    <exclusion>
+                        <groupId>commons-lang</groupId>
+                        <artifactId>commons-lang</artifactId>
+                    </exclusion>
+                </exclusions>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- 中文转拼音 -->
+            <dependency>
+                <groupId>com.belerweb</groupId>
+                <artifactId>pinyin4j</artifactId>
+                <version>${pinyin4j.version}</version>
+            </dependency>
+
+
+            <!-- POI 操作office start -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml-schemas</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <!-- POI 操作office end -->
+
+
+            <!-- google验证码 com.google.code已失效 -->
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${kaptcha.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!--spring-boot-maven-->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- 指定jdk和编码 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>${project.encoding}</encoding>
+                        <compilerArgs>
+                            <arg>-parameters</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+
+                <!-- 跳过测试 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <skipTests>true</skipTests>
+                        <testFailureIgnore>true</testFailureIgnore>
+                    </configuration>
+                </plugin>
+
+                <!--打包时 把源码打包到本地 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- copy resources -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                </plugin>
+
+
+                <!--打jar插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+
+                <!--javadoc-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <id>bundle-sources</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <!--不进行doclint 检测-->
+                                <doclint>none</doclint>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <maxmemory>1024</maxmemory>
+                        <encoding>UTF-8</encoding>
+                        <show>protected</show>
+                        <notree>true</notree>
+
+                        <!-- Avoid running into Java 8's very restrictive doclint issues -->
+                        <failOnError>true</failOnError>
+                        <!-- 防止文档不规范报错 -->
+                        <!--<additionalparam>-Xdoclint:none</additionalparam>-->
+                        <!--<additionalJOption>-Xdoclint:none</additionalJOption>-->
+                        <!-- 自定义tag https://maven.apache.org/plugins/maven-javadoc-plugin/examples/tag-configuration.html-->
+                        <tags>
+                            <tag>
+                                <name>description</name>
+                                <!-- description tag for all places -->
+                                <placement>a</placement>
+                                <head>description about class or method and so on</head>
+                            </tag>
+                            <tag>
+                                <name>date</name>
+                                <!-- date tag for all places -->
+                                <placement>a</placement>
+                                <head>create date:</head>
+                            </tag>
+                        </tags>
+
+                    </configuration>
+                </plugin>
+
+                <!-- 本项目主要用于版本占位符替换  https://maven.apache.org/maven-ci-friendly.html https://www.mojohaus.org/flatten-maven-plugin/usage.html  -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.3.0</version>
+                    <configuration>
+                        <updatePomFile>true</updatePomFile>
+                        <!--org.codehaus.mojo.flatten.FlattenMode  此处仅修正变量，不做精简处理-->
+                        <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                    </configuration>
+                    <executions>
+                        <!-- enable flattening -->
+                        <execution>
+                            <id>flatten</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>flatten</goal>
+                            </goals>
+                        </execution>
+                        <!-- ensure proper cleanup -->
+                        <execution>
+                            <id>flatten.clean</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- 阿里p3c插件 -->
+                <!-- 2024-06-03移除阿里p3c插件  使用 Idea 插件手动扫描
+                    主要是在其官网wiki中看见起标注为TODO
+                    https://github.com/alibaba/p3c/wiki/p3c-pmd
+                -->
+                <!--spotbugs 静态bug检测：https://spotbugs.readthedocs.io/en/stable/maven.html  -->
+                <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${spotbugs-maven-plugin.version}</version>
+                    <dependencies>
+                        <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+                        <dependency>
+                            <groupId>com.github.spotbugs</groupId>
+                            <artifactId>spotbugs</artifactId>
+                            <version>${spotbugs.version}</version>
+                        </dependency>
+                        <!-- 引入注解(如) SuppressFBWarnings
+                        https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations -->
+                        <dependency>
+                            <groupId>com.github.spotbugs</groupId>
+                            <artifactId>spotbugs-annotations</artifactId>
+                            <version>${spotbugs.version}</version>
+                        </dependency>
+
+
+                    </dependencies>
+
+                    <executions>
+                        <execution>
+                            <id>check</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <!--参见：所有 detector https://spotbugs.readthedocs.io/en/stable/detectors.html -->
+                        <!-- FindNullDeref : It is a slow detector.-->
+                        <!-- UnreadFields: 未读字段;FindReturnRef:不安全的返回引用;FindNullDeref:空指针引用-->
+                        <omitVisitors>UnreadFields,FindReturnRef</omitVisitors>
+                        <!--子项目按需处理包含和排除的配置-->
+                        <!--<excludeFilterFile>${project.basedir}/spotbugs-exclude.xml</excludeFilterFile>-->
+                        <skip>${skip.spotbugs}</skip>
+                        <!-- High  Medium  Low-->
+                        <threshold>High</threshold>
+                        <failThreshold>High</failThreshold>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+
+        <!-- 在此府项目中引入一些常用插件 -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+            </plugin>
+
+            <!--不再在parent中引入flatten-->
+            <!-- <plugin>
+                 <groupId>org.codehaus.mojo</groupId>
+                 <artifactId>flatten-maven-plugin</artifactId>
+             </plugin>-->
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <!-- 上传的时候使用的配置和插件 -Pdeploy-->
+            <id>deploy</id>
+            <build>
+                <plugins>
+                    <!-- https://central.sonatype.org/publish/publish-portal-maven/ -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.4.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <!--注意和settings.xml中的serverId一致-->
+                            <publishingServerId>central</publishingServerId>
+                            <tokenAuth>true</tokenAuth>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+
+                    <!--  生成签名，确定使用那个gpg秘钥 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <!--本地生成了多个秘钥对，所以这里指定一个发布成功的秘钥  gpg -k-->
+                                    <keyname>877B1FAE177412DFA451E73B6CF967DE5C1F7A9E</keyname>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
+    <!-- sonatype: 开源许可证声明 有很多不同的开源许可证 Apache Version2.0 表示别人可以直接商用你的开源项目而无任何版权问题 -->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+
+    <!-- sonatype:开源地址 -->
+    <scm>
+        <connection>scm:git:ssh://git@gitee.com:basic-support/lcxm-springboot-parent.git</connection>
+        <developerConnection>scm:git:https://gitee.com/lcxm-springboot-parent.git</developerConnection>
+        <url>https://gitee.com/lcxm-springboot-parent</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <!--sonatype: Issue地址 -->
+    <issueManagement>
+        <system>git Issue</system>
+        <url>https://gitee.com/lcxm-springboot-parent/issues</url>
+    </issueManagement>
+
+    <!--sonatype: 开发者信息 -->
+    <developers>
+        <developer>
+            <name>vic.xu</name>
+            <email>xuduochoua@163.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
+
+</project>

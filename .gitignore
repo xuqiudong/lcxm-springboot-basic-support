@@ -1,0 +1,31 @@
+# 语法规范
+# 空行或是以#开头的行即注释行将被忽略；
+# 以斜杠 / 结尾表示目录；
+# 以星号 * 通配多个字符；
+# 以问号 ? 通配单个字符
+# 以方括号 [] 包含单个字符的匹配列表；(比如说忽略Python编译产生的.pyc、.pyo就可以写*.py[co])
+# 以叹号 !表示不忽略(跟踪)匹配到的文件或目录；
+# 可以在前面添加斜杠 / 来避免递归
+# 比如/dir/就是当前的dir文件夹，不包含子文件夹（例如/abc/efg/dir）
+# 而dir/不仅仅是当前的文件夹也包括子文件夹（例如/abc/efg/dir）
+# https://github.com/github/gitignore
+
+# IntelliJ IDEA 特定文件
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+gen/
+
+# Maven 编译输出
+target/
+**/target/
+
+# other
+.idea
+.project
+.flattened-pom.xml
+.settings
+logback/
+
