@@ -29,14 +29,23 @@
 
 ## 升级步骤：
 
-### 本地maven软件升级:
+### 1 本地maven软件升级:
  [Download Apache Maven – Maven](https://maven.apache.org/download.cgi?.)
  - 本地jdk 切换为17
  - maven软件从3.6.3 升级到 3.9.9
-### 项目迁移合并
+
+### 2 项目迁移合并: 只修改项目结构
  - 新建本项目
  - 迁移原parent 作为父模块
  - 迁移 lcxm-common 为子模块
  - 迁移 lcxm-generate-spring-boot-starter 为子模块
  - 迁移 lcxm-mq-data-bridge-spring-boot-starter 为子模块
  - 迁移 lcxm-quartz-spring-boot-starter  为子模块
+
+### 3  jdk8 升级到 jdk17
+- parent 的 pom.xml中的properties定义的jdk版本修改为17
+- idea 中项目、模块、编译等设置为jdk17
+- 编译：`mvn clean compile`
+- 依赖树: `mvn dependency:tree -Dverbose`
+- 检测下各个模块是否使用jdk内部过时api
+  - 进入 各个子模块： `jdeps -jdkinternals target/classes`

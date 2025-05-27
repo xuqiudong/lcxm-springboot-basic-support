@@ -13,7 +13,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
         <project.encoding>UTF-8</project.encoding>
         <!-- hessian -->
         <hessian.version>4.0.65</hessian.version>

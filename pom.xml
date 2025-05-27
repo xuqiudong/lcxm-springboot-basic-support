@@ -6,13 +6,13 @@
 
     <groupId>cn.xuqiudong.basic</groupId>
     <artifactId>lcxm-springboot-parent</artifactId>
-    <version>2.7.3-jdk8-1.0.0</version>
+    <version>2.7.3-jdk17-1.0.0</version>
     <packaging>pom</packaging>
 
     <!-- sonatype: 下列三项是需要的 -->
     <name>lcxm-springboot-basic-support</name>
-    <description>springboot2.7.3版本的依赖管理,发布信息</description>
-    <url>https://gitee.com/${project.git.name}</url>
+    <description>lcxm的基于springboot的通用基础框架: springboot版本2.7.3, jdk17</description>
+    <url>https://gitee.com/xuqiudong/${project.git.name}</url>
 
     <modules>
         <module>lcxm-common</module>
@@ -28,9 +28,11 @@
 
         <!--system properties ↓ ↓ ↓-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.encoding>UTF-8</project.encoding>
         <!--system properties ↑ ↑ ↑-->
         <!--spring and common middleware version ↓ ↓ ↓-->
@@ -628,16 +630,16 @@
 
     <!-- sonatype:开源地址 -->
     <scm>
-        <connection>scm:git:ssh://git@gitee.com:basic-support/lcxm-springboot-parent.git</connection>
-        <developerConnection>scm:git:https://gitee.com/lcxm-springboot-parent.git</developerConnection>
-        <url>https://gitee.com/lcxm-springboot-parent</url>
+        <connection>scm:git:ssh://git@gitee.com:basic-support/${project.git.name}.git</connection>
+        <developerConnection>scm:git:https://gitee.com/xuqiudong/${project.git.name}.git</developerConnection>
+        <url>https://gitee.com/xuqiudong/${project.git.name}</url>
         <tag>HEAD</tag>
     </scm>
 
     <!--sonatype: Issue地址 -->
     <issueManagement>
         <system>git Issue</system>
-        <url>https://gitee.com/lcxm-springboot-parent/issues</url>
+        <url>https://gitee.com/xuqiudong/${project.git.name}/issues</url>
     </issueManagement>
 
     <!--sonatype: 开发者信息 -->
