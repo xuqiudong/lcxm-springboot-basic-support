@@ -43,6 +43,8 @@
  - 迁移 lcxm-quartz-spring-boot-starter  为子模块
 
 ### 3  jdk8 升级到 jdk17
+- 修改版版本号： 
+  - `mvn versions:set -DnewVersion="2.7.3-jdk17-1.0.0" -DprocessAllModules=true  -DgenerateBackupPoms=false`
 - parent 的 pom.xml中的properties定义的jdk版本修改为17
 - idea 中项目、模块、编译等设置为jdk17
 - 编译：`mvn clean compile`
