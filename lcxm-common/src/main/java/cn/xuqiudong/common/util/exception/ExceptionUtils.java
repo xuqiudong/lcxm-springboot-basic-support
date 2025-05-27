@@ -2,7 +2,7 @@
  */
 package cn.xuqiudong.common.util.exception;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -63,8 +63,8 @@ public class ExceptionUtils {
 		Throwable ex = null;
 		if (request.getAttribute("exception") != null) {
 			ex = (Throwable) request.getAttribute("exception");
-		} else if (request.getAttribute("javax.servlet.error.exception") != null) {
-			ex = (Throwable) request.getAttribute("javax.servlet.error.exception");
+		} else if (request.getAttribute("jakarta.servlet.error.exception") != null) {
+			ex = (Throwable) request.getAttribute("jakarta.servlet.error.exception");
 		}
 		return ex;
 	}

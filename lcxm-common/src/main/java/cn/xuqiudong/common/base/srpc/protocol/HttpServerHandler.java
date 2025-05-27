@@ -7,8 +7,8 @@ import cn.xuqiudong.common.base.srpc.serializer.XqdSerializer;
 import cn.xuqiudong.common.base.srpc.serializer.hessian.Hessian2Serializer;
 import org.apache.commons.io.IOUtils;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import java.io.IOException;
 
 /**

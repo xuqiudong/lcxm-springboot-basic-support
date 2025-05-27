@@ -4,7 +4,7 @@ import cn.xuqiudong.common.base.lookup.Lookup;
 import cn.xuqiudong.common.base.tool.Tools;
 import org.springframework.web.util.WebUtils;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * @author Vic.xu

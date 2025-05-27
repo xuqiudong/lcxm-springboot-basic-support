@@ -10,11 +10,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.util.WebUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.Enumeration;
 
 /**
@@ -51,8 +51,7 @@ public final class WebCommonUtils {
                     MultipartHttpServletRequest.class);
             if (multipartHttpServletRequest == null) {
                 // 文件解析器 默认一般为CommonsMultipartResolver ,若项目中重写了,则此处理应替换为项目默认的文件解析器
-                MultipartResolver resolver = new CommonsMultipartResolver(
-                        ((HttpServletRequest) request).getSession().getServletContext());
+                MultipartResolver resolver = new StandardServletMultipartResolver();
                 multipartHttpServletRequest = resolver.resolveMultipart((HttpServletRequest) request);
                 request = multipartHttpServletRequest;
             } else {

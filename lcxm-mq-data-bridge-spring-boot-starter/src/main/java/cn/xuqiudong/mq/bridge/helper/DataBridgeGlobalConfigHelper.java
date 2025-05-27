@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.*;
 

@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisException;
+import redis.clients.jedis.resps.Tuple;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -286,8 +286,8 @@ public class JedisUtil {
         return value;
     }
 
-    public static Set<Tuple> zrangeWithScores(String key, int start, int end) {
-        Set<Tuple> value = null;
+    public static List<Tuple> zrangeWithScores(String key, int start, int end) {
+        List<Tuple> value = null;
         Jedis jedis = null;
         try {
             jedis = getResource();

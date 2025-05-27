@@ -51,3 +51,38 @@
 - 依赖树: `mvn dependency:tree -Dverbose`
 - 检测下各个模块是否使用jdk内部过时api
   - 进入 各个子模块： `jdeps -jdkinternals target/classes`
+
+### 4 springboot2.7.3 升级到 3.5.0 ★★★
+> 2025-05-27
+
+### 依赖变化
+- mysql:mysql-connector-java 修改为 com.mysql:mysql-connector-j
+- org.glassfish:jakarta.el  版本号不再由springboot管理
+  - 修改为 org.springframework.boot:spring-boot-starter-validation,  包含
+     - hibernate-validator（实现）
+     - jakarta.validation-api（规范）
+- javax.* → jakarta.* 迁移
+  - javax.servlet:javax.servlet-api:4.0.0 迁移为 jakarta.servlet:jakarta.servlet-api:6.1.0
+  - javax.validation:validation-api:2.0.1.Final 移除
+    - 因为 org.springframework.boot:spring-boot-starter-validation 已经引入 jakarta.validation:jakarta.validation-api:3.1.1
+- org.apache.shiro:shiro-spring:1.7.1 移除，因2.x版本依然不支持 Jakarta EE，额外需要依赖
+
+- mybatis-spring-boot-starter 版本 2.2.2 升级到 3.0.4
+- pagehelper-spring-boot-starter 版本 1.4.2 升级到 2.1.0
+- common-lang3  版本 3.12.0 升级到3.17.0
+- poi 版本 4.1.2 升级到  5.4.1 
+  - poi-ooxml-schemas 修改为 poi-ooxml-lite(精简版 poi-ooxml-full 完整版)
+-  org.springdoc:springdoc-openapi-ui:1.8.0 升级到 org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8
+- org.redisson:redisson-spring-boot-starter:3.17.7 升级到 3.47.0
+- com.github.ben-manes.caffeine:caffeine:2.9.3 升级到3.2.0
+- 删除 elasticsearch 的版本重新定义, 保持springboot的对elasticsearch的版本管理
+- 删除 jsqlparser 依赖，交由 pagehelper 传递而来
+
+#### 因依赖导致的代码变化
+- CommonsMultipartResolver 修改为 StandardServletMultipartResolver
+- javax.* 修改为  jakarta.* ; 但是如下的部分不修改
+  - javax.net.ssl.* 
+  - javax.imageio.*
+  - javax.crypto.*
+- redis.clients.jedis.Tuple; 修改为 redis.clients.jedis.resps.Tuple;
+- 

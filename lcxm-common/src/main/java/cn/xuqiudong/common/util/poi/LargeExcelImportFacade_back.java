@@ -8,6 +8,7 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.eventusermodel.XSSFReader.SheetIterator;
 import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
+import org.apache.poi.xssf.model.SharedStrings;
 import org.apache.poi.xssf.model.SharedStringsTable;
 import org.apache.poi.xssf.model.StylesTable;
 import org.apache.poi.xssf.usermodel.XSSFComment;
@@ -94,7 +95,7 @@ public class LargeExcelImportFacade_back {
          */
         private XSSFReader reader;
 
-        private SharedStringsTable sharedStringsTable;
+        private SharedStrings sharedStringsTable;
 
         private StylesTable stylesTable;
 

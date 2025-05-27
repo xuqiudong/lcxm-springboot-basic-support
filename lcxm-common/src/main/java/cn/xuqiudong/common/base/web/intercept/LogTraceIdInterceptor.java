@@ -3,8 +3,8 @@ package cn.xuqiudong.common.base.web.intercept;
 import cn.xuqiudong.common.base.web.intercept.log.TraceUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 描述: 通过拦截为日志加入traceId，方便统一追加

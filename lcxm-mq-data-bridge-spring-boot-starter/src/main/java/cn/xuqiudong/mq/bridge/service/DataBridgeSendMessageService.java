@@ -10,7 +10,7 @@ import cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage;
 import cn.xuqiudong.mq.bridge.model.FetchMessageLookup;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 
 /**
