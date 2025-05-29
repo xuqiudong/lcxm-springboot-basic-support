@@ -108,3 +108,7 @@
 </dependency>
 ```
 - Redis 配置：spring.redis → spring.data.redis
+
+
+
+>  2025-05-29测试推送到gitea，触发gitea推送到gitee
