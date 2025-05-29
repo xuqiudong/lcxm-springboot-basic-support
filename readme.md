@@ -85,4 +85,26 @@
   - javax.imageio.*
   - javax.crypto.*
 - redis.clients.jedis.Tuple; 修改为 redis.clients.jedis.resps.Tuple;
-- 
+- ListenableFuture(Spring Framework) 修改为 CompletableFuture(JDK 标准库)。
+
+#### logback相关变化
+从 Logback 1.3.0 开始，官方推荐直接在 <logger> 或 <root> 标签中使用 level 属性来指定日志级别，而不是独立的 <level> 子元素
+
+#### springboot相关变化
+- 自定义 Starter **自动装配类**（之前就已经完成）
+  -  META-INF/spring.factories 为 META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
+
+#### 配置文件调整
+- 添加 spring-boot-properties-migrator 生成迁移报告
+> 启动时扫描环境变量和配置文件,生成迁移诊断报告 打印警告日志并临时映射旧属性到新属性
+> 查看控制台输出的属性迁移建议。
+> 根据日志修改配置
+> 完成迁移后删除该模块
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-properties-migrator</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+- Redis 配置：spring.redis → spring.data.redis
