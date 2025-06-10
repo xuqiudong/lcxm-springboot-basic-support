@@ -1,0 +1,7 @@
+name: Test Runner
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest  # 需与 Runner 标签匹配
+    steps:
+      - run: echo "Runner is working!"
