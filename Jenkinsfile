@@ -11,7 +11,7 @@ pipeline {
         stage('build lcxm-springboot-basic-support') {
             steps {
                 echo "install lcxm-springboot-basic-support"
-                sh 'mvn clean install -Dmaven.javadoc.skip=true'
+                sh 'mvn clean install -Dmaven.javadoc.skip=false'
                 echo 'install success'
             }
         }
