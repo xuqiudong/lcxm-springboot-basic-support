@@ -3,6 +3,8 @@ package cn.xuqiudong.common.base.srpc.reference;
 import cn.xuqiudong.common.base.srpc.annotation.SrpcReference;
 import cn.xuqiudong.common.base.srpc.proxy.ProxyFactory;
 import cn.xuqiudong.common.base.srpc.proxy.jdk.JdkProxyFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
@@ -13,6 +15,8 @@ import org.springframework.beans.factory.FactoryBean;
  * @date 2022-02-28 17:16
  */
 public class XqdBeanFactory implements FactoryBean<Object> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(XqdBeanFactory.class);
 
     /**
      * interfaceClass  字段名
@@ -37,7 +41,16 @@ public class XqdBeanFactory implements FactoryBean<Object> {
 
     @Override
     public Object getObject() throws Exception {
-        return bean;
+        if (this.bean == null) {
+            synchronized (this) {
+                if (this.bean == null) {
+                    // 延迟生成代理对象
+                    this.bean = factory.getProxy(interfaceClass);
+                    LOGGER.debug("Created proxy for interface: {}", interfaceClass.getName());
+                }
+            }
+        }
+        return this.bean;
     }
 
     @Override
@@ -49,7 +62,7 @@ public class XqdBeanFactory implements FactoryBean<Object> {
      * 初始化方法
      */
     private void init(){
-        this.bean = factory.getProxy(interfaceClass);
+        // 把创建bean的逻辑放到 getObject， 以满足可能存在的延迟加载的需求
     }
 
     public Class<?> getInterfaceClass() {

@@ -84,7 +84,10 @@ public class CommonJobQuartzHelper {
             JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(name, group)
                     .usingJobData(new JobDataMap(params)).build();
             //基于表达式构建触发器
-            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
+            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cron)
+                    // 跳过所有遗漏触发;
+//                    .withMisfireHandlingInstructionDoNothing()
+                    ;
 
             CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity(name, group)
                     .withSchedule(cronScheduleBuilder).build();

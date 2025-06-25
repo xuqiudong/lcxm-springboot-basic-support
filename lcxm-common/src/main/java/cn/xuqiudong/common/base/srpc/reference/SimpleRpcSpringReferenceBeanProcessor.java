@@ -1,6 +1,7 @@
 package cn.xuqiudong.common.base.srpc.reference;
 
 import cn.xuqiudong.common.base.srpc.annotation.SrpcReference;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
@@ -67,26 +69,34 @@ public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostPro
             }
         }
 
-        BeanDefinitionRegistry registry=(BeanDefinitionRegistry)beanFactory;
+        BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
         XQD_REFERENCE_BEAN_MAP.forEach((beanName, beanDefinition) -> {
-            if(applicationContext.containsBean(beanName)) {
+            if (applicationContext.containsBean(beanName)) {
                 logger.info("{} 已经注册到spring上下文", beanName);
                 return;
             }
-            registry.registerBeanDefinition(beanName, beanDefinition );
+            registry.registerBeanDefinition(beanName, beanDefinition);
             logger.info("成功注册 XqdReference bean：{}到spring", beanName);
         });
     }
 
-    private void fieldCallback(Field field){
+    private void fieldCallback(Field field) {
         SrpcReference annotation = AnnotationUtils.getAnnotation(field, SrpcReference.class);
-        if (annotation != null) {
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(XqdBeanFactory.class);
-            builder.setInitMethodName(XqdBeanFactory.INIT_METHOD_NAME);
-            builder.addPropertyValue(XqdBeanFactory.INTERFACE_CLASS_FIELD_NAME, field.getType());
-            BeanDefinition beanDefinition = builder.getBeanDefinition();
-            XQD_REFERENCE_BEAN_MAP.put(field.getName(), beanDefinition);
+        if (annotation == null) {
+            return;
         }
+        Class<?> fieldType = field.getType();
+        // 检查Spring上下文中是否已有该接口的实现
+        if (hasExistingImplementation(fieldType)) {
+            logger.info("Interface {} already has implementation, skip proxy creation", fieldType.getName());
+            return;
+        }
+
+        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(XqdBeanFactory.class);
+        builder.setInitMethodName(XqdBeanFactory.INIT_METHOD_NAME);
+        builder.addPropertyValue(XqdBeanFactory.INTERFACE_CLASS_FIELD_NAME, field.getType());
+        BeanDefinition beanDefinition = builder.getBeanDefinition();
+        XQD_REFERENCE_BEAN_MAP.put(field.getName(), beanDefinition);
     }
 
     @Override
@@ -98,4 +108,15 @@ public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostPro
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
+
+    /**
+     * 检查接口是否已有实现Bean
+     * 可以考虑使用ResolvableType 满足后续可能存在的泛型接口 / 抽象类/接口继承 的场景
+     */
+    private boolean hasExistingImplementation(Class<?> interfaceType) {
+        String[] beanNamesForType = applicationContext.getBeanNamesForType(interfaceType);
+        return ArrayUtils.isNotEmpty(beanNamesForType);
+    }
+
+
 }
