@@ -45,13 +45,13 @@ public class DataBridgeReceiveMessageService extends BaseGenericService<DataBrid
         return mapper.fetchMessageToConsumer(lookup);
     }
 
-    public void checkMessageIdThenInsert(DataBridgeReceiveMessage entity) {
+    public int checkMessageIdThenInsert(DataBridgeReceiveMessage entity) {
         long count = mapper.countByColumnValue(null, entity.getMessageId(), "message_id");
         if (count > 0) {
             //messageId重复的消息 忽略
             LOGGER.warn("忽略messageId重复的消息入表!  messageId:{}", entity.getMessageId());
-            return;
+            return 0;
         }
-        insert(entity);
+        return insert(entity);
     }
 }

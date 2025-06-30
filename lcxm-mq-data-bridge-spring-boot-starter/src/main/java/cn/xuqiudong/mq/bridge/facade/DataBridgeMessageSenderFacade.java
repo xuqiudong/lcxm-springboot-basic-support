@@ -48,6 +48,8 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
 
     private ApplicationContext applicationContext;
 
+    DataBridgeMessageSenderFacade self;
+
     public DataBridgeMessageSenderFacade(DataBridgeGlobalConfigHelper dataBridgeGlobalSwitchHelper,
                                          DataBridgeSendMessageService dataBridgeSendMessageService,
                                          DataBridgeMqMessageSender dataMessageSender,
@@ -59,6 +61,13 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
         this.dataBridgeProperties = dataBridgeProperties;
     }
 
+    public DataBridgeMessageSenderFacade getSelf() {
+        if (self == null) {
+            self = applicationContext.getBean(DataBridgeMessageSenderFacade.class);
+        }
+        return self;
+    }
+
     /**
      * 保证在当前事务提交后 执行异步消息发送
      */
@@ -68,12 +77,12 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @Override
                 public void afterCommit() {
-                    startSendAsync();
+                    getSelf().startSendAsync();
                 }
             });
         } else {
             // 没有事务，直接执行
-            startSendAsync();
+            getSelf().startSendAsync();
         }
     }
 
@@ -116,10 +125,10 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
                     // 没有消息可发送，退出循环
                     break;
                 }
-                DataBridgeMessageSenderFacade self = applicationContext.getBean(DataBridgeMessageSenderFacade.class);
+                DataBridgeMessageSenderFacade self = getSelf();
                 for (DataBridgeSendMessage dataBridgeSendMessage : dataBridgeSendMessages) {
                     lastTimeId = dataBridgeSendMessage.getId();
-                     BooleanWithMsg result;
+                    BooleanWithMsg result;
                     try {
                         result = self.send(dataBridgeSendMessage);
                     } catch (Exception e) {

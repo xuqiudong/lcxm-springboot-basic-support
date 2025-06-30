@@ -106,9 +106,11 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
             receiveMessage.setNote(ReceiveStatusEnum.PARSE_ERROR.getText());
         }
         // 插入接收到的消息入库
-        dataBridgeReceiveMessageService.checkMessageIdThenInsert(receiveMessage);
-        // 触发消息的异步消费
-        startConsumerAsyncWithTransactionCheck();
+        int count = dataBridgeReceiveMessageService.checkMessageIdThenInsert(receiveMessage);
+        if (count > 0) {
+            // 触发消息的异步消费
+            startConsumerAsyncWithTransactionCheck();
+        }
     }
 
     /**
@@ -120,12 +122,12 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @Override
                 public void afterCommit() {
-                    startConsumerAsync();
+                    getSelf().startConsumerAsync();
                 }
             });
         } else {
             // 没有事务，直接执行
-            startConsumerAsync();
+            getSelf().startConsumerAsync();
         }
     }
 
