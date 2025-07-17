@@ -4,9 +4,9 @@ import cn.xuqiudong.common.base.service.BaseGenericService;
 import $!{package}.$!{moduleName}.mapper.$!{className}Mapper;
 import $!{package}.$!{moduleName}.model.$!{className};
 
-    #if($!{table.hasPic})
+#if($!{table.hasPic})
 import pers.vic.base.attachment.service.AttachmentService;
-    #end
+#end
 import org.springframework.stereotype.Service;
 
 /**

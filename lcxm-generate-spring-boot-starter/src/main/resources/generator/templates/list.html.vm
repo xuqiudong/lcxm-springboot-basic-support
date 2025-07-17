@@ -31,15 +31,15 @@
 									</button>
 								</div>
 								<!-- 查询条件 -->
-								#foreach($column in $columns)
-								#if($column.extend.show)
+#foreach($column in $columns)
+#if($column.extend.show)
 								<div class="form-group">
 									<label class="sr-only" for="$!column.attrname">$!{column.comments}</label>
 									<input type="text" class="form-control input-sm" id="$!column.attrname" name="$!column.attrname" placeholder="请输入$!{column.comments}"
 									 autocomplete="off">
 								</div>
-								#end
-								#end
+#end
+#end
 
 								<div class="form-group">
 									<label class="sr-only" for="engine">是否启用</label>
@@ -65,11 +65,11 @@
 								<thead>
 									<tr>
 										<th data-checkbox="true"></th>
-										#foreach($column in $columns)
-										#if($column.extend.show)
+#foreach($column in $columns)
+#if($column.extend.show)
 										<th data-field="$!column.attrname" data-sortable="true">$!{column.comments}</th>
-										#end
-										#end
+#end
+#end
 										<th data-field="enable" data-formatter="showEnbale" data-sortable="true">状态</th>
 										<th data-field="createTime" data-sortable="true">创建时间</th>
 										<th data-field="operate" data-formatter="defaultOperate" data-events="defaultOperateEvent">操作</th>

@@ -47,7 +47,7 @@ public class DataBaseLikeJointTool extends Directive{
 		//根据数据库生成like 拼接字段 并输出
 		DatabaseType databaseType = GeneratorProperties.getDatabaseType();
 		String likeJoint = databaseType.getDialect().getLikeJoint().apply(columnAttrname);
-		writer.write(likeJoint);
+		writer.write(likeJoint + System.lineSeparator());
 
 		return true;
 	}

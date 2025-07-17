@@ -7,7 +7,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
     </resultMap>
 
-
+    #set($nl = "\n")
     <sql id="tableName">$!{tableName}</sql>
 
     <!-- 列表数据列 -->
@@ -36,7 +36,7 @@
         WHERE 1=1
 #foreach($column in $columns)
 #if($column.extend.where)
-#if($column.extend.condition==1)
+#if($column.extend.condition == 1)
         <if test="$!column.attrname !=null and $!column.attrname !=''">
             AND a.${dialect.quotation}$!column.columnName${dialect.quotation} LIKE #LikeJoint($!column.attrname)
         </if>
@@ -47,6 +47,7 @@
 #end
 #end
 #end
+
         <!-- 排序 -->
         <choose>
             <when test="sortColumn != null and sortColumn != '' and  sortOrder != null and sortOrder!= ''">
@@ -101,21 +102,19 @@
     <insert id="batchInsert" #if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$!pk.attrname"#end>
         insert into $!{tableName}
         (
-        #foreach($column in $columns)
-            #if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
-    ${dialect.quotation}$!column.columnName${dialect.quotation} #if($velocityCount != $columns.size()),#end
-            #end
-
-        #end
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+    ${dialect.quotation}$!column.columnName${dialect.quotation}#if($velocityCount != $columns.size()),#end ## 换行
+#end
+#end
         ) VALUES
         <foreach collection="list" separator="," item="item">
             (
-            #foreach($column in $columns)
-                #if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
-                   #{item.$!column.attrname} #if($velocityCount != $columns.size()), #end
-                #end
-
-            #end
+ #foreach($column in $columns)
+#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+                   #{item.$!column.attrname}#if($velocityCount != $columns.size()), #end
+#end
+#end
             )
         </foreach>
     </insert>
@@ -126,7 +125,7 @@
         <set>
 #foreach($column in $columns)
 #if($column.columnName != $pk.columnName)
-            <if test="$!column.attrname != null">${dialect.quotation}$!column.columnName${dialect.quotation} = #{$!column.attrname}#if($velocityCount != $columns.size()), #end</if>
+            <if test="$!column.attrname != null">${dialect.quotation}$!column.columnName${dialect.quotation} = #{$!column.attrname}#if($velocityCount != $columns.size()),#end</if>
 #end
 #end
         </set>
