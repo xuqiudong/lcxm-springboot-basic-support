@@ -1,4 +1,4 @@
-# 获取端口和context path
+# obtain port  and context path
 org.springframework.context.ApplicationListener=cn.xuqiudong.common.base.framework.listener.WebServerListener
 # SpringBootApplicationPropertiesUtil:set ConfigurableEnvironment  for  SpringBootApplicationPropertiesUtil before the ApplicationContext} has been created.
 # StartupTimeListener  startup time listener
