@@ -88,7 +88,7 @@ public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostPro
         Class<?> fieldType = field.getType();
         // 检查Spring上下文中是否已有该接口的实现
         if (hasExistingImplementation(fieldType)) {
-            logger.info("Interface {} already has implementation, skip proxy creation", fieldType.getName());
+            logger.info("Interface {} already has implementation, skip srpc proxy creation", fieldType.getName());
             return;
         }
 
