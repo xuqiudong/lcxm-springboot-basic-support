@@ -38,7 +38,8 @@
         <!--spring and common middleware version ↓ ↓ ↓-->
         <!--redisson 3.17.7 之后对应的就是redisson-spring-data-3x 也即springboot3.x -->
         <redisson-spring-boot.version>3.47.0</redisson-spring-boot.version>
-        <springdoc.version>2.8.8</springdoc.version>
+        <!-- springdoc 版本降低, 依赖的 LiteWebJarsResourceResolver 在spring6.2 才有-->
+        <springdoc.version>2.3.0</springdoc.version>
         <caffeine.version>3.2.0</caffeine.version>
         <jakarta.servlet>6.1.0</jakarta.servlet>
         <javax.servlet>4.0.0</javax.servlet>
