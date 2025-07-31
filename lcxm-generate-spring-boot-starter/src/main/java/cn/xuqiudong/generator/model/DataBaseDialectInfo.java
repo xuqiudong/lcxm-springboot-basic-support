@@ -33,25 +33,25 @@ public class DataBaseDialectInfo implements Serializable {
     /**
      * 初始化一些数据库 dialect
      */
-    public static final DataBaseDialectInfo mysql = new DataBaseDialectInfo();
+    public static final DataBaseDialectInfo MYSQL = new DataBaseDialectInfo();
 
-    public static final DataBaseDialectInfo oracle = new DataBaseDialectInfo();
+    public static final DataBaseDialectInfo ORACLE = new DataBaseDialectInfo();
 
-    public static final DataBaseDialectInfo gauss = new DataBaseDialectInfo();
+    public static final DataBaseDialectInfo GAUSS = new DataBaseDialectInfo();
 
     static {
-        mysql.setCurrentDate("CURRENT_TIMESTAMP()");
-        mysql.setQuotation("`");
-        mysql.setLikeJoint(attr -> "CONCAT('%', #{" + attr + "}, '%')");
+        MYSQL.setCurrentDate("CURRENT_TIMESTAMP()");
+        MYSQL.setQuotation("`");
+        MYSQL.setLikeJoint(attr -> "CONCAT('%', #{" + attr + "}, '%')");
 
-        oracle.setCurrentDate("sysdate");
-        oracle.setQuotation("\"");
+        ORACLE.setCurrentDate("sysdate");
+        ORACLE.setQuotation("\"");
         // oracle.setLikeJoint(attr -> "'%'||#{" + attr + "}||'%'");
-        oracle.setLikeJoint(attr -> "concat(concat('%', #{" + attr + "}), '%')");
+        ORACLE.setLikeJoint(attr -> "concat(concat('%', #{" + attr + "}), '%')");
 
-        gauss.setCurrentDate("current_timestamp");
-        gauss.setQuotation("\"");
-        gauss.setLikeJoint(attr -> "CONCAT('%', #{" + attr + "}, '%')");
+        GAUSS.setCurrentDate("current_timestamp");
+        GAUSS.setQuotation("\"");
+        GAUSS.setLikeJoint(attr -> "CONCAT('%', #{" + attr + "}, '%')");
 
     }
 

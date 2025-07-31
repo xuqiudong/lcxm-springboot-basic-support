@@ -11,12 +11,12 @@ import cn.xuqiudong.generator.model.DataBaseDialectInfo;
 public enum DatabaseType {
 
     /** mysql */
-    mysql(DataBaseDialectInfo.mysql),
+    mysql(DataBaseDialectInfo.MYSQL),
 
     /** oracle */
-    oracle(DataBaseDialectInfo.oracle),
+    oracle(DataBaseDialectInfo.ORACLE),
     /**gauss*/
-    gauss(DataBaseDialectInfo.gauss);
+    gauss(DataBaseDialectInfo.GAUSS);
 
     /**
      * 不同数据库的一些sql方面的区别

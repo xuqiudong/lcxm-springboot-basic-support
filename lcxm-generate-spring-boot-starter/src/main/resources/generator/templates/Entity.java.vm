@@ -1,6 +1,14 @@
 package $!{package}.$!{moduleName}.model;
 
 import cn.xuqiudong.common.base.model.BaseGenericEntity;
+#if($!{lombok})
+import lombok.Getter;
+import lombok.Setter;
+#end
+#if($!{springdoc2})
+import io.swagger.v3.oas.annotations.media.Schema;
+#end
+
 #if($!{table.hasDate})
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -24,6 +32,14 @@ import pers.vic.base.handle.convert.AttachmentSingleConver;
  * @author $!{author}
  * @since $!{datetime}
  */
+
+#if($!{lombok})
+@Getter
+@Setter
+#end
+#if($!{springdoc2})
+@Schema(name = "$!{comments}", description = "$!{comments}")
+#end
 public class $!{className} extends  BaseGenericEntity<$!pk.attrType> {
 
     private static final long serialVersionUID = 1L;
@@ -47,6 +63,9 @@ public class $!{className} extends  BaseGenericEntity<$!pk.attrType> {
 #end
 #if($column.extend.type == 4)
     @AttachmentFlag(AttachmentType.CONTENT)
+#end
+#if($!{springdoc2})
+    @Schema(name = "$!column.attrname", description = "$!{column.comments}")
 #end
     private $!column.attrType $!column.attrname;
 #end

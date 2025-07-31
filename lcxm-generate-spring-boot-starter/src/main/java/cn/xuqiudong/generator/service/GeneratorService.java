@@ -3,10 +3,7 @@ package cn.xuqiudong.generator.service;
 import cn.xuqiudong.common.base.model.PageInfo;
 import cn.xuqiudong.generator.autoconfigure.GeneratorProperties;
 import cn.xuqiudong.generator.dao.BaseGeneratorDao;
-import cn.xuqiudong.generator.model.ColumnConfigVO;
-import cn.xuqiudong.generator.model.ColumnEntity;
-import cn.xuqiudong.generator.model.TableConfigVO;
-import cn.xuqiudong.generator.model.TableEntity;
+import cn.xuqiudong.generator.model.*;
 import cn.xuqiudong.generator.tool.DataBaseLikeJointTool;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -255,8 +252,9 @@ public class GeneratorService {
 
     private void generatorCode(TableConfigVO tableConfigVO, ZipOutputStream zip) {
         TableEntity table = buildTableDetail(tableConfigVO.getTableName());
-        Map<String, Object> map = getTemplateData(table, tableConfigVO);
-        VelocityContext context = new VelocityContext(map);
+//        Map<String, Object> map =
+        TemplateContext templateData = getTemplateData(table, tableConfigVO);
+        VelocityContext context = new VelocityContext(templateData.getMapContext());
         // 获取模板列表
         List<String> templates = generatorProperties.getTemplates();
         for (String template : templates) {
@@ -283,7 +281,7 @@ public class GeneratorService {
     /**
      * 通过前端配置构建模板数据
      */
-    private Map<String, Object> getTemplateData(TableEntity table, TableConfigVO tableConfigVO) {
+    private TemplateContext getTemplateData(TableEntity table, TableConfigVO tableConfigVO) {
 
         String packageName = tableConfigVO.getPackageName();
         String moduleName = tableConfigVO.getModuleName();
@@ -296,24 +294,27 @@ public class GeneratorService {
         // 根据页面配置列的信息:是否列表 查询条件
         configColumn(table, tableConfigVO);
         // 封装模板数据
-        Map<String, Object> map = new HashMap<>(32);
-        map.put("table", table);
-        map.put("tableName", table.getTableName());
-        map.put("comments", table.getComments());
-        map.put("pk", table.getPk());
-        map.put("className", table.getClassName());
-        map.put("classname", table.getClassname());
-        map.put("pathName", table.getClassname().toLowerCase());
-        map.put("columns", table.getColumns());
-        //列表页展示的列，即columns中extend.show = true
-        map.put("listColumns", table.getListColumns());
-        map.put("hasBigDecimal", table.getHasBigDecimal());
-        map.put("package", packageName);
-        map.put("moduleName", moduleName);
-        map.put("author", generatorProperties.getAuthor());
-        map.put("dialect", generatorProperties.getTaDatabaseType().getDialect());
-        map.put("datetime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm"));
-        return map;
+//        Map<String, Object> map = new HashMap<>(32);
+//        map.put("table", table);
+//        map.put("tableName", table.getTableName());
+//        map.put("comments", table.getComments());
+//        map.put("pk", table.getPk());
+//        map.put("className", table.getClassName());
+//        map.put("classname", table.getClassname());
+//        map.put("pathName", table.getClassname().toLowerCase());
+//        map.put("columns", table.getColumns());
+//        //列表页展示的列，即columns中extend.show = true
+//        map.put("listColumns", table.getListColumns());
+//        map.put("hasBigDecimal", table.getHasBigDecimal());
+//        map.put("package", packageName);
+//        map.put("moduleName", moduleName);
+//        map.put("author", generatorProperties.getAuthor());
+//        map.put("dialect", generatorProperties.getTaDatabaseType().getDialect());
+//        map.put("datetime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm"));
+        TemplateContext templateContext = new TemplateContext(table, generatorProperties);
+        templateContext.setPackageName(packageName);
+        templateContext.setModuleName(moduleName);
+        return templateContext;
     }
 
     /**

@@ -2,24 +2,26 @@ package cn.xuqiudong.generator.autoconfigure;
 
 import cn.xuqiudong.generator.contant.DatabaseType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import jakarta.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.*;
 
 /**
  * 说明 :  代码自动生成配置项
- * @author  Vic.xu
- * @since  2019年12月11日 上午9:33:21
+ *
+ * @author Vic.xu
+ * @since 2019年12月11日 上午9:33:21
  */
 @Configuration
 @ConfigurationProperties(prefix = GeneratorProperties.GENERATOR_PREFIX)
 @PropertySource("classpath:config/generator-config.properties")
 public class GeneratorProperties implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     public static final String GENERATOR_PREFIX = "generator";
@@ -39,6 +41,16 @@ public class GeneratorProperties implements Serializable {
      * 表前缀 若存在则生成的实体名会去掉前缀
      */
     private String tablePrefix;
+
+    /**
+     * 是否支持lombok
+     */
+    private boolean lombok;
+
+    /**
+     * 是否 使用springdoc 2 注解
+     */
+    private boolean springdoc2;
 
     /**
      * 实体中忽略的表字段
@@ -67,14 +79,14 @@ public class GeneratorProperties implements Serializable {
     @PostConstruct
     private void post() {
         mergerDataType();
-        ignorestoLowerCase();
+        ignores2LowerCase();
 
     }
 
     /**
      * 忽略的字符串 转小写
      */
-    private void ignorestoLowerCase() {
+    private void ignores2LowerCase() {
         if (ignores == null) {
             ignores = new HashSet<>();
             return;
@@ -123,6 +135,23 @@ public class GeneratorProperties implements Serializable {
         return tablePrefix;
     }
 
+
+    public boolean isLombok() {
+        return lombok;
+    }
+
+    public void setLombok(boolean lombok) {
+        this.lombok = lombok;
+    }
+
+    public boolean isSpringdoc2() {
+        return springdoc2;
+    }
+
+    public void setSpringdoc2(boolean springdoc2) {
+        this.springdoc2 = springdoc2;
+    }
+
     public Set<String> getIgnores() {
         return ignores;
     }
@@ -167,8 +196,7 @@ public class GeneratorProperties implements Serializable {
     }
 
     /**
-     * @param database
-     *            the database to set
+     * @param database the database to set
      */
     public void setDatabase(String database) {
         this.database = database;
@@ -192,8 +220,7 @@ public class GeneratorProperties implements Serializable {
     }
 
     /**
-     * @param textTypes
-     *            the textTypes to set
+     * @param textTypes the textTypes to set
      */
     public void setTextTypes(Set<String> textTypes) {
         this.textTypes = textTypes;
