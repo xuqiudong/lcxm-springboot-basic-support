@@ -4,3 +4,8 @@ org.springframework.context.ApplicationListener=cn.xuqiudong.common.base.framewo
 # StartupTimeListener  startup time listener
 org.springframework.boot.SpringApplicationRunListener=cn.xuqiudong.common.util.SpringBootApplicationPropertiesUtil,\
                                                         cn.xuqiudong.common.base.framework.listener.StartupTimeListener
+
+
+# EnvironmentPostProcessor
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  cn.xuqiudong.common.base.configuration.LcxmCommonPropertiesPostProcessor
