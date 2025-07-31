@@ -8,7 +8,6 @@ import cn.xuqiudong.generator.tool.DataBaseLikeJointTool;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -140,21 +139,19 @@ public class GeneratorService {
      *推断主键：当忘记设置主键的时候，自动推断主键：根据字段名 是否是 id，或者取第一个列
      */
     private ColumnEntity inferPk(List<ColumnEntity> columns) {
-        ColumnEntity column =
-                columns.stream().filter(c -> StringUtils.equalsIgnoreCase(c.getColumnName(), "id")).
-                        findAny().orElse(null);
-        return column == null ? columns.get(0) : column;
+        return columns.stream().filter(c -> StringUtils.equalsIgnoreCase(c.getColumnName(), "id")).
+                findAny().orElseGet(() -> columns.get(0));
     }
 
     /**
      * 打印没有定义映射的数据列
      */
-    private static void printUnknownJavaType(List<ColumnEntity> UnknownJavaTypeList) {
-        if (CollectionUtils.isEmpty(UnknownJavaTypeList)) {
+    private static void printUnknownJavaType(List<ColumnEntity> unknownJavaTypeList) {
+        if (CollectionUtils.isEmpty(unknownJavaTypeList)) {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        UnknownJavaTypeList.forEach(c ->
+        unknownJavaTypeList.forEach(c ->
                 sb.append("\t").append(c.getColumnName()).append("  -->  ").append(c.getDataType())
         );
         logger.warn("没有为数据库类型配置对应的java类型有:\n{}", sb);
@@ -271,7 +268,7 @@ public class GeneratorService {
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("渲染模板失败，表名：" + table.getTableName(), e);
                 throw new RuntimeException("渲染模板失败，表名：" + table.getTableName(), e);
             }
 

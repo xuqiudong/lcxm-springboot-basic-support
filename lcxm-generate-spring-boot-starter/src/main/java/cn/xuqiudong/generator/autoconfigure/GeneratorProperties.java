@@ -120,11 +120,10 @@ public class GeneratorProperties implements Serializable {
     public String toString() {
         List<String> dataTypeConverts = new ArrayList<>();
         dataTypeConvert.forEach((k, v) -> dataTypeConverts.add(k + "=" + v));
-        String sb = "\t【database=" + database + ", author=" + author + ", tablePrefix=" + tablePrefix +
+        return "\t【database=" + database + ", author=" + author + ", tablePrefix=" + tablePrefix +
                 ",\n\t ignores=[" + ignores + "],\n\t textTypes=[" + String.join(";", textTypes) +
                 "],\n\t templates=[\n\t\t" + String.join("\n\t\t", templates) +
                 "],\n\t  dataTypeConvert=[" + String.join(";", dataTypeConverts) + "]\n\t】";
-        return sb;
     }
 
     public String getAuthor() {
