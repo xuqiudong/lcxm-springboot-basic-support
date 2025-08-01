@@ -91,12 +91,12 @@ public class CommonKeyGenerator implements KeyGenerator {
     }
 
     /**
-     * 是否是简单的数据类型:此处只做部分简单的判断8中基本数据类型及包装类和string /Number /date
+     * 是否是简单的数据类型:此处只做部分简单的判断8中基本数据类型及包装类和string /Number /date / Enum
      * @return
      */
     public static boolean isSimpleType(Class<?> clazz) {
         return ClassUtils.isPrimitiveOrWrapper(clazz) || CharSequence.class.isAssignableFrom(clazz)
-                || Number.class.isAssignableFrom(clazz) || Date.class.isAssignableFrom(clazz);
+                || Number.class.isAssignableFrom(clazz) || Date.class.isAssignableFrom(clazz) || clazz.isEnum();
     }
 
     /**
