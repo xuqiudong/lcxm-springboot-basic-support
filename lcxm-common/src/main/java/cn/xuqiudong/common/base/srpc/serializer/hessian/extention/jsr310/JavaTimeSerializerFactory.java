@@ -27,15 +27,15 @@ public class JavaTimeSerializerFactory extends AbstractSerializerFactory {
     }
 
     /**
-     *   JDK8 时间类型的解析/格式化逻辑  处理器
+     * JDK8 时间类型的解析/格式化逻辑  处理器
      */
     private final Map<Class<?>, JavaTimeHandler<?>> handlers = new HashMap<>();
     /**
-     *   JDK8 时间类型的序列化逻辑  处理器 缓存
+     * JDK8 时间类型的序列化逻辑  处理器 缓存
      */
     private final Map<Class<?>, Serializer> serializerCache = new HashMap<>();
     /**
-     *   JDK8 时间类型的反序列化逻辑  处理器 缓存
+     * JDK8 时间类型的反序列化逻辑  处理器 缓存
      */
     private final Map<Class<?>, Deserializer> deserializerCache = new HashMap<>();
 
@@ -74,6 +74,13 @@ public class JavaTimeSerializerFactory extends AbstractSerializerFactory {
         register(YearMonth.class, DateTimeFormatter.ofPattern("yyyy-MM"),
                 str -> YearMonth.parse(str, DateTimeFormatter.ofPattern("yyyy-MM")),
                 ym -> ym.format(DateTimeFormatter.ofPattern("yyyy-MM")));
+        // Instant
+        register(
+                Instant.class,
+                DateTimeFormatter.ISO_INSTANT,
+                str -> Instant.from(DateTimeFormatter.ISO_INSTANT.parse(str)),
+                instant -> DateTimeFormatter.ISO_INSTANT.format(instant)
+        );
     }
 
     /**
