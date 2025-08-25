@@ -27,6 +27,8 @@ demo:
 - 2024-10-29 [修复] AsyncOperation 添加同步锁  
 ```
 ### next version
+- 2025-05-27 版本升级到3.5.0-jdk17-1.0.0 : springboot 3.5.0, jdk17
+- 2025-08-25 hessian 对jdk8时间序列化反序列化的支持  JavaTimeSerializerFactory
 
 ###  1.1.0-2025  2025-03-28
 - Lookup  sortOrder 字段不限制大小写

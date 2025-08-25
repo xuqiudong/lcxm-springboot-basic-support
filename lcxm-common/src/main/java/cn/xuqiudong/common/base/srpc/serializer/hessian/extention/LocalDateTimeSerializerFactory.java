@@ -1,11 +1,17 @@
 package cn.xuqiudong.common.base.srpc.serializer.hessian.extention;
 
+import cn.xuqiudong.common.base.srpc.serializer.hessian.extention.jsr310.JavaTimeSerializerFactory;
 import com.caucho.hessian.io.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * deprecated:  不支持日期类型为泛型, 请使用JavaTimeSerializerFactory
+ * @see JavaTimeSerializerFactory
+ */
+@Deprecated
 public class LocalDateTimeSerializerFactory extends AbstractSerializerFactory {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;

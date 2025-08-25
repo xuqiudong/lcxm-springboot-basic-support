@@ -38,7 +38,7 @@ import pers.vic.base.handle.convert.AttachmentSingleConver;
 @Setter
 #end
 #if($!{springdoc2})
-@Schema(name = "$!{comments}", description = "$!{comments}")
+@Schema(name = "$!{className}", description = "$!{comments}")
 #end
 public class $!{className} extends  BaseGenericEntity<$!pk.attrType> {
 
@@ -71,6 +71,7 @@ public class $!{className} extends  BaseGenericEntity<$!pk.attrType> {
 #end
 #end
 
+#if(!$!{lombok})
     /***************** set|get start **************************************/
 #foreach ($column in $columns)
 #if(!$column.entityIgnore)
@@ -98,4 +99,5 @@ public class $!{className} extends  BaseGenericEntity<$!pk.attrType> {
 #end
 #end
     /***************** set|get end **************************************/
+#end
 }

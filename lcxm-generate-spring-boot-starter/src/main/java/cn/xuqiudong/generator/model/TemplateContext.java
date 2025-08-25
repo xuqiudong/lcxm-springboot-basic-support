@@ -111,6 +111,8 @@ public class TemplateContext {
             // 值为原始对象
             mapContext.put(field.getName(), field.get(this));
         });
+        // 包 同时支持 package 和 packageName
+        mapContext.put("package", packageName);
         return mapContext;
     }
 

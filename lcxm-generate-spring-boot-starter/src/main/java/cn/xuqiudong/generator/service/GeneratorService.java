@@ -290,24 +290,6 @@ public class GeneratorService {
         Velocity.init(prop);
         // 根据页面配置列的信息:是否列表 查询条件
         configColumn(table, tableConfigVO);
-        // 封装模板数据
-//        Map<String, Object> map = new HashMap<>(32);
-//        map.put("table", table);
-//        map.put("tableName", table.getTableName());
-//        map.put("comments", table.getComments());
-//        map.put("pk", table.getPk());
-//        map.put("className", table.getClassName());
-//        map.put("classname", table.getClassname());
-//        map.put("pathName", table.getClassname().toLowerCase());
-//        map.put("columns", table.getColumns());
-//        //列表页展示的列，即columns中extend.show = true
-//        map.put("listColumns", table.getListColumns());
-//        map.put("hasBigDecimal", table.getHasBigDecimal());
-//        map.put("package", packageName);
-//        map.put("moduleName", moduleName);
-//        map.put("author", generatorProperties.getAuthor());
-//        map.put("dialect", generatorProperties.getTaDatabaseType().getDialect());
-//        map.put("datetime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm"));
         TemplateContext templateContext = new TemplateContext(table, generatorProperties);
         templateContext.setPackageName(packageName);
         templateContext.setModuleName(moduleName);
