@@ -1,6 +1,7 @@
 package cn.xuqiudong.common.base.srpc.proxy.jdk;
 
 
+import cn.xuqiudong.common.base.srpc.annotation.SrpcReference;
 import cn.xuqiudong.common.base.srpc.proxy.ProxyFactory;
 
 import java.lang.reflect.Proxy;
@@ -13,7 +14,7 @@ import java.lang.reflect.Proxy;
 public class JdkProxyFactory implements ProxyFactory {
 
     @Override
-    public <T> T getProxy(Class<T> clazz) {
-        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{clazz}, new JdkProxyInvocation(clazz));
+    public <T> T getProxy(Class<T> clazz, SrpcReference referenceAnnotation) {
+        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{clazz}, new JdkProxyInvocation(clazz, referenceAnnotation));
     }
 }

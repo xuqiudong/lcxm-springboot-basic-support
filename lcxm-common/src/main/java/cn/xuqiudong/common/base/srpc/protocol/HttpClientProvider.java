@@ -19,13 +19,23 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * description：
- *      优化下srpc请求 HttpClient的设置
+ * 优化下srpc请求 HttpClient的设置
+ *
  * @author Vic.xu
  * @since 2024-12-04 9:52
  */
 public class HttpClientProvider {
     private static final CloseableHttpClient httpClient;
     private static final ScheduledExecutorService scheduler;
+
+    private static RequestConfig DEFAULT_REQUEST_CONFIG = RequestConfig.custom()
+            // 从连接池获取连接的超时时间
+            .setConnectionRequestTimeout(20000)
+            // 建立连接的超时时间
+            .setConnectTimeout(20000)
+            // 数据传输的超时时间
+            .setSocketTimeout(50000)
+            .build();
 
     static {
         // 1. 创建连接池
@@ -39,14 +49,7 @@ public class HttpClientProvider {
         ConnectionKeepAliveStrategy keepAliveStrategy = (response, context) -> 30 * 1000; // 30 秒
 
         // 3. 设置请求超时配置
-        RequestConfig requestConfig = RequestConfig.custom()
-                // 从连接池获取连接的超时时间
-                .setConnectionRequestTimeout(20000)
-                // 建立连接的超时时间
-                .setConnectTimeout(20000)
-                // 数据传输的超时时间
-                .setSocketTimeout(50000)
-                .build();
+        RequestConfig requestConfig = RequestConfig.copy(DEFAULT_REQUEST_CONFIG).build();
 
         // 4. 定期清理空闲和过期连接
         scheduler = Executors.newScheduledThreadPool(1);
@@ -78,6 +81,21 @@ public class HttpClientProvider {
                 .setRetryHandler(retryHandler)
                 .build();
     }
+
+
+    /**
+     * 快速创建“自定义传输超时”的RequestConfig（供特殊业务使用）
+     * 仅修改SocketTimeout，其他超时沿用全局默认值（避免重复配置，减少出错）
+     *
+     * @param socketTimeoutMs 传输超时 毫秒数
+     * @return RequestConfig
+     */
+    public static RequestConfig createCustomSocketTimeoutConfig(int socketTimeoutMs) {
+        return RequestConfig.copy(DEFAULT_REQUEST_CONFIG)
+                .setSocketTimeout(socketTimeoutMs)
+                .build();
+    }
+
 
     // 获取 HttpClient 实例
     public static CloseableHttpClient getHttpClient() {

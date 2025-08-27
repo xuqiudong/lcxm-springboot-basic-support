@@ -1,5 +1,7 @@
 package cn.xuqiudong.common.base.srpc.proxy;
 
+import cn.xuqiudong.common.base.srpc.annotation.SrpcReference;
+
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,10 +35,11 @@ public interface ProxyFactory {
     /**
      * 获得代理类
      * @param clazz 接口class
+     * @param referenceAnnotation SrpcReference注解 方便传递 元数据
      * @param <T>
      * @return 代理类
      */
-    <T> T getProxy(Class<T> clazz);
+    <T> T getProxy(Class<T> clazz, SrpcReference referenceAnnotation);
 
 
 

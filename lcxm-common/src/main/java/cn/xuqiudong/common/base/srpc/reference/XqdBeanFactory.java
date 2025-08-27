@@ -24,6 +24,12 @@ public class XqdBeanFactory implements FactoryBean<Object> {
     public static final String INTERFACE_CLASS_FIELD_NAME = "interfaceClass";
 
     /**
+     * 注解对象
+     * @see SrpcReference
+     */
+    public static final String REFERENCE_ANNOTATION_FIELD_NAME = "referenceAnnotation";
+
+    /**
      * init方法名
      */
     public static final String INIT_METHOD_NAME = "init";
@@ -35,6 +41,10 @@ public class XqdBeanFactory implements FactoryBean<Object> {
      */
     private Class<?> interfaceClass;
 
+    /**
+     * 引用注解
+     */
+    private SrpcReference referenceAnnotation;
 
     private Object bean;
 
@@ -45,7 +55,7 @@ public class XqdBeanFactory implements FactoryBean<Object> {
             synchronized (this) {
                 if (this.bean == null) {
                     // 延迟生成代理对象
-                    this.bean = factory.getProxy(interfaceClass);
+                    this.bean = factory.getProxy(interfaceClass, referenceAnnotation);
                     LOGGER.debug("Created proxy for interface: {}", interfaceClass.getName());
                 }
             }
@@ -62,7 +72,7 @@ public class XqdBeanFactory implements FactoryBean<Object> {
      * 初始化方法
      */
     private void init(){
-        // 把创建bean的逻辑放到 getObject， 以满足可能存在的延迟加载的需求
+        // 把创建bean的逻辑放到 getObject， 以满足可能存在的延迟加载的需求 (比如本地bean存在的时候)
     }
 
     public Class<?> getInterfaceClass() {

@@ -3,15 +3,13 @@ package cn.xuqiudong.common.base.srpc.protocol;
 
 import cn.xuqiudong.common.base.exception.CommonException;
 import cn.xuqiudong.common.base.srpc.SrpcrAutoConfiguration;
-import cn.xuqiudong.common.base.srpc.model.Invoker;
-import cn.xuqiudong.common.base.srpc.model.SrpcRequestUrl;
-import cn.xuqiudong.common.base.srpc.model.XqdRequest;
-import cn.xuqiudong.common.base.srpc.model.XqdResponse;
+import cn.xuqiudong.common.base.srpc.model.*;
 import cn.xuqiudong.common.base.srpc.serializer.XqdSerializer;
 import cn.xuqiudong.common.base.srpc.serializer.hessian.Hessian2Serializer;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
@@ -45,16 +43,17 @@ public class HttpProtocol implements Protocol {
 
         XqdRequest xqdRequest = invoker.getXqdRequest();
         byte[] bytesToSend = serializer.serialize(xqdRequest);
-        byte[] bytes = sendPost(url, bytesToSend);
+        byte[] bytes = sendPost(invoker.getInvocationMeta(), url, bytesToSend);
         //反序列化
         XqdResponse response = serializer.deserialize(bytes, XqdResponse.class);
         return response.getResultData();
     }
 
-    public static byte[] sendPost(SrpcRequestUrl url, byte[] bytesToSend) throws IOException {
+    public static byte[] sendPost(SrpcInvocationMeta meta, SrpcRequestUrl url, byte[] bytesToSend) throws IOException {
         try (CloseableHttpClient httpClient = HttpClientProvider.getHttpClient()) {
-            // 创建 POST 请求
-            HttpPost httpPost = new HttpPost(url.getUrl());
+            // 创建 POST 请求  srpcUrl 通过serviceCode 获取
+            String srpcUrl = url.getUrl(meta.getServiceCode());
+            HttpPost httpPost = buildAndCustomizeRequestConfig(srpcUrl, meta);
             // 设置请求体为字节流
             HttpEntity entity = new ByteArrayEntity(bytesToSend);
             httpPost.setEntity(entity);
@@ -78,6 +77,27 @@ public class HttpProtocol implements Protocol {
                 return toByteArray(inputStream);
             }
         }
+    }
+
+    /**
+     * 构建 HttpPost, 并自定义请求级配置: <br />
+     * 比如  超时时间
+     * @param url 请求  url
+     * @param meta 请求元数据
+     * @return HttpPost
+     */
+    private static HttpPost buildAndCustomizeRequestConfig(String url, SrpcInvocationMeta meta){
+        HttpPost httpPost = new HttpPost(url);
+        int  socketTimeoutMs = meta.getTimeout();
+        // 1：根据是否传入自定义超时，设置请求级配置
+        if (socketTimeoutMs > 0) {
+            // 特殊业务：用自定义传输超时（其他超时沿用全局默认）
+            RequestConfig requestConfig = HttpClientProvider.createCustomSocketTimeoutConfig(socketTimeoutMs);
+            // 给当前请求设置配置（仅当前生效）
+            httpPost.setConfig(requestConfig);
+        }
+        return httpPost;
+
     }
 
 

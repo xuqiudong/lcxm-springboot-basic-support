@@ -32,6 +32,11 @@ public class Invoker implements Serializable {
     private long requestId;
 
     /**
+     * 描述: 指定PRC调用的元数据
+     */
+    private SrpcInvocation invocation;
+
+    /**
      * 接口方法的返回类型
      */
     private Class<?> returnType;
@@ -74,5 +79,20 @@ public class Invoker implements Serializable {
 
     public void setReturnType(Class<?> returnType) {
         this.returnType = returnType;
+    }
+
+    public SrpcInvocation getInvocation() {
+        return invocation;
+    }
+
+    public void setInvocation(SrpcInvocation invocation) {
+        this.invocation = invocation;
+    }
+
+    /**
+     * 描述: 获取当前方法的 PRC请求的的元数据
+     */
+    public SrpcInvocationMeta getInvocationMeta() {
+        return invocation.getInvocationMeta(xqdRequest.getMethodName());
     }
 }

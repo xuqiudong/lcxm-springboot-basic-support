@@ -1,6 +1,8 @@
 package cn.xuqiudong.common.base.srpc.proxy.jdk;
 
+import cn.xuqiudong.common.base.srpc.annotation.SrpcReference;
 import cn.xuqiudong.common.base.srpc.model.Invoker;
+import cn.xuqiudong.common.base.srpc.model.SrpcInvocation;
 import cn.xuqiudong.common.base.srpc.model.XqdRequest;
 import cn.xuqiudong.common.base.srpc.protocol.HttpProtocol;
 import cn.xuqiudong.common.base.srpc.protocol.Protocol;
@@ -26,14 +28,18 @@ public class JdkProxyInvocation implements InvocationHandler {
 
     private String interfaceName;
 
+    private SrpcInvocation srpcInvocation;
 
-    public JdkProxyInvocation( Class clazz) {
+
+    public JdkProxyInvocation(Class clazz, SrpcReference referenceAnnotation) {
         this.interfaceName = clazz.getName();
+        this.srpcInvocation = new SrpcInvocation(interfaceName, referenceAnnotation);
     }
 
     private Invoker buildInvoker(XqdRequest request) {
         Invoker invoker = new Invoker();
         invoker.setInterfaceName(interfaceName);
+        invoker.setInvocation(srpcInvocation);
         invoker.setXqdRequest(request);
         return invoker;
     }
