@@ -54,8 +54,9 @@ public class HttpClientProvider {
         // 4. 定期清理空闲和过期连接
         scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> {
+            // 关闭空闲超过 30 秒的连接
             connManager.closeExpiredConnections();
-            connManager.closeIdleConnections(30, TimeUnit.SECONDS); // 关闭空闲超过 30 秒的连接
+            connManager.closeIdleConnections(30, TimeUnit.SECONDS);
         }, 0, 5, TimeUnit.MINUTES);
 
         // 5. 设置重试策略

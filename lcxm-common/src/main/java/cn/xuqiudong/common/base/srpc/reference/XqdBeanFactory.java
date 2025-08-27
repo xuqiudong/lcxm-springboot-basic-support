@@ -83,4 +83,12 @@ public class XqdBeanFactory implements FactoryBean<Object> {
         this.interfaceClass = interfaceClass;
     }
 
+
+    public SrpcReference getReferenceAnnotation() {
+        return referenceAnnotation;
+    }
+
+    public void setReferenceAnnotation(SrpcReference referenceAnnotation) {
+        this.referenceAnnotation = referenceAnnotation;
+    }
 }

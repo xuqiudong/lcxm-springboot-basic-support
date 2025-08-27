@@ -4,6 +4,8 @@ import cn.xuqiudong.common.base.srpc.annotation.SrpcMethod;
 import cn.xuqiudong.common.base.srpc.annotation.SrpcReference;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
+
 /**
  * 描述:
  * 某个接口 每个方法 需要额外指定的元信息, 其属性 伴随 SrpcMethod 增减
@@ -13,7 +15,9 @@ import org.apache.commons.lang3.StringUtils;
  * @see cn.xuqiudong.common.base.srpc.annotation.SrpcMethod
  * @since 2025-08-27 9:31
  */
-public class SrpcInvocationMeta {
+public class SrpcInvocationMeta implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 区分调用不同的服务

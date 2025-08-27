@@ -5,6 +5,7 @@ import cn.xuqiudong.common.base.srpc.annotation.SrpcReference;
 import cn.xuqiudong.common.base.srpc.proxy.jdk.JdkProxyInvocation;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,9 @@ import java.util.Map;
  * @author Vic.xu
  * @since 2025-08-27 9:21
  */
-public class SrpcInvocation {
+public class SrpcInvocation implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 接口名称

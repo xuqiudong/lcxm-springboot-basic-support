@@ -28,7 +28,8 @@ demo:
 ```
 ### next version
 - 2025-05-27 版本升级到3.5.0-jdk17-1.0.0 : springboot 3.5.0, jdk17
-- 2025-08-25 hessian 对jdk8时间序列化反序列化的支持  JavaTimeSerializerFactory
+- 2025-08-25 srpc: hessian 对jdk8时间序列化反序列化的支持  JavaTimeSerializerFactory
+- 2025-08-27 srpc 框架改造: SrpcReference 支持更多元数据: 使用指定服务, 指定超时时间等
 
 ###  1.1.0-2025  2025-03-28
 - Lookup  sortOrder 字段不限制大小写

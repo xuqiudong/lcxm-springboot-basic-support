@@ -50,45 +50,46 @@ public class HttpProtocol implements Protocol {
     }
 
     public static byte[] sendPost(SrpcInvocationMeta meta, SrpcRequestUrl url, byte[] bytesToSend) throws IOException {
-        try (CloseableHttpClient httpClient = HttpClientProvider.getHttpClient()) {
-            // 创建 POST 请求  srpcUrl 通过serviceCode 获取
-            String srpcUrl = url.getUrl(meta.getServiceCode());
-            HttpPost httpPost = buildAndCustomizeRequestConfig(srpcUrl, meta);
-            // 设置请求体为字节流
-            HttpEntity entity = new ByteArrayEntity(bytesToSend);
-            httpPost.setEntity(entity);
-            if (url.getSessionInfo() != null) {
-                url.getSessionInfo().accept(httpPost);
-            }
-            // 发送请求并获取响应
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-                // 处理响应
-                int statusCode = response.getStatusLine().getStatusCode();
-                if (statusCode != HttpStatus.SC_OK) {
-                    throw new CommonException("HTTP 请求失败，状态码: " + statusCode + ", " + response.getStatusLine().getReasonPhrase());
-                }
-                // 如果需要获取响应内容
-                HttpEntity responseEntity = response.getEntity();
-                if (responseEntity == null) {
-                    return null;
-                }
-                // 获取响应流
-                InputStream inputStream = responseEntity.getContent();
-                return toByteArray(inputStream);
-            }
+        CloseableHttpClient httpClient = HttpClientProvider.getHttpClient();
+        // 创建 POST 请求  srpcUrl 通过serviceCode 获取
+        String srpcUrl = url.getUrl(meta.getServiceCode());
+        HttpPost httpPost = buildAndCustomizeRequestConfig(srpcUrl, meta);
+        // 设置请求体为字节流
+        HttpEntity entity = new ByteArrayEntity(bytesToSend);
+        httpPost.setEntity(entity);
+        if (url.getSessionInfo() != null) {
+            url.getSessionInfo().accept(httpPost);
         }
+        // 发送请求并获取响应
+        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+            // 处理响应
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != HttpStatus.SC_OK) {
+                throw new CommonException("HTTP 请求失败，状态码: " + statusCode + ", " + response.getStatusLine().getReasonPhrase());
+            }
+            // 如果需要获取响应内容
+            HttpEntity responseEntity = response.getEntity();
+            if (responseEntity == null) {
+                return null;
+            }
+            // 获取响应流
+            InputStream inputStream = responseEntity.getContent();
+            return toByteArray(inputStream);
+        }
+
     }
 
     /**
      * 构建 HttpPost, 并自定义请求级配置: <br />
      * 比如  超时时间
-     * @param url 请求  url
+     *
+     * @param url  请求  url
      * @param meta 请求元数据
      * @return HttpPost
      */
-    private static HttpPost buildAndCustomizeRequestConfig(String url, SrpcInvocationMeta meta){
+    private static HttpPost buildAndCustomizeRequestConfig(String url, SrpcInvocationMeta meta) {
         HttpPost httpPost = new HttpPost(url);
-        int  socketTimeoutMs = meta.getTimeout();
+        int socketTimeoutMs = meta.getTimeout();
         // 1：根据是否传入自定义超时，设置请求级配置
         if (socketTimeoutMs > 0) {
             // 特殊业务：用自定义传输超时（其他超时沿用全局默认）

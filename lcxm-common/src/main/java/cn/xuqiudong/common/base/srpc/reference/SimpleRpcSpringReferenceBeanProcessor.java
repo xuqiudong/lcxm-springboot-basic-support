@@ -1,11 +1,13 @@
 package cn.xuqiudong.common.base.srpc.reference;
 
 import cn.xuqiudong.common.base.srpc.annotation.SrpcReference;
+import cn.xuqiudong.common.base.srpc.protocol.HttpClientProvider;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanClassLoaderAware;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -29,7 +31,7 @@ import java.util.Map;
  * @author Vic.xu
  * @since 2024-06-25 10:13
  */
-public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostProcessor, BeanClassLoaderAware, ApplicationContextAware {
+public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostProcessor, BeanClassLoaderAware, ApplicationContextAware, DisposableBean {
 
     private static Logger logger = LoggerFactory.getLogger(SimpleRpcSpringReferenceBeanProcessor.class);
     /**
@@ -95,6 +97,8 @@ public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostPro
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(XqdBeanFactory.class);
         builder.setInitMethodName(XqdBeanFactory.INIT_METHOD_NAME);
         builder.addPropertyValue(XqdBeanFactory.INTERFACE_CLASS_FIELD_NAME, field.getType());
+        // 设置引用注解
+        builder.addPropertyValue(XqdBeanFactory.REFERENCE_ANNOTATION_FIELD_NAME, annotation);
         BeanDefinition beanDefinition = builder.getBeanDefinition();
         XQD_REFERENCE_BEAN_MAP.put(field.getName(), beanDefinition);
     }
@@ -119,4 +123,9 @@ public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostPro
     }
 
 
+    @Override
+    public void destroy() throws Exception {
+        HttpClientProvider.shutdown();
+        logger.info("SRPC http request Client shutdown");
+    }
 }
