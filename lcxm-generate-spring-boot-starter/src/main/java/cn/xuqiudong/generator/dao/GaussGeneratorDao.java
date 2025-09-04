@@ -29,7 +29,7 @@ public class GaussGeneratorDao extends BaseGeneratorDao {
     String from = " FROM pg_class a" +
             " JOIN pg_namespace b ON a.relnamespace = b.oid " +
             " LEFT JOIN pg_description c ON a.oid = c.objoid AND c.objsubid = '0' " +
-            " LEFT JOIN pg_tables d on d.tablename = a.relname " +
+            " LEFT JOIN pg_tables d on d.tablename = a.relname AND d.schemaname = b.nspname " +
             " WHERE a.relkind = 'r' and b.nspname =  current_schema ";
 
     Set<String> sortableColumns = Stream.of("tableName", "comments", "createTime").collect(Collectors.toSet());
@@ -98,7 +98,10 @@ public class GaussGeneratorDao extends BaseGeneratorDao {
         String sql = "SELECT  a.attname AS columnName, t.typname AS dataType, col_description(a.attrelid, a.attnum) AS \"comments\",  c.contype AS constraint_type " +
                 "FROM   pg_attribute a JOIN     pg_type t ON a.atttypid = t.oid " +
                 "LEFT JOIN  pg_constraint c ON a.attrelid = c.conrelid AND a.attnum = ANY (c.conkey) " +
-                "WHERE a.attrelid = (SELECT oid FROM pg_class WHERE relname = ?) AND a.attnum > 0";
+                "WHERE a.attrelid = " +
+                " (SELECT cls.oid FROM pg_class cls join  pg_namespace ns on cls.relnamespace = ns.oid  " +
+                "    where  ns.nspname = current_schema and  cls.relname = ?) " +
+                "AND a.attnum > 0";
         return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<ColumnEntity>(ColumnEntity.class), tableName);
     }
 

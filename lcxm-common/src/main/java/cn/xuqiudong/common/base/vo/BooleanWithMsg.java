@@ -23,61 +23,20 @@ public class BooleanWithMsg implements Serializable {
         super();
     }
 
-    /**
-     * 成功
-     */
     public static BooleanWithMsg success() {
         return new BooleanWithMsg(Boolean.TRUE, "");
     }
 
-    /**
-     *  成功
-     */
     public static BooleanWithMsg success(String message) {
         return new BooleanWithMsg(Boolean.TRUE, message);
     }
 
-    /**
-     * 成功 同 success
-     */
-    public static BooleanWithMsg ok() {
-        return new BooleanWithMsg(Boolean.TRUE, "");
-    }
-
-    /**
-     * 成功 同 success
-     */
-    public static BooleanWithMsg ok(String message) {
-        return new BooleanWithMsg(Boolean.TRUE, message);
-    }
-
-    /**
-     * 失败
-     */
     public static BooleanWithMsg fail(String message) {
         return new BooleanWithMsg(Boolean.FALSE, message);
     }
 
-    /**
-     * 失败
-     */
     public static BooleanWithMsg fail(String message, int msgCode) {
         return new BooleanWithMsg(Boolean.FALSE, message, msgCode);
-    }
-
-    /**
-     * 错误 , 同  fail
-     */
-    public static BooleanWithMsg error(String message) {
-        return BooleanWithMsg.fail(message);
-    }
-
-
-    /**
-     * 错误, 同  fail
-     */
-    public static BooleanWithMsg error(String message, int msgCode) {
-        return BooleanWithMsg.fail(message, msgCode);
     }
 
     private BooleanWithMsg(boolean success, String message) {
