@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>lcxm-quartz-spring-boot-starter</artifactId>
-
+    <name>lcxm-quartz-spring-boot-starter</name>
     <description>基于springboot的quartz定时任务starter</description>
 
 

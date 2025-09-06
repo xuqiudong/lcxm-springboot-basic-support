@@ -10,7 +10,8 @@
     </parent>
 
     <artifactId>lcxm-generate-spring-boot-starter</artifactId>
-
+    <name>lcxm-generate-spring-boot-starter</name>
+    <description>基于 velocity 的代码生成</description>
     <properties>
         <lcxm-common.version>${project.version}</lcxm-common.version>
     </properties>

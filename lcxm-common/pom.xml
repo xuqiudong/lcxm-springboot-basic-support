@@ -10,6 +10,8 @@
     </parent>
 
     <artifactId>lcxm-common</artifactId>
+    <name>lcxm-common</name>
+    <description>基类模块: 对象模型, 基础支持等</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
