@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.xuqiudong.basic</groupId>
+        <artifactId>lcxm-springboot-parent</artifactId>
+        <version>2.7.3-jdk17-2.0.0</version>
+    </parent>
+
+    <groupId>cn.xuqiudong.common</groupId>
+    <artifactId>lcxm-basic-srpc</artifactId>
+    <name>lcxm-basic-srpc</name>
+    <description>封装自定义 simple RPC 框架（SrpcService/SrpcReference 相关）的核心能力，包括注解、序列化、协议通信等，可独立使用或结合 Spring 使用。</description>
+
+
+    <dependencies>
+        <!-- spring  -->
+        <dependency>
+            <groupId>cn.xuqiudong.basic</groupId>
+            <artifactId>lcxm-basic-spring</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!-- HTTP客户端（RPC协议基于HTTP时需要） -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-codec</artifactId>
+                    <groupId>commons-codec</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Hessian序列化（RPC序列化方式之一） -->
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
+        </dependency>
+
+        <!-- JDK动态代理（无需额外依赖，JDK自带） -->
+
+        <!-- 测试依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

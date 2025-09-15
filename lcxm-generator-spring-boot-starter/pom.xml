@@ -9,18 +9,28 @@
         <version>2.7.3-jdk17-2.0.0</version>
     </parent>
 
-    <artifactId>lcxm-generate-spring-boot-starter</artifactId>
-    <name>lcxm-generate-spring-boot-starter</name>
-    <description>基于 velocity 的代码生成</description>
-    <properties>
-        <lcxm-common.version>${project.version}</lcxm-common.version>
-    </properties>
+    <artifactId>lcxm-generator-spring-boot-starter</artifactId>
+    <name>lcxm-generator-spring-boot-starter</name>
+    <description>基于MybatisPlus的代码生成器</description>
 
     <dependencies>
         <dependency>
             <groupId>cn.xuqiudong.basic</groupId>
-            <artifactId>lcxm-common</artifactId>
-            <version>${lcxm-common.version}</version>
+            <artifactId>lcxm-basic-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xuqiudong.basic</groupId>
+            <artifactId>lcxm-basic-cache</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!-- mybatis-plus basic-->
+        <dependency>
+            <groupId>cn.xuqiudong.basic</groupId>
+            <artifactId>lcxm-basic-mybatis-plus</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
@@ -29,16 +39,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <scope>compile</scope>
-            <exclusions>
-                <!-- 此处引入commons-lang2.4 和commons-configuration引入的2.6 冲突 -->
-                <exclusion>
-                    <groupId>commons-lang</groupId>
-                    <artifactId>commons-lang</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
         </dependency>
 
         <!-- 热部署 -->
@@ -59,7 +61,7 @@
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
         <!-- GaussDB JDBC Driver https://gitee.com/opengauss/openGauss-connector-jdbc-->
@@ -68,7 +70,7 @@
             <groupId>org.opengauss</groupId>
             <artifactId>opengauss-jdbc</artifactId>
             <version>3.0.5</version>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
 
@@ -99,7 +101,9 @@
 
     </dependencies>
 
+
     <build>
+
 
         <plugins>
             <plugin>
@@ -119,6 +123,4 @@
         </plugins>
 
     </build>
-
-
 </project>

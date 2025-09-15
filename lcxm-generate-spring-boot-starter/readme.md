@@ -6,7 +6,7 @@
   **maven坐标**
 ```
 <dependency>
-    <groupId>cn.xuqiudong.basic</groupId>
+    <groupId>cn.xuqiudong.common</groupId>
     <artifactId>lcxm-generate-spring-boot-starter</artifactId>
     <version>${version}</version>
 </dependency>

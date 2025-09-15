@@ -6,7 +6,7 @@
 
     <groupId>cn.xuqiudong.basic</groupId>
     <artifactId>lcxm-springboot-parent</artifactId>
-    <version>3.5.0-jdk17-1.0.0</version>
+    <version>2.7.3-jdk17-2.0.0</version>
     <packaging>pom</packaging>
 
     <!-- sonatype: 下列三项是需要的 -->
@@ -19,6 +19,14 @@
         <module>lcxm-generate-spring-boot-starter</module>
         <module>lcxm-mq-data-bridge-spring-boot-starter</module>
         <module>lcxm-quartz-spring-boot-starter</module>
+        <module>lcxm-basic-core</module>
+        <module>lcxm-basic-spring</module>
+        <module>lcxm-basic-srpc</module>
+        <module>lcxm-basic-mybatis-plus</module>
+        <module>lcxm-basic-cache</module>
+        <module>lcxm-basic-excel</module>
+        <module>lcxm-basic-third</module>
+        <module>lcxm-generator-spring-boot-starter</module>
     </modules>
 
     <properties>
@@ -39,12 +47,17 @@
         <!--redisson 3.17.7 之后对应的就是redisson-spring-data-3x 也即springboot3.x -->
         <redisson-spring-boot.version>3.47.0</redisson-spring-boot.version>
         <!-- springdoc 版本降低, 依赖的 LiteWebJarsResourceResolver 在spring6.2 才有-->
-        <springdoc.version>2.3.0</springdoc.version>
+        <springdoc.version>2.8.8</springdoc.version>
         <caffeine.version>3.2.0</caffeine.version>
         <jakarta.servlet>6.1.0</jakarta.servlet>
         <javax.servlet>4.0.0</javax.servlet>
         <validation.version>3.1.1</validation.version>
+        <!-- 后面 将逐步替换为 mybatis-plus -->
         <mybatis.starter.version>3.0.4</mybatis.starter.version>
+        <!--https://baomidou.com/getting-started/install/ springboot3 mp-->
+        <mybatis-plus-bom.version>3.5.14</mybatis-plus-bom.version>
+        <!--保持和mybatis-plus-bom 中对应的版本一致-->
+        <jsqlparser.version>5.2</jsqlparser.version>
         <pagehelper.starter.version>2.1.0</pagehelper.starter.version>
         <odbc.version>21.1.0.0</odbc.version>
         <sa-token.version>1.43.0</sa-token.version>
@@ -64,11 +77,16 @@
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons.lang.version>2.6</commons.lang.version>
         <velocity.version>1.7</velocity.version>
+        <freemarker.version>2.3.34</freemarker.version>
         <poi.version>5.4.1</poi.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
         <kaptcha.version>2.3.2</kaptcha.version>
         <jsoup.version>1.20.1</jsoup.version>
         <httpclient.version>4.5.13</httpclient.version>
+        <!-- hessian -->
+        <hessian.version>4.0.65</hessian.version>
+        <!--能否取代 JSR 305 的空值注解呢-->
+        <jspecify.version>1.0.0</jspecify.version>
         <!--util version ↑ ↑ ↑-->
         <!--maven plugin version ↓ ↓ ↓ -->
         <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
@@ -111,6 +129,30 @@
                 <scope>import</scope>
             </dependency>
 
+            <!--springdoc bom-->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-bom</artifactId>
+                <version>${springdoc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--mybatis plus bom: jsqlparser 不在支持jdk8 需要额外的引入-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>${mybatis-plus-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>${jsqlparser.version}</version>
+            </dependency>
+
 
             <!--redisson
               注意官网的版本提示： https://github.com/redisson/redisson/tree/master/redisson-spring-boot-starter
@@ -124,11 +166,8 @@
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson-spring-boot.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>${springdoc.version}</version>
-            </dependency>
+
+
 
             <!-- caffeine  cache-->
             <dependency>
@@ -157,6 +196,9 @@
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.starter.version}</version>
             </dependency>
+
+
+
 
             <!-- pagehelper分页插件依赖 -->
             <dependency>
@@ -278,6 +320,12 @@
                 <scope>compile</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
+            </dependency>
+
             <!-- 中文转拼音 -->
             <dependency>
                 <groupId>com.belerweb</groupId>
@@ -317,10 +365,20 @@
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.caucho</groupId>
+                <artifactId>hessian</artifactId>
+                <version>${hessian.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jspecify</groupId>
+                <artifactId>jspecify</artifactId>
+                <version>${jspecify.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
-
 
 
     <build>

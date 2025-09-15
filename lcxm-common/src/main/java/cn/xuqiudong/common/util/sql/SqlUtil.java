@@ -3,8 +3,8 @@ package cn.xuqiudong.common.util.sql;
 import cn.xuqiudong.common.util.CommonUtils;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.Parenthesis;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
+import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
@@ -93,7 +93,7 @@ public class SqlUtil {
         PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
         Expression where = CCJSqlParserUtil.parseCondExpression(append);
         if (needParenthesis) {
-            where = new Parenthesis(where);
+            where = new ParenthesedExpressionList(where);
         }
         if (plainSelect.getWhere() == null) {
             plainSelect.setWhere(where);

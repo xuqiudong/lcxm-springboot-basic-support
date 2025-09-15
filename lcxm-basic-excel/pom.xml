@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.xuqiudong.basic</groupId>
+        <artifactId>lcxm-springboot-parent</artifactId>
+        <version>2.7.3-jdk17-2.0.0</version>
+    </parent>
+
+    <artifactId>lcxm-basic-excel</artifactId>
+    <name>lcxm-basic-excel</name>
+    <description>excel 读取、写入工具类</description>
+
+    <dependencies>
+    <!-- 核心依赖：基础通用层（工具类、异常基类等） -->
+    <dependency>
+        <groupId>cn.xuqiudong.basic</groupId>
+        <artifactId>lcxm-basic-core</artifactId>
+        <version>${project.parent.version}</version>
+    </dependency>
+
+        <!-- 替换EasyExcel为FastExcel（阿里系替代方案） -->
+        <dependency>
+            <groupId>cn.idev.excel</groupId>
+            <artifactId>fastexcel</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+        <!-- 方案2：若直接使用POI（根据原pom保留） -->
+        <!-- POI 操作office start  TODO 升级-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-codec</artifactId>
+                    <groupId>commons-codec</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-collections4</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-lite</artifactId>
+        </dependency>
+        <!-- POI 操作office end -->
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- 测试依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

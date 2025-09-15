@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.xuqiudong.basic</groupId>
+        <artifactId>lcxm-springboot-parent</artifactId>
+        <version>2.7.3-jdk17-2.0.0</version>
+    </parent>
+
+    <artifactId>lcxm-basic-spring</artifactId>
+
+    <name>lcxm-basic-spring</name>
+    <description>封装 Spring/Spring Boot/Web 的通用能力（AOP 切面、全局异常处理、拦截器等），仅给使用 Spring 框架的项目依赖。</description>
+
+
+    <dependencies>
+        <!-- 依赖核心通用层 -->
+        <dependency>
+            <groupId>cn.xuqiudong.basic</groupId>
+            <artifactId>lcxm-basic-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xuqiudong.basic</groupId>
+            <artifactId>lcxm-basic-cache</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Spring核心依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Spring AOP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- jdbc -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <!--redisson
+               注意官网的版本提示： https://github.com/redisson/redisson/tree/master/redisson-spring-boot-starter
+               redisson-spring-data	 Spring Boot
+               redisson-spring-data-18	 1.5.y
+               redisson-spring-data-2x	 2.x.y
+               redisson-spring-data-3x	 3.x.y
+              -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <!--不在 传递redisson-spring-boot-starter，需要的项目自行引入-->
+            <optional>true</optional>
+        </dependency>
+
+
+        <!-- Spring Web（包含Spring MVC） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Servlet API（仅编译时依赖，运行时由容器提供） -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Thymeleaf（可选，仅Web项目需要时引入） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- 读取配置文件 http://commons.apache.org/proper/commons-configuration/userguide/quick_start.html -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-configuration2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-text</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- commons-configuration2 也需要此依赖 -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
+
+        <!-- google验证码 com.google.code已失效 -->
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+        </dependency>
+
+        <!-- 测试依赖（Spring环境） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
+
+</project>

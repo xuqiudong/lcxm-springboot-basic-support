@@ -5,7 +5,7 @@
 [Maven Central: 搜索本项目](https://central.sonatype.com/search?q=cn.xuqiudong.basic)
 ```
 <dependency>
-    <groupId>cn.xuqiudong.basic</groupId>
+    <groupId>cn.xuqiudong.common</groupId>
     <artifactId>lcxm-generate-spring-boot-starter</artifactId>
     <version>${version}</version>
 </dependency>

@@ -26,7 +26,7 @@
 **maven坐标**
 ```
 <dependency>
-    <groupId>cn.xuqiudong.basic</groupId>
+    <groupId>cn.xuqiudong.common</groupId>
     <artifactId>lcxm-common</artifactId>
     <version>${version}</version>
 </dependency>

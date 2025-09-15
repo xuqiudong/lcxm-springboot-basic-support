@@ -5,6 +5,7 @@ import cn.xuqiudong.quartz.model.TaskJobHandlerModel;
 import cn.xuqiudong.quartz.model.TaskJobLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.AopProxyUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -31,7 +32,7 @@ public abstract class AbstractTaskJob {
      */
     public Map<String, TaskJobHandlerModel<?>> registerTasks(AbstractTaskJob selfBean) {
         Map<String, TaskJobHandlerModel<?>> taskJob = new HashMap<>();
-        Class<? extends AbstractTaskJob> taskClazz = getClass();
+        Class<?> taskClazz = AopProxyUtils.ultimateTargetClass(selfBean);
         for (Method method : taskClazz.getDeclaredMethods()) {
             //1. 只处理public方法
             //2. 必须被标记为TaskJobFlag

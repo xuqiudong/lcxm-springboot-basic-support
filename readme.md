@@ -112,3 +112,17 @@
 
 
 >  2025-05-29测试推送到gitea，触发gitea推送到gitee
+
+
+## 版本升级2.7.3-jdk17-2.0.0
+> 2025-09-08
+> 把common进行拆分, 因为其引入的依赖较多,拆分后, 可按需引入
+
+- **lcxm-basic-core** 
+ - 基础核心模块: 无框架依赖的通用能力，所有项目都能依赖。
+- **lcxm-basic-spring**
+ - 封装 Spring/Spring Boot/Web 的通用能力（AOP 切面、全局异常处理、拦截器等），仅给使用 Spring 框架的项目依赖。
+- **lcxm-basic-srpc**
+ - 封装自定义 simple RPC 框架（SrpcService/SrpcReference 相关）的核心能力，包括注解、序列化、协议通信等，可独立使用或结合 Spring 使用。  
+- **lcxm-basic-mybatis-plus**
+ -  封装 MyBatis-Plus 的通用能力（带 MP 注解的实体基类、通用 Mapper/Service、字段拦截器等），仅给使用 MyBatis-Plus 的项目依赖，依赖核心层 lcxm-basic-core。
