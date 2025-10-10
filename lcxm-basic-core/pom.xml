@@ -89,10 +89,11 @@
         </dependency>
 
         <!-- 代码检查注解 -->
+        <!-- 引入注解(如)https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations -->
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <!-- spring core -->
@@ -106,12 +107,8 @@
             <artifactId>jsqlparser</artifactId>
         </dependency>
 
-        <!-- 引入注解(如)https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations -->
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-            <version>${spotbugs.version}</version>
-        </dependency>
+
+
 
         <!-- lombok -->
         <dependency>
