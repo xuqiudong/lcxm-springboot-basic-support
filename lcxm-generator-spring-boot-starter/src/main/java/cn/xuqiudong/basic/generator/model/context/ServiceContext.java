@@ -5,6 +5,8 @@ import cn.xuqiudong.basic.generator.model.TableInfo;
 import cn.xuqiudong.basic.generator.util.ImportPackageUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 描述:
  * service 上下文模型
@@ -20,6 +22,11 @@ public class ServiceContext extends BaseContext {
         addAnnotation("@Service");
         String mapperAnno = ImportPackageUtils.getImport(Service.class);
         addImport(mapperAnno);
+    }
+
+    @Override
+    public List<Class<?>> genericClassList(TableInfo tableInfo) {
+        return List.of();
     }
 
     @Override

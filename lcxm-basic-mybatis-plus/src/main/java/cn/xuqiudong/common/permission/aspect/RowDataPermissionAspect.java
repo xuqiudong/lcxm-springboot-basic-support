@@ -32,7 +32,7 @@ public class RowDataPermissionAspect {
                 // 3. 获取枚举实例
                 RowDataHandlerType type = resolvePermissionType(typeClass, typeValue);
                 // 4. 填充到上下文（复用原有ThreadLocal逻辑）
-                RowDataHelper.start(type, item.column(), item.precondition());
+                RowDataHelper.start(type, item.column(), item.jointLogic(), item.precondition());
             }
             // 2. 执行目标方法 分页应该在此处 执行两条sql
             return joinPoint.proceed();

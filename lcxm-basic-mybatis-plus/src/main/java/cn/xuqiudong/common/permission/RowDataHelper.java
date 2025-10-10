@@ -1,5 +1,6 @@
 package cn.xuqiudong.common.permission;
 
+import cn.xuqiudong.common.permission.enums.JointLogic;
 import cn.xuqiudong.common.permission.enums.RowDataHandlerType;
 import cn.xuqiudong.common.permission.model.DataRowAuthColumn;
 import cn.xuqiudong.common.permission.model.DataRowAuthModel;
@@ -56,22 +57,23 @@ public class RowDataHelper {
      * @param column SQL 中需要过滤的字段 如a.dept_id
      */
     public static void start(RowDataHandlerType type, String column) {
-        start(type, column, null);
+        start(type, column, null, null);
     }
 
     /**
      * 业务代码设置过滤条件
-     *   最终形成的WHERE条件为：(前置条件 AND 权限条件)
+     *   最终形成的WHERE条件为：(前置条件 [and | or] 权限条件)
      * @param type          数据行权限过滤类型
      * @param column        SQL 中需要过滤的字段 如a.dept_id
+     * @param jointLogic    拼接逻辑
      * @param precondition  前置判断条件（如"a.xx_id is not null"）
      */
-    public static void start(RowDataHandlerType type, String column, String precondition) {
+    public static void start(RowDataHandlerType type, String column, JointLogic jointLogic, String precondition) {
         DataRowAuthModel data = getLocalAuthorityData();
         if (data == null) {
             data = new DataRowAuthModel();
         }
-        DataRowAuthColumn filterColumn = new DataRowAuthColumn(type, column, precondition);
+        DataRowAuthColumn filterColumn = new DataRowAuthColumn(type, column, precondition, jointLogic);
         data.addFilterColumn(filterColumn);
         setLocalAuthorityData(data);
     }
