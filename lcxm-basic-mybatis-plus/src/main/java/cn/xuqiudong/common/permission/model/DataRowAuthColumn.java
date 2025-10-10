@@ -1,6 +1,9 @@
 package cn.xuqiudong.common.permission.model;
 
+import cn.xuqiudong.common.permission.enums.JointLogic;
 import cn.xuqiudong.common.permission.enums.RowDataHandlerType;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -13,6 +16,8 @@ import java.io.Serializable;
  * @author VIC.xu
  *
  */
+@Getter
+@Setter
 public class DataRowAuthColumn implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -30,6 +35,11 @@ public class DataRowAuthColumn implements Serializable {
 	 */
 	private String precondition;
 
+	/**
+	 * 拼接 precondition 的逻辑 是and 还是 or , 默认or
+	 */
+	private JointLogic jointLogic = JointLogic.OR;
+
 	private boolean hasPrecondition = false;
 
 	public DataRowAuthColumn(RowDataHandlerType type, String column) {
@@ -38,37 +48,13 @@ public class DataRowAuthColumn implements Serializable {
 		this.column = column;
 	}
 
-	public DataRowAuthColumn(RowDataHandlerType type, String column, String precondition) {
+	public DataRowAuthColumn(RowDataHandlerType type, String column, String precondition, JointLogic jointLogic) {
 		this(type, column);
 		this.precondition = precondition;
 		this.hasPrecondition = StringUtils.isNotBlank(precondition);
+		this.jointLogic = jointLogic;
 	}
 
-	public String getPrecondition() {
-		return precondition;
-	}
-
-	public boolean hasPrecondition() {
-		return hasPrecondition;
-	}
-
-
-
-	public RowDataHandlerType getType() {
-		return type;
-	}
-
-	public void setType(RowDataHandlerType type) {
-		this.type = type;
-	}
-
-	public String getColumn() {
-		return column;
-	}
-
-	public void setColumn(String column) {
-		this.column = column;
-	}
 
 	@Override
 	public int hashCode() {
@@ -86,6 +72,10 @@ public class DataRowAuthColumn implements Serializable {
 		}
 		DataRowAuthColumn data = (DataRowAuthColumn) obj;
 		return new EqualsBuilder().append(type, data.getType()).append(column, data.getColumn()).isEquals();
+	}
+
+	public boolean hasPrecondition() {
+		return hasPrecondition;
 	}
 
 }

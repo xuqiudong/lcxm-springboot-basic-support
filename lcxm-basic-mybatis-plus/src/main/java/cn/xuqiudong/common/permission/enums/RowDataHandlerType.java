@@ -15,4 +15,11 @@ public interface RowDataHandlerType {
 	 */
 	String handlerSql(String column);
 
+	/**
+	 * 和其他权限的关系： 默认是OR  ， 如果是AND 的话， 则放在外面 直接AND
+	 */
+	default JointLogic permissionType() {
+		return JointLogic.OR;
+	}
+
 }

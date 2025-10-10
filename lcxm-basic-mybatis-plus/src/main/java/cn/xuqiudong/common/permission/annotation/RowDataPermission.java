@@ -2,6 +2,7 @@ package cn.xuqiudong.common.permission.annotation;
 
 
 import cn.xuqiudong.common.permission.RowDataHelper;
+import cn.xuqiudong.common.permission.enums.JointLogic;
 import cn.xuqiudong.common.permission.enums.RowDataHandlerType;
 
 import java.lang.annotation.ElementType;
@@ -52,5 +53,10 @@ public @interface RowDataPermission {
          * 前置判断条件（如"a.xx_id is not null"） 最终形成 WHERE条件为：(前置条件 AND 权限条件)
          */
         String precondition() default "";
+
+        /**
+         * 前置判断条件 和权限sql 逻辑关系（默认为OR）
+         */
+        JointLogic jointLogic() default JointLogic.OR;
     }
 }

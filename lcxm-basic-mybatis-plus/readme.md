@@ -1,6 +1,10 @@
 # mybatis plus 模块
 
 ## 基于mybatis-plus的权限拦截器: 基于字段的权限控制
+- 支持mapper接口内方法上加RowDataPermission注解的方式（切面实现）
+- 支持手动通过RowDataHelper.start开启，需要手动调用clear()方法结束
+- 最终的权限sql均在RowDataHandlerType（子类枚举中实现）， 框架只是组装权限sql
+
 
 **1 定义权限拦截器:**
 
