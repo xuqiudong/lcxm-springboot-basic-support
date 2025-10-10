@@ -1,0 +1,2 @@
+com.kjlink.cloud.mybatis.MyBatisModuleAutoConfiguration
+com.kjlink.cloud.mybatis.MybatisSecurityAutoConfiguration

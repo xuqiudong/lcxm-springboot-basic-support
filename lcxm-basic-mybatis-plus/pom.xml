@@ -49,6 +49,12 @@
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
         </dependency>
 
+        <!-- jsqlparser -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+        </dependency>
+
         <!-- PageHelper 分页插件 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>

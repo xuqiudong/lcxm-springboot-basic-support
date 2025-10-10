@@ -1,0 +1,2 @@
+include:
+  - remote: 'http://gitlab.kjlink.in/open/pipeline-template/-/raw/master/cloud-jar-jdk21.yml'
