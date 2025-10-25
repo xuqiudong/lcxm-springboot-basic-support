@@ -7,9 +7,9 @@
     <!--  *********** some common sql *******************    -->
     <!--  如果是复杂sql，可以通过 databaseId 匹配不同数据库   -->
     <!--修改 enable 状态 -->
-    <update id="updateEnable">
+    <update id="commonUpdateEnable">
         update
-        <include refid="tableName"/>
+            ${tableName}
         set enable = #{enable}
         where id = #{id}
     </update>

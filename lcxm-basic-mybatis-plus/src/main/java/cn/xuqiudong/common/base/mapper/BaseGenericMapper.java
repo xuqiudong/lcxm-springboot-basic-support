@@ -16,6 +16,8 @@ import java.util.List;
  */
 public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Serializable> {
 
+    int commonUpdateEnable(@Param("tableName")String tableName, @Param("id")Integer id, @Param("enable")Boolean enable);
+
     /**
      * 查询列表
      * @param lookup query condition

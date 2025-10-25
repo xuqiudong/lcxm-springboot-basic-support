@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface BaseMapper<T> {
 
+    int commonUpdateEnable(@Param("tableName")String tableName, @Param("id")Integer id, @Param("enable")Boolean enable);
+
     /**
      * 查询列表
      * @param lookup query condition
@@ -87,5 +89,7 @@ public interface BaseMapper<T> {
     default int updateEnable(@Param("id")Integer id, @Param("enable")Boolean enable){
         throw new UnsupportedOperationException("当前 Mapper.xml 未实现 updateEnable 方法");
     }
+
+
 
 }
