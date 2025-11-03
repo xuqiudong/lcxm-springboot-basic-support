@@ -1,9 +1,7 @@
 package cn.xuqiudong.common.util;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollUtil;
 import cn.xuqiudong.common.query.Column;
-import cn.xuqiudong.common.query.PageQuery;
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.sql.SqlInjectionUtils;
@@ -34,8 +32,9 @@ public class ColumnUtils {
     private static final Map<String, String> FIELD_NAME_CACHE = new ConcurrentHashMap<>();
     /**
      * 匹配字段名称： 检测是否合法字段  字母数字 下划线和点
+     * . 字符在方括号 [] 内部时不需要转义（\）
      */
-    private static final Pattern SAFE_COLUMN_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\.]+$");
+    private static final Pattern SAFE_COLUMN_PATTERN = Pattern.compile("^[a-zA-Z0-9_.]+$");
 
     /**
      * 安全字段名称： 检测是否合法字段， 并驼峰转下划线
