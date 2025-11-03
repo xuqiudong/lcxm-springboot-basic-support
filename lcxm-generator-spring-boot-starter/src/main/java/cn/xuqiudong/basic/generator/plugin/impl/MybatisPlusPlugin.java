@@ -20,7 +20,7 @@ import java.util.List;
  * @author Vic.xu
  * @since 2025-09-15 11:33
  */
-public class PlusPlugin implements IGeneratorPlugin {
+public class MybatisPlusPlugin implements IGeneratorPlugin {
 
 
     @Override
@@ -31,6 +31,7 @@ public class PlusPlugin implements IGeneratorPlugin {
     /**
      * entity  上的导入
      * 字段上的 注解
+     *
      * @param templateContext
      */
     @Override
@@ -63,7 +64,7 @@ public class PlusPlugin implements IGeneratorPlugin {
             } else {
                 //  非主键  加上 @TableField 注解  @TableField(value = "name", select = false)
                 //  select = false , 当为lob类型的时候
-                String  select = "";
+                String select = "";
                 if (field.isLob()) {
                     select = ", select = false";
                 }
@@ -73,7 +74,6 @@ public class PlusPlugin implements IGeneratorPlugin {
                 // // 追加imports
                 entity.addImport(ImportPackageUtils.getImport(TableField.class));
             }
-
         }
     }
 
