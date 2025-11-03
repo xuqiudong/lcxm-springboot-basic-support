@@ -8,7 +8,7 @@ import org.apache.ibatis.mapping.SqlSource;
 
 /**
  * 描述:
- * 查询全部， 包括 select = false 字段  TODO  test
+ * 查询全部， 包括 select = false 字段
  *
  * @author Vic.xu
  * @see com.baomidou.mybatisplus.core.injector.methods.SelectById
