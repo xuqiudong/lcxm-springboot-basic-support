@@ -3,10 +3,8 @@ package cn.xuqiudong.generator;
 import cn.xuqiudong.basic.generator.Generator;
 import cn.xuqiudong.basic.generator.engine.FreemarkerTemplateEngine;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
-import cn.xuqiudong.common.base.controller.BaseController;
 import cn.xuqiudong.common.base.entity.BaseMpEntity;
-import cn.xuqiudong.common.base.mapper.BaseMapper;
-import cn.xuqiudong.common.base.service.BaseService;
+import cn.xuqiudong.common.base.mapper.StringCrudMapper;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
@@ -32,11 +30,13 @@ public class MainGeneratorTest {
                                 builder.author("Vic.xu")
                                         // 输出目录: 可以指定为项目内 Paths.get(System.getProperty("user.dir")) + "/src/main/java"
 //                                .outputDir("D:/desk/generator")
-                                        .outputDir(Paths.get(System.getProperty("user.dir")) + "/src/main/java")
+                                        .outputDir(Paths.get(System.getProperty("user.dir")) + "/src/test/java")
                                         // 基础包路径
                                         .basePackage("cn.xuqiudong.generator")
                                         // 模块名称: 基础包路径的子包, 以及controller 请求路径
                                         .module("demo")
+                                        // 主键类型: 将覆盖数据库查询出的结果
+                                        .pkType(String.class)
                                         // 是否开启 lombok 注解 : 默认：true
                                         .lombok(true)
                                         // 是否开启 plus 注解 : 默认：true
@@ -59,16 +59,16 @@ public class MainGeneratorTest {
                                         .fileOverride(true)
                                         // 生成的实体(Entity)相关配置 *********************
                                         .entityConfig(ec ->
-                                                // 实体的父类
-                                                ec.supperClass(BaseMpEntity.class)
-                                                        // 实体类父类 是否带泛型: 取自主键类型
-                                                        .supperClassWithGeneric(true)
-                                                        //实体中忽略的表字段: xml 中也不会生成
-                                                        .ignoreColumns("create_time", "update_time")
+                                                        // 实体的父类
+                                                        ec.supperClass(BaseMpEntity.class)
+                                                                // 实体类父类 是否带泛型: 取自主键类型
+                                                                .supperClassWithGeneric(true)
+                                                //实体中忽略的表字段: xml 中也不会生成
+//                                                        .ignoreColumns("create_time", "update_time")
                                         )
                                         // 生成的 Mapper相关配置 *********************
                                         .mapperConfig(mc ->
-                                                mc.supperClass(BaseMapper.class)
+                                                mc.supperClass(StringCrudMapper.class)
                                                         .supperClassWithGeneric(true)
                                         )
                                         // 生成的 Mapper XML相关配置 *********************
@@ -76,17 +76,19 @@ public class MainGeneratorTest {
                                                 xc.disable(false))
                                         // 生成的 Service 相关配置 *********************
                                         .serviceConfig(sc ->
-                                                sc.supperClass(BaseService.class)
-                                                        //service 泛型 只支持 <XxxMapper, XxxEntity> 形式
-                                                        .supperClassWithGeneric(true)
-                                                        .disable(false)
+                                                        sc
+//                                                .supperClass(BaseService.class)
+                                                                //service 泛型 只支持 <XxxMapper> 形式
+                                                                .supperClassWithGeneric(false)
+                                                                .disable(false)
                                         )
                                         // 生成的 Controller 相关配置 *********************
                                         .controllerConfig(cc ->
-                                                cc.supperClass(BaseController.class)
-                                                        // controller 泛型 只支持 <XxxService, XxxEntity> 形式
-                                                        .supperClassWithGeneric(true)
-                                                        .disable(false)
+                                                        cc
+//                                                        .supperClass(BaseController.class)
+                                                                // controller 泛型 只支持 <XxxService> 形式
+                                                                .supperClassWithGeneric(false)
+                                                                .disable(false)
                                         )
                 )
                 // 模板配置: 默认就是freemarker 模板引擎 可以不用配置

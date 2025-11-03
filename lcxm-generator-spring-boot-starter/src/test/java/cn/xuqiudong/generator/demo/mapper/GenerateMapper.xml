@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xuqiudong.generator.demo.mapper.GenerateMapper">
+
+    <sql id="tableName">test_generate</sql>
+
+    <!-- 列表数据列 -->
+    <sql id="base_list">
+        a.id,
+        a.create_by,
+        a.create_time,
+        a.update_by,
+        a.update_time,
+        a.enabled,
+        a.`name`,
+        a.birthday,
+        a.`type`,
+        a.version,
+        a.open_time,
+        a.start_time,
+        a.tag_name
+    </sql>
+
+    <!-- 详情数据列 -->
+    <sql id="detail_list">
+        <include refid="base_list"/>,
+        a.note,
+        a.article
+    </sql>
+
+    <!-- 只包含主键 -->
+    <resultMap id="BaseResultMap" type="cn.xuqiudong.generator.demo.entity.Generate">
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <!-- 通用查询映射结果: 去掉lob 字段 -->
+    <resultMap id="ListResultMap" type="cn.xuqiudong.generator.demo.entity.Generate" extends="BaseResultMap">
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="enabled" property="enabled"/>
+        <result column="name" property="name"/>
+        <result column="birthday" property="birthday"/>
+        <result column="type" property="type"/>
+        <result column="version" property="version"/>
+        <result column="open_time" property="openTime"/>
+        <result column="start_time" property="startTime"/>
+        <result column="tag_name" property="tagName"/>
+    </resultMap>
+
+    <!-- 全字段映射结果 -->
+    <resultMap id="DetailResultMap" type="cn.xuqiudong.generator.demo.entity.Generate" extends="ListResultMap">
+        <result column="note" property="note"/>
+        <result column="article" property="article"/>
+    </resultMap>
+</mapper>
