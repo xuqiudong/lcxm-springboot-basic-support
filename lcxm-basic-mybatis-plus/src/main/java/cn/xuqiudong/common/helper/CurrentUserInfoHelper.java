@@ -20,7 +20,7 @@ public class CurrentUserInfoHelper {
     /**
      * 用户ID
      */
-    private static Supplier<String> userIdSupplier = () -> "-";
+    private static Supplier<String> userIdSupplier = () -> "-1";
     /**
      * 用户名
      */

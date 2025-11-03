@@ -20,13 +20,13 @@ public class BaseMpEntityAutoFillFieldHandler implements AutoFillFieldHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseMpEntityAutoFillFieldHandler.class);
 
-    public static final String TIPS = "未提供获取当前登录用户的方法, 将使用匿名用户";
+    public static final String TIPS = "未提供获取当前登录用户的方法, 将使用匿名用户{}";
 
     @Override
     public void insertFill(MetaObject metaObject) {
         Object entity = metaObject.getOriginalObject();
         if (entity instanceof BaseMpEntity baseMpEntity) {
-            tips();
+            tips("insert");
 
             String useId = CurrentUserInfoHelper.getUserId();
             // 字段为空的时候 设置相关默认值
@@ -57,7 +57,7 @@ public class BaseMpEntityAutoFillFieldHandler implements AutoFillFieldHandler {
     public void updateFill(MetaObject metaObject) {
         Object entity = metaObject.getOriginalObject();
         if (entity instanceof BaseMpEntity baseMpEntity) {
-            tips();
+            tips("update");
             String useId = CurrentUserInfoHelper.getUserId();
             // 总是更新 修改人和修改时间
             baseMpEntity.setUpdateBy(useId);
@@ -66,9 +66,9 @@ public class BaseMpEntityAutoFillFieldHandler implements AutoFillFieldHandler {
 
     }
 
-    private void tips() {
+    private void tips(String opt) {
         if (CurrentUserInfoHelper.isAnonymous()) {
-            LOGGER.warn(TIPS);
+            LOGGER.warn(TIPS,  opt);
         }
     }
 }

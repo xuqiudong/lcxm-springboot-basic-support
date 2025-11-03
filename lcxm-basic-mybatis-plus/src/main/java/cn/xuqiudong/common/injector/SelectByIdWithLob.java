@@ -8,9 +8,10 @@ import org.apache.ibatis.mapping.SqlSource;
 
 /**
  * 描述:
- *    查询全部， 包括 select = false 字段  TODO  test
- * @see com.baomidou.mybatisplus.core.injector.methods.SelectById
+ * 查询全部， 包括 select = false 字段  TODO  test
+ *
  * @author Vic.xu
+ * @see com.baomidou.mybatisplus.core.injector.methods.SelectById
  * @since 2025-10-25 15:59
  */
 public class SelectByIdWithLob extends AbstractMethod {
@@ -51,7 +52,7 @@ public class SelectByIdWithLob extends AbstractMethod {
         String selectColumns = ASTERISK;
         if (table.getResultMap() == null || table.isAutoInitResultMap()) {
             /* 未设置 resultMap 或者 resultMap 是自动构建的,视为属于mp的规则范围内 */
-            selectColumns = table.getAllSqlSelect();
+            selectColumns = table.chooseSelect(x -> true);
         }
         return selectColumns;
     }
