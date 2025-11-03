@@ -65,6 +65,8 @@
 
         <!--spring and common middleware version ↑ ↑ ↑-->
         <!--util version ↓ ↓ ↓-->
+        <!--原本是使用apache common 的相关util 的， 此处引入 hutool是本着实用的想法-->
+        <hutool.version>5.8.38</hutool.version>
         <commons.lang3.version>3.17.0</commons.lang3.version>
         <commons-validator.version>1.7</commons-validator.version>
         <commons.fileupload.version>1.3.1</commons.fileupload.version>
@@ -224,6 +226,14 @@
             </dependency>
 
             <!-- util  start-->
+
+            <!--hutool all-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
             <!-- COMMONS工具类 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
