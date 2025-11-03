@@ -3,11 +3,11 @@ package cn.xuqiudong.basic.generator;
 import cn.xuqiudong.basic.generator.config.DataSourceConfig;
 import cn.xuqiudong.basic.generator.config.GlobalConfig;
 import cn.xuqiudong.basic.generator.config.StrategyConfig;
-import cn.xuqiudong.basic.generator.factory.GeneratorFactory;
-import cn.xuqiudong.basic.generator.enums.DatabaseType;
-import cn.xuqiudong.basic.generator.plugin.IGeneratorPlugin;
 import cn.xuqiudong.basic.generator.engine.BaseTemplateEngine;
 import cn.xuqiudong.basic.generator.engine.FreemarkerTemplateEngine;
+import cn.xuqiudong.basic.generator.enums.DatabaseType;
+import cn.xuqiudong.basic.generator.factory.GeneratorFactory;
+import cn.xuqiudong.basic.generator.plugin.IGeneratorPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ public class Generator {
     /**
      * 模板引擎: 默认使用Freemarker模板引擎
      */
-    private BaseTemplateEngine templateEngine ;
+    private BaseTemplateEngine templateEngine;
 
     /**
      * 自定义插件
@@ -60,6 +60,7 @@ public class Generator {
         this.templateEngine = new FreemarkerTemplateEngine();
         this.customizedPlugins = new ArrayList<>();
     }
+
     /**
      * 1. 创建生成器: 指定数据库连接信息
      */

@@ -9,13 +9,16 @@ import java.util.stream.Collectors;
 
 /**
  * 描述:
- *   把class 泛型类列表转化为泛型字符串 形如: <Integer>, <User, UserMapper>等
+ * 把class 泛型类列表转化为泛型字符串 形如: <Integer>, <User, UserMapper>等
+ *
  * @author Vic.xu
  * @since 2025-09-19 13:45
  */
 public class GenericStringUtils {
 
-    /** 支持 List<Class<?>> */
+    /**
+     * 支持 List<Class<?>>
+     */
     public static String toGenericString(List<Class<?>> classes) {
         if (classes == null || classes.isEmpty()) {
             return "";
@@ -25,15 +28,37 @@ public class GenericStringUtils {
                 .collect(Collectors.joining(", ", "<", ">"));
     }
 
-    /** 支持可变参数 Class<?>... */
+    /**
+     * 支持可变参数 Class<?>...
+     */
     public static String toGenericString(Class<?>... classes) {
         if (classes == null || classes.length == 0) {
             return "";
         }
-        return Arrays.stream(classes)
-                .map(Class::getSimpleName)
+        return toGenericString(Arrays.asList(classes));
+    }
+
+    /**
+     * 支持 List<String>
+     */
+    public static String classNameToGenericString(List<String> classes) {
+        if (classes == null || classes.isEmpty()) {
+            return "";
+        }
+        return classes.stream()
                 .collect(Collectors.joining(", ", "<", ">"));
     }
+
+    /**
+     * 支持可变参数 String...
+     */
+    public static String classNameToGenericString(String... classes) {
+        if (classes == null || classes.length == 0) {
+            return "";
+        }
+        return classNameToGenericString(Arrays.asList(classes));
+    }
+
 
     public static void main(String[] args) {
         // 测试 List

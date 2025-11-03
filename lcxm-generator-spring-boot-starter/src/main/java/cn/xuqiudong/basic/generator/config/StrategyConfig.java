@@ -1,21 +1,17 @@
 package cn.xuqiudong.basic.generator.config;
 
-import cn.xuqiudong.basic.generator.config.template.BaseTemplateConfig;
+import cn.xuqiudong.basic.generator.config.template.ControllerTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.EntityTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.MapperTemplateConfig;
-import cn.xuqiudong.basic.generator.config.template.ControllerTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.MapperXmlTemplateConfig;
+import cn.xuqiudong.basic.generator.config.template.QueryTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.ServiceTemplateConfig;
-import cn.xuqiudong.basic.generator.enums.TemplateType;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.util.Assert;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -30,6 +26,7 @@ import java.util.function.Consumer;
  * 2.3 xml 配置
  * 2.4 service 配置
  * 2.5 controller 配置
+ * 2.6 query 配置
  * </p>
  *
  * @author Vic.xu
@@ -64,6 +61,19 @@ public class StrategyConfig {
      */
     private EntityTemplateConfig entityTemplateConfig;
 
+
+    /**
+     * query 配置 builder
+     */
+    @Getter(AccessLevel.NONE)
+    private QueryTemplateConfig.Builder queryConfigBuilder = new QueryTemplateConfig.Builder();
+
+    /**
+     * query 配置
+     */
+    private QueryTemplateConfig queryTemplateConfig;
+
+
     /**
      * mapper 配置 builder
      */
@@ -94,7 +104,6 @@ public class StrategyConfig {
     private ServiceTemplateConfig serviceTemplateConfig;
 
 
-
     /**
      * controller 配置 builder
      */
@@ -110,6 +119,7 @@ public class StrategyConfig {
      */
     private void afterPropertySet() {
         this.entityTemplateConfig = this.entityConfigBuilder.build();
+        this.queryTemplateConfig = this.queryConfigBuilder.build();
         this.mapperTemplateConfig = this.mapperConfigBuilder.build();
         this.xmlTemplateConfig = this.xmlConfigBuilder.build();
         this.serviceTemplateConfig = this.serviceConfigBuilder.build();
@@ -149,6 +159,7 @@ public class StrategyConfig {
             consumer.accept(this.strategyConfig.entityConfigBuilder);
             return this;
         }
+
         /**
          * mapper 配置
          */
@@ -176,7 +187,6 @@ public class StrategyConfig {
             this.strategyConfig.fileOverride = fileOverride;
             return this;
         }
-
 
 
         @Override

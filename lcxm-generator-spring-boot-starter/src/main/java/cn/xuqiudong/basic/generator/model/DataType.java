@@ -2,9 +2,7 @@ package cn.xuqiudong.basic.generator.model;
 
 import cn.xuqiudong.basic.generator.registry.DataTypeMappingRegistry;
 import lombok.Data;
-
 import org.apache.ibatis.type.JdbcType;
-
 
 
 /**

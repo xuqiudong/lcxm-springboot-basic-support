@@ -16,16 +16,27 @@ import java.util.List;
  */
 public class ServiceContext extends BaseContext {
 
-    public ServiceContext(TableInfo tableInfo, ConfigBundle bundle) {
-        super(tableInfo, bundle, bundle.getStrategyConfig().getServiceTemplateConfig());
+    /**
+     * 构造函数
+     *
+     * @param tableInfo       表信息
+     * @param bundle          配置信息
+     * @param templateContext 此时已经组装好 entity 和 mapper
+     */
+    public ServiceContext(TableInfo tableInfo, ConfigBundle bundle, TemplateContext templateContext) {
+        super(tableInfo, bundle, bundle.getStrategyConfig().getServiceTemplateConfig(), templateContext);
         // 固定加上 Service 注解
         addAnnotation("@Service");
-        String mapperAnno = ImportPackageUtils.getImport(Service.class);
-        addImport(mapperAnno);
+        String serviceAnno = ImportPackageUtils.getImport(Service.class);
+        addImport(serviceAnno);
+        //  添加实体和 mapper 的包
+        addImport(ImportPackageUtils.getImport(templateContext.getEntity().getFullName()));
+        addImport(ImportPackageUtils.getImport(templateContext.getMapper().getFullName()));
+
     }
 
     @Override
-    public List<Class<?>> genericClassList(TableInfo tableInfo) {
+    public List<String> genericClassNameList(TableInfo tableInfo, ConfigBundle bundle, TemplateContext templateContext) {
         return List.of();
     }
 

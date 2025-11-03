@@ -4,17 +4,18 @@ import cn.xuqiudong.common.annotation.QueryCondition;
 import cn.xuqiudong.common.enums.QueryOperation;
 import cn.xuqiudong.common.query.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
 * 测试生成 分页查询参数
 *
 * @author Vic.xu
-* @since 2025-11-03 15:16
+* @since 2025-11-03 15:23
 */
 @Data
 @EqualsAndHashCode(callSuper = true)

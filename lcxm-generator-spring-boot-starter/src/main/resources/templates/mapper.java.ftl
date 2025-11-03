@@ -24,7 +24,7 @@ ${ann}
 <#if mapper.hasSuperClass>
 public interface ${mapper.className} extends ${mapper.superClass} {
 <#else>
-public class ${mapper.className} {
+public interface ${mapper.className} {
 </#if>
 
 }

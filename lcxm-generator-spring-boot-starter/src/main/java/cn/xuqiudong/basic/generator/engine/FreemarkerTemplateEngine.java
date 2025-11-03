@@ -11,7 +11,8 @@ import java.util.Map;
 
 /**
  * 描述:
- *  基于freemarker的模板引擎
+ * 基于freemarker的模板引擎
+ *
  * @author Vic.xu
  * @since 2025-09-15 9:59
  */
@@ -31,7 +32,6 @@ public class FreemarkerTemplateEngine extends BaseTemplateEngine {
     public String templateSuffix() {
         return ".ftl";
     }
-
 
 
     /**

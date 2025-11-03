@@ -1,7 +1,7 @@
 package cn.xuqiudong.basic.generator.config.template;
 
-import cn.xuqiudong.basic.generator.constant.GeneratorConstant;
 import cn.xuqiudong.basic.generator.config.IConfigBuilder;
+import cn.xuqiudong.basic.generator.constant.GeneratorConstant;
 import lombok.Getter;
 import org.springframework.util.ReflectionUtils;
 
@@ -41,7 +41,6 @@ public class EntityTemplateConfig extends BaseTemplateConfig {
 
     /**
      * 字段是否会被忽略 : 在父类中存在
-     *
      */
     public boolean isFieldIgnored(String fieldName) {
         return this.supperClassFields != null &&

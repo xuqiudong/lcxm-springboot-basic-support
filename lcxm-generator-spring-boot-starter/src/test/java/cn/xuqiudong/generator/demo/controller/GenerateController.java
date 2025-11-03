@@ -1,13 +1,11 @@
 package cn.xuqiudong.generator.demo.controller;
 
-import cn.xuqiudong.generator.demo.entity.Generate;
-import cn.xuqiudong.generator.demo.query.GenerateQuery;
-import cn.xuqiudong.generator.demo.service.GenerateService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import cn.xuqiudong.common.base.model.BaseResponse;
 import cn.xuqiudong.common.base.model.PageInfo;
 import cn.xuqiudong.common.base.request.CheckNotRepeatRequest;
+import cn.xuqiudong.generator.demo.entity.Generate;
+import cn.xuqiudong.generator.demo.query.GenerateQuery;
+import cn.xuqiudong.generator.demo.service.GenerateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
-* 测试生成 Controller
-*
-* @author Vic.xu
-* @since 2025-11-03 15:16
-*/
+ * 测试生成 Controller
+ *
+ * @author Vic.xu
+ * @since 2025-11-03 15:23
+ */
 @Tag(name = "Generate", description = "测试生成")
 @RequestMapping("/demo/generate")
 @RestController
@@ -36,7 +34,7 @@ public class GenerateController {
     @PostMapping(value = "/page")
     public BaseResponse<PageInfo<Generate>> page(@RequestBody GenerateQuery query) {
         PageInfo<Generate> page = service.page(query);
-            return BaseResponse.success(page);
+        return BaseResponse.success(page);
     }
 
 
@@ -59,8 +57,8 @@ public class GenerateController {
 
 
     /**
-    * 删除
-    */
+     * 删除
+     */
     @Operation(summary = "删除", description = "根据id删除")
     @PostMapping(value = "/delete/{id}")
     public BaseResponse<Integer> delete(@PathVariable String id) {
@@ -73,5 +71,5 @@ public class GenerateController {
     public BaseResponse<?> checkAvailable(@RequestBody CheckNotRepeatRequest<String> repeatRequest) {
         boolean ok = service.isValueAvailable(repeatRequest.getId(), repeatRequest.getValue(), repeatRequest.getColumn());
         return BaseResponse.success(ok);
-        }
+    }
 }

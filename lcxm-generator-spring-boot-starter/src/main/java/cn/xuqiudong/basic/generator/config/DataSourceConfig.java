@@ -1,8 +1,8 @@
 package cn.xuqiudong.basic.generator.config;
 
-import cn.xuqiudong.basic.generator.registry.GeneratorDaoProvider;
 import cn.xuqiudong.basic.generator.dao.BaseGeneratorDao;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
+import cn.xuqiudong.basic.generator.registry.GeneratorDaoProvider;
 import lombok.Getter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;

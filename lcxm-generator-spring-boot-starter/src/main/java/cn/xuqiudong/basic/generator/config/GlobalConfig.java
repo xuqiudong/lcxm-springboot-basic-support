@@ -54,6 +54,11 @@ public class GlobalConfig {
      */
     private boolean open = true;
 
+    /**
+     * 主键的数据类型  将覆盖从竖数据库查询出来的结果
+     */
+    private Class<?> pkType;
+
 
     public static class Builder implements IConfigBuilder<GlobalConfig> {
 
@@ -124,6 +129,14 @@ public class GlobalConfig {
          */
         public Builder open(boolean open) {
             this.globalConfig.open = open;
+            return this;
+        }
+
+        /**
+         * 主键 的数据类型  将覆盖从竖数据库查询出来的结果
+         */
+        public Builder pkType(Class<?> pkType) {
+            this.globalConfig.pkType = pkType;
             return this;
         }
 

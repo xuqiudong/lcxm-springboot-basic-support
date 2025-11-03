@@ -1,5 +1,7 @@
 package cn.xuqiudong.basic.generator.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,9 +40,18 @@ public class ImportPackageUtils {
      */
     public static String getImport(Class<?> clazz) {
         if (!needImport(clazz)) {
-            return  "";
+            return "";
         }
         return String.format(FORMAT, clazz.getName());
+    }
+    /**
+     * 获取导包字符串: 形如 import java.time.LocalTime;
+     */
+    public static String getImport(String className) {
+        if (StringUtils.isBlank( className)) {
+            return "";
+        }
+        return String.format(FORMAT, className);
     }
 
     /**

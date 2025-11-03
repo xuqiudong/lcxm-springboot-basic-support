@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 * 测试生成 Mapper
 *
 * @author Vic.xu
-* @since 2025-11-03 15:16
+* @since 2025-11-03 15:23
 */
 @Mapper
 public interface GenerateMapper extends StringCrudMapper<Generate> {

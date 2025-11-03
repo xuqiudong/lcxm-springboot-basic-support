@@ -57,6 +57,11 @@ public class TemplateContext {
     private MapperContext mapper;
 
     /**
+     * 查询参数信息: 用于 query.java 模板
+     */
+    private QueryContext query;
+
+    /**
      * service信息: 用于 service.java 模板
      */
     private ServiceContext service;
@@ -65,7 +70,6 @@ public class TemplateContext {
      * controller信息: 用于 controller.java 模板
      */
     private ControllerContext controller;
-
 
 
     public TemplateContext(GlobalConfig globalConfig) {

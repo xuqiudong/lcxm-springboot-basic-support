@@ -15,6 +15,11 @@ public interface GeneratorConstant {
     String TEMPLATE_ENTITY_JAVA = "/templates/entity.java";
 
     /**
+     * 查询对象模板路径 (不带后缀)
+     */
+    String TEMPLATE_QUERY_JAVA = "/templates/query.java";
+
+    /**
      * 控制器模板路径 (不带后缀)
      */
     String TEMPLATE_CONTROLLER = "/templates/controller.java";
@@ -38,6 +43,11 @@ public interface GeneratorConstant {
      * entity 所在包
      */
     String PACKAGE_ENTITY = "entity";
+
+    /**
+     * query 所在包
+     */
+    String PACKAGE_QUERY = "query";
     /**
      * controller 所在包
      */

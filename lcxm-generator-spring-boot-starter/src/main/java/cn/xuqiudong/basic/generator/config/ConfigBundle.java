@@ -1,8 +1,8 @@
 package cn.xuqiudong.basic.generator.config;
 
+import cn.xuqiudong.basic.generator.engine.BaseTemplateEngine;
 import cn.xuqiudong.basic.generator.enums.TemplateType;
 import cn.xuqiudong.basic.generator.plugin.IGeneratorPlugin;
-import cn.xuqiudong.basic.generator.engine.BaseTemplateEngine;
 import lombok.Getter;
 import lombok.Setter;
 

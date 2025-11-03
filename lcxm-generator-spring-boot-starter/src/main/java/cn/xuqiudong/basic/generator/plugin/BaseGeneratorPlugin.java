@@ -1,7 +1,8 @@
 package cn.xuqiudong.basic.generator.plugin;
 
 import cn.xuqiudong.basic.generator.plugin.impl.LombokPlugin;
-import cn.xuqiudong.basic.generator.plugin.impl.PlusPlugin;
+import cn.xuqiudong.basic.generator.plugin.impl.MybatisPlusPlugin;
+import cn.xuqiudong.basic.generator.plugin.impl.QueryConditionPlugins;
 import cn.xuqiudong.basic.generator.plugin.impl.SpringdocPlugin;
 
 import java.util.HashSet;
@@ -23,11 +24,12 @@ public abstract class BaseGeneratorPlugin implements IGeneratorPlugin {
      */
     static {
         DEFAULT_PLUGINS.add(new LombokPlugin());
-        DEFAULT_PLUGINS.add(new PlusPlugin());
+        DEFAULT_PLUGINS.add(new MybatisPlusPlugin());
         DEFAULT_PLUGINS.add(new SpringdocPlugin());
+        DEFAULT_PLUGINS.add(new QueryConditionPlugins());
     }
 
-    public static Set<IGeneratorPlugin> getDefaultPlugins(){
+    public static Set<IGeneratorPlugin> getDefaultPlugins() {
         return DEFAULT_PLUGINS;
     }
 

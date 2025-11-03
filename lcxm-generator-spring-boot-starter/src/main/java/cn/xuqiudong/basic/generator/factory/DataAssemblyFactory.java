@@ -2,15 +2,16 @@ package cn.xuqiudong.basic.generator.factory;
 
 import cn.xuqiudong.basic.generator.config.ConfigBundle;
 import cn.xuqiudong.basic.generator.config.GlobalConfig;
+import cn.xuqiudong.basic.generator.model.FieldInfo;
+import cn.xuqiudong.basic.generator.model.TableInfo;
 import cn.xuqiudong.basic.generator.model.context.ControllerContext;
 import cn.xuqiudong.basic.generator.model.context.EntityContext;
 import cn.xuqiudong.basic.generator.model.context.MapperContext;
+import cn.xuqiudong.basic.generator.model.context.QueryContext;
 import cn.xuqiudong.basic.generator.model.context.ServiceContext;
+import cn.xuqiudong.basic.generator.model.context.TemplateContext;
 import cn.xuqiudong.basic.generator.model.meta.ColumnMeta;
 import cn.xuqiudong.basic.generator.model.meta.TableMeta;
-import cn.xuqiudong.basic.generator.model.FieldInfo;
-import cn.xuqiudong.basic.generator.model.TableInfo;
-import cn.xuqiudong.basic.generator.model.context.TemplateContext;
 import cn.xuqiudong.basic.generator.util.NameConvertUtils;
 import org.springframework.util.Assert;
 
@@ -20,7 +21,7 @@ import java.util.Set;
 
 /**
  * 描述:
- *   组装数据的工厂
+ * 组装数据的工厂
  *
  * @author Vic.xu
  * @since 2025-09-13 9:58
@@ -32,8 +33,6 @@ public class DataAssemblyFactory {
     public DataAssemblyFactory(ConfigBundle bundle) {
         this.bundle = bundle;
     }
-
-
 
 
     /**
@@ -50,6 +49,10 @@ public class DataAssemblyFactory {
         return result;
     }
 
+    /**
+     * 构建模版数据
+     * 注意需要按顺序构建， 后面的构建依赖前面的构建结果
+     */
     public TemplateContext buildTemplateContext(String tableName) {
         GlobalConfig globalConfig = bundle.getGlobalConfig();
         TemplateContext templateContext = new TemplateContext(globalConfig);
@@ -57,17 +60,23 @@ public class DataAssemblyFactory {
         TableInfo tableInfo = buildTableInfo(tableName);
         templateContext.setTable(tableInfo);
         // 2. 构建 EntityContext
-        EntityContext entityContext = new EntityContext(tableInfo, bundle);
+        EntityContext entityContext = new EntityContext(tableInfo, bundle, templateContext);
         templateContext.setEntity(entityContext);
+
+        // 2.1 构建QueryContext
+        QueryContext queryContext = new QueryContext(tableInfo, bundle, templateContext);
+        templateContext.setQuery(queryContext);
+
         // 3. 构建MapperContext
-        MapperContext mapperContext = new MapperContext(tableInfo, bundle);
+        MapperContext mapperContext = new MapperContext(tableInfo, bundle, templateContext);
         templateContext.setMapper(mapperContext);
         //4. 构建ServiceContext
-        ServiceContext serviceContext = new ServiceContext(tableInfo, bundle);
+        ServiceContext serviceContext = new ServiceContext(tableInfo, bundle, templateContext);
         templateContext.setService(serviceContext);
         //5. 构建ControllerContext
-        ControllerContext controllerContext = new ControllerContext(tableInfo, bundle);
+        ControllerContext controllerContext = new ControllerContext(tableInfo, bundle, templateContext);
         templateContext.setController(controllerContext);
+
         return templateContext;
     }
 
@@ -140,6 +149,7 @@ public class DataAssemblyFactory {
 
     /**
      * 构建模版数据
+     *
      * @param tableInfo
      */
     public TemplateContext buildTemplateContext(TableInfo tableInfo) {

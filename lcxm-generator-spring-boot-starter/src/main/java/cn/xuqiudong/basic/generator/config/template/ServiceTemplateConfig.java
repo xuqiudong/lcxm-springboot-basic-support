@@ -4,7 +4,8 @@ import cn.xuqiudong.basic.generator.constant.GeneratorConstant;
 
 /**
  * 描述:
- *  Service 模板配置
+ * Service 模板配置
+ *
  * @author Vic.xu
  * @since 2025-09-18 17:35
  */

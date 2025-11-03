@@ -1,9 +1,9 @@
 package cn.xuqiudong.basic.generator.model;
 
-import cn.xuqiudong.basic.generator.model.meta.ColumnMeta;
-import cn.xuqiudong.basic.generator.registry.KeyWordsHandlerRegistry;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
+import cn.xuqiudong.basic.generator.model.meta.ColumnMeta;
 import cn.xuqiudong.basic.generator.registry.DataTypeMappingRegistry;
+import cn.xuqiudong.basic.generator.registry.KeyWordsHandlerRegistry;
 import cn.xuqiudong.basic.generator.util.NameConvertUtils;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -21,7 +21,7 @@ import java.util.Set;
  * @since 2025-09-11 20:01
  */
 @Data
-public class FieldInfo {
+public class FieldInfo implements Cloneable {
 
     /**
      * 列原始名
@@ -118,5 +118,19 @@ public class FieldInfo {
             annotations = new HashSet<>();
         }
         annotations.add(annotation);
+    }
+
+    /**
+     * 克隆 原始数据， 此时 注解尚未处理 所以 只需要new个空集合即可
+     */
+    @Override
+    public FieldInfo clone() {
+        try {
+            FieldInfo clone = (FieldInfo) super.clone();
+            this.annotations = new HashSet<>();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

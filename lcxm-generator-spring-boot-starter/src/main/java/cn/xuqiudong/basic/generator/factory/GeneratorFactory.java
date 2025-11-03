@@ -80,9 +80,11 @@ public class GeneratorFactory {
         open();
     }
 
-    private void batchOutput(TemplateContext context){
+    private void batchOutput(TemplateContext context) {
         // 渲染Entity
         renderEntity(context);
+        // 渲染query
+        renderQuery(context);
         // 渲染Mapper 接口
         renderMapperInterface(context);
         // 渲染Mapper  xml
@@ -113,8 +115,8 @@ public class GeneratorFactory {
      * 渲染 Mapper.xml
      */
     private void renderMapperXml(TemplateContext context) {
-       render(TemplateType.XML, context,
-               bundle.getStrategyConfig().getXmlTemplateConfig(), context.getMapper());
+        render(TemplateType.XML, context,
+                bundle.getStrategyConfig().getXmlTemplateConfig(), context.getMapper());
     }
 
     /**
@@ -129,17 +131,25 @@ public class GeneratorFactory {
      * 渲染 entity
      */
     public void renderEntity(TemplateContext context) {
-       render(TemplateType.ENTITY, context,
-               bundle.getStrategyConfig().getEntityTemplateConfig(), context.getEntity());
+        render(TemplateType.ENTITY, context,
+                bundle.getStrategyConfig().getEntityTemplateConfig(), context.getEntity());
+    }
+
+    /**
+     * 渲染 query
+     */
+    public void renderQuery(TemplateContext context) {
+        render(TemplateType.QUERY, context,
+                bundle.getStrategyConfig().getQueryTemplateConfig(), context.getQuery());
     }
 
     /**
      * 渲染
      */
     public void render(TemplateType templateType, TemplateContext context,
-                       BaseTemplateConfig config, BaseContext baseContext){
+                       BaseTemplateConfig config, BaseContext baseContext) {
         if (config.isDisable()) {
-            LOGGER.warn("{} 模板渲染禁用, tableName: {}",templateType,  context.getTable().getTableName());
+            LOGGER.warn("{} 模板渲染禁用, tableName: {}", templateType, context.getTable().getTableName());
             return;
         }
         // 1. 获取模板内容

@@ -13,6 +13,10 @@ public enum TemplateType {
      */
     ENTITY,
     /**
+     * QUERY
+     */
+    QUERY,
+    /**
      * mapper接口
      */
     MAPPER,

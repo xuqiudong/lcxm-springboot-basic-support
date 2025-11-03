@@ -25,7 +25,7 @@ public class TableInfo {
     private String tableName;
 
     /**
-     *  表转化为java的name: 比如 sys_user -> User
+     * 表转化为java的name: 比如 sys_user -> User
      */
     private String className;
 
@@ -53,8 +53,6 @@ public class TableInfo {
      * lob 字段
      */
     private List<FieldInfo> lobFields;
-
-
 
 
     /**
@@ -99,7 +97,7 @@ public class TableInfo {
                 .filter(f -> !f.isLob())
                 .collect(Collectors.toList());
 
-      // 3. 其他字段排序：忽略的排前面(父类的字段)
+        // 3. 其他字段排序：忽略的排前面(父类的字段)
         otherFields.sort(Comparator.comparing(FieldInfo::isEntityIgnore).reversed());
 
         listFields = otherFields;

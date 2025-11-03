@@ -1,7 +1,7 @@
 package cn.xuqiudong.basic.generator.plugin;
 
-import cn.xuqiudong.basic.generator.factory.GeneratorFactory;
 import cn.xuqiudong.basic.generator.config.ConfigBundle;
+import cn.xuqiudong.basic.generator.factory.GeneratorFactory;
 import cn.xuqiudong.basic.generator.model.context.TemplateContext;
 
 /**
@@ -9,8 +9,9 @@ import cn.xuqiudong.basic.generator.model.context.TemplateContext;
  * 代码生成的插件: 给生成的代码加一些扩展
  * - 如: SwaggerPlugin：扫描字段注释，加上 @Schema
  * - 如:LombokPlugin：类上自动加 @Data、@Builder
- * @see GeneratorFactory#beforeGenerate(TemplateContext)
+ *
  * @author Vic.xu
+ * @see GeneratorFactory#beforeGenerate(TemplateContext)
  * @since 2025-09-11 10:04
  */
 public interface IGeneratorPlugin {

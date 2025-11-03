@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 /**
  * 描述:
- *  根据数据库类型获取合适的数据库访问dao
+ * 根据数据库类型获取合适的数据库访问dao
  *
  * @author Vic.xu
  * @since 2025-09-12 11:34
@@ -33,14 +33,16 @@ public class GeneratorDaoProvider {
     /**
      * 默认注册
      */
-    private static void registerDefault(){
+    private static void registerDefault() {
         register(DatabaseType.oracle, OracleGeneratorDao::new);
         register(DatabaseType.mysql, MysqlGeneratorDao::new);
         register(DatabaseType.gauss, GaussGeneratorDao::new);
     }
+
     /**
      * 注册 数据库访问dao
-     * @param type 数据库类型
+     *
+     * @param type    数据库类型
      * @param creator 创建器
      */
     public static void register(DatabaseType type, Function<JdbcTemplate, BaseGeneratorDao> creator) {
