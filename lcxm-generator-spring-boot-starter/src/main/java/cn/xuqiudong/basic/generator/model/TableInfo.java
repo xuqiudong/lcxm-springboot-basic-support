@@ -86,7 +86,7 @@ public class TableInfo {
         // 1. 去掉主键
         List<FieldInfo> nonPk = all.stream()
                 .filter(f -> !f.isPk())
-                .collect(Collectors.toList());
+                .toList();
 
         // 2. 拆分 lob 和非 lob
         List<FieldInfo> lobFields = nonPk.stream()

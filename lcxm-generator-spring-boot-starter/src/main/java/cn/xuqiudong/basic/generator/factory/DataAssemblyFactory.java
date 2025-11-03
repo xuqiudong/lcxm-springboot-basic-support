@@ -150,11 +150,9 @@ public class DataAssemblyFactory {
     /**
      * 构建模版数据
      *
-     * @param tableInfo
      */
     public TemplateContext buildTemplateContext(TableInfo tableInfo) {
         GlobalConfig globalConfig = bundle.getGlobalConfig();
-        TemplateContext templateContext = new TemplateContext(globalConfig);
-        return templateContext;
+        return new TemplateContext(globalConfig);
     }
 }

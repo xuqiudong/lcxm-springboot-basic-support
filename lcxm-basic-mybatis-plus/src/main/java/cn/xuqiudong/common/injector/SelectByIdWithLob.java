@@ -47,6 +47,7 @@ public class SelectByIdWithLob extends AbstractMethod {
      * @param queryWrapper 是否为使用 queryWrapper 查询
      * @return sql 脚本
      */
+    @Override
     protected String sqlSelectColumns(TableInfo table, boolean queryWrapper) {
         /* 假设存在用户自定义的 resultMap 映射返回 */
         String selectColumns = ASTERISK;

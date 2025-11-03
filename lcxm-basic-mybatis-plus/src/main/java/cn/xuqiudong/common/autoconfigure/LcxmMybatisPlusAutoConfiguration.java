@@ -117,7 +117,7 @@ public class LcxmMybatisPlusAutoConfiguration {
 
     /**
      *  扩展 mybatis-plus 的 方法注入
-     * link https://baomidou.com/guides/sql-injector/
+     * link <a href="https://baomidou.com/guides/sql-injector/">sql-injector</a>
      */
     @Bean
     @ConditionalOnMissingBean

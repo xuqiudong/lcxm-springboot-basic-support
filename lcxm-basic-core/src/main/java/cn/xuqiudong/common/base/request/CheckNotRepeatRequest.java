@@ -1,6 +1,5 @@
 package cn.xuqiudong.common.base.request;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 

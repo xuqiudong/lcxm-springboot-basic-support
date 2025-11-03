@@ -31,6 +31,6 @@ public enum TemplateType {
     /**
      * rest controller
      */
-    CONTROLLER;
+    CONTROLLER
 
 }

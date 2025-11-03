@@ -25,7 +25,7 @@ public class BaseMpEntityAutoFillFieldHandler implements AutoFillFieldHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         Object entity = metaObject.getOriginalObject();
-        if (entity instanceof BaseMpEntity baseMpEntity) {
+        if (entity instanceof BaseMpEntity<?> baseMpEntity) {
             tips("insert");
 
             String useId = CurrentUserInfoHelper.getUserId();
@@ -56,7 +56,7 @@ public class BaseMpEntityAutoFillFieldHandler implements AutoFillFieldHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         Object entity = metaObject.getOriginalObject();
-        if (entity instanceof BaseMpEntity baseMpEntity) {
+        if (entity instanceof BaseMpEntity<?> baseMpEntity) {
             tips("update");
             String useId = CurrentUserInfoHelper.getUserId();
             // 总是更新 修改人和修改时间

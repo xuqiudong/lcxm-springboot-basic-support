@@ -29,17 +29,17 @@ public class Generator {
     /**
      * 数据源配置
      */
-    private DataSourceConfig.Builder dataSourceConfigBuilder;
+    private final DataSourceConfig.Builder dataSourceConfigBuilder;
 
     /**
      * 全局配置
      */
-    private GlobalConfig.Builder globalConfigBuilder;
+    private final GlobalConfig.Builder globalConfigBuilder;
 
     /**
      * 生成细节配置
      */
-    private StrategyConfig.Builder strategyConfigBuilder;
+    private final StrategyConfig.Builder strategyConfigBuilder;
 
     /**
      * 模板引擎: 默认使用Freemarker模板引擎
@@ -49,7 +49,7 @@ public class Generator {
     /**
      * 自定义插件
      */
-    private List<IGeneratorPlugin> customizedPlugins;
+    private final List<IGeneratorPlugin> customizedPlugins;
 
     // 私有构造函数 初始化一些默认配置
     private Generator(DataSourceConfig.Builder dataSourceConfigBuilder) {

@@ -138,7 +138,7 @@ public abstract class BaseContext {
     }
 
     public void addAnnotations(Set<String> annotations) {
-        annotations.addAll(annotations);
+        this.annotations.addAll(annotations);
     }
 
 

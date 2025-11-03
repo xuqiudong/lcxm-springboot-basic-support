@@ -119,7 +119,7 @@ public class QueryConditionUtils {
             return StringUtils.isBlank((String) value);
         }
         if (value instanceof Collection) {
-            return ((Collection<?>) value).size() == 0;
+            return ((Collection<?>) value).isEmpty();
         }
         if (value.getClass().isArray()) {
             return ArrayUtil.isEmpty(value);

@@ -43,7 +43,7 @@ public class StrategyConfig {
     /**
      * 表前缀
      */
-    private Set<String> tablePrefix = new HashSet<>();
+    private final Set<String> tablePrefix = new HashSet<>();
 
     /**
      * 是否覆盖文件
@@ -54,7 +54,7 @@ public class StrategyConfig {
      * entity 配置 builder
      */
     @Getter(AccessLevel.NONE)
-    private EntityTemplateConfig.Builder entityConfigBuilder = new EntityTemplateConfig.Builder();
+    private final EntityTemplateConfig.Builder entityConfigBuilder = new EntityTemplateConfig.Builder();
 
     /**
      * entity 配置
@@ -66,7 +66,7 @@ public class StrategyConfig {
      * query 配置 builder
      */
     @Getter(AccessLevel.NONE)
-    private QueryTemplateConfig.Builder queryConfigBuilder = new QueryTemplateConfig.Builder();
+    private final QueryTemplateConfig.Builder queryConfigBuilder = new QueryTemplateConfig.Builder();
 
     /**
      * query 配置
@@ -78,7 +78,7 @@ public class StrategyConfig {
      * mapper 配置 builder
      */
     @Getter(AccessLevel.NONE)
-    private MapperTemplateConfig.Builder mapperConfigBuilder = new MapperTemplateConfig.Builder();
+    private final MapperTemplateConfig.Builder mapperConfigBuilder = new MapperTemplateConfig.Builder();
 
     /**
      * mapper 配置
@@ -89,7 +89,7 @@ public class StrategyConfig {
      * xml 配置 builder
      */
     @Getter(AccessLevel.NONE)
-    private MapperXmlTemplateConfig.Builder xmlConfigBuilder = new MapperXmlTemplateConfig.Builder();
+    private final MapperXmlTemplateConfig.Builder xmlConfigBuilder = new MapperXmlTemplateConfig.Builder();
     /**
      * xml 配置
      */
@@ -99,7 +99,7 @@ public class StrategyConfig {
      * service 配置 builder
      */
     @Getter(AccessLevel.NONE)
-    private ServiceTemplateConfig.Builder serviceConfigBuilder = new ServiceTemplateConfig.Builder();
+    private final ServiceTemplateConfig.Builder serviceConfigBuilder = new ServiceTemplateConfig.Builder();
 
     private ServiceTemplateConfig serviceTemplateConfig;
 
@@ -108,7 +108,7 @@ public class StrategyConfig {
      * controller 配置 builder
      */
     @Getter(AccessLevel.NONE)
-    private ControllerTemplateConfig.Builder controllerConfigBuilder = new ControllerTemplateConfig.Builder();
+    private final ControllerTemplateConfig.Builder controllerConfigBuilder = new ControllerTemplateConfig.Builder();
     /**
      * controller 配置
      */

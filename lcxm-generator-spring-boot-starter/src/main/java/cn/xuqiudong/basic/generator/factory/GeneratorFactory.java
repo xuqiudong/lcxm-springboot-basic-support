@@ -41,7 +41,7 @@ public class GeneratorFactory {
 
     ConfigBundle bundle;
 
-    private DataAssemblyFactory dataAssemblyFactory;
+    private final DataAssemblyFactory dataAssemblyFactory;
 
     public GeneratorFactory(DataSourceConfig dataSourceConfig, GlobalConfig globalConfig, StrategyConfig strategyConfig,
                             BaseTemplateEngine templateEngine, List<IGeneratorPlugin> customizedPlugins) {
@@ -227,8 +227,6 @@ public class GeneratorFactory {
     /**
      * 写入文件, 存在则log记录 ,不写入
      *
-     * @param filePath
-     * @param content
      */
     private void writeFile(String filePath, String content) {
         // 判断文件是否存在
@@ -244,7 +242,8 @@ public class GeneratorFactory {
                 LOGGER.warn("文件已存在, 覆盖写入: {}", filePath);
                 Files.write(path,
                         content.getBytes(StandardCharsets.UTF_8),
-                        StandardOpenOption.TRUNCATE_EXISTING, // 清空再写
+                        // 清空再写
+                        StandardOpenOption.TRUNCATE_EXISTING,
                         StandardOpenOption.WRITE);
             } catch (IOException e) {
                 LOGGER.error("覆盖文件失败: {}", filePath, e);

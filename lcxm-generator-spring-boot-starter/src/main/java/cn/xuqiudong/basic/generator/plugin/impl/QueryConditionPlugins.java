@@ -8,6 +8,7 @@ import cn.xuqiudong.basic.generator.util.ImportPackageUtils;
 import cn.xuqiudong.common.annotation.QueryCondition;
 import cn.xuqiudong.common.enums.QueryOperation;
 import cn.xuqiudong.common.util.QueryConditionUtils;
+import lombok.EqualsAndHashCode;
 
 /**
  * 描述:
@@ -17,6 +18,7 @@ import cn.xuqiudong.common.util.QueryConditionUtils;
  * @see cn.xuqiudong.common.annotation.QueryCondition;
  * @since 2025-11-01 14:57
  */
+@EqualsAndHashCode
 public class QueryConditionPlugins extends BaseGeneratorPlugin {
     @Override
     public boolean enable(ConfigBundle config) {

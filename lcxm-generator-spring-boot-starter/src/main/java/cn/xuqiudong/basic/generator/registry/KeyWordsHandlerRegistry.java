@@ -25,7 +25,7 @@ public class KeyWordsHandlerRegistry {
     /**
      * 持有 数据库关键字处理器
      */
-    private static Map<DatabaseType, BaseKeyWordsHandler> REGISTRY = new HashMap<>();
+    private static final Map<DatabaseType, BaseKeyWordsHandler> REGISTRY = new HashMap<>();
 
 
     static {

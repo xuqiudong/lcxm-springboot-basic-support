@@ -29,7 +29,7 @@ public class QueryContext extends BaseContext {
     /**
      * 实体字段信息: 将去除父类存在的字段 以及主键
      */
-    private List<FieldInfo> fields;
+    private final List<FieldInfo> fields;
 
     /**
      * 基类构造函数: 构造一些统统字段

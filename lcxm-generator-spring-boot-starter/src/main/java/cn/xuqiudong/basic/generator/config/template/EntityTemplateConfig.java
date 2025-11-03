@@ -115,6 +115,7 @@ public class EntityTemplateConfig extends BaseTemplateConfig {
             super(new EntityTemplateConfig());
         }
 
+        @Override
         public Builder templatePath(String templatePath) {
             config.templatePath = templatePath;
             return this;

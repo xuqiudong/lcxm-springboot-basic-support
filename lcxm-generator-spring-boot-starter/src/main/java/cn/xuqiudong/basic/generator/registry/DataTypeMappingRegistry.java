@@ -29,7 +29,7 @@ public class DataTypeMappingRegistry {
     /**
      * 数据类型映射   map:  数据库数据类型  -->  DataTypeMapping (JdbcType,  JavaType)
      */
-    private static Map<String, DataType> HOLDER = new HashMap<>();
+    private static final Map<String, DataType> HOLDER = new HashMap<>();
 
     /**
      * 找不到的数据类型时的映射

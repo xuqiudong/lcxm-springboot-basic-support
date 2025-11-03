@@ -61,12 +61,12 @@ public class GenericStringUtils {
 
 
     public static void main(String[] args) {
-        // 测试 List
+        // 测试 List // 输出: <User, BaseMapper>
         List<Class<?>> list = List.of(BaseGeneratorDao.class, Integer.class);
-        System.out.println(toGenericString(list));  // 输出: <User, BaseMapper>
+        System.out.println(toGenericString(list));
 
-        // 测试可变参数
-        System.out.println(toGenericString(String.class, TableMeta.class)); // 输出: <User, BaseMapper>
+        // 测试可变参数 // 输出: <User, BaseMapper>
+        System.out.println(toGenericString(String.class, TableMeta.class));
     }
 
 }

@@ -51,17 +51,17 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
     /**
      * 当前 MpGenericMapperHelper 对应的 MpGenericMapper
      */
-    private BaseMapper<T> mapper;
+    private final BaseMapper<T> mapper;
 
-    private Class<?> mapperClass;
+    private final Class<?> mapperClass;
 
     private Class<?> entityClass;
 
-    private Log log;
+    private final Log log;
 
-    private TableInfo tableInfo;
+    private final TableInfo tableInfo;
 
-    private String keyProperty;
+    private final String keyProperty;
 
     private volatile SqlSessionFactory sqlSessionFactory;
 
@@ -108,7 +108,7 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
 
     private Object findId(Object entity) {
 
-        if (entity instanceof BaseMpEntity mp) {
+        if (entity instanceof BaseMpEntity<?> mp) {
             return mp.getId();
         }
         return tableInfo.getPropertyValue(entity, keyProperty);
@@ -139,9 +139,8 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
             return 0;
         }
         String sql = getSqlStatement(SqlMethod.UPDATE_BY_ID);
-        SqlHelper.executeBatch(sqlSessionFactory, log, entityList, DEFAULT__BATCH_SIZE, (sqlSession, entity) -> {
-            updateSql(sqlSession, sql, entity);
-        });
+        SqlHelper.executeBatch(sqlSessionFactory, log, entityList, DEFAULT__BATCH_SIZE,
+                (sqlSession, entity) -> updateSql(sqlSession, sql, entity));
         return entityList.size();
     }
 
@@ -161,9 +160,7 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
         };
         SqlHelper.saveOrUpdateBatch(sqlSessionFactory, mapperClass, log, entityList, DEFAULT__BATCH_SIZE
                 , predicate,
-                (sqlSession, entity) -> {
-                    updateSql(sqlSession, sql, entity);
-                }
+                (sqlSession, entity) -> updateSql(sqlSession, sql, entity)
         );
 
         return entityList.size();
@@ -172,8 +169,8 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
     /**
      * 执行 SqlMethod.UPDATE_BY_ID 的更新逻辑
      * 如果直接使用entity作为参数：There is no getter for property named 'et' in XxxEntity
-     * @see com.baomidou.mybatisplus.core.injector.methods.UpdateById
      *
+     * @see com.baomidou.mybatisplus.core.injector.methods.UpdateById
      */
     private void updateSql(SqlSession sqlSession, String sql, T entity) {
         MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();

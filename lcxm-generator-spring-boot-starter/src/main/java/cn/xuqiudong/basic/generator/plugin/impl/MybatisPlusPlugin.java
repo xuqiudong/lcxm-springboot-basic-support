@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
  * @author Vic.xu
  * @since 2025-09-15 11:33
  */
+@EqualsAndHashCode
 public class MybatisPlusPlugin implements IGeneratorPlugin {
 
 
@@ -31,8 +33,6 @@ public class MybatisPlusPlugin implements IGeneratorPlugin {
     /**
      * entity  上的导入
      * 字段上的 注解
-     *
-     * @param templateContext
      */
     @Override
     public void beforeGenerate(TemplateContext templateContext) {

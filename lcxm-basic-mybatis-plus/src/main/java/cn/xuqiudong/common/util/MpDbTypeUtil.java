@@ -29,18 +29,14 @@ public class MpDbTypeUtil {
      * 处理名称不直接匹配的特殊数据库类型
      */
     public static  DbType mapSpecialDbType(String driverName) {
-        switch (driverName) {
-            case "POSTGRESQL":
-                return DbType.POSTGRE_SQL;
-            case "SQLSERVER":
-                return DbType.SQL_SERVER;
-            case "H2":
-                return DbType.H2;
+        // 可选：抛出异常提示不支持，或返回 null 让插件自动推断
+        return switch (driverName) {
+            case "POSTGRESQL" -> DbType.POSTGRE_SQL;
+            case "SQLSERVER" -> DbType.SQL_SERVER;
+            case "H2" -> DbType.H2;
             // 其他特殊类型补充在这里
-            default:
-                // 可选：抛出异常提示不支持，或返回 null 让插件自动推断
-                throw new IllegalArgumentException("不支持的数据库类型: " + driverName);
-        }
+            default -> throw new IllegalArgumentException("不支持的数据库类型: " + driverName);
+        };
 
     }
 }

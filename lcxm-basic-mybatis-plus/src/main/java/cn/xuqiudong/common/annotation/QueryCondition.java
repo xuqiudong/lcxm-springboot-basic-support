@@ -50,7 +50,6 @@ public @interface QueryCondition {
 
     /**
      * in 语句 时候，  分割字符串 的分隔符
-     * @return
      */
     String delimiter() default ",";
 

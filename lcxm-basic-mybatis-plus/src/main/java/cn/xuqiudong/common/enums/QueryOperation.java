@@ -4,6 +4,8 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.xuqiudong.common.function.WrapperProcessor;
 import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
+import com.baomidou.mybatisplus.core.conditions.interfaces.Compare;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -20,9 +22,9 @@ import java.util.Collections;
  */
 public enum QueryOperation {
 
-    EQ(false, (wrapper, column, value) -> wrapper.eq(column, value)),
+    EQ(false, AbstractWrapper::eq),
 
-    LIKE(false, (wrapper, column, value) -> wrapper.like(column, value)),
+    LIKE(false, AbstractWrapper::like),
 
     IN(true, (wrapper, column, value) -> wrapper.in(column, toCollection(value))),
 
@@ -32,13 +34,13 @@ public enum QueryOperation {
 
     IS_NOT_NULL(false, (wrapper, column, value) -> wrapper.isNotNull(column)),
 
-    LT(false, (wrapper, column, value) -> wrapper.lt(column, value)),
+    LT(false, AbstractWrapper::lt),
 
-    LE(false, (wrapper, column, value) -> wrapper.le(column, value)),
+    LE(false, AbstractWrapper::le),
 
-    GT(false, (wrapper, column, value) -> wrapper.gt(column, value)),
+    GT(false, AbstractWrapper::gt),
 
-    GE(false, (wrapper, column, value) -> wrapper.ge(column, value));
+    GE(false, AbstractWrapper::ge);
 
 
     /**
