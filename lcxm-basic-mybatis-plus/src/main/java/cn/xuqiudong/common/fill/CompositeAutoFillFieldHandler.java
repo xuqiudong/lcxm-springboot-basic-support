@@ -1,4 +1,4 @@
-package cn.xuqiudong.common.base.fill;
+package cn.xuqiudong.common.fill;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

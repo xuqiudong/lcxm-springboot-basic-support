@@ -1,4 +1,4 @@
-package cn.xuqiudong.common.helper;
+package cn.xuqiudong.common.base.context;
 
 import java.util.function.Supplier;
 
@@ -10,12 +10,12 @@ import java.util.function.Supplier;
  * @author Vic.xu
  * @since 2025-10-27
  */
-public class CurrentUserInfoHelper {
+public class CurrentUserInfoContext {
 
     /**
      * 是否匿名访问
      */
-    private static Supplier<Boolean> isAnonymousSupplier = () -> true;
+    private static boolean isAnonymous = true;
 
     /**
      * 用户ID
@@ -26,34 +26,43 @@ public class CurrentUserInfoHelper {
      */
     private static Supplier<String> usernameSupplier = () -> "anonymous";
 
+    /**
+     * 是否匿名访问
+     */
     public static boolean isAnonymous() {
-        return isAnonymousSupplier.get();
+        return isAnonymous;
     }
 
+    /**
+     * 获取当前用户ID
+     */
     public static String getUserId() {
         return userIdSupplier.get();
     }
 
+    /**
+     * 获取当前用户名
+     */
     public static String getUsername() {
         return usernameSupplier.get();
     }
 
 
-    public static void setIsAnonymousSupplier(Supplier<Boolean> isAnonymousSupplier) {
-        CurrentUserInfoHelper.isAnonymousSupplier = isAnonymousSupplier;
+    public static void setIsAnonymous(boolean isAnonymous) {
+        CurrentUserInfoContext.isAnonymous = isAnonymous;
     }
 
     public static void setUserIdSupplier(Supplier<String> userIdSupplier) {
-        CurrentUserInfoHelper.userIdSupplier = userIdSupplier;
+        CurrentUserInfoContext.userIdSupplier = userIdSupplier;
         if (userIdSupplier != null) {
-            CurrentUserInfoHelper.isAnonymousSupplier = () -> false;
+            CurrentUserInfoContext.isAnonymous = false;
         }
     }
 
     public static void setUsernameSupplier(Supplier<String> usernameSupplier) {
-        CurrentUserInfoHelper.usernameSupplier = usernameSupplier;
+        CurrentUserInfoContext.usernameSupplier = usernameSupplier;
         if (usernameSupplier != null) {
-            CurrentUserInfoHelper.isAnonymousSupplier = () -> false;
+            CurrentUserInfoContext.isAnonymous = false;
         }
     }
 }

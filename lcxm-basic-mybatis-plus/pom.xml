@@ -32,7 +32,7 @@
         <!-- 可选依赖：Spring 适配层（如需 Spring 自动扫描 Mapper） -->
         <dependency>
             <groupId>cn.xuqiudong.basic</groupId>
-            <artifactId>lcxm-basic-spring</artifactId>
+            <artifactId>lcxm-basic-framework</artifactId>
             <version>${project.parent.version}</version>
             <optional>true</optional>
         </dependency>

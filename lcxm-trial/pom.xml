@@ -9,17 +9,12 @@
         <version>3.5.0-jdk17-1.0.0</version>
     </parent>
 
-    <artifactId>lcxm-basic-third</artifactId>
-    <name>lcxm-basic-third</name>
-    <description>与第三方对接</description>
+    <artifactId>lcxm-trial</artifactId>
 
-    <dependencies>
-        <!-- spring  -->
-        <dependency>
-            <groupId>cn.xuqiudong.basic</groupId>
-            <artifactId>lcxm-basic-framework</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-    </dependencies>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 </project>

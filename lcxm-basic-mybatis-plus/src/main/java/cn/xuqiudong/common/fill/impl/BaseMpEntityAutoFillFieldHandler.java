@@ -1,8 +1,8 @@
-package cn.xuqiudong.common.base.fill.impl;
+package cn.xuqiudong.common.fill.impl;
 
+import cn.xuqiudong.common.base.context.CurrentUserInfoContext;
 import cn.xuqiudong.common.base.entity.BaseMpEntity;
-import cn.xuqiudong.common.base.fill.AutoFillFieldHandler;
-import cn.xuqiudong.common.helper.CurrentUserInfoHelper;
+import cn.xuqiudong.common.fill.AutoFillFieldHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class BaseMpEntityAutoFillFieldHandler implements AutoFillFieldHandler {
         if (entity instanceof BaseMpEntity<?> baseMpEntity) {
             tips("insert");
 
-            String useId = CurrentUserInfoHelper.getUserId();
+            String useId = CurrentUserInfoContext.getUserId();
             // 字段为空的时候 设置相关默认值
 
             // 创建人
@@ -58,7 +58,7 @@ public class BaseMpEntityAutoFillFieldHandler implements AutoFillFieldHandler {
         Object entity = metaObject.getOriginalObject();
         if (entity instanceof BaseMpEntity<?> baseMpEntity) {
             tips("update");
-            String useId = CurrentUserInfoHelper.getUserId();
+            String useId = CurrentUserInfoContext.getUserId();
             // 总是更新 修改人和修改时间
             baseMpEntity.setUpdateBy(useId);
             baseMpEntity.setUpdateTime(LocalDateTime.now());
@@ -67,7 +67,7 @@ public class BaseMpEntityAutoFillFieldHandler implements AutoFillFieldHandler {
     }
 
     private void tips(String opt) {
-        if (CurrentUserInfoHelper.isAnonymous()) {
+        if (CurrentUserInfoContext.isAnonymous()) {
             LOGGER.warn(TIPS,  opt);
         }
     }

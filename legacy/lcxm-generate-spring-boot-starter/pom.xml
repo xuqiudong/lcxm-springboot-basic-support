@@ -13,14 +13,20 @@
     <name>lcxm-generate-spring-boot-starter</name>
     <description>基于 velocity 的代码生成</description>
     <properties>
-        <lcxm-common.version>${project.version}</lcxm-common.version>
+        <lcxm-basic.version>3.5.0-jdk17-1.0.0</lcxm-basic.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>cn.xuqiudong.basic</groupId>
-            <artifactId>lcxm-common</artifactId>
-            <version>${lcxm-common.version}</version>
+            <artifactId>lcxm-basic-core</artifactId>
+            <version>${lcxm-basic.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xuqiudong.basic</groupId>
+            <artifactId>lcxm-basic-mybatis-plus</artifactId>
+            <version>${lcxm-basic.version}</version>
         </dependency>
 
         <dependency>

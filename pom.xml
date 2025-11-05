@@ -15,18 +15,16 @@
     <url>https://gitee.com/xuqiudong/${project.git.name}</url>
 
     <modules>
-        <module>lcxm-common</module>
-        <module>lcxm-generate-spring-boot-starter</module>
-        <module>lcxm-mq-data-bridge-spring-boot-starter</module>
-        <module>lcxm-quartz-spring-boot-starter</module>
         <module>lcxm-basic-core</module>
-        <module>lcxm-basic-spring</module>
-        <module>lcxm-basic-srpc</module>
-        <module>lcxm-basic-mybatis-plus</module>
-        <module>lcxm-basic-cache</module>
         <module>lcxm-basic-excel</module>
+        <module>lcxm-basic-framework</module>
+        <module>lcxm-basic-mybatis-plus</module>
+        <module>lcxm-basic-srpc</module>
         <module>lcxm-basic-third</module>
         <module>lcxm-generator-spring-boot-starter</module>
+        <module>lcxm-mq-data-bridge-spring-boot-starter</module>
+        <module>lcxm-quartz-spring-boot-starter</module>
+        <module>lcxm-trial</module>
     </modules>
 
     <properties>

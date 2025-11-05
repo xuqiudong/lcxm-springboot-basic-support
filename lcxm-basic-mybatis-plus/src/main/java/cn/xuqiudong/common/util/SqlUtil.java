@@ -1,9 +1,7 @@
-package cn.xuqiudong.common.util.sql;
+package cn.xuqiudong.common.util;
 
-import cn.xuqiudong.common.util.CommonUtils;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.Parenthesis;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;

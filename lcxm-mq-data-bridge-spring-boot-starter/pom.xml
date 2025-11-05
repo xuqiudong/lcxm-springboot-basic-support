@@ -17,7 +17,7 @@
     </description>
 
     <properties>
-        <lcxm-common.version>${project.version}</lcxm-common.version>
+        <lcxm-basic.version>${project.version}</lcxm-basic.version>
         <lcxm-generator.version>${project.version}</lcxm-generator.version>
     </properties>
 
@@ -25,8 +25,8 @@
     <dependencies>
         <dependency>
             <groupId>cn.xuqiudong.basic</groupId>
-            <artifactId>lcxm-common</artifactId>
-            <version>${lcxm-common.version}</version>
+            <artifactId>lcxm-basic-framework</artifactId>
+            <version>${lcxm-basic.version}</version>
         </dependency>
 
         <dependency>

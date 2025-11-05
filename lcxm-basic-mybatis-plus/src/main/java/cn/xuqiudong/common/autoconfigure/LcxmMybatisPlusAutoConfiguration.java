@@ -1,8 +1,8 @@
 package cn.xuqiudong.common.autoconfigure;
 
-import cn.xuqiudong.common.base.fill.AutoFillFieldHandler;
-import cn.xuqiudong.common.base.fill.CompositeAutoFillFieldHandler;
-import cn.xuqiudong.common.base.fill.impl.BaseMpEntityAutoFillFieldHandler;
+import cn.xuqiudong.common.fill.AutoFillFieldHandler;
+import cn.xuqiudong.common.fill.CompositeAutoFillFieldHandler;
+import cn.xuqiudong.common.fill.impl.BaseMpEntityAutoFillFieldHandler;
 import cn.xuqiudong.common.injector.LcxmDefaultSqlInjector;
 import cn.xuqiudong.common.permission.MPDataPermissionHandler;
 import cn.xuqiudong.common.util.MpDbTypeUtil;

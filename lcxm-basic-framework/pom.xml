@@ -9,9 +9,9 @@
         <version>3.5.0-jdk17-1.0.0</version>
     </parent>
 
-    <artifactId>lcxm-basic-spring</artifactId>
+    <artifactId>lcxm-basic-framework</artifactId>
 
-    <name>lcxm-basic-spring</name>
+    <name>lcxm-basic-framework</name>
     <description>封装 Spring/Spring Boot/Web 的通用能力（AOP 切面、全局异常处理、拦截器等），仅给使用 Spring 框架的项目依赖。</description>
 
 
@@ -45,6 +45,32 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <!-- Spring缓存注解支持 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Redis缓存实现（可选） -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- Caffeine本地缓存（可选，未来可引入） -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!--redisson

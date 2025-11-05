@@ -15,7 +15,7 @@
 
 
     <properties>
-        <lcxm-common.version>${project.version}</lcxm-common.version>
+        <lcxm-basic.version>${project.version}</lcxm-basic.version>
     </properties>
 
     <dependencies>
@@ -26,9 +26,16 @@
 
         <dependency>
             <groupId>cn.xuqiudong.basic</groupId>
-            <artifactId>lcxm-common</artifactId>
-            <version>${lcxm-common.version}</version>
+            <artifactId>lcxm-basic-framework</artifactId>
+            <version>${lcxm-basic.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>cn.xuqiudong.basic</groupId>
+            <artifactId>lcxm-basic-mybatis-plus</artifactId>
+            <version>${lcxm-basic.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
