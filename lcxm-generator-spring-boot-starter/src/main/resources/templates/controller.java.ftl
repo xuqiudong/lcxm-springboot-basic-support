@@ -46,15 +46,15 @@ public class ${controller.className} {
     @Operation(summary = "分页查询")
     @PostMapping(value = "/page")
     public BaseResponse<PageInfo<${entity.className }>> page(@RequestBody ${query.className} query) {
-        PageInfo<Generate> page = service.page(query);
-            return BaseResponse.success(page);
+        PageInfo<${entity.className}> page = service.page(query);
+        return BaseResponse.success(page);
     }
 
 
     @Operation(summary = "详情", description = "根据id查询详情")
     @GetMapping(value = "/detail/{id}")
     public BaseResponse<${entity.className}> detail(@PathVariable ${entity.pkTypeName} id) {
-        Generate entity = service.selectById(id);
+        ${entity.className} entity = service.selectById(id);
         return entity == null ? BaseResponse.error("不存在的实体") : BaseResponse.success(entity);
     }
 
