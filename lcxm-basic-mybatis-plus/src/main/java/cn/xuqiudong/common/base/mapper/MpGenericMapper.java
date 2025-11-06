@@ -1,10 +1,13 @@
 package cn.xuqiudong.common.base.mapper;
 
+import cn.xuqiudong.common.builder.WrapperBuilder;
 import cn.xuqiudong.common.helper.MpGenericMapperHelper;
 import cn.xuqiudong.common.injector.SelectByIdWithLob;
+import cn.xuqiudong.common.query.Column;
 import cn.xuqiudong.common.query.PageQuery;
 import cn.xuqiudong.common.util.ColumnUtils;
 import cn.xuqiudong.common.util.QueryConditionUtils;
+import cn.xuqiudong.common.util.WrapUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -124,6 +127,16 @@ public interface MpGenericMapper<ID extends Serializable, T> extends BaseMapper<
     default List<T> selectListByQuery(Object query) {
         QueryWrapper<T> queryWrapper = QueryConditionUtils.createWrapper(query);
         return selectList(queryWrapper);
+    }
+
+    /**
+     * 根据字段查询
+     */
+    default <R> T selectOneByColumn(Column<T, R> colum, R value){
+        QueryWrapper<T> wrapper = WrapUtils.createWrapper(colum, value);
+        List<T> ts = this.selectList(wrapper);
+        return helper().selectOne(ts);
+
     }
 
 }

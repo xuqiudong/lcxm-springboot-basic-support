@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import org.apache.ibatis.binding.MapperMethod;
+import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
@@ -26,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
 
@@ -184,5 +186,18 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
      */
     private String getSqlStatement(SqlMethod sqlMethod) {
         return SqlHelper.getSqlStatement(mapperClass, sqlMethod);
+    }
+
+    /**
+     * 查询单个结果
+     */
+    public T selectOne(List<T> ts) {
+        if (CollectionUtils.isEmpty(ts)) {
+            return null;
+        }
+        if (ts.size() == 1) {
+            return ts.get(0);
+        }
+        throw new TooManyResultsException("期望查询一条记录, 但实际记录数为: " + ts.size());
     }
 }
