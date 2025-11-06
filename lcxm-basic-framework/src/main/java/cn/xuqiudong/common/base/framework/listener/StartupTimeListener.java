@@ -64,6 +64,11 @@ public class StartupTimeListener implements SpringApplicationRunListener {
         String url = WebServerListener.selfVisitUrl();
         stopWatch.stop();
         info.append(String.format("项目启动完成, 耗时%dms, 请访问: %s", stopWatch.getTotalTimeMillis(), url));
+        String property = context.getEnvironment().getProperty("springdoc.api-docs.enabled");
+        if ("true".equals(property)) {
+            info.append("\n");
+            info.append("接口文档地址: " + WebServerListener.selfVisitUrl() + "/swagger-ui/index.html");
+        }
         info.append("\n----------------------------------------------------------------");
         LOGGER.info(info.toString());
 
