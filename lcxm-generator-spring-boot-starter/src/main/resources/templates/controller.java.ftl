@@ -68,10 +68,13 @@ public class ${controller.className} {
         return BaseResponse.success(service.selectById(entity.getId()));
     }
 
+    @Operation(summary = "修改状态", description = "修改状态")
+    @PostMapping(value = "/updateEnable/{id}")
+    public BaseResponse<Boolean> updateEnable(@PathVariable ${entity.pkTypeName} id, Boolean enable) {
+        int updated = service.updateEnable(id, enable);
+        return BaseResponse.success(updated == 1);
+    }
 
-    /**
-    * 删除
-    */
     @Operation(summary = "删除", description = "根据id删除")
     @PostMapping(value = "/delete/{id}")
     public BaseResponse<Integer> delete(@PathVariable ${entity.pkTypeName} id) {
@@ -80,7 +83,7 @@ public class ${controller.className} {
 
 
     @Operation(summary = "检测字段是否可用", description = "检测字段是否可用")
-    @PostMapping(value = "/checkAvailable(")
+    @PostMapping(value = "/check")
     public BaseResponse<?> checkAvailable(@RequestBody CheckNotRepeatRequest<${entity.pkTypeName}> repeatRequest) {
         boolean ok = service.isValueAvailable(repeatRequest.getId(), repeatRequest.getValue(), repeatRequest.getColumn());
         return BaseResponse.success(ok);
