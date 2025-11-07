@@ -4,6 +4,7 @@ import cn.xuqiudong.common.util.ColumnUtils;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.util.Assert;
@@ -45,6 +46,7 @@ public class PageQuery implements Serializable {
     /**
      * 设置排序字段
      */
+    @JsonIgnore
     public void setOrderBy(OrderBy orderBy) {
         this.orders = orderBy.toOrderSql();
     }
