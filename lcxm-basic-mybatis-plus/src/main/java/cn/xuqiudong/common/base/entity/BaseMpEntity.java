@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -21,13 +22,8 @@ import java.time.LocalDateTime;
  * @since 2025-09-10 10:39
  */
 @Data
-public class BaseMpEntity<ID extends Serializable> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Schema(description = "主键")
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    protected ID id;
+@EqualsAndHashCode(callSuper = true)
+public class BaseMpEntity<ID  extends Serializable> extends IdEntity<ID> {
 
     /**
      * 创建人账号
