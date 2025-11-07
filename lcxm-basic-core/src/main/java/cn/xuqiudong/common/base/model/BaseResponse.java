@@ -4,6 +4,7 @@ import cn.xuqiudong.common.base.enums.ResultMsg;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.style.ToStringCreator;
 
 import java.io.Serializable;
 
@@ -70,13 +71,12 @@ public final class BaseResponse<T> implements Serializable {
      * 转JSON
      */
     public String toJson() {
-        try {
-            return MAPPER.writeValueAsString(this);
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return "{" + "\"code\":" + code + ",\"msg\":\"" + msg + "\",\"data\":\"" + data + "\"}";
+        return new ToStringCreator(this)
+                .append("code", code)
+                .append("msg", msg)
+                //  如果 data 是 User 这种复杂对象，会自动简化
+                .append("data", data)
+                .toString();
     }
 
 
@@ -136,6 +136,5 @@ public final class BaseResponse<T> implements Serializable {
         return 0 == code;
     }
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
 }
