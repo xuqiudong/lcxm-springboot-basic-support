@@ -3,7 +3,6 @@ package cn.xuqiudong.mq.bridge.mapper;
 import cn.xuqiudong.common.base.mapper.BaseGenericMapper;
 import cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage;
 import cn.xuqiudong.mq.bridge.model.FetchMessageLookup;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

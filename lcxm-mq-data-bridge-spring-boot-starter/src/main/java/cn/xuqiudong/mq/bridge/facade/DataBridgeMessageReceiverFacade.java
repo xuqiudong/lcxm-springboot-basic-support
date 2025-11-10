@@ -14,6 +14,7 @@ import cn.xuqiudong.mq.bridge.mq.DataBridgeMqMessageReceiver;
 import cn.xuqiudong.mq.bridge.service.DataBridgeReceiveMessageService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.constraints.NotNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RLock;
@@ -28,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 

@@ -5,14 +5,14 @@ import cn.xuqiudong.common.util.JsonUtil;
 import cn.xuqiudong.mq.bridge.model.ActionHandlerModel;
 import cn.xuqiudong.mq.bridge.model.DataBridgeReceiveMessage;
 import cn.xuqiudong.mq.bridge.vo.AbstractDataBridgeVo;
+import jakarta.annotation.PostConstruct;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.validation.constraints.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;

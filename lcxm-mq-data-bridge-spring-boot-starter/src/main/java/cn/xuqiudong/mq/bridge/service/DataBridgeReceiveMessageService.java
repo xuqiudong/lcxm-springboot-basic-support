@@ -6,11 +6,11 @@ import cn.xuqiudong.mq.bridge.constant.DataBridgeConstant;
 import cn.xuqiudong.mq.bridge.mapper.DataBridgeReceiveMessageMapper;
 import cn.xuqiudong.mq.bridge.model.DataBridgeReceiveMessage;
 import cn.xuqiudong.mq.bridge.model.FetchMessageLookup;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Resource;
 import java.util.List;
 
 /**

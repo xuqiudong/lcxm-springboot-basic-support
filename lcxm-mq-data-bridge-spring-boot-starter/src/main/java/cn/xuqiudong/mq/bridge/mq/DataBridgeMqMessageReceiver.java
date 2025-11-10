@@ -1,8 +1,8 @@
 package cn.xuqiudong.mq.bridge.mq;
 
 import cn.xuqiudong.mq.bridge.facade.DataBridgeMessageReceiverFacade;
-import cn.xuqiudong.mq.bridge.helper.DataBridgeMqListenerSwitchHelper;
 import cn.xuqiudong.mq.bridge.helper.DataBridgeGlobalConfigHelper;
+import cn.xuqiudong.mq.bridge.helper.DataBridgeMqListenerSwitchHelper;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

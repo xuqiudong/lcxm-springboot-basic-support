@@ -5,10 +5,9 @@ import cn.xuqiudong.common.base.transmission.log.model.ThirdLogModel;
 import cn.xuqiudong.common.base.transmission.log.service.ThirdLogService;
 import cn.xuqiudong.common.base.vo.BooleanWithMsg;
 import cn.xuqiudong.common.util.async.AsyncOperation;
+import jakarta.validation.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.validation.constraints.NotEmpty;
 
 /**
  * 描述: 数据传输处理基类

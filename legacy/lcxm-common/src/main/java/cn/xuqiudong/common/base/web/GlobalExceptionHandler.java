@@ -6,6 +6,7 @@ import cn.xuqiudong.common.base.exception.CommonException;
 import cn.xuqiudong.common.base.exception.UnauthorizedException;
 import cn.xuqiudong.common.base.model.BaseResponse;
 import cn.xuqiudong.common.base.tool.Tools;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 描述:全局异常捕捉，兼容json和view

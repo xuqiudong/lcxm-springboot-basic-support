@@ -1,6 +1,5 @@
 package cn.xuqiudong.mq.bridge.facade;
 
-import cn.xuqiudong.mq.bridge.core.DataBridgeMessageRouter;
 import cn.xuqiudong.mq.bridge.enums.OperationEnum;
 import cn.xuqiudong.mq.bridge.helper.ClusterOperationStateManagerHelper;
 import cn.xuqiudong.mq.bridge.helper.DataBridgeGlobalConfigHelper;

@@ -2,6 +2,7 @@ package cn.xuqiudong.common.base.transmission.log.service;
 
 import cn.xuqiudong.common.base.transmission.log.model.ThirdLogModel;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import jakarta.annotation.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -9,7 +10,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import jakarta.annotation.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

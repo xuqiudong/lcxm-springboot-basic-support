@@ -1,6 +1,5 @@
 package cn.xuqiudong.common.base.mapper;
 
-import cn.xuqiudong.common.builder.WrapperBuilder;
 import cn.xuqiudong.common.helper.MpGenericMapperHelper;
 import cn.xuqiudong.common.injector.SelectByIdWithLob;
 import cn.xuqiudong.common.query.Column;

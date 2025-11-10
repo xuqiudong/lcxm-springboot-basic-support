@@ -4,8 +4,6 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.xuqiudong.common.function.WrapperProcessor;
 import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
-import com.baomidou.mybatisplus.core.conditions.interfaces.Compare;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import java.util.Collection;
 import java.util.Collections;

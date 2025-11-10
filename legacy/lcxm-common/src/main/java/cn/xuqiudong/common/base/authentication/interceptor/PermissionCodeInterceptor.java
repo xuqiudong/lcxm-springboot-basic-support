@@ -6,12 +6,12 @@ import cn.xuqiudong.common.base.authentication.model.PermissionModel;
 import cn.xuqiudong.common.base.exception.CommonException;
 import cn.xuqiudong.common.base.model.BaseResponse;
 import cn.xuqiudong.common.base.tool.Tools;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;

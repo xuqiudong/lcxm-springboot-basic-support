@@ -59,6 +59,11 @@ public class GlobalConfig {
      */
     private Class<?> pkType;
 
+    /**
+     * 生成前是否需要手动确认  防止覆盖
+     */
+    private boolean confirm = true;
+
 
     public static class Builder implements IConfigBuilder<GlobalConfig> {
 
@@ -137,6 +142,14 @@ public class GlobalConfig {
          */
         public Builder pkType(Class<?> pkType) {
             this.globalConfig.pkType = pkType;
+            return this;
+        }
+
+        /**
+         * 生成前是否需要手动确认  防止覆盖
+         */
+        public Builder confirm(boolean confirm) {
+            this.globalConfig.confirm = confirm;
             return this;
         }
 

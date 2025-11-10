@@ -1,16 +1,14 @@
 package cn.xuqiudong.mq.bridge.service;
 
 import cn.xuqiudong.common.base.service.BaseGenericService;
-import cn.xuqiudong.common.base.service.BaseService;
 import cn.xuqiudong.mq.bridge.autoconfigure.DataBridgeProperties;
 import cn.xuqiudong.mq.bridge.constant.DataBridgeConstant;
 import cn.xuqiudong.mq.bridge.mapper.DataBridgeSendMessageMapper;
 import cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage;
-
 import cn.xuqiudong.mq.bridge.model.FetchMessageLookup;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Resource;
 import java.util.List;
 
 /**

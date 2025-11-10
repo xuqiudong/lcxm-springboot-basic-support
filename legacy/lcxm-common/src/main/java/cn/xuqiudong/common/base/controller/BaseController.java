@@ -5,13 +5,12 @@ import cn.xuqiudong.common.base.model.BaseResponse;
 import cn.xuqiudong.common.base.model.PageInfo;
 import cn.xuqiudong.common.base.service.BaseService;
 import cn.xuqiudong.common.base.tool.HibernateValidatorUtils;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 说明 :  controller 的基类

@@ -14,7 +14,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**

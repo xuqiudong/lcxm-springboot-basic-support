@@ -2,7 +2,16 @@ package cn.xuqiudong.mq.bridge.autoconfigure;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.*;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_CONSUME_ENABLE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_EXCHANGE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_MQ_ENABLE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_RECEIVE_ENABLE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_RECEIVE_QUEUE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_RECEIVE_ROUTING_KEY;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_SEND_CONFIRM_TIMEOUT;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_SEND_ENABLE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_SEND_QUEUE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.DEFAULT_SEND_ROUTING_KEY;
 
 
 @ConfigurationProperties(prefix = "data.bridge")

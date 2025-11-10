@@ -4,6 +4,9 @@ import cn.xuqiudong.common.base.aspect.annotation.LogPrint;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,9 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.NotNull;
 import java.util.Enumeration;
 
 /**

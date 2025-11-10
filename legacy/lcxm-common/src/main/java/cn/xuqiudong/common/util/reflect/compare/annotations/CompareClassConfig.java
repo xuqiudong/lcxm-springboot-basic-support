@@ -5,7 +5,11 @@ package cn.xuqiudong.common.util.reflect.compare.annotations;
 
 import cn.xuqiudong.common.util.reflect.compare.CompareClassUtil;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *  说明 :  比较两个类的字段的注解， 只比较加了这个注解的字段

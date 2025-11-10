@@ -3,6 +3,8 @@ package cn.xuqiudong.common.base.aspect;
 import cn.xuqiudong.common.base.aspect.annotation.RepeatCommitVersion;
 import cn.xuqiudong.common.base.enums.CommonMsgEnum;
 import cn.xuqiudong.common.base.exception.CommonException;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -12,9 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 描述:form重复提交版本检测，    依赖于数据库字段 ;

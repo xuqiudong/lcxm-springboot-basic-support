@@ -2,12 +2,11 @@ package cn.xuqiudong.common.base.captcha;
 
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
-
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

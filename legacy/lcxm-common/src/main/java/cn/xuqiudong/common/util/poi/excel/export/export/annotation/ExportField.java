@@ -1,6 +1,11 @@
 package cn.xuqiudong.common.util.poi.excel.export.export.annotation;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * 导出的列的注解

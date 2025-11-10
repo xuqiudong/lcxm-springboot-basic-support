@@ -3,6 +3,7 @@ package cn.xuqiudong.common.base.aspect;
 import cn.xuqiudong.common.base.aspect.advice.SerialRequestAdvice;
 import cn.xuqiudong.common.base.aspect.annotation.SerialRequest;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import jakarta.validation.constraints.NotNull;
 import org.aopalliance.aop.Advice;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -14,8 +15,6 @@ import org.springframework.aop.support.ComposablePointcut;
 import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * 描述: 串行化请求切面

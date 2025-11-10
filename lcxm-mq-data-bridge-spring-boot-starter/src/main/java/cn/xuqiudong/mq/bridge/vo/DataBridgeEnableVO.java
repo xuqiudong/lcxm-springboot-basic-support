@@ -1,7 +1,5 @@
 package cn.xuqiudong.mq.bridge.vo;
 
-import org.apache.tomcat.util.modeler.BaseModelMBean;
-
 import java.io.Serializable;
 
 /**

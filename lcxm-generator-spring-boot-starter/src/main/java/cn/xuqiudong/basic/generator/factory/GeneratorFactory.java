@@ -27,6 +27,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -226,7 +227,6 @@ public class GeneratorFactory {
 
     /**
      * 写入文件, 存在则log记录 ,不写入
-     *
      */
     private void writeFile(String filePath, String content) {
         // 判断文件是否存在
@@ -265,4 +265,31 @@ public class GeneratorFactory {
             LOGGER.error("写入文件失败: {}", filePath, e);
         }
     }
+
+
+    /**
+     * 手动确认生成
+     */
+    public void confirmGenerate() {
+        if (!bundle.getGlobalConfig().isConfirm()) {
+            return;
+        }
+        // 如果不存在覆盖文件, 则不需要手动确认
+        if (!bundle.getStrategyConfig().isFileOverride()) {
+            return;
+        }
+        String tables = String.join(",", bundle.getStrategyConfig().getTables());
+        LOGGER.warn(" 将生成[｛｝]表的代码, 该操作可能会覆盖相关文件，请确认是否继续？(yes/no):", tables);
+
+        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
+        String input = scanner.nextLine().trim();
+
+        if (!"yes".equalsIgnoreCase(input)) {
+            LOGGER.warn("生成操作已取消!");
+            System.exit(0);
+        }
+        LOGGER.warn("生成操作已确认，开始执行...");
+    }
+
+
 }

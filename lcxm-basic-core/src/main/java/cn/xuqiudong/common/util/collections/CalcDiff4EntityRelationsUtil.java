@@ -5,7 +5,11 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述：构建两个集合的差别: 主要用于级联对象列表，在入库前判断哪些需要新增，哪些需要删除

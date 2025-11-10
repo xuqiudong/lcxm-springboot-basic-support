@@ -1,7 +1,6 @@
 package cn.xuqiudong.common.base.model;
 
 import cn.xuqiudong.common.base.enums.ResultMsg;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.style.ToStringCreator;

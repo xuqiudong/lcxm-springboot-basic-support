@@ -2,14 +2,16 @@ package cn.xuqiudong.mq.bridge.helper;
 
 import cn.xuqiudong.mq.bridge.autoconfigure.DataBridgeProperties;
 import cn.xuqiudong.mq.bridge.vo.DataBridgeEnableVO;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
-
-import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.*;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.REDIS_KEY_CONSUMER_ENABLE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.REDIS_KEY_MQ_ENABLE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.REDIS_KEY_RECEIVE_ENABLE;
+import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.REDIS_KEY_SEND_ENABLE;
 
 /**
  * 描述: data bridge

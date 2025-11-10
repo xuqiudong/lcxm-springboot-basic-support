@@ -8,7 +8,9 @@ import cn.xuqiudong.mq.bridge.helper.DataBridgeMqListenerSwitchHelper;
 import cn.xuqiudong.mq.bridge.vo.DataBridgeEnableVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 描述:
