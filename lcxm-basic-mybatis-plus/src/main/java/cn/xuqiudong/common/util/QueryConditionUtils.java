@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -27,6 +28,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2025-10-29 15:42
  */
 public class QueryConditionUtils {
+
+
+    /**
+     * 可能是直接 相等比较的字段 、或字段前缀 后缀集合， 比如id, uuid   xxx_id, _uuid
+     */
+    public static final Set<String> POSSIBLE_EQUAL_QUERY_FIELDS = Set.of("id", "uuid",
+            "pid", "parentId");
 
     /**
      * 缓存查询字段: class -> List<QueryFieldModel> (带QueryCondition注解的列集合 )
@@ -91,6 +99,35 @@ public class QueryConditionUtils {
             return QueryOperation.IN;
         }
         return QueryOperation.EQ;
+    }
+
+
+    /**
+     * 根据字段类型 和字段名称推断 mybatis 的比较类型
+     */
+    public static QueryOperation inferQueryOperation(Class<?> fieldType, String columnName) {
+        if (fieldType == String.class) {
+            if (isPossibleEqualQueryField(columnName)) {
+                return QueryOperation.EQ;
+            }
+            return QueryOperation.LIKE;
+        }
+        if (Collection.class.isAssignableFrom(fieldType) || fieldType.isArray()) {
+            return QueryOperation.IN;
+        }
+        return QueryOperation.EQ;
+    }
+
+    public static boolean isPossibleEqualQueryField(String columnName) {
+        for (String field : POSSIBLE_EQUAL_QUERY_FIELDS) {
+            boolean eq = field.equalsIgnoreCase( field)
+                    || StringUtils.startsWithIgnoreCase(columnName, field)
+                    || StringUtils.endsWithIgnoreCase(columnName, field);
+            if (eq) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
