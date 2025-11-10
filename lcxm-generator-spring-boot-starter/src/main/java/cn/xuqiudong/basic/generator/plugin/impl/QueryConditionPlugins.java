@@ -35,7 +35,8 @@ public class QueryConditionPlugins extends BaseGeneratorPlugin {
         // 每个字段上加注解  @QueryCondition(operation = QueryOperation.LIKE)
         query.getFields().forEach(field -> {
             Class<?> javaType = field.getDataType().getJavaType();
-            QueryOperation operation = QueryConditionUtils.inferQueryOperation(javaType);
+            String columnName = field.getColumnName();
+            QueryOperation operation = QueryConditionUtils.inferQueryOperation(javaType, columnName);
             field.addAnnotation("@QueryCondition(operation = QueryOperation." + operation + ")");
         });
     }
