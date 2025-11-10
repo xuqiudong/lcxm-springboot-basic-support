@@ -84,6 +84,7 @@
         <jsoup.version>1.20.1</jsoup.version>
         <httpclient.version>4.5.13</httpclient.version>
         <mapstruct.version>1.6.3</mapstruct.version>
+        <lombok.version>1.18.38</lombok.version>
         <!-- hessian -->
         <hessian.version>4.0.65</hessian.version>
         <!--能否取代 JSR 305 的空值注解呢-->
@@ -435,6 +436,20 @@
                         <compilerArgs>
                             <arg>-parameters</arg>
                         </compilerArgs>
+                        <annotationProcessorPaths>
+                            <!-- Lombok 处理器 配置在mapstruct 之前-->
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <!-- MapStruct 处理器 -->
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${mapstruct.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
 
