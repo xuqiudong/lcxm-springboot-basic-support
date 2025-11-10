@@ -1,11 +1,13 @@
 package cn.xuqiudong.generator.demo.controller;
 
-import cn.xuqiudong.common.base.model.BaseResponse;
-import cn.xuqiudong.common.base.model.PageInfo;
-import cn.xuqiudong.common.base.request.CheckNotRepeatRequest;
 import cn.xuqiudong.generator.demo.entity.Generate;
 import cn.xuqiudong.generator.demo.query.GenerateQuery;
 import cn.xuqiudong.generator.demo.service.GenerateService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import cn.xuqiudong.common.base.model.BaseResponse;
+import cn.xuqiudong.common.base.model.PageInfo;
+import cn.xuqiudong.common.base.request.CheckNotRepeatRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * 测试生成 Controller
- *
- * @author Vic.xu
- * @since 2025-11-03 15:23
- */
+* 测试生成 Controller
+*
+* @author Vic.xu
+* @since 2025-11-10 15:53
+*/
 @Tag(name = "Generate", description = "测试生成")
 @RequestMapping("/demo/generate")
 @RestController
@@ -55,10 +57,13 @@ public class GenerateController {
         return BaseResponse.success(service.selectById(entity.getId()));
     }
 
+    @Operation(summary = "修改状态", description = "修改状态")
+    @PostMapping(value = "/updateEnable/{id}")
+    public BaseResponse<Boolean> updateEnable(@PathVariable String id, Boolean enable) {
+        int updated = service.updateEnable(id, enable);
+        return BaseResponse.success(updated == 1);
+    }
 
-    /**
-     * 删除
-     */
     @Operation(summary = "删除", description = "根据id删除")
     @PostMapping(value = "/delete/{id}")
     public BaseResponse<Integer> delete(@PathVariable String id) {
@@ -67,7 +72,7 @@ public class GenerateController {
 
 
     @Operation(summary = "检测字段是否可用", description = "检测字段是否可用")
-    @PostMapping(value = "/checkAvailable(")
+    @PostMapping(value = "/check")
     public BaseResponse<?> checkAvailable(@RequestBody CheckNotRepeatRequest<String> repeatRequest) {
         boolean ok = service.isValueAvailable(repeatRequest.getId(), repeatRequest.getValue(), repeatRequest.getColumn());
         return BaseResponse.success(ok);

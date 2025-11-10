@@ -19,7 +19,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Console;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -69,6 +71,7 @@ public class GeneratorFactory {
      * 生成: 加载配置 → 读取元数据 → 调用前置插件 → 渲染模板 →  调用后置插件 →  输出(文件)
      */
     public void generate() {
+        confirmGenerate();
         // 连接数据库 查询表的信息, 根据配置构建导出的表的上下文信息
         List<TemplateContext> templateContexts = dataAssemblyFactory.listTemplateContexts();
         for (TemplateContext context : templateContexts) {
@@ -270,12 +273,17 @@ public class GeneratorFactory {
     /**
      * 手动确认生成
      */
-    public void confirmGenerate() {
+    private void confirmGenerate() {
         if (!bundle.getGlobalConfig().isConfirm()) {
             return;
         }
         // 如果不存在覆盖文件, 则不需要手动确认
         if (!bundle.getStrategyConfig().isFileOverride()) {
+            return;
+        }
+        // 非交互式环境
+        if (!isRunningFromMainMethod()) {
+            LOGGER.warn("非main函数运行的代码生成!");
             return;
         }
         String tables = String.join(",", bundle.getStrategyConfig().getTables());
@@ -291,5 +299,23 @@ public class GeneratorFactory {
         LOGGER.warn("生成操作已确认，开始执行...");
     }
 
+    /**
+     * 判断当前程序是否通过 main 方法启动
+     */
+    private boolean isRunningFromMainMethod() {
+        // 获取当前线程的调用栈
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        // 遍历调用栈，检查是否存在 main 方法
+        for (StackTraceElement element : stackTrace) {
+            // main 方法的特征：方法名为 "main"，且参数为 String[]
+            if ("main".equals(element.getMethodName())
+                    // 确保是有效的类名
+                    && element.getClassName().matches(".*[A-Za-z0-9]+")
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

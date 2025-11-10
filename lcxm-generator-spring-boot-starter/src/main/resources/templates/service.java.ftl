@@ -50,7 +50,7 @@ public class ${service.className} {
     /**
     * 分页查询
     */
-    public PageInfo<${entity.className}> page(PageQuery query) {
+    public PageInfo<${entity.className}> page(${query.className} query) {
         Assert.notNull(query, "query can not be null");
         Page<${entity.className}> page = mapper.selectPage(query);
         return PageConvert.convert(page);

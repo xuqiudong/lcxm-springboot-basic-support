@@ -14,7 +14,7 @@
   <dependencies>
       <dependency>
           <groupId>cn.xuqiudong.basic</groupId>
-          <artifactId>lcxm-basic-core</artifactId>
+          <artifactId>lcxm-basic-framework</artifactId>
           <version>${project.version}</version>
       </dependency>
   </dependencies>
