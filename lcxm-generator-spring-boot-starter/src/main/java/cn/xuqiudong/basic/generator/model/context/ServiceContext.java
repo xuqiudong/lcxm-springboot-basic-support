@@ -32,6 +32,7 @@ public class ServiceContext extends BaseContext {
         //  添加实体和 mapper 的包
         addImport(ImportPackageUtils.getImport(templateContext.getEntity().getFullName()));
         addImport(ImportPackageUtils.getImport(templateContext.getMapper().getFullName()));
+        addImport(ImportPackageUtils.getImport(templateContext.getQuery().getFullName()));
 
     }
 
