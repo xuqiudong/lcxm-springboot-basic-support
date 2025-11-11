@@ -4,6 +4,7 @@ import cn.xuqiudong.basic.generator.enums.DatabaseType;
 import cn.xuqiudong.basic.generator.model.meta.ColumnMeta;
 import cn.xuqiudong.basic.generator.registry.DataTypeMappingRegistry;
 import cn.xuqiudong.basic.generator.registry.KeyWordsHandlerRegistry;
+import cn.xuqiudong.basic.generator.util.JavaTypeInferUtil;
 import cn.xuqiudong.basic.generator.util.NameConvertUtils;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -51,6 +52,11 @@ public class FieldInfo implements Cloneable {
      * 属性类型: resultMap 中可以使用
      */
     private DataType dataType;
+    /**
+     * 属性类型: java类型,  一般情况下为 dataType 中的 javaType， 可能额外的加一些判断
+     *
+     */
+    private Class<?> javaType;
 
     /**
      * 表实体中是否忽略此字段(因在基类中已定义)
@@ -105,7 +111,8 @@ public class FieldInfo implements Cloneable {
         // 属性名称(第一个字母小写)，如：user_name => userName
         this.fieldName = StringUtils.uncapitalize(className);
         //列的数据类型
-        this.dataType = DataTypeMappingRegistry.get(meta.getDataType());
+        DataType originDataType = DataTypeMappingRegistry.get(meta.getDataType());
+        this.dataType = JavaTypeInferUtil.inferJavaType(originDataType,  comments);
         // 是否是主键
         this.pk = meta.isPk();
     }

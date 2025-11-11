@@ -42,4 +42,11 @@ public class DataType {
         this.javaType = javaType;
         this.lob = lob;
     }
+
+    /**
+     * copy 一份
+     */
+    public DataType copy() {
+        return new DataType(columnType, jdbcType, javaType, lob);
+    }
 }
