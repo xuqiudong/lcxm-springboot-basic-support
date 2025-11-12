@@ -3,6 +3,7 @@ package cn.xuqiudong.basic.generator;
 import cn.xuqiudong.basic.generator.config.DataSourceConfig;
 import cn.xuqiudong.basic.generator.config.GlobalConfig;
 import cn.xuqiudong.basic.generator.config.StrategyConfig;
+import cn.xuqiudong.basic.generator.config.template.CustomizeTemplateConfig;
 import cn.xuqiudong.basic.generator.engine.BaseTemplateEngine;
 import cn.xuqiudong.basic.generator.engine.FreemarkerTemplateEngine;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
@@ -37,7 +38,7 @@ public class Generator {
     private final GlobalConfig.Builder globalConfigBuilder;
 
     /**
-     * 生成细节配置
+     * 生成细节配置 : 内置的 Entity Query Mapper  MapperXml  Service  Controller
      */
     private final StrategyConfig.Builder strategyConfigBuilder;
 
@@ -45,6 +46,12 @@ public class Generator {
      * 模板引擎: 默认使用Freemarker模板引擎
      */
     private BaseTemplateEngine templateEngine;
+
+    /**
+     * 自定义模板配置
+     */
+    private List<CustomizeTemplateConfig> customizedTemplateConfigs;
+
 
     /**
      * 自定义插件
@@ -59,6 +66,7 @@ public class Generator {
         // 默认使用Freemarker模板引擎
         this.templateEngine = new FreemarkerTemplateEngine();
         this.customizedPlugins = new ArrayList<>();
+        this.customizedTemplateConfigs = new ArrayList<>();
     }
 
     /**
@@ -107,22 +115,29 @@ public class Generator {
         return this;
     }
 
+    /**
+     * 6. 添加自定义模板
+     */
+    public Generator addCustomizedTemplate(CustomizeTemplateConfig customizeTemplateConfig) {
+        this.customizedTemplateConfigs.add(customizeTemplateConfig);
+        return this;
+    }
+
 
     /**
-     * 6. 开始生成
+     * 7. 开始生成
      */
     public void generate() {
         new GeneratorFactory(dataSourceConfigBuilder.build(),
                 globalConfigBuilder.build(),
                 strategyConfigBuilder.build(),
                 templateEngine,
-                customizedPlugins)
+                customizedPlugins,
+                customizedTemplateConfigs)
                 .generate();
 
         LOGGER.info("generate success!");
     }
-
-
 
 
 }

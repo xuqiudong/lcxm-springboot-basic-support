@@ -26,6 +26,11 @@ import java.util.TreeSet;
 public abstract class BaseContext {
 
     /**
+     * 父类包名
+     */
+    private String parentPackage;
+
+    /**
      * 包名 全路径
      */
     protected String packageName;
@@ -74,16 +79,9 @@ public abstract class BaseContext {
     public BaseContext(TableInfo tableInfo, ConfigBundle bundle, BaseTemplateConfig templateConfig, TemplateContext templateContext) {
         this.className = tableInfo.getClassName() + classNameSuffix();
         this.className4Field = StringUtils.uncapitalize(className);
+        this.parentPackage = bundle.getGlobalConfig().getPackageName();
         // 包路径: BasePackage + 模块 + 类名
-        this.packageName = bundle.getGlobalConfig().getBasePackage();
-        String module = bundle.getGlobalConfig().getModule();
-        if (StringUtils.isNotEmpty(module)) {
-            this.packageName += "." + module;
-        }
-        String subPackage = templateConfig.getSubPackage();
-        if (StringUtils.isNotEmpty(subPackage)) {
-            this.packageName += "." + subPackage;
-        }
+        this.packageName = bundle.getGlobalConfig().getPackageName(templateConfig.getSubPackage());
         // 处理泛型
         handleGeneric(tableInfo, bundle, templateConfig, templateContext);
     }

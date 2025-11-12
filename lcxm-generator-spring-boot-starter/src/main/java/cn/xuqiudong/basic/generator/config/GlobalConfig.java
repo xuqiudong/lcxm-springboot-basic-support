@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.generator.config;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 描述:
@@ -63,6 +64,28 @@ public class GlobalConfig {
      * 生成前是否需要手动确认  防止覆盖
      */
     private boolean confirm = true;
+
+    /**
+     * 获取包路径： 基础包 + 模块
+     */
+    public String getPackageName() {
+        String packageName = this.basePackage;
+        if (StringUtils.isNotEmpty(module)) {
+            packageName += "." + module;
+        }
+        return packageName;
+    }
+
+    /**
+     * 获取子包 的完整路径： 基础包 + 模块 + 子包
+     */
+    public String getPackageName(String subPackage) {
+        String packageName = getPackageName();
+        if (StringUtils.isNotEmpty(subPackage)) {
+            packageName += "." + subPackage;
+        }
+        return packageName;
+    }
 
 
     public static class Builder implements IConfigBuilder<GlobalConfig> {

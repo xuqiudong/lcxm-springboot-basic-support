@@ -2,6 +2,7 @@ package cn.xuqiudong.generator.demo.service;
 
 import cn.xuqiudong.generator.demo.entity.Generate;
 import cn.xuqiudong.generator.demo.mapper.GenerateMapper;
+import cn.xuqiudong.generator.demo.query.GenerateQuery;
 import org.springframework.stereotype.Service;
 import cn.xuqiudong.common.base.model.PageInfo;
 import cn.xuqiudong.common.convert.PageConvert;
@@ -16,7 +17,7 @@ import java.util.List;
 * 测试生成 Service
 *
 * @author Vic.xu
-* @since 2025-11-10 15:53
+* @since 2025-11-12 15:34
 */
 @Service
 public class GenerateService {
@@ -36,7 +37,7 @@ public class GenerateService {
     /**
     * 分页查询
     */
-    public PageInfo<Generate> page(PageQuery query) {
+    public PageInfo<Generate> page(GenerateQuery query) {
         Assert.notNull(query, "query can not be null");
         Page<Generate> page = mapper.selectPage(query);
         return PageConvert.convert(page);

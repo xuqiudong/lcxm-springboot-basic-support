@@ -5,6 +5,7 @@ import cn.xuqiudong.basic.generator.config.DataSourceConfig;
 import cn.xuqiudong.basic.generator.config.GlobalConfig;
 import cn.xuqiudong.basic.generator.config.StrategyConfig;
 import cn.xuqiudong.basic.generator.config.template.BaseTemplateConfig;
+import cn.xuqiudong.basic.generator.config.template.CustomizeTemplateConfig;
 import cn.xuqiudong.basic.generator.engine.BaseTemplateEngine;
 import cn.xuqiudong.basic.generator.enums.TemplateType;
 import cn.xuqiudong.basic.generator.model.context.BaseContext;
@@ -19,9 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Console;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,9 +46,10 @@ public class GeneratorFactory {
     private final DataAssemblyFactory dataAssemblyFactory;
 
     public GeneratorFactory(DataSourceConfig dataSourceConfig, GlobalConfig globalConfig, StrategyConfig strategyConfig,
-                            BaseTemplateEngine templateEngine, List<IGeneratorPlugin> customizedPlugins) {
+                            BaseTemplateEngine templateEngine, List<IGeneratorPlugin> customizedPlugins,
+                            List<CustomizeTemplateConfig> customizedTemplates) {
         Set<IGeneratorPlugin> plugins = initPlugins(customizedPlugins);
-        bundle = new ConfigBundle(dataSourceConfig, globalConfig, strategyConfig, templateEngine, plugins);
+        bundle = new ConfigBundle(dataSourceConfig, globalConfig, strategyConfig, templateEngine, plugins, customizedTemplates);
         dataAssemblyFactory = new DataAssemblyFactory(bundle);
         // init template engine
         bundle.getTemplateEngine().init(bundle);
@@ -97,7 +97,10 @@ public class GeneratorFactory {
         renderService(context);
         // 渲染Controller
         renderController(context);
+        // 渲染自定义模板
+        renderCustomize(context);
     }
+
 
     /**
      * 渲染service
@@ -148,6 +151,29 @@ public class GeneratorFactory {
     }
 
     /**
+     * 渲染自定义模板
+     */
+    private void renderCustomize(TemplateContext context) {
+        List<CustomizeTemplateConfig> customizedTemplates = bundle.getCustomizedTemplates();
+        if (CollectionUtils.isEmpty(customizedTemplates)) {
+            return;
+        }
+        for (CustomizeTemplateConfig customizeTemplateConfig : customizedTemplates) {
+            // 1. 获取模板内容
+            String content = getContent(customizeTemplateConfig.getTemplatePath(), context);
+            // 2. 获取输出文件地址
+            String packageName = bundle.getGlobalConfig().getPackageName(customizeTemplateConfig.getSubPackage());
+            String fileName = customizeTemplateConfig.getFileNameFunction().apply(context.getEntity().getClassName());
+
+            String path =
+                    NameConvertUtils.getFullOutputFilePath(bundle.getGlobalConfig().getOutputDir(), packageName,
+                            fileName, customizeTemplateConfig.getFileSuffix());
+            // 3. 写入文件
+            writeFile(path, content);
+        }
+    }
+
+    /**
      * 渲染
      */
     public void render(TemplateType templateType, TemplateContext context,
@@ -185,6 +211,14 @@ public class GeneratorFactory {
     private String getContent(BaseTemplateConfig config, TemplateContext context) {
         return bundle.getTemplateEngine().render(config.getTemplatePath(), context);
     }
+
+    /**
+     * 获取渲染后的 模板内容
+     */
+    private String getContent(String templatePath, TemplateContext context) {
+        return bundle.getTemplateEngine().render(templatePath, context);
+    }
+
 
     /**
      * 获得某个模板的输出文件地址:  全局输出路径 + 包路径 + 类名 + 文件后缀

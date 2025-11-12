@@ -1,6 +1,7 @@
 package cn.xuqiudong.generator;
 
 import cn.xuqiudong.basic.generator.Generator;
+import cn.xuqiudong.basic.generator.config.template.CustomizeTemplateConfig;
 import cn.xuqiudong.basic.generator.engine.FreemarkerTemplateEngine;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
 import cn.xuqiudong.common.base.entity.BaseMpEntity;
@@ -17,8 +18,10 @@ import java.nio.file.Paths;
  */
 public class MainGeneratorTest {
 
-    @Test
-    public void test() {
+    public static void main(String[] args) {
+        test();
+    }
+    public static void test() {
         String url = "jdbc:mysql://127.0.0.1:3306/qiudong?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true";
         String username = "qiudong";
         String password = "qiudong12345678";
@@ -30,7 +33,7 @@ public class MainGeneratorTest {
                                 builder.author("Vic.xu")
                                         // 输出目录: 可以指定为项目内 Paths.get(System.getProperty("user.dir")) + "/src/main/java"
 //                                .outputDir("D:/desk/generator")
-                                        .outputDir(Paths.get(System.getProperty("user.dir")) + "/src/test/java")
+                                        .outputDir(Paths.get(System.getProperty("user.dir")) +"/lcxm-generator-spring-boot-starter"+ "/src/test/java")
                                         // 基础包路径
                                         .basePackage("cn.xuqiudong.generator")
                                         // 模块名称: 基础包路径的子包, 以及controller 请求路径
@@ -90,6 +93,12 @@ public class MainGeneratorTest {
                                                                 .supperClassWithGeneric(false)
                                                                 .disable(false)
                                         )
+                )
+                // 自定义模板
+                .addCustomizedTemplate(CustomizeTemplateConfig.build("customizer", "templates/customizer.java")
+                        .setDisable(false)
+                        .setFileSuffix(".java")
+                        .setFileNameFunction(className -> className + "Customizer")
                 )
                 // 模板配置: 默认就是freemarker 模板引擎 可以不用配置
                 .templateEngine(new FreemarkerTemplateEngine());
