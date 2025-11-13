@@ -126,6 +126,12 @@
             <artifactId>commons-beanutils</artifactId>
         </dependency>
 
+        <!--spring doc 注解-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-common</artifactId>
+        </dependency>
+
         <!-- google验证码 com.google.code已失效 -->
         <dependency>
             <groupId>com.github.penggle</groupId>
