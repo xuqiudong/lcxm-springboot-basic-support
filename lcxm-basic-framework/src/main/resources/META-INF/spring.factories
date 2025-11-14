@@ -8,6 +8,4 @@ org.springframework.boot.SpringApplicationRunListener=cn.xuqiudong.common.util.S
 org.springframework.boot.env.EnvironmentPostProcessor=\
   cn.xuqiudong.common.base.configuration.LcxmCommonPropertiesPostProcessor
 
-# EnumScanInitializer
-org.springframework.context.ApplicationContextInitializer=\
-  cn.xuqiudong.common.base.select.config.EnumScanInitializer
+
