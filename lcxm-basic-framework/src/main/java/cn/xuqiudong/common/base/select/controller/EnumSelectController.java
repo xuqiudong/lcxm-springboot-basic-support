@@ -21,9 +21,9 @@ import java.util.Map;
  * @author Vic.xu
  * @since 2025-11-13 17:23
  */
-@Tag(name = "通用枚举下拉框接口")
+@Tag(name = "Common:enumSelect", description = "通用枚举下拉框接口")
 @RestController
-@RequestMapping("/api/common/enumSelect")
+@RequestMapping("/common/enumSelect")
 public class EnumSelectController {
 
     /**
