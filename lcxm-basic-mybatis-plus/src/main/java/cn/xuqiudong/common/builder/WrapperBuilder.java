@@ -2,6 +2,7 @@ package cn.xuqiudong.common.builder;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.xuqiudong.common.enums.QueryOperation;
+import cn.xuqiudong.common.query.Where;
 import cn.xuqiudong.common.util.ColumnUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -30,6 +31,8 @@ public class WrapperBuilder {
      */
     private QueryWrapper queryWrapper;
 
+    private Where where;
+
 
     private WrapperBuilder() {
         this.conditions = new ArrayList<>();
@@ -53,6 +56,18 @@ public class WrapperBuilder {
         }
         return queryWrapper;
     }
+
+    public <T> Where<T> toWhere() {
+        if (this.where == null) {
+            where = new Where();
+            // 拼接条件
+            for (Condition condition : conditions) {
+                condition.build(where);
+            }
+        }
+        return where;
+    }
+
 
 
     /**
