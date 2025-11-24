@@ -15,6 +15,11 @@ import org.springframework.context.annotation.Configuration;
  * 描述:
  * 枚举转下拉框模块的自动配置
  * 枚举包配置: lcxm.framework.enum.scan-base-packages=cn.xuqiudong.test,cn.xuqiudong.demo
+ *
+ * <p>
+ *     META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports下：
+ *     cn.xuqiudong.common.FrameworkAutoConfiguration
+ * </p>
  * @author Vic.xu
  * @since 2025-11-13 17:59
  */
