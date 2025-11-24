@@ -1,12 +1,15 @@
 package cn.xuqiudong.common.base.select;
 
 import cn.xuqiudong.common.base.select.controller.EnumSelectController;
+import cn.xuqiudong.common.base.select.json.EnumSelectableSerializer;
 import cn.xuqiudong.common.base.select.scan.EnumSelectScanner;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,4 +56,22 @@ public class EnumSelectAutoConfiguration {
             @Value("${lcxm.framework.enum.scan-base-packages:}") String scanPackage) {
         return new EnumSelectScanner(applicationContext, scanPackage);
     }
+
+    /**
+     *  Jackson序列化配置：全局注册枚举序列化器 EnumSelectableSerializer
+     *  使得每个EnumSelectable字段转json的时候追加一个xxxText字段
+     *  不用在每个EnumSelectable 字段上加@JsonSerialize(using = EnumSelectableSerializer.class)
+     */
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+        return builder -> {
+            // 注册自定义序列化器
+            SimpleModule enumModule = new SimpleModule();
+            enumModule.addSerializer(EnumSelectable.class, new EnumSelectableSerializer());
+            builder.modules(enumModule);
+
+
+        };
+    }
+
 }
