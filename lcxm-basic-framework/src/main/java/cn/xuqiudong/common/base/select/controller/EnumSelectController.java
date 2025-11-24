@@ -53,4 +53,11 @@ public class EnumSelectController {
     public BaseResponse<Map<String, String>> getRegisteredEnums() {
         return BaseResponse.success(EnumSelectRegistry.getRegisteredEnums());
     }
+
+    @Operation(summary = "获取多个枚举下拉选项")
+    @GetMapping("/multipleOptions")
+    public BaseResponse<Map<String, List<SelectOption>>> getMultipleOptions(List<String> enumKeys) {
+        return BaseResponse.success(EnumSelectRegistry.getMultipleOptions(enumKeys));
+
+    }
 }

@@ -1,15 +1,20 @@
 package cn.xuqiudong.common.base.select.registry;
 
+import cn.xuqiudong.common.base.model.SelectOption;
 import cn.xuqiudong.common.base.select.EnumSelectable;
+import cn.xuqiudong.common.base.select.convert.EnumSelectConverter;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 /**
  * 描述:
- *   枚举注册中心，管理所有需要暴露的枚举
+ * 枚举注册中心，管理所有需要暴露的枚举
+ *
  * @author Vic.xu
  * @since 2025-11-13 17:18
  */
@@ -26,9 +31,10 @@ public class EnumSelectRegistry {
 
     /**
      * 注册枚举
-     * @param enumKey 枚举标识（前端访问用）
+     *
+     * @param enumKey   枚举标识（前端访问用）
      * @param enumClass 枚举类
-     * @param desc 枚举描述
+     * @param desc      枚举描述
      */
     public static void register(String enumKey, Class<? extends EnumSelectable> enumClass, String desc) {
         Assert.notNull(enumKey, "枚举标识不能为空");
@@ -53,5 +59,16 @@ public class EnumSelectRegistry {
      */
     public static Map<String, String> getRegisteredEnums() {
         return new HashMap<>(DESC_MAP); // 返回副本，避免外部修改
+    }
+
+    public static Map<String, List<SelectOption>> getMultipleOptions(List<String> enumKeys) {
+        Map<String, List<SelectOption>> optionsMap = new HashMap<>();
+        if (CollectionUtils.isEmpty(enumKeys)) {
+            return optionsMap;
+        }
+        for (String enumKey : enumKeys) {
+            optionsMap.put(enumKey, EnumSelectConverter.convert(getEnumClass(enumKey)));
+        }
+        return optionsMap;
     }
 }
