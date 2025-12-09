@@ -3,6 +3,7 @@ package cn.xuqiudong.common.base.select.json;
 import cn.xuqiudong.common.base.select.EnumSelectable;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
@@ -18,6 +19,28 @@ public class EnumSelectableSerializer extends JsonSerializer<EnumSelectable> imp
 
     // 枚举字段名（如status → statusText）
     private String fieldName;
+
+
+    public EnumSelectableSerializer() {
+    }
+
+    public EnumSelectableSerializer(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    /**
+     * 上下文初始化：获取枚举字段的名称
+     */
+    @Override
+    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) throws JsonMappingException {
+
+        if (property != null) {
+            // 获取实体中枚举字段的名称
+            return new EnumSelectableSerializer(property.getName());
+        }
+        return new EnumSelectableSerializer();
+    }
+
 
     /**
      * 核心序列化逻辑
@@ -39,15 +62,5 @@ public class EnumSelectableSerializer extends JsonSerializer<EnumSelectable> imp
         }
     }
 
-    /**
-     * 上下文初始化：获取枚举字段的名称
-     */
-    @Override
-    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) {
-        if (property != null) {
-            // 获取实体中枚举字段的名称
-            this.fieldName = property.getName();
-        }
-        return this;
-    }
+
 }

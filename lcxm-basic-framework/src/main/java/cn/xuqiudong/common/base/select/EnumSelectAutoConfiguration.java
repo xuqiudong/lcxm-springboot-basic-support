@@ -63,13 +63,13 @@ public class EnumSelectAutoConfiguration {
      *  不用在每个EnumSelectable 字段上加@JsonSerialize(using = EnumSelectableSerializer.class)
      */
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+    public Jackson2ObjectMapperBuilderCustomizer enumSelectJacksonCustomizer() {
         LOGGER.info("注册枚举转json序列化器");
         return builder -> {
             // 注册自定义序列化器
             SimpleModule enumModule = new SimpleModule();
             enumModule.addSerializer(EnumSelectable.class, new EnumSelectableSerializer());
-            builder.modules(enumModule);
+            builder.modulesToInstall(enumModule);
         };
     }
 
