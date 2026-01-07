@@ -1,5 +1,6 @@
 package cn.xuqiudong.common;
 
+import cn.xuqiudong.common.base.jackson.LcxmJacksonAutoConfiguration;
 import cn.xuqiudong.common.base.select.EnumSelectAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,8 +15,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnProperty(prefix = "lcxm.framework", name = "enabled", havingValue = "true", matchIfMissing = true)
-@ImportAutoConfiguration(
-        EnumSelectAutoConfiguration.class
+@ImportAutoConfiguration({
+        EnumSelectAutoConfiguration.class,
+        LcxmJacksonAutoConfiguration.class
+}
 )
 public class FrameworkAutoConfiguration {
 }
