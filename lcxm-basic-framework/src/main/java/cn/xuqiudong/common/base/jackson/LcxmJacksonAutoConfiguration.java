@@ -1,5 +1,6 @@
 package cn.xuqiudong.common.base.jackson;
 
+import cn.xuqiudong.common.base.jackson.desr.NullableEnumDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -8,6 +9,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,6 +37,8 @@ import java.util.TimeZone;
 @ConditionalOnProperty(prefix = "lcxm.framework.jackson", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class LcxmJacksonAutoConfiguration {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LcxmJacksonAutoConfiguration.class);
+
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String TIME_FORMAT = "HH:mm:ss";
@@ -44,6 +49,7 @@ public class LcxmJacksonAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public Jackson2ObjectMapperBuilderCustomizer dateTimeFormatCustomizer() {
+        LOGGER.info("注册JDK8日期时间格式化");
         var dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT).withResolverStyle(ResolverStyle.SMART);
         var df = DateTimeFormatter.ofPattern(DATE_FORMAT).withResolverStyle(ResolverStyle.SMART);
         var tf = DateTimeFormatter.ofPattern(TIME_FORMAT).withResolverStyle(ResolverStyle.SMART);
@@ -57,5 +63,14 @@ public class LcxmJacksonAutoConfiguration {
                 .deserializerByType(LocalTime.class, new LocalTimeDeserializer(tf))
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .timeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+    }
+
+    /**
+     * 枚举反序列化可以传入空字符串
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public Jackson2ObjectMapperBuilderCustomizer nullableEnumDeserializer() {
+        return builder -> builder.deserializerByType(Enum.class, new NullableEnumDeserializer());
     }
 }
