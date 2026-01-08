@@ -62,7 +62,8 @@ public class EnumSelectAutoConfiguration {
      *  使得每个EnumSelectable字段转json的时候追加一个xxxText字段
      *  不用在每个EnumSelectable 字段上加@JsonSerialize(using = EnumSelectableSerializer.class)
      */
-    @Bean
+    @Bean("enumSelectJacksonCustomizer")
+    @ConditionalOnMissingBean(name = "enumSelectJacksonCustomizer")
     public Jackson2ObjectMapperBuilderCustomizer enumSelectJacksonCustomizer() {
         LOGGER.info("注册枚举转json序列化器");
         return builder -> {

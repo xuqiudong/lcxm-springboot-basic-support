@@ -46,8 +46,8 @@ public class LcxmJacksonAutoConfiguration {
     /**
      * JDK8 日期时间格式化
      */
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean("dateTimeFormatCustomizer")
+    @ConditionalOnMissingBean(name = "dateTimeFormatCustomizer")
     public Jackson2ObjectMapperBuilderCustomizer dateTimeFormatCustomizer() {
         LOGGER.info("注册JDK8日期时间格式化");
         var dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT).withResolverStyle(ResolverStyle.SMART);
@@ -68,8 +68,8 @@ public class LcxmJacksonAutoConfiguration {
     /**
      * 枚举反序列化可以传入空字符串
      */
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean("nullableEnumDeserializer")
+    @ConditionalOnMissingBean(name = "nullableEnumDeserializer")
     public Jackson2ObjectMapperBuilderCustomizer nullableEnumDeserializer() {
         LOGGER.info("注册枚举反序列化可以传入空字符串");
         return builder -> builder.deserializerByType(Enum.class, new NullableEnumDeserializer());
