@@ -3,6 +3,8 @@ package cn.xuqiudong.common.base.mapper;
 import cn.xuqiudong.common.helper.MpGenericMapperHelper;
 import cn.xuqiudong.common.injector.SelectByIdWithLob;
 import cn.xuqiudong.common.query.Column;
+import cn.xuqiudong.common.query.MpQuery;
+import cn.xuqiudong.common.query.OrderBy;
 import cn.xuqiudong.common.query.PageQuery;
 import cn.xuqiudong.common.util.ColumnUtils;
 import cn.xuqiudong.common.util.QueryConditionUtils;
@@ -123,9 +125,19 @@ public interface MpGenericMapper<ID extends Serializable, T> extends BaseMapper<
      *
      * @see cn.xuqiudong.common.annotation.QueryCondition
      */
-    default List<T> selectListByQuery(Object query) {
+    default List<T> selectListByQuery(MpQuery query) {
         QueryWrapper<T> queryWrapper = QueryConditionUtils.createWrapper(query);
-        return selectList(queryWrapper);
+        return this.selectList(queryWrapper);
+    }
+
+    /**
+     * 根据查询条件查询列表 并排序
+     *
+     */
+    default List<T> selectListByQuery(MpQuery query, OrderBy orderBy) {
+        QueryWrapper<T> queryWrapper = QueryConditionUtils.createWrapper(query);
+        WrapUtils.setOrderBy(queryWrapper, orderBy);
+        return this.selectList(queryWrapper);
     }
 
     /**

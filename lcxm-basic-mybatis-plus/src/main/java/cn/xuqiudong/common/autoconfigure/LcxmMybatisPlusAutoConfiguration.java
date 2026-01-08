@@ -5,6 +5,8 @@ import cn.xuqiudong.common.fill.CompositeAutoFillFieldHandler;
 import cn.xuqiudong.common.fill.impl.BaseMpEntityAutoFillFieldHandler;
 import cn.xuqiudong.common.injector.LcxmDefaultSqlInjector;
 import cn.xuqiudong.common.permission.MPDataPermissionHandler;
+import cn.xuqiudong.common.permission.RowDataHelper;
+import cn.xuqiudong.common.permission.enums.RowDataHandlerType;
 import cn.xuqiudong.common.util.MpDbTypeUtil;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
@@ -69,6 +71,7 @@ public class LcxmMybatisPlusAutoConfiguration {
      * 自定义的 mybatis-plus 数据权限插件
      *
      * @see MPDataPermissionHandler
+     * @see RowDataHelper#start(RowDataHandlerType, String)
      */
     @Bean
     public DataPermissionInterceptor dataPermissionInterceptor() {

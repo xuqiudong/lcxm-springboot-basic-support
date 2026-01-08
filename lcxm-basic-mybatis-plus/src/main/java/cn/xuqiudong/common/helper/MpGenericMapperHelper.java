@@ -2,6 +2,9 @@ package cn.xuqiudong.common.helper;
 
 import cn.xuqiudong.common.base.entity.BaseMpEntity;
 import cn.xuqiudong.common.base.mapper.MpGenericMapper;
+import cn.xuqiudong.common.query.OrderBy;
+import cn.xuqiudong.common.util.WrapUtils;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.core.toolkit.MybatisUtils;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -199,5 +203,28 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
             return ts.get(0);
         }
         throw new TooManyResultsException("期望查询一条记录, 但实际记录数为: " + ts.size());
+    }
+
+
+    /**
+     * 根据查询条件查询第一条记录， 需要排序字段
+     */
+    public T selectFirstByWrapper(Wrapper<T> queryWrapper, OrderBy orderBy) {
+        Page<T> page = Page.of(1, 1);
+        page.setSearchCount(false);
+        // 排序
+        WrapUtils.setOrderBy(page, orderBy);
+        return selectFirst(page, queryWrapper);
+    }
+
+    /**
+     * 根据查询条件查询第一条记录
+     */
+    public T selectFirst(Page< T> page, Wrapper<T> queryWrapper) {
+        List<T> ts = mapper.selectList(page, queryWrapper);
+        if (CollectionUtils.isEmpty(ts)) {
+            return null;
+        }
+        return ts.get(0);
     }
 }

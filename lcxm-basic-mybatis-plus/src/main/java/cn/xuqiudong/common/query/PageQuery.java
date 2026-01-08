@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Data
 @Schema(description = "分页查询参数基类")
-public class PageQuery implements Serializable {
+public class PageQuery implements MpQuery {
 
 
     private static final long serialVersionUID = 1L;

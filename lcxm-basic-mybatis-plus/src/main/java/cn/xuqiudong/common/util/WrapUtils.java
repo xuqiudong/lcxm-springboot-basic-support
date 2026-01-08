@@ -2,8 +2,14 @@ package cn.xuqiudong.common.util;
 
 import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.common.query.Column;
+import cn.xuqiudong.common.query.OrderBy;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 描述:
@@ -29,4 +35,39 @@ public class WrapUtils {
         return value != null;
     }
 
+    /**
+     * 为查询设置排序
+     */
+    public static <T> void setOrderBy(QueryWrapper<T> queryWrapper, OrderBy orderBy) {
+        if (orderBy == null) {
+            return;
+        }
+        List<OrderBy.OrderColumn> orderColumns = orderBy.getOrderColumns();
+        for (OrderBy.OrderColumn orderColumn : orderColumns) {
+            if (orderColumn.orderType == OrderBy.OrderType.ASC) {
+                queryWrapper.orderByAsc(orderColumn.column);
+            } else {
+                queryWrapper.orderByDesc(orderColumn.column);
+            }
+        }
+    }
+
+    /**
+     * 为分页设置排序
+     */
+    public static <T> void setOrderBy(Page<T> page, OrderBy orderBy){
+        if (orderBy == null) {
+            return;
+        }
+        List<OrderBy.OrderColumn> orderColumns = orderBy.getOrderColumns();
+        List<OrderItem> orders = new ArrayList<>();
+        for (OrderBy.OrderColumn orderColumn : orderColumns) {
+            if (orderColumn.orderType == OrderBy.OrderType.ASC) {
+                orders.add(OrderItem.asc(orderColumn.column));
+            } else {
+                orders.add(OrderItem.desc(orderColumn.column));
+            }
+        }
+        page.setOrders(orders);
+    }
 }

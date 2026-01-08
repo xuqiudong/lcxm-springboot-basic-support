@@ -4,6 +4,7 @@ import cn.xuqiudong.common.util.ColumnUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -23,7 +24,7 @@ import java.util.StringJoiner;
  */
 public class OrderBy {
 
-    public final List<OrderColumn> orderColumns = new ArrayList<>();
+    private final List<OrderColumn> orderColumns = new ArrayList<>();
 
 
     /**
@@ -109,6 +110,11 @@ public class OrderBy {
     public <T, R> OrderBy thenAsc(Column<T, R> column) {
         String safeColumn = ColumnUtils.safeColumn(column);
         return this.thenAsc(safeColumn);
+    }
+
+
+    public List<OrderColumn> getOrderColumns() {
+        return Collections.unmodifiableList(orderColumns);
     }
 
 

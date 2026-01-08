@@ -9,6 +9,7 @@ import cn.xuqiudong.common.annotation.QueryCondition;
 import cn.xuqiudong.common.builder.WrapperBuilder;
 import cn.xuqiudong.common.enums.QueryOperation;
 import cn.xuqiudong.common.model.QueryFieldModel;
+import cn.xuqiudong.common.query.MpQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 描述:
  * 解析包含QueryCondition注解的查询对象  最终构建QueryWrapper
- *
+ * @see QueryCondition
  * @author Vic.xu
  * @since 2025-10-29 15:42
  */
@@ -47,14 +48,14 @@ public class QueryConditionUtils {
     /**
      * 通过 包含QueryCondition注解 的对象 创建查询Wrapper
      */
-    public static <T> QueryWrapper<T> createWrapper(Object query) {
+    public static <T> QueryWrapper<T> createWrapper(MpQuery query) {
         return builder(query).toWrapper();
     }
 
     /**
      * 通过 带QueryCondition注解的对象 创建查询WrapperBuilder
      */
-    public static WrapperBuilder builder(Object query) {
+    public static WrapperBuilder builder(MpQuery query) {
         Class<?> queryClass = query.getClass();
         String key = queryClass.getName();
         List<QueryFieldModel> queryFields = QUERY_FIELD_MODEL_CACHE.computeIfAbsent(key, (k) -> getQueryFields(queryClass));
