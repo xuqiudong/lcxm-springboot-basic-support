@@ -71,6 +71,7 @@ public class LcxmJacksonAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public Jackson2ObjectMapperBuilderCustomizer nullableEnumDeserializer() {
+        LOGGER.info("注册枚举反序列化可以传入空字符串");
         return builder -> builder.deserializerByType(Enum.class, new NullableEnumDeserializer());
     }
 }
