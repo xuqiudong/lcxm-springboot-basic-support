@@ -1,5 +1,6 @@
 package cn.xuqiudong.common;
 
+import cn.xuqiudong.common.base.code2text.Code2TextAutoConfiguration;
 import cn.xuqiudong.common.base.jackson.LcxmJacksonAutoConfiguration;
 import cn.xuqiudong.common.base.select.BusinessSelectAutoConfiguration;
 import cn.xuqiudong.common.base.select.EnumSelectAutoConfiguration;
@@ -19,7 +20,8 @@ import org.springframework.context.annotation.Configuration;
 @ImportAutoConfiguration({
         EnumSelectAutoConfiguration.class,
         BusinessSelectAutoConfiguration.class,
-        LcxmJacksonAutoConfiguration.class
+        LcxmJacksonAutoConfiguration.class,
+        Code2TextAutoConfiguration.class
 }
 )
 public class FrameworkAutoConfiguration {
