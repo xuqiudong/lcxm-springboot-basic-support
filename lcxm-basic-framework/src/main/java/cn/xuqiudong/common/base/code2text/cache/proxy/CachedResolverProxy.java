@@ -7,7 +7,8 @@ import java.lang.annotation.Annotation;
 
 /**
  * 描述:
- *  运行期对象， 每个resolver对应一个代理对象
+ * 运行期对象， 每个resolver对应一个代理对象
+ *
  * @author Vic.xu
  * @since 2026-01-14 14:09
  */
@@ -51,7 +52,12 @@ public class CachedResolverProxy<A extends Annotation>
 
     @Override
     public Object textToCode(String text) {
-        //TODO 缓存
-        return delegate.textToCode(text);
+        if (text == null || text.isEmpty()) {
+            return null;
+        }
+        return cacheManager.getOrLoadReverse(region, text, () -> {
+            Object o = delegate.textToCode(text);
+            return o == null ? null : String.valueOf(o);
+        });
     }
 }

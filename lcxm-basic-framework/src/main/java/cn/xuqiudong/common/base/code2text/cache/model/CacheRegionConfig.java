@@ -33,6 +33,12 @@ public class CacheRegionConfig {
     private boolean preload;
 
     /**
+     * 是否缓存 text -> code
+     */
+    private boolean text2CodeCacheable = true;
+
+
+    /**
      * 是否启用 Redis
      * 默认启用： 但是会判断容器是否提供StringRedisTemplate
      */

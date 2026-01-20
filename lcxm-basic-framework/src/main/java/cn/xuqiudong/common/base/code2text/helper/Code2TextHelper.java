@@ -34,6 +34,17 @@ public class Code2TextHelper {
         return resolver.codeToText(code);
     }
 
+    public static Object getCode(Class<? extends Annotation> annoType, String text) {
+
+        Code2TextResolver resolver = Code2TextResolverRegistry.get(annoType);
+
+        if (resolver == null) {
+            return null;
+        }
+        return resolver.textToCode(text);
+    }
+
+
     /**
      * 获取 code 对应的 text
      *   需要在spring环境下 使用

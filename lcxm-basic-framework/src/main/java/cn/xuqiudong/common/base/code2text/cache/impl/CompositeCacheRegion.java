@@ -35,10 +35,10 @@ public class CompositeCacheRegion implements CacheRegion {
 
     @Override
     public String get(String key) {
-
         String v = level1.get(key);
-        if (v != null) return v;
-
+        if (v != null) {
+            return v;
+        }
         v = level2.get(key);
         if (v != null) {
             String finalV = v;

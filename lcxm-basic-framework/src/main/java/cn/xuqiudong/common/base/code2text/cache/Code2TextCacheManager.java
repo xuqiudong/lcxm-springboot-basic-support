@@ -15,12 +15,18 @@ import java.util.function.Supplier;
 public interface Code2TextCacheManager {
 
     /**
-     * 获取缓存数据
+     * 获取code对应的text
      */
     String getOrLoad(String region,
-                     String key,
+                     String code,
                      Supplier<String> loader);
 
+    /**
+     * 获取text对应的code
+     */
+    String getOrLoadReverse(String region,
+                             String text,
+                             Supplier<String> loader);
     /**
      * 单个清除
      */
@@ -32,9 +38,10 @@ public interface Code2TextCacheManager {
     void invalidateAll(String region);
 
     /**
-     * 注册 region
+     * 注册 CacheBundle(region)
      */
-    void registerRegion(CacheRegion region);
+    void registerBundle(CacheRegionBundle bundle);
+
 
     /**
      * 预加载

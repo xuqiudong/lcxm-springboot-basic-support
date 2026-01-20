@@ -1,5 +1,6 @@
 package cn.xuqiudong.common.base.code2text.core;
 
+import cn.xuqiudong.common.base.code2text.cache.CacheRegionBundle;
 import cn.xuqiudong.common.base.code2text.cache.CacheRegionConfigProvider;
 import cn.xuqiudong.common.base.code2text.cache.CacheRegionFactory;
 import cn.xuqiudong.common.base.code2text.cache.proxy.CachedResolverProxy;
@@ -94,9 +95,9 @@ public class Code2TextResolverRegistry implements InitializingBean {
 
         CacheRegionConfig config = configProvider.get(regionName);
 
-        CacheRegion region = regionFactory.create(regionName, config);
+        CacheRegionBundle regionBundle = regionFactory.createBundle(regionName, config);
 
-        cacheManager.registerRegion(region);
+        cacheManager.registerBundle(regionBundle);
 
         Code2TextResolver proxy =
                 new CachedResolverProxy(resolver, regionName, cacheManager);
