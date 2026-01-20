@@ -26,7 +26,7 @@ public class DemoCode2TextResolver implements Code2TextPreloadable<DemoCode2Text
 
     @Override
     public Object textToCode(String text) {
-        return null;
+        return "none code for " + text;
     }
 
     @Override

@@ -54,12 +54,21 @@ public class Code2TextSerializerTest extends BaseTest {
      * @see DemoCode2TextResolver#preload()
      */
     @Test
-    @DisplayName("测试静态转换(内部其实使用的是resolve的缓存功能)")
+    @DisplayName("测试静态转换code(内部其实使用的是resolve的缓存功能)")
     public void testCode2TextHelper() {
         String code = "code1";
         String text = Code2TextHelper.getText(DemoCode2Text.class, code);
         System.out.println(code + " -> " + text);
         Assertions.assertEquals("code1-preload", text);
+    }
+
+    @Test
+    @DisplayName("测试静态转换text(内部其实使用的是resolve的缓存功能)")
+    public void testText2CodeHelper() {
+        String text = "code2-preload";
+        Object code = Code2TextHelper.getCode(DemoCode2Text.class, text);
+        System.out.println(text + " -> " + code);
+        Assertions.assertEquals("code2", code);
     }
 
 
