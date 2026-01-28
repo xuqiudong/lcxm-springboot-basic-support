@@ -19,4 +19,18 @@ public interface Code2TextResolver<A extends Annotation> {
 
     Object textToCode(String text);
 
+
+    /**
+     * 是否支持多个code转换成text 或 多个text转换成code
+     */
+    default boolean supportMultiValue() {
+        return true;
+    }
+
+    /**
+     * 多个code转换成text时，code之间的分隔符
+     */
+    default String getSeparator() {
+        return ",";
+    }
 }

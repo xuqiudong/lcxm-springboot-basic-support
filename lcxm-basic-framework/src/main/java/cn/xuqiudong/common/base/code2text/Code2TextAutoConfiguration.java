@@ -13,6 +13,7 @@ import cn.xuqiudong.common.base.code2text.cache.runner.Code2TextPreloadRunner;
 import cn.xuqiudong.common.base.code2text.core.Code2TextResolverRegistry;
 import cn.xuqiudong.common.base.code2text.helper.Code2TextCacheHelper;
 import cn.xuqiudong.common.base.code2text.resolver.Code2TextResolver;
+import cn.xuqiudong.common.base.code2text.resolver.impl.EnumCode2TextResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +92,16 @@ public class Code2TextAutoConfiguration {
                                                                CacheRegionConfigProvider configProvider) {
         LOGGER.info("code2text: Code2TextResolverRegistry init...");
         return new Code2TextResolverRegistry(resolverProvider, regionFactory, cacheManager, configProvider);
+    }
+
+    /**
+     * 枚举解析器
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public EnumCode2TextResolver enumCode2TextResolver() {
+        LOGGER.info("code2text: EnumCode2TextResolver init...");
+        return new EnumCode2TextResolver();
     }
 
     /* ************************** 缓存清理相关 bean below *********************************** */
