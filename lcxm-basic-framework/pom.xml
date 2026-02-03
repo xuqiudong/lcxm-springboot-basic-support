@@ -66,11 +66,10 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!-- Caffeine本地缓存（可选，未来可引入） -->
+        <!-- Caffeine本地缓存 -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <!--redisson
