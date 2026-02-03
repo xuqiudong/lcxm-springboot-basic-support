@@ -72,6 +72,8 @@ public abstract class BaseAppendJsonHandler {
     public static Map<String, BaseAppendJsonHandler> getSubAppendJsonHandlerMap() {
         if (SUB_APPEND_JSON_HANDLER_MAP.size() > 0) {
             return SUB_APPEND_JSON_HANDLER_MAP;
+
+
         }
         ApplicationContext applicationContext = ApplicationContextHolder.getApplicationContext();
         if (applicationContext == null) {

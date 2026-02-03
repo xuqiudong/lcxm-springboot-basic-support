@@ -108,4 +108,11 @@ public class BusinessSelectFacade {
         return Optional.ofNullable(options).orElse(Collections.emptyList());
     }
 
+    /**
+     * 获取所有已注册的业务下拉框type
+     */
+    public List<String> types(){
+        return Collections.unmodifiableList(serviceMap.keySet().stream().toList());
+    }
+
 }

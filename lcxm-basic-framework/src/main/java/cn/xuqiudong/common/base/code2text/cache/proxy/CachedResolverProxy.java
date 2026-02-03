@@ -2,8 +2,10 @@ package cn.xuqiudong.common.base.code2text.cache.proxy;
 
 import cn.xuqiudong.common.base.code2text.cache.Code2TextCacheManager;
 import cn.xuqiudong.common.base.code2text.resolver.Code2TextResolver;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.Annotation;
+import java.util.StringJoiner;
 
 /**
  * 描述:
@@ -45,6 +47,22 @@ public class CachedResolverProxy<A extends Annotation>
             return null;
         }
         String key = String.valueOf(code);
+        if (StringUtils.isBlank(key)) {
+            return null;
+        }
+
+        //支持多个code
+        if (delegate.supportMultiValue()) {
+            String[] codes = StringUtils.split(key, delegate.getSeparator());
+            if (codes != null && codes.length > 1) {
+                StringJoiner joiner = new StringJoiner(delegate.getSeparator());
+                for (String c : codes) {
+                    joiner.add(cacheManager.getOrLoad(region, c,
+                            () -> delegate.codeToText(c)));
+                }
+                return joiner.toString();
+            }
+        }
 
         return cacheManager.getOrLoad(region, key,
                 () -> delegate.codeToText(code));
@@ -55,9 +73,27 @@ public class CachedResolverProxy<A extends Annotation>
         if (text == null || text.isEmpty()) {
             return null;
         }
+
+        //支持多个text
+        if (delegate.supportMultiValue()) {
+            String[] texts = StringUtils.split(text, delegate.getSeparator());
+            if (texts != null && texts.length > 1) {
+                StringJoiner joiner = new StringJoiner(delegate.getSeparator());
+                for (String t : texts) {
+                    joiner.add(cacheManager.getOrLoadReverse(region, t,
+                            () -> {
+                                Object o = delegate.textToCode(text);
+                                return o == null ? null : String.valueOf(o);
+                            }));
+                }
+                return joiner.toString();
+            }
+        }
+
         return cacheManager.getOrLoadReverse(region, text, () -> {
             Object o = delegate.textToCode(text);
             return o == null ? null : String.valueOf(o);
         });
     }
+
 }

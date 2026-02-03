@@ -31,6 +31,16 @@ public class BusinessSelectController {
     }
 
     /**
+     * 获取所有业务类型的下拉选项
+     */
+    @Operation(summary = "获取所有业务类型的下拉选项的type")
+    @GetMapping("/types")
+    public BaseResponse<List<String>> types() {
+        List<String> types = businessSelectFacade.types();
+        return BaseResponse.success(types);
+    }
+
+    /**
      * 获取指定业务类型的下拉选项
      *
      * @param type 枚举标识（通过实现 BusinessSelectService 接口的Bean注入， 注意不要重复）

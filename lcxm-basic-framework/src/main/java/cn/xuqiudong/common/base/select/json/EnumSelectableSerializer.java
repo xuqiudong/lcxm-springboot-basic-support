@@ -11,7 +11,8 @@ import lombok.SneakyThrows;
 
 /**
  * 描述:
- *   通用枚举序列化器：自动为EnumSelectable枚举追加xxxText字段
+ * 通用枚举序列化器：自动为EnumSelectable枚举追加xxxText字段
+ *
  * @author Vic.xu
  * @since 2025-11-24 15:35
  */
@@ -61,6 +62,4 @@ public class EnumSelectableSerializer extends JsonSerializer<EnumSelectable> imp
             gen.writeStringField(fieldName + "Text", value.getText());
         }
     }
-
-
 }
