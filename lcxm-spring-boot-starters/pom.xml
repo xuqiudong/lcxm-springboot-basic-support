@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.xuqiudong.basic</groupId>
+        <artifactId>lcxm-springboot-parent</artifactId>
+        <version>3.5.0-jdk17-1.0.0</version>
+    </parent>
+
+    <artifactId>lcxm-spring-boot-starters</artifactId>
+    <packaging>pom</packaging>
+
+    <description>聚合所有的starter模块</description>
+
+    <modules>
+        <module>lcxm-attachment-spring-boot-starter</module>
+        <module>lcxm-generator-spring-boot-starter</module>
+        <module>lcxm-mq-data-bridge-spring-boot-starter</module>
+        <module>lcxm-quartz-spring-boot-starter</module>
+    </modules>
+
+
+    <!--跳过部署 -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
