@@ -7,8 +7,8 @@ import cn.xuqiudong.common.query.MpQuery;
 import cn.xuqiudong.common.query.OrderBy;
 import cn.xuqiudong.common.query.PageQuery;
 import cn.xuqiudong.common.util.ColumnUtils;
-import cn.xuqiudong.common.util.QueryConditionUtils;
 import cn.xuqiudong.common.util.WrapUtils;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -116,7 +116,7 @@ public interface MpGenericMapper<ID extends Serializable, T> extends BaseMapper<
      */
     default Page<T> selectPage(PageQuery query) {
         Page<T> page = query.toPage();
-        QueryWrapper<T> queryWrapper = QueryConditionUtils.createWrapper(query);
+        QueryWrapper<T> queryWrapper = WrapUtils.createWrapper(query);
         return selectPage(page, queryWrapper);
     }
 
@@ -126,16 +126,15 @@ public interface MpGenericMapper<ID extends Serializable, T> extends BaseMapper<
      * @see cn.xuqiudong.common.annotation.QueryCondition
      */
     default List<T> selectListByQuery(MpQuery query) {
-        QueryWrapper<T> queryWrapper = QueryConditionUtils.createWrapper(query);
+        QueryWrapper<T> queryWrapper = WrapUtils.createWrapper(query);
         return this.selectList(queryWrapper);
     }
 
     /**
      * 根据查询条件查询列表 并排序
-     *
      */
     default List<T> selectListByQuery(MpQuery query, OrderBy orderBy) {
-        QueryWrapper<T> queryWrapper = QueryConditionUtils.createWrapper(query);
+        QueryWrapper<T> queryWrapper = WrapUtils.createWrapper(query);
         WrapUtils.setOrderBy(queryWrapper, orderBy);
         return this.selectList(queryWrapper);
     }
@@ -143,11 +142,40 @@ public interface MpGenericMapper<ID extends Serializable, T> extends BaseMapper<
     /**
      * 根据字段查询
      */
-    default <R> T selectOneByColumn(Column<T, R> colum, R value){
+    default <R> T selectOneByColumn(Column<T, R> colum, R value) {
         QueryWrapper<T> wrapper = WrapUtils.createWrapper(colum, value);
         List<T> ts = this.selectList(wrapper);
         return helper().selectOne(ts);
+    }
 
+    /**
+     * 根据查询条件查询第一条记录， 需要排序字段
+     */
+    default T selectFirstByWrapper(Wrapper<T> queryWrapper, OrderBy orderBy) {
+        return helper().selectFirstByWrapper(queryWrapper, orderBy);
+    }
+
+    /**
+     * 根据查询条件查询第一条记录
+     */
+    default T selectFirst(Page<T> page, Wrapper<T> queryWrapper) {
+        return helper().selectFirst(page, queryWrapper);
+    }
+
+    /**
+     * 根据查询条件查询第一条记录
+     */
+    default T selectFirst(MpQuery query, OrderBy orderBy) {
+        QueryWrapper<T> queryWrapper = WrapUtils.createWrapper(query);
+        return helper().selectFirstByWrapper(queryWrapper, orderBy);
+    }
+
+    /**
+     * 根据查询条件查询第一条记录
+     */
+    default <R> T selectFirst(Column<T, R> column, R value, OrderBy orderBy) {
+        QueryWrapper<T> queryWrapper = WrapUtils.createWrapper(column, value);
+        return helper().selectFirstByWrapper(queryWrapper, orderBy);
     }
 
 }
