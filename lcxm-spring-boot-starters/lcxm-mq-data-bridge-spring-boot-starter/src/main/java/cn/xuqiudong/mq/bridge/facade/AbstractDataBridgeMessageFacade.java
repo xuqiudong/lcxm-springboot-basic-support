@@ -37,13 +37,14 @@ public abstract class AbstractDataBridgeMessageFacade {
      * @param operation 操作标识
      * @param switchKey 消费开关的key
      * @return 是否可以启动
+     * @changelog  by Vic.xu 20260204 删除这些复杂的处理 可能造成不可知的问题，  使用简单错误的redisson锁即可
      */
     protected RLock  beforeOperation(OperationEnum operation, String switchKey) {
-        // 检查本地状态和 Redis 状态
-        if (!stateManager.canStartOperation(operation)) {
-            LOGGER.warn("消息{}已启动，请勿重复启动", operation.getDescription());
-            return null;
-        }
+        // 检查本地状态和 Redis 状态  删除这些复杂的处理 可能造成不可知的问题，  使用简单错误的redisson锁即可
+//        if (!stateManager.canStartOperation(operation)) {
+//            LOGGER.warn("消息{}已启动，请勿重复启动", operation.getDescription());
+//            return null;
+//        }
         // 本地消息消费开关
         if (!dataBridgeGlobalSwitchHelper.isEnableInRedis(switchKey)) {
             LOGGER.warn("本地消息{}[{}]开关未打开，跳过处理", operation.getDescription(), switchKey);
@@ -59,30 +60,17 @@ public abstract class AbstractDataBridgeMessageFacade {
     }
 
     /**
-     * 刷新 Redis 状态
-     * @param operation 操作标识
-     */
-    public void refreshRedisState(OperationEnum operation) {
-        stateManager.refreshRedisState(operation);
-    }
-
-    /**
      * 操作后的后置处理： 保证和before 相反的顺序
      * 1. 释放分布式锁
      * 2. 清除redis状态
      * 3. 更新本地状态
      * @param operation 操作标识
+     * @changelog  by Vic.xu 20260204 删除这些复杂的处理 可能造成不可知的问题，  使用简单错误的redisson锁即可
      */
     protected void afterOperation(OperationEnum operation, RLock lock) {
-        try {
-            stateManager.clearRedisState(operation);
-            stateManager.updateLocalState(operation, false);
-        }finally {
+//            stateManager.clearRedisState(operation);
+//            stateManager.updateLocalState(operation, false);
             stateManager.unlock(lock);
-        }
-
-
-
 
     }
 

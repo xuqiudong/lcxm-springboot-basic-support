@@ -32,14 +32,6 @@ public enum OperationEnum {
         this.description = description;
     }
 
-    /**
-     * 获取存于 Redis 的当前操作是否进行中的 key
-     *
-     * @return string 形如：data:bridge:send:running
-     */
-    public String getRedisStateKey() {
-        return DataBridgeConstant.REDIS_KEY_PREFIX + this.operationKey + ":running";
-    }
 
     /**
      * 获取 Redis 锁的 key

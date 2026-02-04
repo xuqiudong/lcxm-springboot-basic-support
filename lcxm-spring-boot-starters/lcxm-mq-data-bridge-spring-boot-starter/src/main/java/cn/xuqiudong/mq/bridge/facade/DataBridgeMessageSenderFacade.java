@@ -114,6 +114,8 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
         if (lock == null) {
             return;
         }
+        long start = System.currentTimeMillis();
+        int size = 0;
         try {
             // 设置本地状态
             stateManager.updateLocalState(operation, true);
@@ -129,8 +131,9 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
                     // 没有消息可发送，退出循环
                     break;
                 }
+                size += dataBridgeSendMessages.size();
                 DataBridgeMessageSenderFacade self = getSelf();
-                long start = System.currentTimeMillis();
+                long internalStart = System.currentTimeMillis();
                 for (DataBridgeSendMessage dataBridgeSendMessage : dataBridgeSendMessages) {
                     lastTimeId = dataBridgeSendMessage.getId();
                     BooleanWithMsg result;
@@ -145,9 +148,8 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
                         return;
                     }
                 }
-                long cost = System.currentTimeMillis() - start;
+                long cost = System.currentTimeMillis() - internalStart;
                 LOGGER.info("本次发送消息[{}]条, cost = {}ms", dataBridgeSendMessages.size(), cost);
-                refreshRedisState(operation);
                 try {
                     // 休眠1s后继续下一轮发送
                     TimeUnit.SECONDS.sleep(1);
@@ -157,6 +159,9 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
                 }
             }
         } finally {
+            // 打印时间 和 总条数
+            long cost = System.currentTimeMillis() - start;
+            LOGGER.info("本次发送消息总条数[{}]条, cost = {}ms", size, cost);
             // 重置状态
             afterOperation(operation, lock);
         }
