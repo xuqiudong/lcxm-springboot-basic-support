@@ -10,6 +10,7 @@ import cn.xuqiudong.mq.bridge.helper.ClusterOperationStateManagerHelper;
 import cn.xuqiudong.mq.bridge.helper.DataBridgeGlobalConfigHelper;
 import cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage;
 import cn.xuqiudong.mq.bridge.mq.DataBridgeMqMessageSender;
+import cn.xuqiudong.mq.bridge.notify.DataBridgeFailEventPublisher;
 import cn.xuqiudong.mq.bridge.service.DataBridgeSendMessageService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,10 +56,11 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
 
     public DataBridgeMessageSenderFacade(DataBridgeGlobalConfigHelper dataBridgeGlobalSwitchHelper,
                                          DataBridgeSendMessageService dataBridgeSendMessageService,
+                                         DataBridgeFailEventPublisher dataBridgeFailEventPublisher,
                                          DataBridgeMqMessageSender dataMessageSender,
                                          DataBridgeProperties dataBridgeProperties,
                                          ClusterOperationStateManagerHelper clusterOperationStateManagerHelper, SendMessageArchiveService sendMessageArchiveService) {
-        super(dataBridgeGlobalSwitchHelper, clusterOperationStateManagerHelper);
+        super(dataBridgeGlobalSwitchHelper, clusterOperationStateManagerHelper, dataBridgeFailEventPublisher);
         this.dataBridgeSendMessageService = dataBridgeSendMessageService;
         this.dataBridgeSender = dataMessageSender;
         this.dataBridgeProperties = dataBridgeProperties;
@@ -118,7 +120,6 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
         int size = 0;
         try {
             // 设置本地状态
-            stateManager.updateLocalState(operation, true);
             Integer lastTimeId = null;
             // 此处使用while 而不是递归是为了防止，数据不断的情况下 可能出现 栈内存溢出的情况
             while (true) {
@@ -161,7 +162,7 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
         } finally {
             // 打印时间 和 总条数
             long cost = System.currentTimeMillis() - start;
-            LOGGER.info("本次发送消息总条数[{}]条, cost = {}ms", size, cost);
+            LOGGER.info("本次发送消息结束,总条数[{}]条, cost = {}ms", size, cost);
             // 重置状态
             afterOperation(operation, lock);
         }
@@ -231,6 +232,7 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
             //阻塞发送
             LOGGER.warn("消息[{}]发送失败，将要阻塞全局消息发送!!!!!!!", entity.getId());
             dataBridgeGlobalSwitchHelper.setSendEnable(false);
+            dataBridgeFailEventPublisher.publish(OperationEnum.SEND, entity.getId(), result.getMessage());
         }
         dataBridgeSendMessageService.save(entity);
         sendMessageArchiveService.archive(entity.getId());

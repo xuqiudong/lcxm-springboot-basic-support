@@ -3,6 +3,7 @@ package cn.xuqiudong.mq.bridge.facade;
 import cn.xuqiudong.mq.bridge.enums.OperationEnum;
 import cn.xuqiudong.mq.bridge.helper.ClusterOperationStateManagerHelper;
 import cn.xuqiudong.mq.bridge.helper.DataBridgeGlobalConfigHelper;
+import cn.xuqiudong.mq.bridge.notify.DataBridgeFailEventPublisher;
 import org.redisson.api.RLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +24,14 @@ public abstract class AbstractDataBridgeMessageFacade {
 
     protected final ClusterOperationStateManagerHelper stateManager;
 
-    public AbstractDataBridgeMessageFacade(DataBridgeGlobalConfigHelper dataBridgeGlobalSwitchHelper, ClusterOperationStateManagerHelper stateManager) {
+    protected final DataBridgeFailEventPublisher dataBridgeFailEventPublisher;
+
+    public AbstractDataBridgeMessageFacade(DataBridgeGlobalConfigHelper dataBridgeGlobalSwitchHelper,
+                                           ClusterOperationStateManagerHelper stateManager,
+                                           DataBridgeFailEventPublisher dataBridgeFailEventPublisher) {
         this.dataBridgeGlobalSwitchHelper = dataBridgeGlobalSwitchHelper;
         this.stateManager = stateManager;
+        this.dataBridgeFailEventPublisher = dataBridgeFailEventPublisher;
     }
 
 
@@ -53,7 +59,7 @@ public abstract class AbstractDataBridgeMessageFacade {
         RLock lock = stateManager.lockWithWatchDog(operation);
         // 获取分布式锁
         if (lock == null) {
-            LOGGER.warn("获取分布式锁失败，跳过本次{}", operation.getDescription());
+            LOGGER.warn("未获取到分布式锁，跳过本次{}", operation.getDescription());
             return null;
         }
         return lock;

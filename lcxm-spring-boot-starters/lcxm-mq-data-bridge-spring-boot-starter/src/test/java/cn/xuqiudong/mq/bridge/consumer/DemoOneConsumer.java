@@ -28,7 +28,7 @@ public class DemoOneConsumer extends AbstractDataBridgeMessageConsumer {
     @ActionHandler(action = aa, messageType = DemoConsumerModel.class)
     public BooleanWithMsg save(DemoConsumerModel demoConsumerModel){
         if (demoConsumerModel.getAge() == 20) {
-          //  return BooleanWithMsg.fail("年龄不能为20");
+            return BooleanWithMsg.fail("年龄不能为20");
         }
         System.out.println("save DemoOneConsumer demoConsumerModel : age = " + demoConsumerModel.getAge() );
         JsonUtil.printJson(demoConsumerModel);

@@ -12,6 +12,7 @@ import cn.xuqiudong.mq.bridge.helper.DataBridgeGlobalConfigHelper;
 import cn.xuqiudong.mq.bridge.model.DataBridgeReceiveMessage;
 import cn.xuqiudong.mq.bridge.model.MessageContentWrapper;
 import cn.xuqiudong.mq.bridge.mq.DataBridgeMqMessageReceiver;
+import cn.xuqiudong.mq.bridge.notify.DataBridgeFailEventPublisher;
 import cn.xuqiudong.mq.bridge.service.DataBridgeReceiveMessageService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -59,9 +61,10 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
 
     public DataBridgeMessageReceiverFacade(DataBridgeReceiveMessageService dataBridgeReceiveMessageService,
                                            DataBridgeGlobalConfigHelper dataBridgeGlobalSwitchHelper,
+                                           DataBridgeFailEventPublisher dataBridgeFailEventPublisher,
                                            DataBridgeMessageRouter dataBridgeMessageDispatcher,
                                            ClusterOperationStateManagerHelper clusterOperationStateManagerHelper, ReceiveMessageArchiveService receiveMessageArchiveService) {
-        super(dataBridgeGlobalSwitchHelper, clusterOperationStateManagerHelper);
+        super(dataBridgeGlobalSwitchHelper, clusterOperationStateManagerHelper, dataBridgeFailEventPublisher);
         this.dataBridgeReceiveMessageService = dataBridgeReceiveMessageService;
         this.dataBridgeMessageDispatcher = dataBridgeMessageDispatcher;
         this.receiveMessageArchiveService = receiveMessageArchiveService;
@@ -162,8 +165,6 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
         long start = System.currentTimeMillis();
         int size = 0;
         try {
-            // 设置本地状态
-            stateManager.updateLocalState(operation, true);
             Integer lastTimeId = null;
             // 此处使用while 而不是递归是为了防止，数据不断的情况下 可能出现 栈内存溢出的情况
             while (true) {
@@ -207,7 +208,7 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
         } finally {
             // 打印总耗时 和 总条数
             long cost = System.currentTimeMillis() - start;
-            LOGGER.info("本次消费消息总条数[{}]条, cost = {}ms", size, cost);
+            LOGGER.info("本次消费消息结束,总条数[{}]条, cost = {}ms", size, cost);
             // 重置状态
             afterOperation(operation, lock);
         }
@@ -222,10 +223,11 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
         // 判断状态：只有未发送和 已修正的数据才能发送 （其实数据库层面已经处理过）
         ReceiveStatusEnum status = entity.getStatus();
         if (status == ReceiveStatusEnum.PARSE_ERROR) {
-            LOGGER.warn("消息[{}]状态为[{}]，无法消费, 需要人工处理后方可消费", entity.getId(), entity.getStatus().getText());
+            String msg = MessageFormat.format("消息[{}]状态为[{}]，无法消费", entity.getId(), entity.getStatus().getText());
+            LOGGER.warn(msg);
             dataBridgeGlobalSwitchHelper.setConsumerEnable(false);
-            // FIXME  是否需要通知人工处理？
-            return BooleanWithMsg.fail("消息[" + entity.getId() + "]状态为[" + entity.getStatus().getText() + "]，不能消费");
+            dataBridgeFailEventPublisher.publish(OperationEnum.CONSUME, entity.getId(), msg);
+            return BooleanWithMsg.fail(msg);
         }
         // 查询的时候已经过滤 可忽略掉
         if (ReceiveStatusEnum.INITIAL != status && ReceiveStatusEnum.AMENDED != status) {
@@ -258,6 +260,7 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
             //阻塞发送
             LOGGER.warn("消息[{}]消费失败，将要阻塞全局消息消费!!!!!!!", entity.getId());
             dataBridgeGlobalSwitchHelper.setConsumerEnable(false);
+            dataBridgeFailEventPublisher.publish(OperationEnum.CONSUME, entity.getId(), result.getMessage());
         }
         dataBridgeReceiveMessageService.save(entity);
         receiveMessageArchiveService.archive(entity.getId());
