@@ -39,7 +39,7 @@ public @interface CompareClassConfig {
 	String innerIdentifyField() default "id";
 	
 	/**
-	 *@see InnerType.CASCADE_SINGLE 和InnerType.CASCADE_LIST
+	 *@see InnerType#CASCADE_SINGLE 和 InnerType.CASCADE_LIST
 	 * 展开比较的时候, 选择对象的某个属性值  记录为变化说明 InnerType为非NONE得时候
 	 */
 	String innerRecordShowField() default "name";
@@ -54,7 +54,7 @@ public @interface CompareClassConfig {
 	/**
 	 * 展开比较的时候的属性类型:单个对象或者list对象
 	 */
-	public enum InnerType {
+	enum InnerType {
 		/**
 		 * 不展开比较， 一般是基本数据类型
 		 */
