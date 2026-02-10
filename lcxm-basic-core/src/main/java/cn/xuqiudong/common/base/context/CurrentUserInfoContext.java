@@ -1,5 +1,8 @@
 package cn.xuqiudong.common.base.context;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.function.Supplier;
 
 /**
@@ -11,6 +14,7 @@ import java.util.function.Supplier;
  * @since 2025-10-27
  */
 public class CurrentUserInfoContext {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CurrentUserInfoContext.class);
 
     /**
      * 是否匿名访问
@@ -37,14 +41,24 @@ public class CurrentUserInfoContext {
      * 获取当前用户ID
      */
     public static String getUserId() {
-        return userIdSupplier.get();
+        try {
+            return userIdSupplier.get();
+        } catch (Exception e) {
+            LOGGER.warn("获取当前用户ID异常:{}", e.getMessage());
+            return "-1";
+        }
     }
 
     /**
      * 获取当前用户名
      */
     public static String getUsername() {
-        return usernameSupplier.get();
+        try {
+            return usernameSupplier.get();
+        } catch (Exception e) {
+            LOGGER.warn("获取当前用户名异常:{}", e.getMessage());
+            return "anonymous";
+        }
     }
 
 
