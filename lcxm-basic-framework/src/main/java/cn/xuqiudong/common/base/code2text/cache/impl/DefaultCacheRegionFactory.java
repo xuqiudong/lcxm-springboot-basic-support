@@ -38,7 +38,7 @@ public class DefaultCacheRegionFactory implements CacheRegionFactory {
         }
 
         CacheRegion redis =
-                new RedisCacheRegion(name, redisTemplate);
+                new RedisCacheRegion(name, cfg, redisTemplate);
 
         return new CompositeCacheRegion(name, local, redis);
     }

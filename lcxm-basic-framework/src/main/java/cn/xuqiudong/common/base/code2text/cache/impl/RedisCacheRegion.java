@@ -1,6 +1,7 @@
 package cn.xuqiudong.common.base.code2text.cache.impl;
 
 import cn.xuqiudong.common.base.code2text.cache.CacheRegion;
+import cn.xuqiudong.common.base.code2text.cache.model.CacheRegionConfig;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.Map;
@@ -16,11 +17,15 @@ import java.util.function.Supplier;
 public class RedisCacheRegion implements CacheRegion {
 
     private final String name;
+
+    private final CacheRegionConfig config;
     private final StringRedisTemplate redis;
 
     public RedisCacheRegion(String name,
+                            CacheRegionConfig config,
                             StringRedisTemplate redis) {
         this.name = name;
+        this.config = config;
         this.redis = redis;
     }
 
@@ -49,8 +54,9 @@ public class RedisCacheRegion implements CacheRegion {
 
         v = loader.get();
         if (v != null) {
-            //TODO 过期时间设置
             redis.opsForHash().put(redisKey(), key, v);
+            // 过期时间设置 FIXME  这里有个问题  设置的是整个map的过期时间
+            redis.expire(redisKey(), config.getRedisTtl());
         }
         return v;
     }
