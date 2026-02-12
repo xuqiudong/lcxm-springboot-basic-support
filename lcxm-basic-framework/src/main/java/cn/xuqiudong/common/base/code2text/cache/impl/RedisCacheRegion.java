@@ -54,9 +54,8 @@ public class RedisCacheRegion implements CacheRegion {
 
         v = loader.get();
         if (v != null) {
-            redis.opsForHash().put(redisKey(), key, v);
-            // 过期时间设置 FIXME  这里有个问题  设置的是整个map的过期时间
-            redis.expire(redisKey(), config.getRedisTtl());
+            saveAndExpire(key, v);
+
         }
         return v;
     }
@@ -76,7 +75,7 @@ public class RedisCacheRegion implements CacheRegion {
         if (key == null || value == null) {
             return;
         }
-        redis.opsForHash().put(redisKey(), key, value);
+        saveAndExpire(key, value);
     }
 
     @Override
@@ -85,5 +84,17 @@ public class RedisCacheRegion implements CacheRegion {
             return;
         }
         redis.opsForHash().putAll(redisKey(), map);
+        expire();
+    }
+
+    private void saveAndExpire(String key, String value) {
+        redis.opsForHash().put(redisKey(), key, value);
+        expire();
+
+    }
+
+    private void expire() {
+        // 过期时间设置 FIXME  这里有个问题  设置的是整个map的过期时间
+        redis.expire(redisKey(), config.getRedisTtl());
     }
 }
