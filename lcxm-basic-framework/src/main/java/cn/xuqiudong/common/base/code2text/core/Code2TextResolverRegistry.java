@@ -86,10 +86,14 @@ public class Code2TextResolverRegistry implements InitializingBean {
         // 不需要缓存 则直接注册 解析器
         if (!resolver.needCache()) {
             REGISTRY.put(resolver.annotationType(), resolver);
+            LOGGER.info("Code2Text resolver registered: {} , (need not cache)",
+                    resolver.getClass().getSimpleName());
             return;
         }
         if (ObjectUtils.anyNull(configProvider, regionFactory, cacheManager)) {
             REGISTRY.put(resolver.annotationType(), resolver);
+            LOGGER.info("Code2Text resolver registered: {} , (no cache region)",
+                    resolver.getClass().getSimpleName());
             return;
         }
 
