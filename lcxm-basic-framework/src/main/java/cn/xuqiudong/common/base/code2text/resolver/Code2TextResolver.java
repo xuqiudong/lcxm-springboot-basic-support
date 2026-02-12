@@ -1,5 +1,7 @@
 package cn.xuqiudong.common.base.code2text.resolver;
 
+import cn.xuqiudong.common.base.code2text.cache.proxy.CachedResolverProxy;
+
 import java.lang.annotation.Annotation;
 
 /**
@@ -18,6 +20,14 @@ public interface Code2TextResolver<A extends Annotation> {
     String codeToText(Object code);
 
     Object textToCode(String text);
+
+    /**
+     * 是否需要缓存，默认开启缓存, 开启的话，则会将Resolver包装为CachedResolverProxy
+     * @see CachedResolverProxy
+     */
+    default boolean needCache() {
+        return true;
+    }
 
 
     /**

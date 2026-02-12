@@ -16,6 +16,12 @@ public class EnumCode2TextResolver implements Code2TextResolver<EnumCode2Text> {
         return EnumCode2Text.class;
     }
 
+
+    @Override
+    public boolean needCache() {
+        return false;
+    }
+
     @Override
     public String codeToText(Object code) {
         if (code == null) {
