@@ -21,10 +21,8 @@
         <module>lcxm-basic-mybatis-plus</module>
         <module>lcxm-basic-srpc</module>
         <module>lcxm-basic-third</module>
-        <module>lcxm-generator-spring-boot-starter</module>
-        <module>lcxm-mq-data-bridge-spring-boot-starter</module>
-        <module>lcxm-quartz-spring-boot-starter</module>
         <module>lcxm-trial</module>
+        <module>lcxm-spring-boot-starters</module>
     </modules>
 
     <properties>
