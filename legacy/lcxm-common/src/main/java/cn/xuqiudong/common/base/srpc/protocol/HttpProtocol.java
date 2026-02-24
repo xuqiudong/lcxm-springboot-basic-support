@@ -108,7 +108,7 @@ public class HttpProtocol implements Protocol {
 
     /**
      * InputStream 转byte数组
-     *
+     *selectByType
      * @param input InputStream
      * @return byte[]
      * @throws IOException

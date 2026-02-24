@@ -1,5 +1,6 @@
 package cn.xuqiudong.common.autoconfigure;
 
+import cn.xuqiudong.common.base.context.CurrentUserInfoContext;
 import cn.xuqiudong.common.fill.AutoFillFieldHandler;
 import cn.xuqiudong.common.fill.CompositeAutoFillFieldHandler;
 import cn.xuqiudong.common.fill.impl.BaseMpEntityAutoFillFieldHandler;
@@ -28,6 +29,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * 描述:
@@ -46,6 +48,9 @@ public class LcxmMybatisPlusAutoConfiguration {
     /**
      * BaseMpEntity 属性填充
      *
+     * 依赖于设置 CurrentUserInfoContext 的 方法
+     * @see CurrentUserInfoContext#setUserIdSupplier(Supplier) 
+     * @see CurrentUserInfoContext#setUsernameSupplier(Supplier) 
      * @see #compositeMetaFieldHandler(ObjectProvider)
      */
     @Bean

@@ -1,8 +1,11 @@
 package cn.xuqiudong.common.util;
 
 import cn.hutool.core.util.StrUtil;
+import cn.xuqiudong.common.builder.WrapperBuilder;
 import cn.xuqiudong.common.query.Column;
+import cn.xuqiudong.common.query.MpQuery;
 import cn.xuqiudong.common.query.OrderBy;
+import cn.xuqiudong.common.query.Where;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -27,6 +30,24 @@ public class WrapUtils {
        queryWrapper.eq(isNotEmpty(value), ColumnUtils.safeColumn(column), value);
        return queryWrapper;
     }
+
+    /**
+     * 创建查询条件
+     */
+    public static <T> QueryWrapper<T> createWrapper(MpQuery query) {
+        return QueryConditionUtils.createWrapper(query);
+    }
+
+    /**
+     * 创建查询条件
+     */
+    public static <T> Where<T> createWhere(MpQuery query) {
+        WrapperBuilder builder = QueryConditionUtils.builder(query);
+        return builder.toWhere();
+    }
+
+
+
 
     private static boolean isNotEmpty(Object value) {
         if (value instanceof CharSequence) {
