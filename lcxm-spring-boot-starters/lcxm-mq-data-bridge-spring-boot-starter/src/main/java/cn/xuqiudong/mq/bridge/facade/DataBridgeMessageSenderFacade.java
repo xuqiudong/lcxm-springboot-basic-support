@@ -235,7 +235,10 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
             dataBridgeFailEventPublisher.publish(OperationEnum.SEND, entity.getId(), result.getMessage());
         }
         dataBridgeSendMessageService.save(entity);
-        sendMessageArchiveService.archive(entity.getId());
+        // 只归档成功的消息
+        if (success) {
+            sendMessageArchiveService.archive(entity.getId());
+        }
     }
 
     @Override

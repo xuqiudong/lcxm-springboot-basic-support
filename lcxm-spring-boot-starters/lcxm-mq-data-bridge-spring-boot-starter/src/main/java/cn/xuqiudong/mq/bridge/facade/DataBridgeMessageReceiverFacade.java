@@ -263,7 +263,10 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
             dataBridgeFailEventPublisher.publish(OperationEnum.CONSUME, entity.getId(), result.getMessage());
         }
         dataBridgeReceiveMessageService.save(entity);
-        receiveMessageArchiveService.archive(entity.getId());
+        // 只归档成功
+        if (success) {
+            receiveMessageArchiveService.archive(entity.getId());
+        }
 
     }
 

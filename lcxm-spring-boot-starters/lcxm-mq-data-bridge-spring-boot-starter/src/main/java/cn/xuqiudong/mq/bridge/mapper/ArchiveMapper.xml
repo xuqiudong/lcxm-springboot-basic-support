@@ -18,7 +18,7 @@
 
     <!-- 归档数据 -->
     <insert id="archive">
-        INSERT INTO ${archiveTable}
+        INSERT IGNORE INTO ${archiveTable}
         SELECT *
         FROM ${bizTable}
         WHERE id = #{id}

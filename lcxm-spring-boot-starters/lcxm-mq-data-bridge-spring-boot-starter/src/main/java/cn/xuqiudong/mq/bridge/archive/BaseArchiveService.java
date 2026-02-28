@@ -50,7 +50,9 @@ public abstract class BaseArchiveService {
         // 归档
         int insert = archiveMapper.archive(getTableName(), archiveTable, id);
         if (insert != 1) {
-            throw new IllegalStateException("归档失败，id=" + id);
+            logger.warn("归档失败，id={}，可能是主键/消息id已存在", id);
+            // 如果没有插入数据，可能是因为主键冲突，直接跳过
+            return;
         }
         // 删除业务表
         int delete = archiveMapper.delete(getTableName(), id);
