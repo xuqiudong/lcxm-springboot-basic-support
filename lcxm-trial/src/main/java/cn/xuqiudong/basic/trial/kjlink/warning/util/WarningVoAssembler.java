@@ -4,7 +4,7 @@ import cn.xuqiudong.basic.trial.kjlink.warning.enums.WarningItemEnum;
 import cn.xuqiudong.basic.trial.kjlink.warning.enums.WarningRuleEnum;
 import cn.xuqiudong.basic.trial.kjlink.warning.vo.WarningItemVo;
 import cn.xuqiudong.basic.trial.kjlink.warning.vo.WarningRuleVo;
-import cn.xuqiudong.common.util.JsonUtil;
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Arrays;

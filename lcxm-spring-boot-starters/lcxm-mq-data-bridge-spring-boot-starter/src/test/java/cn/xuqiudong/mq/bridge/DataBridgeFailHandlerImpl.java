@@ -1,6 +1,6 @@
 package cn.xuqiudong.mq.bridge;
 
-import cn.xuqiudong.common.util.JsonUtil;
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.mq.bridge.notify.DataBridgeFailHandler;
 import cn.xuqiudong.mq.bridge.notify.FailContext;
 import org.springframework.stereotype.Component;

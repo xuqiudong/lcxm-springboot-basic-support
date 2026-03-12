@@ -1,6 +1,6 @@
 package cn.xuqiudong.quartz.controller;
 
-import cn.xuqiudong.common.base.controller.BaseController;
+import cn.xuqiudong.basic.core.controller.BaseController;
 import cn.xuqiudong.quartz.model.TaskJobLogDetail;
 import cn.xuqiudong.quartz.service.TaskJobLogDetailService;
 import org.springframework.web.bind.annotation.RequestMapping;

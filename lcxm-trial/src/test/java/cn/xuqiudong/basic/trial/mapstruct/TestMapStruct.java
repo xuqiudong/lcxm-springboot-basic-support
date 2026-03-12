@@ -1,6 +1,6 @@
 package cn.xuqiudong.basic.trial.mapstruct;
 
-import cn.xuqiudong.common.util.JsonUtil;
+import cn.xuqiudong.basic.core.util.JsonUtil;
 
 import java.time.LocalDate;
 

@@ -5,9 +5,9 @@ import cn.xuqiudong.basic.generator.model.context.QueryContext;
 import cn.xuqiudong.basic.generator.model.context.TemplateContext;
 import cn.xuqiudong.basic.generator.plugin.BaseGeneratorPlugin;
 import cn.xuqiudong.basic.generator.util.ImportPackageUtils;
-import cn.xuqiudong.common.annotation.QueryCondition;
-import cn.xuqiudong.common.enums.QueryOperation;
-import cn.xuqiudong.common.util.QueryConditionUtils;
+import cn.xuqiudong.basic.core.annotation.QueryCondition;
+import cn.xuqiudong.basic.core.enums.QueryOperation;
+import cn.xuqiudong.basic.core.util.QueryConditionUtils;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  * 给查询条件加上@QueryCondition 注解
  *
  * @author Vic.xu
- * @see cn.xuqiudong.common.annotation.QueryCondition;
+ * @see QueryCondition ;
  * @since 2025-11-01 14:57
  */
 @EqualsAndHashCode

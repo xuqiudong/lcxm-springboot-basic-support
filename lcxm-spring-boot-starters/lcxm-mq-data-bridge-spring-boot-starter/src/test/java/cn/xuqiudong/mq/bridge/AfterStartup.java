@@ -1,13 +1,12 @@
 package cn.xuqiudong.mq.bridge;
 
-import cn.xuqiudong.common.base.tool.Tools;
+import cn.xuqiudong.basic.core.tool.Tools;
 import cn.xuqiudong.mq.bridge.autoconfigure.DataBridgeProperties;
 import cn.xuqiudong.mq.bridge.consumer.model.DemoConsumerModel;
 import cn.xuqiudong.mq.bridge.core.DataBridgeMessageProducer;
 import cn.xuqiudong.mq.bridge.helper.DataBridgeGlobalConfigHelper;
 import cn.xuqiudong.mq.bridge.helper.DataBridgeMqListenerSwitchHelper;
 import cn.xuqiudong.mq.bridge.mq.DataBridgeMqMessageSender;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

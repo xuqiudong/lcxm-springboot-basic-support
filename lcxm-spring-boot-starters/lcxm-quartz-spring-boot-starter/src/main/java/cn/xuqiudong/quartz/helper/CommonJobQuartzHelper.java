@@ -1,6 +1,6 @@
 package cn.xuqiudong.quartz.helper;
 
-import cn.xuqiudong.common.base.vo.BooleanWithMsg;
+import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.quartz.constant.QuartzConstant;
 import cn.xuqiudong.quartz.enums.QuartzStatusEnum;
 import cn.xuqiudong.quartz.job.CommonJob;

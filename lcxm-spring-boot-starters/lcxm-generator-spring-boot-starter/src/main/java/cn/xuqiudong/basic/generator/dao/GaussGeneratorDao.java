@@ -5,7 +5,7 @@ import cn.xuqiudong.basic.generator.enums.DatabaseType;
 import cn.xuqiudong.basic.generator.model.meta.ColumnMeta;
 import cn.xuqiudong.basic.generator.model.meta.TableMeta;
 import cn.xuqiudong.basic.generator.model.query.TableLookup;
-import cn.xuqiudong.common.util.SqlUtil;
+import cn.xuqiudong.basic.core.util.SqlUtil;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

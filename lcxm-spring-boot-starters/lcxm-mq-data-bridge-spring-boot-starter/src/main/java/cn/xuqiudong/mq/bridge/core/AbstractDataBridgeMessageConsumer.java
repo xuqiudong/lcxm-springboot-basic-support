@@ -1,6 +1,6 @@
 package cn.xuqiudong.mq.bridge.core;
 
-import cn.xuqiudong.common.base.vo.BooleanWithMsg;
+import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.mq.bridge.annotation.ActionHandler;
 import cn.xuqiudong.mq.bridge.model.ActionHandlerModel;
 

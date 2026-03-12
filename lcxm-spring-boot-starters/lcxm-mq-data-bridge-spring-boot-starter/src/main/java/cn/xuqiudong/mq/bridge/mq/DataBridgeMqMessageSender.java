@@ -1,6 +1,6 @@
 package cn.xuqiudong.mq.bridge.mq;
 
-import cn.xuqiudong.common.base.vo.BooleanWithMsg;
+import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.mq.bridge.autoconfigure.DataBridgeProperties;
 import cn.xuqiudong.mq.bridge.constant.DataBridgeConstant;
 import cn.xuqiudong.mq.bridge.helper.DataBridgeGlobalConfigHelper;

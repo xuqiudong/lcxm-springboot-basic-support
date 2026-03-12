@@ -1,7 +1,7 @@
 package cn.xuqiudong.basic.trial.kjlink.warning.enums;
 
-import cn.xuqiudong.common.base.select.EnumSelectable;
-import cn.xuqiudong.common.base.select.annotation.RegisterSelectEnum;
+import cn.xuqiudong.basic.core.select.EnumSelectable;
+import cn.xuqiudong.basic.core.select.annotation.RegisterSelectEnum;
 
 /**
  * 描述:

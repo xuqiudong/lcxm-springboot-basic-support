@@ -1,7 +1,7 @@
 package cn.xuqiudong.mq.bridge.controller;
 
-import cn.xuqiudong.common.base.model.BaseResponse;
-import cn.xuqiudong.common.base.tool.Tools;
+import cn.xuqiudong.basic.core.model.BaseResponse;
+import cn.xuqiudong.basic.core.tool.Tools;
 import cn.xuqiudong.mq.bridge.consumer.model.DemoConsumerModel;
 import cn.xuqiudong.mq.bridge.core.DataBridgeMessageProducer;
 import org.apache.commons.lang.math.RandomUtils;

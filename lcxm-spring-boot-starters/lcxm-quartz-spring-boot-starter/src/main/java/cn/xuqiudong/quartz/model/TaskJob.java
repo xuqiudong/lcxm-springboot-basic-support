@@ -1,7 +1,7 @@
 package cn.xuqiudong.quartz.model;
 
 
-import cn.xuqiudong.common.base.model.BaseEntity;
+import cn.xuqiudong.basic.core.model.BaseEntity;
 import cn.xuqiudong.quartz.enums.QuartzStatusEnum;
 
 /**

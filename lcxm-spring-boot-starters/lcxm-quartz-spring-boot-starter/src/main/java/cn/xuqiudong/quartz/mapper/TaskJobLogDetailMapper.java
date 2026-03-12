@@ -1,6 +1,6 @@
 package cn.xuqiudong.quartz.mapper;
 
-import cn.xuqiudong.common.base.mapper.BaseMapper;
+import cn.xuqiudong.basic.core.mapper.BaseMapper;
 import cn.xuqiudong.quartz.model.TaskJobLogDetail;
 
 /**

@@ -1,7 +1,7 @@
 package cn.xuqiudong.mq.bridge.core;
 
-import cn.xuqiudong.common.base.vo.BooleanWithMsg;
-import cn.xuqiudong.common.util.JsonUtil;
+import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.mq.bridge.model.ActionHandlerModel;
 import cn.xuqiudong.mq.bridge.model.DataBridgeReceiveMessage;
 import cn.xuqiudong.mq.bridge.vo.AbstractDataBridgeVo;

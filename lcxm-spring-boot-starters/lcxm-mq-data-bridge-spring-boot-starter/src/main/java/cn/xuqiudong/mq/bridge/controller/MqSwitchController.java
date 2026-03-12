@@ -1,6 +1,6 @@
 package cn.xuqiudong.mq.bridge.controller;
 
-import cn.xuqiudong.common.base.model.BaseResponse;
+import cn.xuqiudong.basic.core.model.BaseResponse;
 import cn.xuqiudong.mq.bridge.facade.DataBridgeMessageReceiverFacade;
 import cn.xuqiudong.mq.bridge.facade.DataBridgeMessageSenderFacade;
 import cn.xuqiudong.mq.bridge.helper.DataBridgeGlobalConfigHelper;

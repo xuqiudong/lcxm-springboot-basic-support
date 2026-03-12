@@ -5,6 +5,7 @@ import cn.xuqiudong.basic.generator.model.DataType;
 import cn.xuqiudong.basic.generator.model.FieldInfo;
 import cn.xuqiudong.basic.generator.model.TableInfo;
 import cn.xuqiudong.basic.generator.util.ImportPackageUtils;
+import cn.xuqiudong.basic.core.query.PageQuery;
 import lombok.Getter;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
  * </p>
  *
  * @author Vic.xu
- * @see cn.xuqiudong.common.query.PageQuery
+ * @see PageQuery
  * @since 2025-11-01 14:35
  */
 @Getter

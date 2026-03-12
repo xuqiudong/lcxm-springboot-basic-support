@@ -1,7 +1,7 @@
 package cn.xuqiudong.mq.bridge.facade;
 
-import cn.xuqiudong.common.base.vo.BooleanWithMsg;
-import cn.xuqiudong.common.util.JsonUtil;
+import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.mq.bridge.archive.ReceiveMessageArchiveService;
 import cn.xuqiudong.mq.bridge.constant.DataBridgeConstant;
 import cn.xuqiudong.mq.bridge.core.DataBridgeMessageRouter;

@@ -1,7 +1,7 @@
 package cn.xuqiudong.mq.bridge.core;
 
-import cn.xuqiudong.common.base.tool.Tools;
-import cn.xuqiudong.common.util.JsonUtil;
+import cn.xuqiudong.basic.core.tool.Tools;
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.mq.bridge.autoconfigure.DataBridgeProperties;
 import cn.xuqiudong.mq.bridge.enums.SendStatusEnum;
 import cn.xuqiudong.mq.bridge.facade.DataBridgeMessageSenderFacade;

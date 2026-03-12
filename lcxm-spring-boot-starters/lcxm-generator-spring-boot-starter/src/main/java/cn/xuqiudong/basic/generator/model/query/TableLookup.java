@@ -1,6 +1,6 @@
 package cn.xuqiudong.basic.generator.model.query;
 
-import cn.xuqiudong.common.base.lookup.Lookup;
+import cn.xuqiudong.basic.core.lookup.Lookup;
 import lombok.Getter;
 import lombok.Setter;
 

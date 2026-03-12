@@ -1,6 +1,6 @@
 package cn.xuqiudong.mq.bridge.model;
 
-import cn.xuqiudong.common.base.model.BaseGenericEntity;
+import cn.xuqiudong.basic.core.model.BaseGenericEntity;
 import cn.xuqiudong.mq.bridge.enums.SendStatusEnum;
 
 /**
