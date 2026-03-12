@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.framework.framework.listener;
+package cn.xuqiudong.basic.framework.listener;
 
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.boot.web.server.WebServer;

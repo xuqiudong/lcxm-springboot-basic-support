@@ -1,8 +1,7 @@
 package cn.xuqiudong.mq.bridge.service;
 
-import cn.xuqiudong.common.base.service.BaseGenericService;
+import cn.xuqiudong.basic.mybatisplus.service.BaseGenericService;
 import cn.xuqiudong.mq.bridge.autoconfigure.DataBridgeProperties;
-import cn.xuqiudong.mq.bridge.constant.DataBridgeConstant;
 import cn.xuqiudong.mq.bridge.mapper.DataBridgeReceiveMessageMapper;
 import cn.xuqiudong.mq.bridge.model.DataBridgeReceiveMessage;
 import cn.xuqiudong.mq.bridge.model.FetchMessageLookup;

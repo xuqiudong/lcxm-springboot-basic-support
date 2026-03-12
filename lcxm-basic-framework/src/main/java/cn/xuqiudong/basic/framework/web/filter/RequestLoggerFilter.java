@@ -10,7 +10,8 @@ import org.springframework.web.filter.AbstractRequestLoggingFilter;
 /**
  * 描述:
  *  记录请求时长的Filter
- *  JIRA: MZFA-1
+ *   spring已内置了类似的filter:CommonsRequestLoggingFilter
+ * @see org.springframework.web.filter.CommonsRequestLoggingFilter;
  * @author Vic.xu
  * @since 2025-01-14 13:42
  */

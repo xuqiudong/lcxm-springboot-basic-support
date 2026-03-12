@@ -1,6 +1,6 @@
 package cn.xuqiudong.mq.bridge.mapper;
 
-import cn.xuqiudong.common.base.mapper.BaseGenericMapper;
+import cn.xuqiudong.basic.mybatisplus.mapper.BaseGenericMapper;
 import cn.xuqiudong.mq.bridge.model.DataBridgeReceiveMessage;
 import cn.xuqiudong.mq.bridge.model.FetchMessageLookup;
 

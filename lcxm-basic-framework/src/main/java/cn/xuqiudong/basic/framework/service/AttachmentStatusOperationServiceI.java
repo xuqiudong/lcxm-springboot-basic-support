@@ -8,7 +8,9 @@ import java.util.List;
  * 说明 :  附件状态处理service
  * @author  Vic.xu
  * @since  2019年12月11日 下午1:37:30
+ * @deprecated  202603  将重写附件模块
  */
+@Deprecated
 public interface AttachmentStatusOperationServiceI {
 
     /**

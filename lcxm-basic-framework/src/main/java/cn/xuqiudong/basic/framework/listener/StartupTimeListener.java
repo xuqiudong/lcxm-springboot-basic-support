@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.framework.framework.listener;
+package cn.xuqiudong.basic.framework.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

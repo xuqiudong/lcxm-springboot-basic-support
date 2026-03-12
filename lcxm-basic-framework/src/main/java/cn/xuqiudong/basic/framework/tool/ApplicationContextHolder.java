@@ -3,18 +3,17 @@ package cn.xuqiudong.basic.framework.tool;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 /**
  *
- *  说明 :  从spring获取bean实例
- *  @author Vic.xu
- * @since  2020年7月31日下午4:55:02
+ * 说明 :  从spring获取bean实例
+ *
+ * @author Vic.xu
+ * @since 2020年7月31日下午4:55:02
  */
-@Component
 public class ApplicationContextHolder implements ApplicationContextAware {
 
-    private static ApplicationContext applicationContext;
+    private static volatile ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(ApplicationContext ctx) throws BeansException {

@@ -31,6 +31,13 @@
 
         <dependency>
             <groupId>cn.xuqiudong.basic</groupId>
+            <artifactId>lcxm-basic-mybatis-plus</artifactId>
+            <version>${lcxm-basic.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xuqiudong.basic</groupId>
             <artifactId>lcxm-generate-spring-boot-starter</artifactId>
             <version>${lcxm-generator.version}</version>
             <scope>provided</scope>
@@ -107,6 +114,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
 
 
     </dependencies>

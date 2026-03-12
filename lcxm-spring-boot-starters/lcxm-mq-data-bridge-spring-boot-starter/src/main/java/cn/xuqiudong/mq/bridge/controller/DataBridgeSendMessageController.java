@@ -1,7 +1,7 @@
 package cn.xuqiudong.mq.bridge.controller;
 
-import cn.xuqiudong.common.base.controller.BaseGenericController;
 import cn.xuqiudong.basic.core.model.BaseResponse;
+import cn.xuqiudong.basic.mybatisplus.controller.BaseGenericController;
 import cn.xuqiudong.mq.bridge.enums.SendStatusEnum;
 import cn.xuqiudong.mq.bridge.model.DataBridgeSendMessage;
 import cn.xuqiudong.mq.bridge.service.DataBridgeSendMessageService;

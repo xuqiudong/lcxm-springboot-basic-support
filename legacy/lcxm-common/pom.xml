@@ -9,8 +9,8 @@
         <version>3.5.0-jdk17-1.0.0</version>
     </parent>
 
-    <artifactId>lcxm-common</artifactId>
-    <name>lcxm-common</name>
+    <artifactId>lcxm-common-deprecate</artifactId>
+    <name>lcxm-common-deprecate</name>
     <description>基类模块: 对象模型, 基础支持等</description>
 
     <properties>
