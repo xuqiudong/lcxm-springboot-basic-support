@@ -4,6 +4,7 @@ import cn.xuqiudong.basic.core.lookup.Lookup;
 import cn.xuqiudong.basic.core.mapper.BaseGenericMapper;
 import cn.xuqiudong.basic.core.model.BaseGenericEntity;
 import cn.xuqiudong.basic.core.model.PageInfo;
+import cn.xuqiudong.basic.framework.service.AttachmentStatusOperationGenericServiceI;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;

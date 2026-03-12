@@ -1,11 +1,11 @@
 # obtain port  and context path
-org.springframework.context.ApplicationListener=cn.xuqiudong.basic.core.framework.listener.WebServerListener
+org.springframework.context.ApplicationListener=cn.xuqiudong.basic.framework.framework.listener.WebServerListener
 # SpringBootApplicationPropertiesUtil:set ConfigurableEnvironment  for  SpringBootApplicationPropertiesUtil before the ApplicationContext} has been created.
 # StartupTimeListener  startup time listener
-org.springframework.boot.SpringApplicationRunListener=cn.xuqiudong.basic.core.util.SpringBootApplicationPropertiesUtil,\
-                                                        cn.xuqiudong.basic.core.framework.listener.StartupTimeListener
+org.springframework.boot.SpringApplicationRunListener=cn.xuqiudong.basic.framework.util.SpringBootApplicationPropertiesUtil,\
+                                                        cn.xuqiudong.basic.framework.framework.listener.StartupTimeListener
 # EnvironmentPostProcessor
 org.springframework.boot.env.EnvironmentPostProcessor=\
-  cn.xuqiudong.basic.core.configuration.LcxmCommonPropertiesPostProcessor
+  cn.xuqiudong.basic.framework.configuration.LcxmCommonPropertiesPostProcessor
 
 

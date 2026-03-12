@@ -2,7 +2,7 @@ package cn.xuqiudong.basic.core.third.login.service;
 
 import cn.xuqiudong.basic.core.model.BaseResponse;
 import cn.xuqiudong.basic.core.third.login.model.TokenSignModel;
-import cn.xuqiudong.basic.core.tool.Tools;
+import cn.xuqiudong.basic.framework.tool.Tools;
 import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.basic.core.util.encrypt.RsaUtils;

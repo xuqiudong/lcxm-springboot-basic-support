@@ -1,6 +1,6 @@
 package cn.xuqiudong.mq.bridge;
 
-import cn.xuqiudong.basic.core.tool.Tools;
+import cn.xuqiudong.basic.framework.tool.Tools;
 import cn.xuqiudong.mq.bridge.autoconfigure.DataBridgeProperties;
 import cn.xuqiudong.mq.bridge.consumer.model.DemoConsumerModel;
 import cn.xuqiudong.mq.bridge.core.DataBridgeMessageProducer;

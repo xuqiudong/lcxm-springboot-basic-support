@@ -5,6 +5,7 @@ import cn.xuqiudong.basic.core.mapper.BaseMapper;
 import cn.xuqiudong.basic.core.model.BaseEntity;
 import cn.xuqiudong.basic.core.model.PageInfo;
 import cn.xuqiudong.basic.core.util.ListUtils;
+import cn.xuqiudong.basic.framework.service.AttachmentStatusOperationServiceI;
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;

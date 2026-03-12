@@ -1,7 +1,7 @@
 package cn.xuqiudong.basic.trial.kjlink.warning.enums;
 
-import cn.xuqiudong.basic.core.select.EnumSelectable;
-import cn.xuqiudong.basic.core.select.annotation.RegisterSelectEnum;
+import cn.xuqiudong.basic.framework.select.EnumSelectable;
+import cn.xuqiudong.basic.framework.select.annotation.RegisterSelectEnum;
 import lombok.Getter;
 
 /**

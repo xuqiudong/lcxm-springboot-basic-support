@@ -1,2 +1,2 @@
 # framework auto  configuration entry point
-cn.xuqiudong.basic.core.FrameworkAutoConfiguration
+cn.xuqiudong.basic.framework.FrameworkAutoConfiguration

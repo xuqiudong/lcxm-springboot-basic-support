@@ -1,7 +1,7 @@
 package cn.xuqiudong.basic.core.entity;
 
 
-import cn.xuqiudong.basic.core.code2text.annotation.UserCode2Text;
+import cn.xuqiudong.basic.framework.code2text.annotation.UserCode2Text;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
