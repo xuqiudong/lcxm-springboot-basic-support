@@ -4,8 +4,11 @@ import cn.xuqiudong.basic.framework.code2text.Code2TextAutoConfiguration;
 import cn.xuqiudong.basic.framework.jackson.LcxmJacksonAutoConfiguration;
 import cn.xuqiudong.basic.framework.select.BusinessSelectAutoConfiguration;
 import cn.xuqiudong.basic.framework.select.EnumSelectAutoConfiguration;
+import cn.xuqiudong.basic.framework.tool.ApplicationContextHolder;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -25,4 +28,12 @@ import org.springframework.context.annotation.Configuration;
 }
 )
 public class FrameworkAutoConfiguration {
+
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ApplicationContextHolder applicationContextHolder() {
+        return new ApplicationContextHolder();
+    }
+
 }
