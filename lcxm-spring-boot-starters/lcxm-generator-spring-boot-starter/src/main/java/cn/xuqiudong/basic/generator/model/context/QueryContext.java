@@ -5,7 +5,7 @@ import cn.xuqiudong.basic.generator.model.DataType;
 import cn.xuqiudong.basic.generator.model.FieldInfo;
 import cn.xuqiudong.basic.generator.model.TableInfo;
 import cn.xuqiudong.basic.generator.util.ImportPackageUtils;
-import cn.xuqiudong.basic.core.query.PageQuery;
+import cn.xuqiudong.basic.mybatisplus.query.PageQuery;
 import lombok.Getter;
 
 import java.util.List;

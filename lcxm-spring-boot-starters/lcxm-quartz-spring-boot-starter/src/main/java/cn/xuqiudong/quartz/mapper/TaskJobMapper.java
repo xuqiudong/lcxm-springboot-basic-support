@@ -1,6 +1,6 @@
 package cn.xuqiudong.quartz.mapper;
 
-import cn.xuqiudong.basic.core.mapper.BaseMapper;
+import cn.xuqiudong.basic.mybatisplus.mapper.BaseMapper;
 import cn.xuqiudong.quartz.model.TaskJob;
 
 /**

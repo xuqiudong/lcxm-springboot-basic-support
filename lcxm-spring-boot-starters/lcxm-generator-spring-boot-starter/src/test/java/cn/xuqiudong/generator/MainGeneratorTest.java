@@ -6,8 +6,8 @@ import cn.xuqiudong.basic.generator.Generator;
 import cn.xuqiudong.basic.generator.config.template.CustomizeTemplateConfig;
 import cn.xuqiudong.basic.generator.engine.FreemarkerTemplateEngine;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
-import cn.xuqiudong.basic.core.entity.BaseMpEntity;
-import cn.xuqiudong.basic.core.mapper.StringCrudMapper;
+import cn.xuqiudong.basic.mybatisplus.entity.BaseMpEntity;
+import cn.xuqiudong.basic.mybatisplus.mapper.StringCrudMapper;
 
 import java.nio.file.Paths;
 

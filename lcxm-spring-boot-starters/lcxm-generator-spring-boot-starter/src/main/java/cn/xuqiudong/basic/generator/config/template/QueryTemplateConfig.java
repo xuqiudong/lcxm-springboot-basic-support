@@ -2,7 +2,7 @@ package cn.xuqiudong.basic.generator.config.template;
 
 import cn.xuqiudong.basic.generator.config.IConfigBuilder;
 import cn.xuqiudong.basic.generator.constant.GeneratorConstant;
-import cn.xuqiudong.basic.core.query.PageQuery;
+import cn.xuqiudong.basic.mybatisplus.query.PageQuery;
 
 /**
  * 描述:

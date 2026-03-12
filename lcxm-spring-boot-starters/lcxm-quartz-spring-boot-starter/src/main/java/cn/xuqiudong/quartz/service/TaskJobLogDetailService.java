@@ -1,6 +1,6 @@
 package cn.xuqiudong.quartz.service;
 
-import cn.xuqiudong.basic.core.service.BaseService;
+import cn.xuqiudong.basic.mybatisplus.service.BaseService;
 import cn.xuqiudong.quartz.helper.JobUserHolder;
 import cn.xuqiudong.quartz.mapper.TaskJobLogDetailMapper;
 import cn.xuqiudong.quartz.model.TaskJobLog;

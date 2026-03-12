@@ -4,7 +4,7 @@ import cn.xuqiudong.basic.generator.enums.DatabaseType;
 import cn.xuqiudong.basic.generator.model.meta.ColumnMeta;
 import cn.xuqiudong.basic.generator.model.meta.TableMeta;
 import cn.xuqiudong.basic.generator.model.query.TableLookup;
-import cn.xuqiudong.basic.core.util.SqlUtil;
+import cn.xuqiudong.basic.mybatisplus.util.SqlUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

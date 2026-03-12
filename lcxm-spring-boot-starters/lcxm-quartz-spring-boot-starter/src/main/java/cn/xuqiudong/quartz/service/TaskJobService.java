@@ -1,6 +1,6 @@
 package cn.xuqiudong.quartz.service;
 
-import cn.xuqiudong.basic.core.service.BaseService;
+import cn.xuqiudong.basic.mybatisplus.service.BaseService;
 import cn.xuqiudong.quartz.mapper.TaskJobMapper;
 import cn.xuqiudong.quartz.model.TaskJob;
 import org.springframework.stereotype.Service;

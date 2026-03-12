@@ -5,9 +5,9 @@ import cn.xuqiudong.basic.generator.model.context.QueryContext;
 import cn.xuqiudong.basic.generator.model.context.TemplateContext;
 import cn.xuqiudong.basic.generator.plugin.BaseGeneratorPlugin;
 import cn.xuqiudong.basic.generator.util.ImportPackageUtils;
-import cn.xuqiudong.basic.core.annotation.QueryCondition;
-import cn.xuqiudong.basic.core.enums.QueryOperation;
-import cn.xuqiudong.basic.core.util.QueryConditionUtils;
+import cn.xuqiudong.basic.mybatisplus.annotation.QueryCondition;
+import cn.xuqiudong.basic.mybatisplus.enums.QueryOperation;
+import cn.xuqiudong.basic.mybatisplus.util.QueryConditionUtils;
 import lombok.EqualsAndHashCode;
 
 /**
