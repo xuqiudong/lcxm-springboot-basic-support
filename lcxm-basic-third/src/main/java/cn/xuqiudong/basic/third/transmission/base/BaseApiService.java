@@ -1,8 +1,8 @@
-package cn.xuqiudong.basic.core.transmission.base;
+package cn.xuqiudong.basic.third.transmission.base;
 
 import cn.xuqiudong.basic.core.craw.CrawlConnect;
-import cn.xuqiudong.basic.core.transmission.log.model.ThirdLogModel;
-import cn.xuqiudong.basic.core.transmission.log.service.ThirdLogService;
+import cn.xuqiudong.basic.third.transmission.log.model.ThirdLogModel;
+import cn.xuqiudong.basic.third.transmission.log.service.ThirdLogService;
 import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.basic.core.util.async.AsyncOperation;
 import jakarta.validation.constraints.NotEmpty;

@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.core.transmission.util;
+package cn.xuqiudong.basic.third.transmission.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

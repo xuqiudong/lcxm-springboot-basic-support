@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.core.transmission.util;
+package cn.xuqiudong.basic.third.transmission.util;
 
 /**
  * 描述: 请求工具类

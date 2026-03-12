@@ -4,4 +4,4 @@
  * @since 2022-08-17
  *
  */
-package cn.xuqiudong.basic.core.transmission.log;
+package cn.xuqiudong.basic.third.transmission.log;

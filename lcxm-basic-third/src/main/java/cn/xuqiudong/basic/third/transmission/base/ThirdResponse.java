@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.core.transmission.base;
+package cn.xuqiudong.basic.third.transmission.base;
 
 /**
  * 描述: 相应对象基类的父接口

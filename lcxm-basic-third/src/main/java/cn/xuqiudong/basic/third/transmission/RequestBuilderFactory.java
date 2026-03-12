@@ -1,6 +1,6 @@
-package cn.xuqiudong.basic.core.transmission;
+package cn.xuqiudong.basic.third.transmission;
 
-import cn.xuqiudong.basic.core.transmission.base.ApiUrl;
+import cn.xuqiudong.basic.third.transmission.base.ApiUrl;
 
 import java.net.Proxy;
 import java.util.Map;

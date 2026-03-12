@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.core.transmission.log.model;
+package cn.xuqiudong.basic.third.transmission.log.model;
 
 import java.util.Date;
 

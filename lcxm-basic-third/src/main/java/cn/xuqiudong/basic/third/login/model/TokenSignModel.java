@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.core.third.login.model;
+package cn.xuqiudong.basic.third.login.model;
 
 import java.io.Serializable;
 

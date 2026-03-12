@@ -4,4 +4,4 @@
  * @author Vic.xu
  * @since 2025-08-28 13:38
  */
-package cn.xuqiudong.basic.core.third.login;
+package cn.xuqiudong.basic.third.login;

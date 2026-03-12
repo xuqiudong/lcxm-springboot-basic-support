@@ -1,6 +1,6 @@
-package cn.xuqiudong.basic.core.transmission.log.service;
+package cn.xuqiudong.basic.third.transmission.log.service;
 
-import cn.xuqiudong.basic.core.transmission.log.model.ThirdLogModel;
+import cn.xuqiudong.basic.third.transmission.log.model.ThirdLogModel;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.annotation.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;

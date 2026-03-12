@@ -1,8 +1,8 @@
-package cn.xuqiudong.basic.core.transmission.base;
+package cn.xuqiudong.basic.third.transmission.base;
 
 import cn.xuqiudong.basic.core.craw.BaseCrawl;
 import cn.xuqiudong.basic.core.craw.CrawlConnect;
-import cn.xuqiudong.basic.core.transmission.util.ThirdCommonUtil;
+import cn.xuqiudong.basic.third.transmission.util.ThirdCommonUtil;
 
 import java.util.Map;
 

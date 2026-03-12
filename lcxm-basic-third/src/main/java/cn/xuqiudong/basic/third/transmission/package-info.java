@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.core.transmission;
+package cn.xuqiudong.basic.third.transmission;
 
 /**
  * 和其他系统的数据传输

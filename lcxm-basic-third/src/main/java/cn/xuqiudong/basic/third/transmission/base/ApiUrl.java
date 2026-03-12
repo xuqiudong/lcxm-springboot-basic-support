@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.core.transmission.base;
+package cn.xuqiudong.basic.third.transmission.base;
 
 import org.springframework.http.HttpMethod;
 

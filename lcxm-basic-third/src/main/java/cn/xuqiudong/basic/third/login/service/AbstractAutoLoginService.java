@@ -1,7 +1,7 @@
-package cn.xuqiudong.basic.core.third.login.service;
+package cn.xuqiudong.basic.third.login.service;
 
 import cn.xuqiudong.basic.core.model.BaseResponse;
-import cn.xuqiudong.basic.core.third.login.model.TokenSignModel;
+import cn.xuqiudong.basic.third.login.model.TokenSignModel;
 import cn.xuqiudong.basic.framework.tool.Tools;
 import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.basic.core.util.JsonUtil;
