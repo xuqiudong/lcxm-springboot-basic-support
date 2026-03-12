@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.mybatisplus.util;
 
+import cn.xuqiudong.basic.core.util.CommonUtils;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
