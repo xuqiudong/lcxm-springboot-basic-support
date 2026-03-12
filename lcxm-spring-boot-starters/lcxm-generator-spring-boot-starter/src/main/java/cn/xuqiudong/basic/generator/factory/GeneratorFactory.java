@@ -313,6 +313,7 @@ public class GeneratorFactory {
         }
         // 如果不存在覆盖文件, 则不需要手动确认
         if (!bundle.getStrategyConfig().isFileOverride()) {
+            LOGGER.info("当前配置为不覆盖已经存在的文件! 可删除已经存在的文件生成或配置为覆盖文件[ fileOverride = true ]");
             return;
         }
         // 非交互式环境

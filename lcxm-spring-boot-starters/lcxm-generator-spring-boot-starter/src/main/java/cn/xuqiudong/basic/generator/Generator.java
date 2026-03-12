@@ -19,7 +19,8 @@ import java.util.function.Consumer;
 /**
  * 描述:
  * 代码生成入口:  收集全部的配置,然后调用生成工厂进行生成
- *
+ * 可以通过 CommonGeneratorFacade 使用一些通用的配置
+ * @see CommonGeneratorFacade#build(CommonFacadeConfig)
  * @author Vic.xu
  * @since 2025-09-12 16:54
  */
@@ -103,7 +104,9 @@ public class Generator {
      * 4. 配置模板   除非使用新的模板引擎,否则不用配置
      */
     public Generator templateEngine(BaseTemplateEngine templateEngine) {
-        this.templateEngine = templateEngine;
+        if (templateEngine != null) {
+            this.templateEngine = templateEngine;
+        }
         return this;
     }
 
@@ -111,7 +114,9 @@ public class Generator {
      * 5. 添加自定义插件, 在生成之前执行 处理模板引擎的上下文数据模型
      */
     public Generator addPlugin(IGeneratorPlugin customizedPlugin) {
-        this.customizedPlugins.add(customizedPlugin);
+        if (customizedPlugin != null) {
+            this.customizedPlugins.add(customizedPlugin);
+        }
         return this;
     }
 
@@ -119,7 +124,9 @@ public class Generator {
      * 6. 添加自定义模板
      */
     public Generator addCustomizedTemplate(CustomizeTemplateConfig customizeTemplateConfig) {
-        this.customizedTemplateConfigs.add(customizeTemplateConfig);
+        if (customizeTemplateConfig != null) {
+            this.customizedTemplateConfigs.add(customizeTemplateConfig);
+        }
         return this;
     }
 

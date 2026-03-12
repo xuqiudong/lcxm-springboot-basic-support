@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -144,11 +145,25 @@ public class StrategyConfig {
             return this;
         }
 
+        public Builder tables(List<String> tableList) {
+            Assert.notNull(tableList, "必须要指定生成的表名");
+            if (this.strategyConfig.tables == null) {
+                strategyConfig.tables = new HashSet<>();
+            }
+            this.strategyConfig.tables.addAll(tableList);
+            return this;
+        }
+
         /**
          * 指定表名前缀
          */
         public Builder tablePrefix(String... tablePrefix) {
             this.strategyConfig.tablePrefix.addAll(Arrays.asList(tablePrefix));
+            return this;
+        }
+
+        public Builder tablePrefix(List<String>tablePrefix) {
+            this.strategyConfig.tablePrefix.addAll(tablePrefix);
             return this;
         }
 

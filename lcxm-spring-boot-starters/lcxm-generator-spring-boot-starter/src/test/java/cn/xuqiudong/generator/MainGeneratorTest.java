@@ -1,12 +1,13 @@
 package cn.xuqiudong.generator;
 
+import cn.xuqiudong.basic.generator.CommonFacadeConfig;
+import cn.xuqiudong.basic.generator.CommonGeneratorFacade;
 import cn.xuqiudong.basic.generator.Generator;
 import cn.xuqiudong.basic.generator.config.template.CustomizeTemplateConfig;
 import cn.xuqiudong.basic.generator.engine.FreemarkerTemplateEngine;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
 import cn.xuqiudong.common.base.entity.BaseMpEntity;
 import cn.xuqiudong.common.base.mapper.StringCrudMapper;
-import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 
@@ -19,8 +20,31 @@ import java.nio.file.Paths;
 public class MainGeneratorTest {
 
     public static void main(String[] args) {
-        test();
+        useFacade();
+//        test();
     }
+
+
+    /**
+     * 使用 facade 模式 生成代码
+     */
+    public static void useFacade(){
+        CommonFacadeConfig config = CommonFacadeConfig
+                .mysql("127.0.0.1", "3306", "qiudong", "qiudong", "qiudong12345678");
+        config
+                .setBasePackage("cn.xuqiudong.generator");
+        config.setModule("test");
+        config.setMavenModule("/lcxm-spring-boot-starters/lcxm-generator-spring-boot-starter");
+        config.addTable("test_generate");
+        config.addTablePrefix("t_");
+        String outputDir = config.getOutputDir();
+        System.out.println(outputDir);
+        Generator generator = CommonGeneratorFacade.build(config);
+        generator.generate();
+    }
+    /**
+     * 手动构建Generator 生成代码
+     */
     public static void test() {
         String url = "jdbc:mysql://127.0.0.1:3306/qiudong?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true";
         String username = "qiudong";
@@ -33,7 +57,7 @@ public class MainGeneratorTest {
                                 builder.author("Vic.xu")
                                         // 输出目录: 可以指定为项目内 Paths.get(System.getProperty("user.dir")) + "/src/main/java"
 //                                .outputDir("D:/desk/generator")
-                                        .outputDir(Paths.get(System.getProperty("user.dir")) +"/lcxm-generator-spring-boot-starter"+ "/src/test/java")
+                                        .outputDir(Paths.get(System.getProperty("user.dir")) +"/lcxm-spring-boot-starters/lcxm-generator-spring-boot-starter"+ "/src/test/java")
                                         // 基础包路径
                                         .basePackage("cn.xuqiudong.generator")
                                         // 模块名称: 基础包路径的子包, 以及controller 请求路径
