@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.core.craw;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
@@ -168,7 +169,7 @@ public class CrawlConnect {
     }
 
     public Response execute() throws IOException {
-        return connection.execute();
+        return executeWithHttpException(() -> connection.execute());
     }
 
     public CrawlConnect followRedirects(boolean followRedirects) {
@@ -180,7 +181,7 @@ public class CrawlConnect {
      * 本页面的查询条件
      */
     public Document getDocument() throws IOException {
-        return connection.get();
+        return executeWithHttpException(() -> connection.get());
     }
 
     public String getHtml() throws IOException {
@@ -236,7 +237,7 @@ public class CrawlConnect {
      * post
      */
     public Document postDocument() throws IOException {
-        return connection.post();
+        return executeWithHttpException(() -> connection.post());
     }
 
     public String postHtml() throws IOException {
@@ -291,4 +292,26 @@ public class CrawlConnect {
         return new File(path, fileName);
     }
 
+    /**
+     * 带 HttpStatusException异常处理
+     */
+    private <T> T executeWithHttpException(IoSupplier<T> supplier) throws IOException {
+        try {
+            return supplier.get();
+        } catch (HttpStatusException e) {
+            // 仅这一处捕获HttpStatusException，所有方法复用
+            throw new IOException(
+                    String.format("HTTP request failed [URL: %s, httpCode: %d,  msg: %s]",
+                            e.getUrl(), e.getStatusCode(), e.getMessage()), e);
+        }
+    }
+
+}
+
+/**
+ * 函数式接口，支持抛出 IOException
+ */
+@FunctionalInterface
+interface IoSupplier<T> {
+    T get() throws IOException;
 }
