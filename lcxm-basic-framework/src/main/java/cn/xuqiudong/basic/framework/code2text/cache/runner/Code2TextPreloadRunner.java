@@ -15,7 +15,8 @@ import java.util.Map;
 
 /**
  * 描述:
- *   code2text 缓存预加载执行器
+ * code2text 缓存预加载执行器
+ *
  * @author Vic.xu
  * @since 2026-01-16 13:46
  */
@@ -34,8 +35,13 @@ public class Code2TextPreloadRunner implements ApplicationRunner {
         if (cacheManager == null) {
             return;
         }
-        LOGGER.info("code2text: 开始预加载 Code2TextResolver 缓存数据");
+
+
         Collection<Code2TextResolver<?>> allResolvers = Code2TextResolverRegistry.getAllResolvers();
+        if (allResolvers.isEmpty()) {
+            return;
+        }
+        LOGGER.info("code2text: 开始预加载 Code2TextResolver 缓存数据, 共 {} 个", allResolvers.size());
         for (Code2TextResolver<?> resolver : allResolvers) {
             Code2TextResolver<?> target = resolver;
             // 如果是代理对象，则获取原始对象
