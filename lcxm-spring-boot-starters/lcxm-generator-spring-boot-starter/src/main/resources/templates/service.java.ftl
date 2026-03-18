@@ -9,9 +9,7 @@ package ${service.packageName};
 <#list service.imports![] as imp>
 import ${imp}
 </#list>
-import cn.xuqiudong.common.base.model.PageInfo;
-import cn.xuqiudong.common.convert.PageConvert;
-import cn.xuqiudong.common.query.PageQuery;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;

@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.generator.plugin;
 
+import cn.xuqiudong.basic.generator.plugin.impl.LcxmBasicImportPlugin;
 import cn.xuqiudong.basic.generator.plugin.impl.LombokPlugin;
 import cn.xuqiudong.basic.generator.plugin.impl.MybatisPlusPlugin;
 import cn.xuqiudong.basic.generator.plugin.impl.QueryConditionPlugins;
@@ -27,6 +28,7 @@ public abstract class BaseGeneratorPlugin implements IGeneratorPlugin {
         DEFAULT_PLUGINS.add(new MybatisPlusPlugin());
         DEFAULT_PLUGINS.add(new SpringdocPlugin());
         DEFAULT_PLUGINS.add(new QueryConditionPlugins());
+        DEFAULT_PLUGINS.add(new LcxmBasicImportPlugin());
     }
 
     public static Set<IGeneratorPlugin> getDefaultPlugins() {

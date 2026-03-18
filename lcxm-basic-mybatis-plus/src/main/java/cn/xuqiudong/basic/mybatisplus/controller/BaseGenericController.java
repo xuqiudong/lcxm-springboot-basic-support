@@ -2,7 +2,7 @@ package cn.xuqiudong.basic.mybatisplus.controller;
 
 import cn.xuqiudong.basic.core.model.BaseGenericEntity;
 import cn.xuqiudong.basic.core.model.BaseResponse;
-import cn.xuqiudong.basic.mybatisplus.model.PageInfo;
+import cn.xuqiudong.basic.core.model.PageInfo;
 import cn.xuqiudong.basic.mybatisplus.service.BaseGenericService;
 import cn.xuqiudong.basic.core.util.HibernateValidatorUtils;
 import jakarta.annotation.Resource;

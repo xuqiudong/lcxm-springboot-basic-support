@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.core.model;
 
 import cn.xuqiudong.basic.core.lookup.Lookup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,9 +13,10 @@ import java.util.List;
  *
  * @author VIC
  */
+@Data
 public class PageInfo<T> implements Serializable {
 
-    private static final long serialVersionUID = 2112010303028938095L;
+    private static final long serialVersionUID = 1L;
     /**
      * 数据
      */
@@ -23,7 +25,10 @@ public class PageInfo<T> implements Serializable {
     /**
      * 总数据量
      */
-    private int total;
+    /**
+     * 总数据量
+     */
+    private long total;
 
     /**
      * 每页的数据数量
@@ -55,12 +60,12 @@ public class PageInfo<T> implements Serializable {
     public PageInfo() {
     }
 
-    public PageInfo(int total, List<T> datas) {
+    public PageInfo(long total, List<T> datas) {
         this.total = total;
         this.datas = datas;
     }
 
-    public PageInfo(int total, List<T> datas, Lookup lookup) {
+    public PageInfo(long total, List<T> datas, Lookup lookup) {
         this.total = total;
         this.datas = datas;
         this.lookup = lookup;
@@ -68,7 +73,7 @@ public class PageInfo<T> implements Serializable {
             this.page = lookup.getPage();
             this.size = lookup.getSize();
             this.curSize = datas.size();
-            this.pages = total % size == 0 ? total / size : total / size + 1;
+            this.pages =(int) (total % (long) size == 0 ? total / (long) size : total / (long) size + 1);
         }
     }
 
@@ -77,61 +82,7 @@ public class PageInfo<T> implements Serializable {
     }
 
 
-    public int getTotal() {
-        return total;
-    }
 
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
-    public List<T> getDatas() {
-        return datas;
-    }
-
-    public void setDatas(List<T> datas) {
-        this.datas = datas;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public Lookup getLookup() {
-        return lookup;
-    }
-
-    public void setLookup(Lookup lookup) {
-        this.lookup = lookup;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getPages() {
-        return pages;
-    }
-
-    public void setPages(int pages) {
-        this.pages = pages;
-    }
-
-    public int getCurSize() {
-        return curSize;
-    }
-
-    public void setCurSize(int curSize) {
-        this.curSize = curSize;
-    }
 
     /**
      * hasMore是否有更多的数据 page * size < total

@@ -1,10 +1,11 @@
 package cn.xuqiudong.basic.mybatisplus.service;
 
 import cn.xuqiudong.basic.core.lookup.Lookup;
-import cn.xuqiudong.basic.mybatisplus.mapper.BaseGenericMapper;
 import cn.xuqiudong.basic.core.model.BaseGenericEntity;
-import cn.xuqiudong.basic.mybatisplus.model.PageInfo;
+import cn.xuqiudong.basic.core.model.PageInfo;
 import cn.xuqiudong.basic.framework.service.AttachmentStatusOperationGenericServiceI;
+import cn.xuqiudong.basic.mybatisplus.convert.PageConvert;
+import cn.xuqiudong.basic.mybatisplus.mapper.BaseGenericMapper;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public abstract class BaseGenericService<M extends BaseGenericMapper<T, K>, T ex
     public PageInfo<T> page(Lookup lookup) {
         startPage(lookup.getPage(), lookup.getSize());
         List<T> datas = this.list(lookup);
-        return PageInfo.instance(datas);
+        return PageConvert.convert(datas);
     }
 
     /**
