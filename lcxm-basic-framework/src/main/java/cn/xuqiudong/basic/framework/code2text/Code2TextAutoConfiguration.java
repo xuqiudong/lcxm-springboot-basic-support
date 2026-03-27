@@ -1,9 +1,11 @@
 package cn.xuqiudong.basic.framework.code2text;
 
+import cn.xuqiudong.basic.framework.code2text.annotation.Code2Text;
+import cn.xuqiudong.basic.framework.code2text.annotation.EnumCode2Text;
+import cn.xuqiudong.basic.framework.code2text.annotation.UserCode2Text;
 import cn.xuqiudong.basic.framework.code2text.cache.CacheRegionConfigProvider;
 import cn.xuqiudong.basic.framework.code2text.cache.CacheRegionFactory;
 import cn.xuqiudong.basic.framework.code2text.cache.Code2TextCacheManager;
-import cn.xuqiudong.basic.framework.code2text.annotation.Code2Text;
 import cn.xuqiudong.basic.framework.code2text.cache.event.Code2TextRedisEvictListener;
 import cn.xuqiudong.basic.framework.code2text.cache.event.Code2TextSpringEvictListener;
 import cn.xuqiudong.basic.framework.code2text.cache.event.RedisCacheEvictPublisher;
@@ -11,9 +13,11 @@ import cn.xuqiudong.basic.framework.code2text.cache.impl.DefaultCacheRegionConfi
 import cn.xuqiudong.basic.framework.code2text.cache.impl.DefaultCacheRegionFactory;
 import cn.xuqiudong.basic.framework.code2text.cache.impl.DefaultCode2TextCacheManager;
 import cn.xuqiudong.basic.framework.code2text.cache.runner.Code2TextPreloadRunner;
+import cn.xuqiudong.basic.framework.condition.ConditionalOnMissingGenericBean;
 import cn.xuqiudong.basic.framework.code2text.core.Code2TextResolverRegistry;
 import cn.xuqiudong.basic.framework.code2text.helper.Code2TextCacheHelper;
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
+import cn.xuqiudong.basic.framework.code2text.resolver.impl.DefaultUserCode2TextResolver;
 import cn.xuqiudong.basic.framework.code2text.resolver.impl.EnumCode2TextResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -99,13 +103,24 @@ public class Code2TextAutoConfiguration {
      * 枚举解析器
      */
     @Bean
-    @ConditionalOnMissingBean
-    public EnumCode2TextResolver enumCode2TextResolver() {
+    @ConditionalOnMissingGenericBean(beanInterface = Code2TextResolver.class, genericType = EnumCode2Text.class)
+    public Code2TextResolver<EnumCode2Text> enumCode2TextResolver() {
         LOGGER.info("code2text: EnumCode2TextResolver init...");
         return new EnumCode2TextResolver();
     }
 
+    /**
+     * userCode 解析器
+     */
+    @Bean
+    @ConditionalOnMissingGenericBean(beanInterface = Code2TextResolver.class, genericType = UserCode2Text.class)
+    public Code2TextResolver<UserCode2Text> userCode2TextResolver() {
+        LOGGER.warn("code2text: DefaultUserCode2TextResolver init. Please define an implementation class for UserCode2Text by yourself");
+        return new DefaultUserCode2TextResolver();
+    }
+
     /* ************************** 缓存清理相关 bean below *********************************** */
+
     /**
      * redis 缓存失效监听器: 只删除本机的 ，不再触发事件发布
      */
@@ -125,7 +140,6 @@ public class Code2TextAutoConfiguration {
         LOGGER.info("code2text: 本地缓存失效监听器 init...");
         return new Code2TextSpringEvictListener(cacheManager.getIfAvailable(), redisCacheEvictPublisher);
     }
-
 
 
     @Bean
