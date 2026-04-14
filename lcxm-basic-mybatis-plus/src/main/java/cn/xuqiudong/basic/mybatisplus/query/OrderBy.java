@@ -48,6 +48,18 @@ public class OrderBy {
         }
         return joiner.toString();
     }
+    /**
+     * 转为另一种排序字符串: column1,desc;column2,asc;...
+     * @see PageQuery#getOrders()
+     */
+    public String toOrderSqlWithSemicolon() {
+        StringJoiner joiner = new StringJoiner(";");
+        for (OrderColumn orderColumn : orderColumns) {
+            // 列名和顺序用逗号隔开
+            joiner.add(orderColumn.column + "," + orderColumn.orderType.name().toLowerCase());
+        }
+        return joiner.toString();
+    }
 
     /**
      * 构建降序排序字段
@@ -142,7 +154,7 @@ public class OrderBy {
         }
 
         /**
-         * 转为排序字符串
+         * 转为排序字符串 column1 [desc| asc]
          */
         public String toOrderSql() {
             return column + " " + orderType.name().toLowerCase();
