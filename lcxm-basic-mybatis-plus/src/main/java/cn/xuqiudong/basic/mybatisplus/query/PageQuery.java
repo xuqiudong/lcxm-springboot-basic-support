@@ -47,7 +47,9 @@ public class PageQuery implements MpQuery {
      */
     @JsonIgnore
     public void setOrderBy(OrderBy orderBy) {
-        this.orders = orderBy.toOrderSql();
+        if (orderBy != null) {
+            this.orders = orderBy.toOrderSqlWithSemicolon();
+        }
     }
 
     /**
