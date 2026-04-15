@@ -33,6 +33,10 @@ public class BadParamException extends RuntimeException {
 
     }
 
+    public static BadParamException instance(String string) {
+        return new BadParamException(string);
+    }
+
     public BadParamException(String string) {
         super(string);
     }

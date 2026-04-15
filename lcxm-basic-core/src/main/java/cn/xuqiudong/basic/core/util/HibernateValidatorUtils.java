@@ -18,7 +18,7 @@ public class HibernateValidatorUtils {
 
     public static <T> void validate(T o) throws BadParamException {
         if (o == null) {
-            throw new IllegalArgumentException();
+            throw BadParamException.instance("校验对象不能为null");
         }
 
         Set<ConstraintViolation<T>> constraintViolation = VALIDATOR.validate(o);
@@ -27,11 +27,11 @@ public class HibernateValidatorUtils {
         }
     }
 
-    public static <T> void validate(T o, Class<?> cls) throws BadParamException {
+    public static <T> void validate(T o, Class<?>... groups) throws BadParamException {
         if (o == null) {
-            throw new IllegalArgumentException();
+            throw BadParamException.instance("校验对象不能为null");
         }
-        Set<ConstraintViolation<T>> constraintViolation = VALIDATOR.validate(o, cls);
+        Set<ConstraintViolation<T>> constraintViolation = VALIDATOR.validate(o, groups);
         if (constraintViolation.size() != 0) {
             throw BadParamException.instanceHibernateVerity(constraintViolation);
         }

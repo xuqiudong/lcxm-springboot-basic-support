@@ -3,6 +3,7 @@ package cn.xuqiudong.basic.mybatisplus.enums;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.xuqiudong.basic.mybatisplus.function.WrapperProcessor;
+import cn.xuqiudong.basic.mybatisplus.query.MpQuery;
 import cn.xuqiudong.basic.mybatisplus.util.QueryConditionUtils;
 import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 
@@ -78,7 +79,7 @@ public enum QueryOperation {
      * 转换为集合 其实在创建WrapperBuilder的时候已经处理了:
      * value = StrUtil.split((String) value, queryField.getDelimiter());
      *
-     * @see QueryConditionUtils#builder(Object)
+     * @see QueryConditionUtils#createWrapper(MpQuery)
      */
     private static Collection<?> toCollection(Object value) {
         if (value instanceof Collection<?>) {
