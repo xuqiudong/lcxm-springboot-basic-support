@@ -24,9 +24,16 @@ public class BadParamException extends RuntimeException {
     public static <T> BadParamException instanceHibernateVerity(Set<ConstraintViolation<T>> errors) {
         StringBuilder verifyError = new StringBuilder();
         for (ConstraintViolation<?> c : errors) {
-            verifyError.append(c.getMessage()).append("； ");
+            // 关键：这里加上 c.getPropertyPath() 就是字段名
+            verifyError.append(c.getPropertyPath())
+                    .append(": ")
+                    .append(c.getMessage())
+                    .append(";");
         }
-        verifyError.deleteCharAt(verifyError.length() - 1);
+        // 删掉最后多余的分号
+        if (verifyError.length() > 0) {
+            verifyError.deleteCharAt(verifyError.length() - 1);
+        }
         BadParamException e = new BadParamException(verifyError.toString());
         e.validated = true;
         return e;
