@@ -22,6 +22,10 @@
         <module>lcxm-quartz-spring-boot-starter</module>
     </modules>
 
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
 
     <!--跳过部署 -->
     <build>

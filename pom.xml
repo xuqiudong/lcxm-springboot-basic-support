@@ -663,6 +663,9 @@
         <profile>
             <!-- 上传的时候使用的配置和插件 -Pdeploy-->
             <id>deploy</id>
+            <properties>
+                <skip.spotbugs>true</skip.spotbugs>
+            </properties>
             <build>
                 <plugins>
 
