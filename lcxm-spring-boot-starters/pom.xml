@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.xuqiudong.basic</groupId>
         <artifactId>lcxm-springboot-parent</artifactId>
-        <version>3.5.0-jdk17-1.0.0</version>
+        <version>3.5.0-jdk17-2.0.0</version>
     </parent>
 
     <artifactId>lcxm-spring-boot-starters</artifactId>
@@ -16,7 +16,6 @@
     <description>聚合所有的starter模块</description>
 
     <modules>
-        <module>lcxm-attachment-spring-boot-starter</module>
         <module>lcxm-generator-spring-boot-starter</module>
         <module>lcxm-mq-data-bridge-spring-boot-starter</module>
         <module>lcxm-quartz-spring-boot-starter</module>

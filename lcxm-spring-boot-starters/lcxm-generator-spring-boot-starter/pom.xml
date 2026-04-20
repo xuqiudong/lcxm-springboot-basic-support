@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.xuqiudong.basic</groupId>
         <artifactId>lcxm-springboot-parent</artifactId>
-        <version>3.5.0-jdk17-1.0.0</version>
+        <version>3.5.0-jdk17-2.0.0</version>
     </parent>
 
     <artifactId>lcxm-generator-spring-boot-starter</artifactId>
@@ -17,12 +17,6 @@
         <dependency>
             <groupId>cn.xuqiudong.basic</groupId>
             <artifactId>lcxm-basic-core</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xuqiudong.basic</groupId>
-            <artifactId>lcxm-basic-cache</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
