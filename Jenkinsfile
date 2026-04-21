@@ -8,13 +8,21 @@ pipeline {
     }
 
     stages {
-        stage('build lcxm-springboot-basic-support') {
+        stage('build lcxm-springboot-basic-support parent') {
             steps {
-                echo "install lcxm-springboot-basic-support"
-                sh 'mvn clean install -Dmaven.javadoc.skip=false'
-                echo 'install success'
+                echo "install lcxm-springboot-basic-support parent"
+                sh 'mvn clean install -N -Dmaven.javadoc.skip=false'
+                echo 'install parent success'
             }
         }
+
+        stage('build lcxm-springboot-basic-support all module') {
+                    steps {
+                        echo "build all modules (skip clean to save time)"
+                        sh 'mvn install -Dmaven.javadoc.skip=false'
+                        echo 'build all success'
+                    }
+                }
     }
     post {
         always {
