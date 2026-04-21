@@ -6,7 +6,7 @@
 
     <groupId>cn.xuqiudong.basic</groupId>
     <artifactId>lcxm-springboot-parent</artifactId>
-    <version>3.5.0-jdk17-2.0.0</version>
+    <version>3.5.0-jdk21-3.0.0</version>
     <packaging>pom</packaging>
 
     <!-- sonatype: 下列三项是需要的 -->
@@ -34,9 +34,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.encoding>UTF-8</project.encoding>
         <!--system properties ↑ ↑ ↑-->
         <!--spring and common middleware version ↓ ↓ ↓-->

@@ -4,7 +4,7 @@ pipeline {
     options { timestamps () }
 
     tools {
-            jdk 'jdk17'  // 这里的名称需与Jenkins全局工具配置中的JDK名称一致
+            jdk 'jdk21'  // 这里的名称需与Jenkins全局工具配置中的JDK名称一致
     }
 
     stages {

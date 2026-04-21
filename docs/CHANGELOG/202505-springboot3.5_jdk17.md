@@ -1,5 +1,6 @@
 # lcxm-springboot-basic support
 > start 2025-05-26
+> springboot2.7.3 + jdk8 升级到 springboot3.5  + jdk17
 
 ## 升级背景
 把原来的一些[基础支持](https://gitee.com/basic-support)合并到本项目，方便管理,并升级jdk和springboot版本

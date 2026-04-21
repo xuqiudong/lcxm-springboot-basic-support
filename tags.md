@@ -26,3 +26,9 @@ git tag -a lcxm-basic-pre-split-3.5.0-jdk17-1.0.0 -m "拆分前基线：包含lc
 git tag -a lcxm-basic-post-split-3.5.0-jdk17-1.1.0 -m "拆分后版本：拆分lcxm-common为core、mybatis-plus、redis等专项模块，各starter依赖调整完成"
 git push origin lcxm-basic-post-split-3.5.0-jdk17-1.1.0
 ```
+
+### 3.5.0-jdk17-2.0.0 
+```
+git tag -a 3.5.0-jdk17-2.0.0 -m "springboot3.5 + jdk17版本，对应中央仓库中的版本"
+git push origin 3.5.0-jdk17-2.0.0
+```
