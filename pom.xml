@@ -433,6 +433,8 @@
                         <encoding>${project.encoding}</encoding>
                         <compilerArgs>
                             <arg>-parameters</arg>
+                            <arg>-Xlint:unchecked</arg>
+                            <arg>-Xlint:deprecation</arg>
                         </compilerArgs>
                         <annotationProcessorPaths>
                             <!-- Lombok 处理器 配置在mapstruct 之前-->
