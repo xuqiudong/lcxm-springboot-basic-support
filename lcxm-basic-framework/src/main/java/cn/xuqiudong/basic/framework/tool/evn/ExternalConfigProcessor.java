@@ -1,6 +1,7 @@
 package cn.xuqiudong.basic.framework.tool.evn;
 
 
+import cn.xuqiudong.basic.framework.constant.LcxmFrameworkEnvConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -21,46 +22,52 @@ import java.util.Map;
 
 /**
  * 描述:
- *   加载外部配置 ，将要覆盖内部配置 支持 properties 和 yml yaml
- *   <p>
- *       1、 配置
- *       在 META-INF 目录下的spring.factories内：
- *       org.springframework.boot.env.EnvironmentPostProcessor=cn.xuqiudong.common.base.tool.evn.ExternalConfigProcessor
- *       2、 配置项
- *         external.config.location=/data/config/config.properties
- *   </p>
+ * 加载外部配置 ，将要覆盖内部配置 支持 properties 和 yml yaml
+ * <p>
+ * 1、 注册方式
+ * 在 META-INF/spring.factories 内注册（Spring Boot 3.x 仍然使用此方式）
+ *  org.springframework.boot.env.EnvironmentPostProcessor=cn.xuqiudong.basic.framework.tool.evn.ExternalConfigProcessor
+ * 2、 配置项
+ * lcxm.env.external.enable=true                          # 是否启用（默认false）
+ * lcxm.env.external.location=/data/config/config.properties  # 外部配置文件路径
+ * </p>
+ *
  * @author Vic.xu
  * @since 2025-11-19 15:15
  */
-public class ExternalConfigProcessor implements EnvironmentPostProcessor {
+public class ExternalConfigProcessor implements EnvironmentPostProcessor, ProcessorEnabled {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExternalConfigProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExternalConfigProcessor.class);
     /**
-     * 外部配置文件路径的配置项   external.config.location=/data/config/config.properties
+     * 外部配置文件路径的配置项   lcxm.external.config.location=/data/config/config.properties
      */
-    private static final String EXTERNAL_CONFIG_LOCATION_KEY = "external.config.location";
+    private static final String EXTERNAL_CONFIG_LOCATION_KEY = LcxmFrameworkEnvConstant.EXTERNAL_CONFIG_LOCATION_KEY;
     private static final boolean PRINT_EXTERNAL_CONFIG = true;
     private static final boolean PRINT_CONFIG_VALUE = false;
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+        if (!isEnabled(environment, LcxmFrameworkEnvConstant.ENABLE_EXTERNAL_CONFIG_KEY)) {
+            LOGGER.info("未启用外部配置，跳过外部配置加载");
+            return;
+        }
         // 1. 读取你配置的外部文件路径
         String externalConfigPath = environment.getProperty(EXTERNAL_CONFIG_LOCATION_KEY);
         if (!StringUtils.hasText(externalConfigPath)) {
-            logger.info("未配置{}，跳过外部配置加载", EXTERNAL_CONFIG_LOCATION_KEY);
+            LOGGER.info("未配置{}，跳过外部配置加载", EXTERNAL_CONFIG_LOCATION_KEY);
             return;
         }
         // 2. 校验文件是否存在
         Resource externalResource = new FileSystemResource(externalConfigPath);
         if (!externalResource.exists() || !externalResource.isReadable()) {
-            logger.warn("外部配置文件不存在或不可读：{}", externalConfigPath);
+            LOGGER.warn("外部配置文件不存在或不可读：{}", externalConfigPath);
             return;
         }
         try {
             // 3. 加载配置：用你的文件路径作为配置源名称（替代external-config）
             List<PropertySource<?>> propertySources = loadConfig(externalResource, externalConfigPath);
             if (propertySources.isEmpty()) {
-                logger.warn("外部配置文件加载为空：{}", externalConfigPath);
+                LOGGER.warn("外部配置文件加载为空：{}", externalConfigPath);
                 return;
             }
             // 4. 注入配置（最高优先级）
@@ -72,10 +79,10 @@ public class ExternalConfigProcessor implements EnvironmentPostProcessor {
                 if (PRINT_EXTERNAL_CONFIG) {
                     printExternalConfigItems(propertySource, environment);
                 }
-                logger.info("外部配置加载成功：{}", externalConfigPath);
+                LOGGER.info("外部配置加载成功：{}", externalConfigPath);
             }
         } catch (IOException e) {
-            logger.error("加载外部配置失败：{}", externalConfigPath, e);
+            LOGGER.error("加载外部配置失败：{}", externalConfigPath, e);
             throw new RuntimeException("外部配置加载失败", e);
         }
     }
@@ -102,15 +109,15 @@ public class ExternalConfigProcessor implements EnvironmentPostProcessor {
      */
     private void printExternalConfigItems(PropertySource<?> externalPropertySource, ConfigurableEnvironment environment) {
         if (!(externalPropertySource instanceof MapPropertySource)) {
-            logger.warn("不支持的配置源类型，无法打印：{}", externalPropertySource.getClass().getName());
+            LOGGER.warn("不支持的配置源类型，无法打印：{}", externalPropertySource.getClass().getName());
             return;
         }
 
         MapPropertySource mapPropertySource = (MapPropertySource) externalPropertySource;
         Map<String, Object> externalConfigMap = mapPropertySource.getSource();
 
-        logger.info("外部配置项总数：{}", externalConfigMap.size());
-        logger.info("==================== 外部配置项列表 ====================");
+        LOGGER.info("外部配置项总数：{}", externalConfigMap.size());
+        LOGGER.info("==================== 外部配置项列表 ====================");
         for (Map.Entry<String, Object> entry : externalConfigMap.entrySet()) {
             String key = entry.getKey();
             Object innerValue = environment.getProperty(key);
@@ -122,8 +129,8 @@ public class ExternalConfigProcessor implements EnvironmentPostProcessor {
             } else {
                 logMsg.append(" | 状态: ").append(innerValue == null ? "新增配置" : "覆盖内置配置");
             }
-            logger.info(logMsg.toString());
+            LOGGER.info(logMsg.toString());
         }
-        logger.info("=======================================================");
+        LOGGER.info("=======================================================");
     }
 }
