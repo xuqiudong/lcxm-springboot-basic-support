@@ -30,7 +30,7 @@ public interface LcxmEnvConstant {
      */
     String ENABLE_DECRYPT_CONFIG_KEY = "lcxm.env.decrypt.enable";
     /**
-     * 配置文件解密 中配置salt的key lcxm.env.decrypt.salt=vic.xu
+     * 配置文件解密 中配置salt的key lcxm.env.decrypt.salt=vic-xu
      * @see DecryptEnvironmentPostProcessor ;
      */
     String DECRYPT_SALT_KEY = "lcxm.env.decrypt.salt";
@@ -38,7 +38,7 @@ public interface LcxmEnvConstant {
     /**
      *配置文件解密 默认的salt
      */
-    String DEFAULT_DECRYPT_SALT = "vic.xu";
+    String DEFAULT_DECRYPT_SALT = "vic-xu";
 
     /**
      *加密的属性的前缀 配置项：dec() + 密文    eg: dec()passWord

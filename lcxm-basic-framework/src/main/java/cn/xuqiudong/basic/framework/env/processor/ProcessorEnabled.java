@@ -16,8 +16,8 @@ public interface ProcessorEnabled extends Ordered {
     /**
      * 是否启用
      */
-    default boolean isEnabled(Environment environment, String propertyName) {
-        return environment.getProperty(propertyName, Boolean.class, false);
+    default boolean isEnabled(Environment environment, String propertyName, boolean defaultValue) {
+        return environment.getProperty(propertyName, Boolean.class, defaultValue);
     }
 
     /**

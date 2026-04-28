@@ -59,7 +59,8 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        if (!isEnabled(environment, LcxmEnvConstant.ENABLE_DECRYPT_CONFIG_KEY)) {
+        // 默认启用
+        if (!isEnabled(environment, LcxmEnvConstant.ENABLE_DECRYPT_CONFIG_KEY, true)) {
             LOGGER.info("未启用配置文件解密，跳过配置文件解密");
             return;
         }

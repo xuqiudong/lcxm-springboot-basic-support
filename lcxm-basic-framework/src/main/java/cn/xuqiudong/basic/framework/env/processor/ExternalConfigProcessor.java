@@ -45,7 +45,8 @@ public class ExternalConfigProcessor implements EnvironmentPostProcessor, Proces
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        if (!isEnabled(environment, LcxmEnvConstant.ENABLE_EXTERNAL_CONFIG_KEY)) {
+        // 默认不启用
+        if (!isEnabled(environment, LcxmEnvConstant.ENABLE_EXTERNAL_CONFIG_KEY, false)) {
             LOGGER.info("未启用外部配置，跳过外部配置加载");
             return;
         }
