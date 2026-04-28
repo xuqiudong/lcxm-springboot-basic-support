@@ -1,9 +1,7 @@
-package cn.xuqiudong.basic.framework.tool.evn;
+package cn.xuqiudong.basic.framework.env.processor;
 
 
-import cn.xuqiudong.basic.framework.constant.LcxmFrameworkEnvConstant;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cn.xuqiudong.basic.framework.env.LcxmEnvConstant;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.boot.env.PropertiesPropertySourceLoader;
@@ -26,7 +24,7 @@ import java.util.Map;
  * <p>
  * 1、 注册方式
  * 在 META-INF/spring.factories 内注册（Spring Boot 3.x 仍然使用此方式）
- *  org.springframework.boot.env.EnvironmentPostProcessor=cn.xuqiudong.basic.framework.tool.evn.ExternalConfigProcessor
+ * org.springframework.boot.env.EnvironmentPostProcessor=cn.xuqiudong.basic.framework.env.processor.ExternalConfigProcessor
  * 2、 配置项
  * lcxm.env.external.enable=true                          # 是否启用（默认false）
  * lcxm.env.external.location=/data/config/config.properties  # 外部配置文件路径
@@ -37,17 +35,17 @@ import java.util.Map;
  */
 public class ExternalConfigProcessor implements EnvironmentPostProcessor, ProcessorEnabled {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExternalConfigProcessor.class);
+
     /**
      * 外部配置文件路径的配置项   lcxm.external.config.location=/data/config/config.properties
      */
-    private static final String EXTERNAL_CONFIG_LOCATION_KEY = LcxmFrameworkEnvConstant.EXTERNAL_CONFIG_LOCATION_KEY;
+    private static final String EXTERNAL_CONFIG_LOCATION_KEY = LcxmEnvConstant.EXTERNAL_CONFIG_LOCATION_KEY;
     private static final boolean PRINT_EXTERNAL_CONFIG = true;
     private static final boolean PRINT_CONFIG_VALUE = false;
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        if (!isEnabled(environment, LcxmFrameworkEnvConstant.ENABLE_EXTERNAL_CONFIG_KEY)) {
+        if (!isEnabled(environment, LcxmEnvConstant.ENABLE_EXTERNAL_CONFIG_KEY)) {
             LOGGER.info("未启用外部配置，跳过外部配置加载");
             return;
         }
@@ -132,5 +130,10 @@ public class ExternalConfigProcessor implements EnvironmentPostProcessor, Proces
             LOGGER.info(logMsg.toString());
         }
         LOGGER.info("=======================================================");
+    }
+
+    @Override
+    public int getOrder() {
+        return -20;
     }
 }

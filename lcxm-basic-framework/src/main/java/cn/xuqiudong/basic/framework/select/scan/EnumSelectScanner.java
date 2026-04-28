@@ -53,19 +53,21 @@ public class EnumSelectScanner implements SmartInitializingSingleton {
         }
         LOGGER.info("EnumScanInitializer 扫描包: {}", ArrayUtils.toString(scanPackages));
 
-        Set<Class<? extends Enum>> scannedClasses = new HashSet<>();
+        Set<Class<? extends Enum<?>>> scannedClasses = new HashSet<>();
         for (String pkg : scanPackages) {
             scannedClasses.addAll(scanAnnotatedEnums(pkg));
         }
         LOGGER.info("扫描到被 @RegisterSelectEnum 标注的枚举数量为：{}", scannedClasses.size());
 
         // 4 注册到 EnumSelectRegistry
+
         for (Class<?> clazz : scannedClasses) {
             if (clazz.isEnum() && EnumSelectable.class.isAssignableFrom(clazz)) {
                 RegisterSelectEnum annotation = clazz.getAnnotation(RegisterSelectEnum.class);
                 String simpleName = clazz.getSimpleName();
                 String value = annotation.value().isEmpty() ? simpleName : annotation.value();
                 String desc = annotation.desc().isEmpty() ? simpleName : annotation.desc();
+                //noinspection unchecked
                 EnumSelectRegistry.register(value, (Class<? extends EnumSelectable>) clazz, desc);
             }
         }
@@ -76,8 +78,8 @@ public class EnumSelectScanner implements SmartInitializingSingleton {
     /**
      * 扫描指定包下的枚举
      */
-    private Set<Class<? extends Enum>> scanAnnotatedEnums(String basePackage) {
-        Set<Class<? extends Enum>> result = new HashSet<>();
+    private Set<Class<? extends Enum<?>>> scanAnnotatedEnums(String basePackage) {
+        Set<Class<? extends Enum<?>>> result = new HashSet<>();
 
         ClassPathScanningCandidateComponentProvider scanner =
                 new ClassPathScanningCandidateComponentProvider(false) {
@@ -100,7 +102,7 @@ public class EnumSelectScanner implements SmartInitializingSingleton {
                 Class<?> clazz = Class.forName(className);
                 if (clazz.isEnum()) {
                     //noinspection unchecked
-                    result.add((Class<? extends Enum>) clazz);
+                    result.add((Class<? extends Enum<?>>) clazz);
                 }
             } catch (ClassNotFoundException e) {
                 LOGGER.warn("无法加载类: {}", className, e);

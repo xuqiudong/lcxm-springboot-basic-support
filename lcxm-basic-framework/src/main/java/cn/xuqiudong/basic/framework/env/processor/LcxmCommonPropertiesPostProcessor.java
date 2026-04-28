@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.framework.configuration;
+package cn.xuqiudong.basic.framework.env.processor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;

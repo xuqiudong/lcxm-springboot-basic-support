@@ -1,4 +1,7 @@
-package cn.xuqiudong.basic.framework.constant;
+package cn.xuqiudong.basic.framework.env;
+
+import cn.xuqiudong.basic.framework.env.processor.DecryptEnvironmentPostProcessor;
+import cn.xuqiudong.basic.framework.env.processor.ExternalConfigProcessor;
 
 /**
  * Description:
@@ -6,29 +9,29 @@ package cn.xuqiudong.basic.framework.constant;
  * @author Vic.xu
  * @since 2026-04-27 19:58
  */
-public interface LcxmFrameworkEnvConstant {
+public interface LcxmEnvConstant {
 
     /**
      * 是否启用外部配置 的配置项 lcxm.env.external.enable=true
-     * @see cn.xuqiudong.basic.framework.tool.evn.ExternalConfigProcessor;
+     * @see ExternalConfigProcessor ;
      */
     String ENABLE_EXTERNAL_CONFIG_KEY = "lcxm.env.external.enable";
 
     /**
      * 外部配置文件路径的配置项   lcxm.env.external.location=/data/config/config.properties
-     * @see cn.xuqiudong.basic.framework.tool.evn.ExternalConfigProcessor;
+     * @see ExternalConfigProcessor ;
      */
     String EXTERNAL_CONFIG_LOCATION_KEY = "lcxm.env.external.location";
 
 
     /**
      * 是否启用配置文件解密的配置项 lcxm.env.decrypt.enable=true
-     * @see cn.xuqiudong.basic.framework.tool.evn.DecryptEnvironmentPostProcessor;
+     * @see DecryptEnvironmentPostProcessor ;
      */
     String ENABLE_DECRYPT_CONFIG_KEY = "lcxm.env.decrypt.enable";
     /**
      * 配置文件解密 中配置salt的key lcxm.env.decrypt.salt=vic.xu
-     * @see cn.xuqiudong.basic.framework.tool.evn.DecryptEnvironmentPostProcessor;
+     * @see DecryptEnvironmentPostProcessor ;
      */
     String DECRYPT_SALT_KEY = "lcxm.env.decrypt.salt";
 

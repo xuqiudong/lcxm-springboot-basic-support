@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.framework.condition;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
@@ -36,12 +37,13 @@ import java.util.Map;
 public class OnMissingGenericBeanCondition implements Condition {
 
     @Override
-    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+    public boolean matches(@NonNull ConditionContext context, AnnotatedTypeMetadata metadata) {
 
         // 获取注解属性
         Map<String, Object> attrs = metadata.getAnnotationAttributes(ConditionalOnMissingGenericBean.class.getName());
         if (attrs == null || !attrs.containsKey("beanInterface") || !attrs.containsKey("genericType")) {
-            return true; // 未指定接口或泛型，则默认注册
+            // 未指定接口或泛型，则默认注册
+            return true;
         }
 
         Class<?> beanInterface = (Class<?>) attrs.get("beanInterface");
