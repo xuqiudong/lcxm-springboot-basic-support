@@ -6,6 +6,7 @@ import cn.xuqiudong.basic.generator.registry.DataTypeMappingRegistry;
 import cn.xuqiudong.basic.generator.registry.KeyWordsHandlerRegistry;
 import cn.xuqiudong.basic.generator.util.JavaTypeInferUtil;
 import cn.xuqiudong.basic.generator.util.NameConvertUtils;
+import cn.xuqiudong.basic.generator.util.TypeConvertUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -91,6 +92,13 @@ public class FieldInfo implements Cloneable {
      */
     public String getDataTypeName() {
         return dataType.getJavaType().getSimpleName();
+    }
+
+    /**
+     * 获取ts类型
+     */
+    public String getTsType() {
+        return TypeConvertUtil.toTsType(this.getDataTypeName());
     }
 
     /**
