@@ -98,7 +98,14 @@ public class FieldInfo implements Cloneable {
      * 获取ts类型
      */
     public String getTsType() {
-        return TypeConvertUtil.toTsType(this.getDataTypeName());
+        return TypeConvertUtil.toTsType(dataType);
+    }
+
+    /**
+     * 获取ts 默认值
+     */
+    public String getTsDefault() {
+        return TypeConvertUtil.getTsDefault(dataType);
     }
 
     /**

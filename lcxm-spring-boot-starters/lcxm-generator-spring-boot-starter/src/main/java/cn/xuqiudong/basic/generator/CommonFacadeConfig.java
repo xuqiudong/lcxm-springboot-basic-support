@@ -5,6 +5,7 @@ import cn.xuqiudong.basic.generator.config.template.CustomizeTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.EntityTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.MapperTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.MapperXmlTemplateConfig;
+import cn.xuqiudong.basic.generator.config.template.QueryTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.ServiceTemplateConfig;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
 import cn.xuqiudong.basic.mybatisplus.entity.BaseMpEntity;
@@ -83,6 +84,13 @@ public class CommonFacadeConfig {
             ec.supperClass(BaseMpEntity.class)
                     // 实体类父类 是否带泛型: 取自主键类型
                     .supperClassWithGeneric(true);
+
+    /**
+     * query  config
+     */
+    private Consumer<QueryTemplateConfig.Builder> queryConfig = ec -> {
+        ec.disable(false);
+    };
 
     /**
      * mapper config
@@ -224,14 +232,7 @@ public class CommonFacadeConfig {
     }
 
 
-    /**
-     * 在默认的 mapperXmlConfig 基础上继续追加配置细节
-     */
-    public CommonFacadeConfig addMapperXmlConfig(Consumer<MapperXmlTemplateConfig.Builder> customMapperXmlConfig) {
-        // 使用 andThen 将外部传入的配置，追加到现有的默认配置之后
-        this.mapperXmlConfig = this.mapperXmlConfig.andThen(customMapperXmlConfig);
-        return this;
-    }
+
 
     /**
      * 在默认的 entityConfig 基础上继续追加配置细节
@@ -242,10 +243,27 @@ public class CommonFacadeConfig {
     }
 
     /**
+     * 在默认的 queryConfig 基础上继续追加配置细节
+     */
+    public CommonFacadeConfig addQueryConfig(Consumer<QueryTemplateConfig.Builder> customQueryConfig) {
+        this.queryConfig = this.queryConfig.andThen(customQueryConfig);
+        return this;
+    }
+
+    /**
      * 在默认的 mapperConfig 基础上继续追加配置细节
      */
     public CommonFacadeConfig addMapperConfig(Consumer<MapperTemplateConfig.Builder> customMapperConfig) {
         this.mapperConfig = this.mapperConfig.andThen(customMapperConfig);
+        return this;
+    }
+
+    /**
+     * 在默认的 mapperXmlConfig 基础上继续追加配置细节
+     */
+    public CommonFacadeConfig addMapperXmlConfig(Consumer<MapperXmlTemplateConfig.Builder> customMapperXmlConfig) {
+        // 使用 andThen 将外部传入的配置，追加到现有的默认配置之后
+        this.mapperXmlConfig = this.mapperXmlConfig.andThen(customMapperXmlConfig);
         return this;
     }
 
@@ -267,14 +285,16 @@ public class CommonFacadeConfig {
 
 
     /**
-     * disable all
+     * disable all default template generate
      */
     public CommonFacadeConfig disableAll() {
-        this.addEntityConfig(ec -> ec.disable(true))
-                .addMapperConfig(mc -> mc.disable(true))
-                .addMapperXmlConfig(mc -> mc.disable(true))
-                .addServiceConfig(sc -> sc.disable(true))
-                .addControllerConfig(cc -> cc.disable(true));
+        boolean disable = true;
+        this.addEntityConfig(ec -> ec.disable(disable))
+                .addQueryConfig(qc -> qc.disable(disable))
+                .addMapperConfig(mc -> mc.disable(disable))
+                .addMapperXmlConfig(mc -> mc.disable(disable))
+                .addServiceConfig(sc -> sc.disable(disable))
+                .addControllerConfig(cc -> cc.disable(disable));
         return this;
     }
 

@@ -1,6 +1,5 @@
 package cn.xuqiudong.basic.generator.config.template;
 
-import cn.xuqiudong.basic.generator.config.IConfigBuilder;
 import cn.xuqiudong.basic.generator.constant.GeneratorConstant;
 import lombok.Getter;
 import org.springframework.util.Assert;
@@ -24,9 +23,20 @@ import java.util.function.Function;
 public class CustomizeTemplateConfig {
 
     /**
+     * 是否是java文件: 默认是
+     */
+    protected boolean javaFile = true;
+
+    /**
      * 所在包:
      */
     protected String subPackage;
+
+
+    /**
+     * 非java文件时的输出路径
+     */
+    protected String subPath;
 
     /**
      * 模板路径  不带后缀的 如: /templates/entity.java , 后缀由具体的模板引擎提供
@@ -52,7 +62,7 @@ public class CustomizeTemplateConfig {
 
     /**
      * 构建 自定义模板配置
-     * @param subPackage 模板所在包
+     * @param subPackage 模板输出到哪个子包
      * @param templatePath  模板文件路径  如: /templates/excel 对应   /templates/excel.ftl
      * @return
      */
@@ -60,8 +70,24 @@ public class CustomizeTemplateConfig {
         return new CustomizeTemplateConfig(subPackage, templatePath);
     }
 
+    /**
+     * 构建非java文件的模板配置
+     * @param subPath 模板输出到哪个文件夹  如: vue/apis
+     * @param templatePath  模板文件路径  如: /templates/excel 对应   /templates/excel.ftl
+     */
+    public static CustomizeTemplateConfig buildNotJavaTemplate(String subPath, String templatePath) {
+        return new CustomizeTemplateConfig(false, subPath, templatePath);
+    }
+
+
     private CustomizeTemplateConfig(String subPackage, String templatePath) {
         this.subPackage = subPackage;
+        this.templatePath = templatePath;
+    }
+
+    public CustomizeTemplateConfig(boolean javaFile, String subPath, String templatePath) {
+        this.javaFile = javaFile;
+        this.subPath = subPath;
         this.templatePath = templatePath;
     }
 

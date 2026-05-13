@@ -14,7 +14,6 @@ import cn.xuqiudong.basic.generator.plugin.BaseGeneratorPlugin;
 import cn.xuqiudong.basic.generator.plugin.IGeneratorPlugin;
 import cn.xuqiudong.basic.generator.util.NameConvertUtils;
 import cn.xuqiudong.basic.generator.util.RuntimeUtils;
-import jdk.dynalink.beans.StaticClass;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -39,7 +38,7 @@ import java.util.Set;
  */
 public class GeneratorFactory {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StaticClass.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GeneratorFactory.class);
 
     ConfigBundle bundle;
 
@@ -106,7 +105,7 @@ public class GeneratorFactory {
      * 渲染service
      */
     public void renderService(TemplateContext context) {
-        render(TemplateType.XML, context,
+        render(TemplateType.SERVICE, context,
                 bundle.getStrategyConfig().getServiceTemplateConfig(), context.getService());
     }
 
@@ -114,7 +113,7 @@ public class GeneratorFactory {
      * 渲染 controller
      */
     public void renderController(TemplateContext context) {
-        render(TemplateType.XML, context,
+        render(TemplateType.CONTROLLER, context,
                 bundle.getStrategyConfig().getControllerTemplateConfig(), context.getController());
     }
 
@@ -130,7 +129,7 @@ public class GeneratorFactory {
      * 渲染 mapper 接口 和 mapper xml
      */
     private void renderMapperInterface(TemplateContext context) {
-        render(TemplateType.ENTITY, context,
+        render(TemplateType.MAPPER, context,
                 bundle.getStrategyConfig().getMapperTemplateConfig(), context.getMapper());
     }
 
@@ -163,6 +162,17 @@ public class GeneratorFactory {
             String content = getContent(customizeTemplateConfig.getTemplatePath(), context);
             // 2. 获取输出文件地址
             String packageName = bundle.getGlobalConfig().getPackageName(customizeTemplateConfig.getSubPackage());
+
+            // 当不是java的时候 不在往子包里面输出文件，而是直接输出到指定文件夹
+            if (!customizeTemplateConfig.isJavaFile()) {
+                String subPath = customizeTemplateConfig.getSubPath();
+                if (StringUtils.isNotBlank(subPath)) {
+                    // 把 subPath 中的 /  \ 等换为 .  因为  NameConvertUtils.getFullOutputFilePath 中会最终处理
+                    subPath = subPath.replaceAll("[\\\\/]", ".");
+                    packageName = subPath;
+                }
+            }
+
             String fileName = customizeTemplateConfig.getFileNameFunction().apply(context.getEntity().getClassName());
 
             String path =

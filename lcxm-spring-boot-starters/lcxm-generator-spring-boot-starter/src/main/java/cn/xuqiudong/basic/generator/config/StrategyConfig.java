@@ -176,6 +176,14 @@ public class StrategyConfig {
         }
 
         /**
+         * query 配置
+         */
+        public Builder queryConfig(Consumer<QueryTemplateConfig.Builder> consumer) {
+            consumer.accept(this.strategyConfig.queryConfigBuilder);
+            return this;
+        }
+
+        /**
          * mapper 配置
          */
         public Builder mapperConfig(Consumer<MapperTemplateConfig.Builder> consumer) {

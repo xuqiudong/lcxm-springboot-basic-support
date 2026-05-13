@@ -129,6 +129,15 @@ public class Generator {
         }
         return this;
     }
+    /**
+     * 6. 添加自定义模板
+     */
+    public Generator addCustomizedTemplate(List<CustomizeTemplateConfig> customizeTemplateConfigs) {
+        if (customizeTemplateConfigs != null) {
+            this.customizedTemplateConfigs.addAll(customizeTemplateConfigs);
+        }
+        return this;
+    }
 
 
     /**

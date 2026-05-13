@@ -102,6 +102,9 @@ public class NameConvertUtils {
      * 获取输出文件的相对路径: 把包名转换成路径 +  className + 后缀
      */
     public static String getOutputFilePath(String packageName, String className, String suffix) {
+        // 去掉packageName 前后的 .
+        packageName = StringUtils.removeStart(packageName, ".");
+        packageName = StringUtils.removeEnd(packageName, ".");
         return packageName.replace(".", File.separator) + File.separator + className + suffix;
     }
 

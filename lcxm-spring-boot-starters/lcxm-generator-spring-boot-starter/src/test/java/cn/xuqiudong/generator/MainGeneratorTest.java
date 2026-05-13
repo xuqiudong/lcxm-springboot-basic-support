@@ -39,6 +39,30 @@ public class MainGeneratorTest {
         config.addTablePrefix("t_");
         String outputDir = config.getOutputDir();
         System.out.println(outputDir);
+
+        config.disableAll();
+
+        // 自定义模板 type.ts
+        CustomizeTemplateConfig customizeTemplateConfig = CustomizeTemplateConfig
+                .buildNotJavaTemplate("vue/apis", "/templates/vue/apis/type.ts")
+                        .setFileSuffix(".ts").setFileNameFunction(name -> "type.ts");
+
+        config.addCustomizeTemplate(customizeTemplateConfig);
+
+        // 自定义模板 index.ts
+        CustomizeTemplateConfig customizeTemplateConfig2 = CustomizeTemplateConfig
+                .buildNotJavaTemplate("vue/apis", "/templates/vue/apis/index.ts")
+                .setFileSuffix(".ts").setFileNameFunction(name -> "index.ts");
+
+        config.addCustomizeTemplate(customizeTemplateConfig2);
+
+        // 自定义模板 index.vue
+        CustomizeTemplateConfig customizeTemplateConfig3 = CustomizeTemplateConfig
+                .buildNotJavaTemplate("vue", "/templates/vue/index.vue")
+                .setFileSuffix(".vue").setFileNameFunction(name -> "index.vue");
+
+        config.addCustomizeTemplate(customizeTemplateConfig3);
+
         Generator generator = CommonGeneratorFacade.build(config);
         generator.generate();
     }

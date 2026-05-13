@@ -43,7 +43,7 @@ public abstract class BaseContext {
     /**
      * 类被注入时候的名称: 类名小写
      */
-    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     protected String className4Field;
 
     /**

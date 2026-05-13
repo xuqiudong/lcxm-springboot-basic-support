@@ -27,6 +27,11 @@ public class TemplateContext {
     private String author;
 
     /**
+     * 模块: 作为基础包的 子包 , 以及 请求路径
+     */
+    String module;
+
+    /**
      * 是否支持lombok
      */
     private boolean lombok;
@@ -74,6 +79,7 @@ public class TemplateContext {
 
     public TemplateContext(GlobalConfig globalConfig) {
         this.author = globalConfig.getAuthor();
+        this.module = globalConfig.getModule();
         this.lombok = globalConfig.isLombok();
         this.springdoc = globalConfig.isSpringdoc();
         this.datetime = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm");

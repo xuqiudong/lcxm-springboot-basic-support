@@ -62,13 +62,14 @@ public class CommonGeneratorFacade {
                         .tablePrefix(config.getTablePrefix())
                         .fileOverride(config.isFileOverride())
                         .entityConfig(config.getEntityConfig())
+                        .queryConfig(config.getQueryConfig())
                         .mapperConfig(config.getMapperConfig())
                         .xmlConfig(config.getMapperXmlConfig())
                         .serviceConfig(config.getServiceConfig())
                         .controllerConfig(config.getControllerConfig())
         );
         // 自定义模板
-        generator.addCustomizedTemplate(config.getCustomizeTemplateConfig());
+        generator.addCustomizedTemplate(config.getCustomizeTemplateConfigs());
         // 模板配置: 默认就是freemarker 模板引擎 可以不用配置
         generator.templateEngine(new FreemarkerTemplateEngine());
         return generator;
