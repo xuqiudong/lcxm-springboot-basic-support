@@ -79,4 +79,32 @@ public interface GeneratorConstant {
      */
     String XML_SUFFIX = ".xml";
 
+
+    /**
+     * vue 后缀
+     */
+    String VUE_SUFFIX = ".vue";
+
+    /**
+     * ts 后缀
+     */
+    String TS_SUFFIX = ".ts";
+
+
+    /**
+     * index.vue 模板
+     */
+    String TEMPLATE_INDEX_VUE = "/templates/vue/index.vue";
+
+    /**
+     * type.ts 模板
+     */
+    String TEMPLATE_TYPE_TS = "/templates/vue/apis/type.ts";
+
+    /**
+     * index.ts 模板
+     */
+    String TEMPLATE_INDEX_TS = "/templates/vue/apis/index.ts";
+
+
 }

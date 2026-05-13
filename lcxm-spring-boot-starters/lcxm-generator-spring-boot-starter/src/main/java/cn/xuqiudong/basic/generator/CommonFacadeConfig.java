@@ -7,6 +7,7 @@ import cn.xuqiudong.basic.generator.config.template.MapperTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.MapperXmlTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.QueryTemplateConfig;
 import cn.xuqiudong.basic.generator.config.template.ServiceTemplateConfig;
+import cn.xuqiudong.basic.generator.customize.VueCustomizeConfig;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
 import cn.xuqiudong.basic.mybatisplus.entity.BaseMpEntity;
 import cn.xuqiudong.basic.mybatisplus.mapper.StringCrudMapper;
@@ -280,6 +281,15 @@ public class CommonFacadeConfig {
      */
     public CommonFacadeConfig addControllerConfig(Consumer<ControllerTemplateConfig.Builder> customControllerConfig) {
         this.controllerConfig = this.controllerConfig.andThen(customControllerConfig);
+        return this;
+    }
+
+    /**
+     * 添加自定义的默认的 vue 模板
+     * @see VueCustomizeConfig#DEFAULT_VUE_TEMPLATES
+     */
+    public CommonFacadeConfig addCustomizeVueTemplates() {
+        this.customizeTemplateConfigs.addAll(VueCustomizeConfig.DEFAULT_VUE_TEMPLATES);
         return this;
     }
 
