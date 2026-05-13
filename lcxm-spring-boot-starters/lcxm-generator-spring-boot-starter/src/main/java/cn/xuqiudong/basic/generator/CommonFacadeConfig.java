@@ -24,9 +24,10 @@ import java.util.function.Consumer;
 
 /**
  * 描述:
- *   通用代码生成器配置
- * @see  CommonGeneratorFacade#build(CommonFacadeConfig)
+ * 通用代码生成器配置
+ *
  * @author Vic.xu
+ * @see CommonGeneratorFacade#build(CommonFacadeConfig)
  * @since 2026-03-11 10:01
  */
 @Data
@@ -118,9 +119,13 @@ public class CommonFacadeConfig {
      * 自定义模板
      */
 
-    private CustomizeTemplateConfig customizeTemplateConfig;
+    private List<CustomizeTemplateConfig> customizeTemplateConfigs = new ArrayList<>();
 
 
+    /**
+     * 基于 mysql 数据库 的配置
+     *
+     */
     public static CommonFacadeConfig mysql(String host, String port, String database, String username, String password) {
         CommonFacadeConfig config = new CommonFacadeConfig();
         config.setDatabaseType(DatabaseType.mysql);
@@ -132,23 +137,31 @@ public class CommonFacadeConfig {
 
     }
 
+    /**
+     * 设置代码输出位置
+     *
+     */
     public CommonFacadeConfig setOutputDir(String outputDir) {
         this.outputDir = outputDir;
         return this;
     }
+
     public String getOutputDir() {
         if (StringUtils.isBlank(outputDir)) {
             return defaultOutputDir();
         }
-        return  outputDir;
+        return outputDir;
     }
 
+    /**
+     * 默认的代码输出位置: 对应项目下的 src/main/java 下
+     */
     private String defaultOutputDir() {
         Path projectHome = findProjectHome();
         return projectHome.resolve("src/main/java").toAbsolutePath().toString();
     }
 
-    private Path findProjectHome(){
+    private Path findProjectHome() {
         // 1. 获取项目根目录（IDEA 中运行时，user.dir 默认为项目根目录）
         String projectHome = System.getProperty("user.dir");
         Path rootPath = Paths.get(projectHome).toAbsolutePath();
@@ -162,24 +175,109 @@ public class CommonFacadeConfig {
         return rootPath.resolve(modulePath);
     }
 
+    /**
+     * 添加要要生成的代码的表
+     */
     public CommonFacadeConfig addTable(String table) {
         this.tables.add(table);
         return this;
     }
 
+    /**
+     * 添加要要生成的代码的表
+     */
     public CommonFacadeConfig addTable(String... tables) {
         this.tables.addAll(Arrays.asList(tables));
         return this;
     }
 
+    /**
+     * 添加表前缀
+     */
     public CommonFacadeConfig addTablePrefix(String tablePrefix) {
         this.tablePrefix.add(tablePrefix);
         return this;
     }
 
+    /**
+     * 添加表前缀
+     */
     public CommonFacadeConfig addTablePrefix(String... tablePrefix) {
         this.tablePrefix.addAll(Arrays.asList(tablePrefix));
         return this;
     }
+
+    /**
+     * 添加自定义模板: 基于此生成代码
+     */
+    public CommonFacadeConfig addCustomizeTemplate(CustomizeTemplateConfig customizeTemplateConfig) {
+        this.customizeTemplateConfigs.add(customizeTemplateConfig);
+        return this;
+    }
+
+    /**
+     * 添加自定义模板: 基于此生成代码
+     */
+    public CommonFacadeConfig addCustomizeTemplate(String subPackage, String templatePath) {
+        this.customizeTemplateConfigs.add(CustomizeTemplateConfig.build(subPackage, templatePath));
+        return this;
+    }
+
+
+    /**
+     * 在默认的 mapperXmlConfig 基础上继续追加配置细节
+     */
+    public CommonFacadeConfig addMapperXmlConfig(Consumer<MapperXmlTemplateConfig.Builder> customMapperXmlConfig) {
+        // 使用 andThen 将外部传入的配置，追加到现有的默认配置之后
+        this.mapperXmlConfig = this.mapperXmlConfig.andThen(customMapperXmlConfig);
+        return this;
+    }
+
+    /**
+     * 在默认的 entityConfig 基础上继续追加配置细节
+     */
+    public CommonFacadeConfig addEntityConfig(Consumer<EntityTemplateConfig.Builder> customEntityConfig) {
+        this.entityConfig = this.entityConfig.andThen(customEntityConfig);
+        return this;
+    }
+
+    /**
+     * 在默认的 mapperConfig 基础上继续追加配置细节
+     */
+    public CommonFacadeConfig addMapperConfig(Consumer<MapperTemplateConfig.Builder> customMapperConfig) {
+        this.mapperConfig = this.mapperConfig.andThen(customMapperConfig);
+        return this;
+    }
+
+    /**
+     * 在默认的 serviceConfig 基础上继续追加配置细节
+     */
+    public CommonFacadeConfig addServiceConfig(Consumer<ServiceTemplateConfig.Builder> customServiceConfig) {
+        this.serviceConfig = this.serviceConfig.andThen(customServiceConfig);
+        return this;
+    }
+
+    /**
+     * 在默认的 controllerConfig 基础上继续追加配置细节
+     */
+    public CommonFacadeConfig addControllerConfig(Consumer<ControllerTemplateConfig.Builder> customControllerConfig) {
+        this.controllerConfig = this.controllerConfig.andThen(customControllerConfig);
+        return this;
+    }
+
+
+    /**
+     * disable all
+     */
+    public CommonFacadeConfig disableAll() {
+        this.addEntityConfig(ec -> ec.disable(true))
+                .addMapperConfig(mc -> mc.disable(true))
+                .addMapperXmlConfig(mc -> mc.disable(true))
+                .addServiceConfig(sc -> sc.disable(true))
+                .addControllerConfig(cc -> cc.disable(true));
+        return this;
+    }
+
+
 
 }
