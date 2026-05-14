@@ -6,6 +6,23 @@
 import type * as ${entity.className} from "./type"
 import { request } from "@/http/axios"
 
+/** 查 */
+export function queryPage(data: ${entity.className}.${entity.className}QueryData) {
+    return request<${entity.className}.${entity.className}PageResponseData>({
+        url: "${module}/${entity.className4Field}/page",
+        method: "post",
+        data
+    })
+}
+
+/** 详情 */
+export function detail(id: string) {
+return request<ApiResponseData<${entity.className}.${entity.className}Data>>({
+url: `${module}/${entity.className4Field}/detail/${r'${id}'}`,
+    method: 'get',
+    })
+}
+
 /** 增改 */
 export function save(data: ${entity.className}.${entity.className}Data) {
     return request({
@@ -23,14 +40,7 @@ export function del(id: string) {
     })
 }
 
-/** 查 */
-export function queryPage(data: ${entity.className}.${entity.className}QueryData) {
-    return request<${entity.className}.${entity.className}ResponseData>({
-        url: "${module}/${entity.className4Field}/page",
-        method: "post",
-        data
-    })
-}
+
 
 
 /**

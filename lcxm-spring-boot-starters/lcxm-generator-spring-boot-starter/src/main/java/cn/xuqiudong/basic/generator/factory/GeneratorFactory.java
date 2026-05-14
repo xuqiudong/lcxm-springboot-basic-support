@@ -158,20 +158,14 @@ public class GeneratorFactory {
             return;
         }
         for (CustomizeTemplateConfig customizeTemplateConfig : customizedTemplates) {
+            String className = context.getEntity().getClassName();
             // 1. 获取模板内容
             String content = getContent(customizeTemplateConfig.getTemplatePath(), context);
-            // 2. 获取输出文件地址
-            String packageName = bundle.getGlobalConfig().getPackageName(customizeTemplateConfig.getSubPackage());
+            // 2 获取子路径: java  则是子包， 非java则是自定义子路径
+            String subPackage = customizeTemplateConfig.getSubPackage(className);
 
-            // 当不是java的时候 不在往子包里面输出文件，而是直接输出到指定文件夹
-            if (!customizeTemplateConfig.isJavaFile()) {
-                String subPath = customizeTemplateConfig.getSubPath();
-                if (StringUtils.isNotBlank(subPath)) {
-                    // 把 subPath 中的 /  \ 等换为 .  因为  NameConvertUtils.getFullOutputFilePath 中会最终处理
-                    subPath = subPath.replaceAll("[\\\\/]", ".");
-                    packageName = subPath;
-                }
-            }
+            // 2. 获取输出最终报: 包路径 + 子路径(或子包)
+            String packageName = bundle.getGlobalConfig().getPackageName(subPackage);
 
             String fileName = customizeTemplateConfig.getFileNameFunction().apply(context.getEntity().getClassName());
 

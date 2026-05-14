@@ -81,8 +81,12 @@
 
     // #region 改
     function handleUpdate(row: ${entity.className}Data) {
-        dialogVisible.value = true
-        formData.value = cloneDeep(row)
+        ${entity.className}Api.detail(row.id!).then(({ data }) => {
+            formData.value = data
+            //  formData.value = cloneDeep(row)
+            dialogVisible.value = true
+        })
+
     }
     // #endregion
 
@@ -91,7 +95,7 @@
     const searchFormRef = ref<FormInstance | null>(null)
     const searchData = reactive({
         <#list entity.fields as field>
-        ${field.fieldName}: ${field.tsDefault}, // ${field.comments}
+        ${field.fieldName}: null, // ${field.comments}
         </#list>
     })
     function getTableData() {
@@ -192,7 +196,7 @@
                     <el-table-column type="selection" width="50" align="center" />
 
                     <#list entity.fields as field>
-                    <el-table-column prop="${field.fieldName}" label="${field.comments}" align="center" sortable="custom" />
+                    <el-table-column prop="${field.fieldName}" label="${field.comments}" width="150" align="center"  sortable="custom" />
                     </#list>
                     <el-table-column prop="enabled" label="状态" align="center" sortable="custom">
                         <template #default="scope">

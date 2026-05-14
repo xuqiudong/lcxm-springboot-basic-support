@@ -10,7 +10,12 @@ import java.util.List;
 /**
  * Description:
  * vue 的代码生成： 以customize 的方式追加进来
- * 不额外配置 输出文件夹，直接追加的vue子包中， 手动复制出去
+ * <p>
+ *     vue/className/apis/type.ts
+ *     vue/className/apis/index.ts
+ *     vue/className/index.vue
+ * </p>
+ *
  * @author Vic.xu
  * @since 2026-05-13 16:40
  */
@@ -18,54 +23,32 @@ public class VueCustomizeConfig {
 
 
     // 1. 声明为 private，防止外部直接访问
-    private static final List<CustomizeTemplateConfig> DEFAULT_VUE_TEMPLATES;
+    private static final List<CustomizeTemplateConfig> DEFAULT_VUE_TEMPLATES = Collections.unmodifiableList(init());
 
-    static {
-        List<CustomizeTemplateConfig> temp = new ArrayList<>();
-        /**
-         * 自定义模板 vue/apis/type.ts
-         */
-        temp.add(templateTypeTs());
+    private static List<CustomizeTemplateConfig> init() {
+        List<CustomizeTemplateConfig> configs = new ArrayList<>();
+        // 1. 生成 vue/className/apis/type.ts
+        configs.add(buildVueConfig("apis", GeneratorConstant.TEMPLATE_TYPE_TS, GeneratorConstant.TS_SUFFIX, "type"));
 
-        /**
-         * 自定义模板 vue/apis/index.ts
-         */
-        temp.add(templateIndexTs());
+        // 2. 生成 vue/className/apis/index.ts
+        configs.add(buildVueConfig("apis", GeneratorConstant.TEMPLATE_INDEX_TS, GeneratorConstant.TS_SUFFIX, "index"));
 
-        // 2. 将填充好数据的可变集合包装成不可变集合，再赋值给 final 字段
-        DEFAULT_VUE_TEMPLATES = Collections.unmodifiableList(temp);
+        // 3. 生成 vue/className/index.vue
+        configs.add(buildVueConfig("", GeneratorConstant.TEMPLATE_INDEX_VUE, GeneratorConstant.VUE_SUFFIX, "index"));
+        return configs;
     }
 
     /**
-     * 获取默认的模板列表
+     * 抽取重复的构建逻辑，只保留变化的参数
      */
+    private static CustomizeTemplateConfig buildVueConfig(String subPath, String templateName, String fileSuffix, String fileNameSuffix) {
+        return CustomizeTemplateConfig
+                .build(name -> "vue/" + name + (subPath.isEmpty() ? "" : "/" + subPath), templateName)
+                .setFileSuffix(fileSuffix)
+                .setFileNameFunction(name -> fileNameSuffix);
+    }
+
     public static List<CustomizeTemplateConfig> getDefaultVueTemplates() {
         return DEFAULT_VUE_TEMPLATES;
     }
-    /**
-     * 自定义模板 vue/apis/type.ts
-     */
-    public static CustomizeTemplateConfig templateTypeTs(){
-        return CustomizeTemplateConfig
-                .build("vue.apis", GeneratorConstant.TEMPLATE_TYPE_TS)
-                .setFileSuffix(GeneratorConstant.TS_SUFFIX).setFileNameFunction(name -> "type.ts");
-    }
-
-    /**
-     * 自定义模板 vue/apis/index.ts
-     */
-    public static CustomizeTemplateConfig templateIndexTs(){
-        return CustomizeTemplateConfig
-                .build("vue.apis", GeneratorConstant.TEMPLATE_INDEX_TS)
-                .setFileSuffix(GeneratorConstant.TS_SUFFIX).setFileNameFunction(name -> "index.ts");
-    }
-
-    /**
-     * 自定义模板 vue/index.vue
-     */
-     public static CustomizeTemplateConfig templateIndexVue(){
-         return CustomizeTemplateConfig
-                .build("vue", GeneratorConstant.TEMPLATE_INDEX_VUE)
-                .setFileSuffix(GeneratorConstant.VUE_SUFFIX).setFileNameFunction(name -> "index.vue");
-     }
 }
