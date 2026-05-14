@@ -4,6 +4,7 @@ import cn.xuqiudong.basic.generator.config.template.CustomizeTemplateConfig;
 import cn.xuqiudong.basic.generator.constant.GeneratorConstant;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,26 +17,31 @@ import java.util.List;
 public class VueCustomizeConfig {
 
 
-    public static List<CustomizeTemplateConfig> DEFAULT_VUE_TEMPLATES =  new ArrayList<>();
+    // 1. 声明为 private，防止外部直接访问
+    private static final List<CustomizeTemplateConfig> DEFAULT_VUE_TEMPLATES;
 
     static {
-
+        List<CustomizeTemplateConfig> temp = new ArrayList<>();
         /**
          * 自定义模板 vue/apis/type.ts
          */
-        DEFAULT_VUE_TEMPLATES.add(templateTypeTs());
+        temp.add(templateTypeTs());
 
         /**
          * 自定义模板 vue/apis/index.ts
          */
-        DEFAULT_VUE_TEMPLATES.add(templateIndexTs());
+        temp.add(templateIndexTs());
 
-        /**
-         * 自定义模板 vue/index.vue
-         */
-        DEFAULT_VUE_TEMPLATES.add(templateIndexVue());
+        // 2. 将填充好数据的可变集合包装成不可变集合，再赋值给 final 字段
+        DEFAULT_VUE_TEMPLATES = Collections.unmodifiableList(temp);
     }
 
+    /**
+     * 获取默认的模板列表
+     */
+    public static List<CustomizeTemplateConfig> getDefaultVueTemplates() {
+        return DEFAULT_VUE_TEMPLATES;
+    }
     /**
      * 自定义模板 vue/apis/type.ts
      */

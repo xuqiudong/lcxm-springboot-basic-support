@@ -286,10 +286,10 @@ public class CommonFacadeConfig {
 
     /**
      * 添加自定义的默认的 vue 模板
-     * @see VueCustomizeConfig#DEFAULT_VUE_TEMPLATES
+     * @see VueCustomizeConfig#getDefaultVueTemplates()
      */
     public CommonFacadeConfig addCustomizeVueTemplates() {
-        this.customizeTemplateConfigs.addAll(VueCustomizeConfig.DEFAULT_VUE_TEMPLATES);
+        this.customizeTemplateConfigs.addAll(VueCustomizeConfig.getDefaultVueTemplates());
         return this;
     }
 

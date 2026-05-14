@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * 关于SQL的一些工具类
- * 
+ *
  * @author Vic.xu
  * @since 2021/10/12
  */
@@ -25,7 +25,7 @@ public class SqlUtil {
 
     /**
      * 把oracle对应的SQL语句包装为分页语句
-     * 
+     *
      * @param prefixSql 原来的完整的sql
      * @param page 页码
      * @param size  每页数据量
@@ -90,7 +90,7 @@ public class SqlUtil {
      */
     public static String appendWhere(String sql, String append, boolean needParenthesis) throws JSQLParserException {
         Select select = (Select) CCJSqlParserUtil.parse(sql);
-        PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
+        PlainSelect plainSelect = select.getPlainSelect();
         Expression where = CCJSqlParserUtil.parseCondExpression(append);
         if (needParenthesis) {
             where = new ParenthesedExpressionList(where);
