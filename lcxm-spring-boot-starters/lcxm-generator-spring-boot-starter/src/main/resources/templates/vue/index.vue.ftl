@@ -12,6 +12,8 @@
     import { usePagination } from "@@/composables/usePagination"
     import { useTableSort } from "@@/composables/useTableSort"
     import { checkPermission } from "@@/utils/permission"
+    // import { validateUniqueField } from "@@/composables/useFormValidate"
+    import { checkPermission } from "@@/utils/permission"
     import { CirclePlus, Close, Refresh, RefreshRight, Search } from "@element-plus/icons-vue"
     import { cloneDeep } from "lodash-es"
     import * as ${entity.className}Api from "./apis"
@@ -38,7 +40,7 @@
     const formData = ref<${entity.className}Data>(cloneDeep(DEFAULT_FORM_DATA))
 
     const formRules: FormRules<${entity.className}Data> = reactive<FormRules>({
-        //name: [{ required: true, trigger: "blur", message: "请输入nam" }, { validator: validateUniqueField("`${module}/${entity.className4Field}/check", "name", "名称", formData), trigger: "blur" }],
+        //name: [{ required: true, trigger: "blur", message: "请输入nam" }, { validator: validateUniqueField("${module}/${entity.className4Field}/check", "name", "名称", formData), trigger: "blur" }],
     })
 
     function handleCreateOrUpdate() {
