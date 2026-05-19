@@ -25,7 +25,7 @@ public class SelectOptionBuilder {
      * @param textMapper 如何获取 text（如 BlogCategory::getName）
      * @return 转换后的 SelectOption 集合
      */
-    public static <T> List<SelectOption> convertToSelectOptions(
+    public static <T> List<SelectOption> build(
             List<T> sourceList,
             Function<T, Object> idMapper,
             Function<T, String> textMapper
@@ -54,7 +54,7 @@ public class SelectOptionBuilder {
      * @param rootPid    根节点父id
      * @return 树形结构
      */
-    public static <T> List<SelectOption> buildTreeSelect(
+    public static <T> List<SelectOption> buildTree(
             List<T> sourceList,
             Function<T, Object> idFunc,
             Function<T, String> textFunc,
