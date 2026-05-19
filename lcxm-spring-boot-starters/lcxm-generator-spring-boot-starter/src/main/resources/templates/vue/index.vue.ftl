@@ -110,7 +110,6 @@
         }).then(({ data }) => {
             paginationData.total = data.total
             tableData.value = data.datas
-            console.log(tableData.value)
         }).catch(() => {
             tableData.value = []
         }).finally(() => {
