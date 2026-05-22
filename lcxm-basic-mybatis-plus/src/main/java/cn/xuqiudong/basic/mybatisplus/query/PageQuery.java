@@ -89,7 +89,7 @@ public class PageQuery implements MpQuery {
             Assert.isTrue(split.length == 2, "排序字段格式错误, 请使用: column1,desc;column2,asc;....");
             String column = split[0];
             column = ColumnUtils.safeColumn(column);
-            String order = split[1];
+            String order = split[1].trim();
             if (ASC.equalsIgnoreCase(order)) {
                 orderItems.add(OrderItem.asc(column));
             } else if (DESC.equalsIgnoreCase(order)) {
