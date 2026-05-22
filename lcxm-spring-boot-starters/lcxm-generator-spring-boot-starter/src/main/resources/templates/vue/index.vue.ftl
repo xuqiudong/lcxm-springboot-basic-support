@@ -127,7 +127,7 @@
     // #endregion
 
     // #region 更新状态
-    function updateenabled(row: ${entity.className}Data) {
+    function updateEnabled(row: ${entity.className}Data) {
         const id = row.id
         if (!id) return
         const enbale = row.enabled
@@ -215,7 +215,7 @@
                             <el-button-group>
                                 <el-button
                                         :type="scope.row.enabled ? 'danger' : 'success'" text bg size="small"
-                                        v-if="checkPermission(['admin'])" @click="updateenabled(scope.row)"
+                                        v-if="checkPermission(['admin'])" @click="updateEnabled(scope.row)"
                                 >
                                     {{ scope.row.enabled ? '禁用' : '启用'
                                     }}
