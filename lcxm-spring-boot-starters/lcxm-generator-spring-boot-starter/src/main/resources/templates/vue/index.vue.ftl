@@ -40,7 +40,7 @@
     const formData = ref<${entity.className}Data>(cloneDeep(DEFAULT_FORM_DATA))
 
     const formRules: FormRules<${entity.className}Data> = reactive<FormRules>({
-        //name: [{ required: true, trigger: "blur", message: "请输入nam" }, { validator: validateUniqueField("${module}/${entity.className4Field}/check", "name", "名称", formData), trigger: "blur" }],
+        //name: [{ required: true, trigger: "blur", message: "请输入name" }, { validator: validateUniqueField("${controller.requestMapping}/check", "name", "名称", formData), trigger: "blur" }],
     })
 
     function handleCreateOrUpdate() {

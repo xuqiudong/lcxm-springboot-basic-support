@@ -9,7 +9,7 @@ import { request } from "@/http/axios"
 /** 查 */
 export function queryPage(data: ${entity.className}.${entity.className}QueryData) {
     return request<${entity.className}.${entity.className}PageResponseData>({
-        url: "${module}/${entity.className4Field}/page",
+        url: "${controller.requestMapping}/page",
         method: "post",
         data
     })
@@ -18,7 +18,7 @@ export function queryPage(data: ${entity.className}.${entity.className}QueryData
 /** 详情 */
 export function detail(id: string) {
 return request<ApiResponseData<${entity.className}.${entity.className}Data>>({
-url: `${module}/${entity.className4Field}/detail/${r'${id}'}`,
+url: `${controller.requestMapping}/detail/${r'${id}'}`,
     method: 'get',
     })
 }
@@ -26,7 +26,7 @@ url: `${module}/${entity.className4Field}/detail/${r'${id}'}`,
 /** 增改 */
 export function save(data: ${entity.className}.${entity.className}Data) {
     return request({
-        url: "${module}/${entity.className4Field}/save",
+        url: "${controller.requestMapping}/save",
         method: "post",
         data
     })
@@ -35,7 +35,7 @@ export function save(data: ${entity.className}.${entity.className}Data) {
 /** 删 */
 export function del(id: string) {
     return request({
-        url: `${module}/${entity.className4Field}/delete/${r'${id}'}`,
+        url: `${controller.requestMapping}/delete/${r'${id}'}`,
         method: "post"
     })
 }
@@ -48,7 +48,7 @@ export function del(id: string) {
 */
 export function updateEnable(id: string, enable: boolean) {
     return request({
-        url: `${module}/${entity.className4Field}/updateEnable/${r'${id}'}`,
+        url: `${controller.requestMapping}/updateEnable/${r'${id}'}`,
         method: "post",
         params: {
             enable
