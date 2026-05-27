@@ -41,8 +41,9 @@ public class ColumnUtils {
      */
     public static String safeColumn(String column) {
         Assert.notNull(column, "column can not be null");
+        column = column.trim();
         checkSafe(column);
-        return UNDER_LINE_MAP.computeIfAbsent(column, (col) -> StringUtils.camelToUnderline(column));
+        return UNDER_LINE_MAP.computeIfAbsent(column, (col) -> StringUtils.camelToUnderline(col));
     }
 
     /**
