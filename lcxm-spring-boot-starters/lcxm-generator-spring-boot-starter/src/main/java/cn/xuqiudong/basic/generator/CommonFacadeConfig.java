@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -283,6 +284,22 @@ public class CommonFacadeConfig {
         this.controllerConfig = this.controllerConfig.andThen(customControllerConfig);
         return this;
     }
+
+    /**
+     * 配置 controller 上的请求路径
+     */
+    public CommonFacadeConfig addControllerRequestMapping(String tableName, String requestMapping) {
+        this.controllerConfig = this.controllerConfig.andThen(cc -> cc.addRequestMapping(tableName, requestMapping));
+        return this;
+    }
+    /**
+     * 配置 controller 上的请求路径 map
+     */
+    public CommonFacadeConfig addControllerRequestMapping(Map<String, String> requestMappingMap) {
+        this.controllerConfig = this.controllerConfig.andThen(cc -> cc.addRequestMapping(requestMappingMap));
+        return this;
+    }
+
 
     /**
      * 添加自定义的默认的 vue 模板

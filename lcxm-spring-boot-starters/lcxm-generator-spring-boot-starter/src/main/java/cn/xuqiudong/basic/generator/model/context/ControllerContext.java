@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述:
@@ -19,16 +20,18 @@ import java.util.List;
 public class ControllerContext extends BaseContext {
 
     // controller 上的请求注解 形如: @RequestMapping("/module/tableName")
-    private static final String REQUEST_MAPPING_FORMAT = "@RequestMapping(\"/%s/%s\")";
+    private static final String DEFAULT_REQUEST_MAPPING_FORMAT = "@RequestMapping(\"/%s/%s\")";
+
+    // 自定义请求路径 的请求注解， 形如 @RequestMapping("｛自定义的mapping｝")
+    private static final String CUSTOM_REQUEST_MAPPING_FORMAT = "@RequestMapping(\"%s\")";
+
 
     public ControllerContext(TableInfo tableInfo, ConfigBundle bundle, TemplateContext templateContext) {
         super(tableInfo, bundle, bundle.getStrategyConfig().getControllerTemplateConfig(), templateContext);
         // 固定加上 @RestController 注解
         addAnnotation("@RestController");
         // 新增  @RequestMapping("/module/tableName") 注解
-        String module = bundle.getGlobalConfig().getModule();
-        String className = StringUtils.uncapitalize(tableInfo.getClassName());
-        addAnnotation(String.format(REQUEST_MAPPING_FORMAT, module, className));
+        addRequestMappingAnnotation(tableInfo, bundle);
         // 添加类上的导入
         addImport(ImportPackageUtils.getImport(RestController.class));
         addImport(ImportPackageUtils.getImport(RequestMapping.class));
@@ -38,6 +41,31 @@ public class ControllerContext extends BaseContext {
         addImport(ImportPackageUtils.getImport(templateContext.getService().getFullName()));
         addImport(ImportPackageUtils.getImport(templateContext.getQuery().getFullName()));
 
+    }
+
+
+    /**
+     * 添加请求注解:
+     * 1. 添加 @RestController 注解
+     * 2. 添加 @RequestMapping("/module/tableName") 注解
+     * 2.1 添加自定义的请求路径 如果配置
+     * 2.2 添加默认的请求路径  如果没配置自定义路径
+     *
+     * @param tableInfo
+     * @param bundle
+     */
+    public void addRequestMappingAnnotation(TableInfo tableInfo, ConfigBundle bundle) {
+        // 新增  @RequestMapping("/module/tableName") 注解
+        Map<String, String> requestMappingMap = bundle.getStrategyConfig().getControllerTemplateConfig().getRequestMappingMap();
+
+        String customizedRequestMapping = requestMappingMap.get(tableInfo.getTableName());
+        if (StringUtils.isNotBlank(customizedRequestMapping)) {
+            addAnnotation(String.format(CUSTOM_REQUEST_MAPPING_FORMAT, customizedRequestMapping));
+        } else {
+            String module = bundle.getGlobalConfig().getModule();
+            String className = StringUtils.uncapitalize(tableInfo.getClassName());
+            addAnnotation(String.format(DEFAULT_REQUEST_MAPPING_FORMAT, module, className));
+        }
     }
 
     /**

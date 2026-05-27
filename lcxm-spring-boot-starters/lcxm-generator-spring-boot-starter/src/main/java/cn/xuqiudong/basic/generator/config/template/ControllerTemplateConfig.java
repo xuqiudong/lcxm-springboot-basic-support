@@ -1,6 +1,11 @@
 package cn.xuqiudong.basic.generator.config.template;
 
 import cn.xuqiudong.basic.generator.constant.GeneratorConstant;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.collections4.map.HashedMap;
+
+import java.util.Map;
 
 /**
  * 描述:
@@ -9,7 +14,15 @@ import cn.xuqiudong.basic.generator.constant.GeneratorConstant;
  * @author Vic.xu
  * @since 2025-09-18 17:35
  */
+@Getter
+@Setter
 public class ControllerTemplateConfig extends BaseTemplateConfig {
+
+    /**
+     * 请求路径 映射：  表名和请求路径
+     * 不配置则是 /｛module｝/｛className｝
+     */
+    private Map<String, String> requestMappingMap =new HashedMap<>();
 
 
     /**
@@ -34,8 +47,28 @@ public class ControllerTemplateConfig extends BaseTemplateConfig {
      */
     public static class Builder extends BaseConfigBuilder<ControllerTemplateConfig.Builder, ControllerTemplateConfig> {
 
+        /**
+         * 添加 请求路径映射
+         * @param tableName      表名
+         * @param requestMapping 请求路径
+         */
+        public Builder addRequestMapping(String tableName, String requestMapping) {
+            this.config.requestMappingMap.put(tableName, requestMapping);
+            return this;
+        }
+
+        /**
+         * 添加 请求路径映射 Map
+         */
+        public Builder addRequestMapping(Map<String, String> requestMappingMap) {
+            this.config.requestMappingMap.putAll(requestMappingMap);
+            return this;
+        }
+
         public Builder() {
             super(new ControllerTemplateConfig());
         }
+
+
     }
 }

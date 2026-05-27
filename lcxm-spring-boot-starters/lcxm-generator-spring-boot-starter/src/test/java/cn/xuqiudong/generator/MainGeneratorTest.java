@@ -37,11 +37,12 @@ public class MainGeneratorTest {
         config.setMavenModule("/lcxm-spring-boot-starters/lcxm-generator-spring-boot-starter");
         config.addTable("test_generate");
         config.addTablePrefix("t_");
+        config.addControllerRequestMapping("test_generate", "/demo/generate");
         String outputDir = config.getOutputDir();
         System.out.println(outputDir);
-
-        // 禁用所有 的默认 疤
-        config.disableAll();
+        config.setFileOverride( true);
+        // 禁用所有 的默认
+//        config.disableAll();
 
 
         //  添加 自定义的默认的vue模板
@@ -124,6 +125,7 @@ public class MainGeneratorTest {
 //                                                        .supperClass(BaseController.class)
                                                                 // controller 泛型 只支持 <XxxService> 形式
                                                                 .supperClassWithGeneric(false)
+//                                                                .requestMapping("/demo")
                                                                 .disable(false)
                                         )
                 )
