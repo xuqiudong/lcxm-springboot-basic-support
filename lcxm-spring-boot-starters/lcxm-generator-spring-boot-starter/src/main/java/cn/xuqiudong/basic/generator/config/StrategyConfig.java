@@ -162,7 +162,7 @@ public class StrategyConfig {
             return this;
         }
 
-        public Builder tablePrefix(List<String>tablePrefix) {
+        public Builder tablePrefix(List<String> tablePrefix) {
             this.strategyConfig.tablePrefix.addAll(tablePrefix);
             return this;
         }

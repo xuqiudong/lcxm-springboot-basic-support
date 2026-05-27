@@ -36,12 +36,11 @@ public enum TemplateType {
     /**
      * 自定义模板：  需要自己写模板文件(.ftl)，
      * 上下文依然参见：
+     *
      * @see cn.xuqiudong.basic.generator.model.context.TemplateContext
      *
      */
     CUSTOMIZE;
-
-
 
 
 }

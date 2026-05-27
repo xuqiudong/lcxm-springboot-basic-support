@@ -22,7 +22,7 @@ public class ControllerTemplateConfig extends BaseTemplateConfig {
      * 请求路径 映射：  表名和请求路径
      * 不配置则是 /｛module｝/｛className｝
      */
-    private Map<String, String> requestMappingMap =new HashedMap<>();
+    private Map<String, String> requestMappingMap = new HashedMap<>();
 
 
     /**
@@ -49,6 +49,7 @@ public class ControllerTemplateConfig extends BaseTemplateConfig {
 
         /**
          * 添加 请求路径映射
+         *
          * @param tableName      表名
          * @param requestMapping 请求路径
          */

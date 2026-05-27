@@ -13,7 +13,7 @@ import java.util.function.Function;
  * <p>
  * 自定义模板配置: 配置 自定义模板路径, 子包, 文件后缀，输出文件名
  * 上下文参见TemplateContext, 自己写定义好魔板文件即可
- *  非java的时候 将输出到自定义输出目录(如果非空)
+ * 非java的时候 将输出到自定义输出目录(如果非空)
  * </p>
  *
  * @author Vic.xu
@@ -34,7 +34,6 @@ public class CustomizeTemplateConfig {
      * 非java文件时的输出路径: 参数为实体 class的name
      */
     protected Function<String, String> subPathFunction;
-
 
 
     /**
@@ -61,8 +60,9 @@ public class CustomizeTemplateConfig {
 
     /**
      * 构建 自定义模板配置
-     * @param subPackage 模板输出到哪个子包
-     * @param templatePath  模板文件路径  如: /templates/excel 对应   /templates/excel.ftl
+     *
+     * @param subPackage   模板输出到哪个子包
+     * @param templatePath 模板文件路径  如: /templates/excel 对应   /templates/excel.ftl
      * @return
      */
     public static CustomizeTemplateConfig build(String subPackage, String templatePath) {
@@ -71,8 +71,9 @@ public class CustomizeTemplateConfig {
 
     /**
      * 构建非java文件的模板配置
+     *
      * @param subPathFunction 模板输出到哪个子文件夹  className -> className + /vue/index.vue
-     * @param templatePath  模板文件路径  如: /templates/excel 对应   /templates/excel.ftl
+     * @param templatePath    模板文件路径  如: /templates/excel 对应   /templates/excel.ftl
      */
     public static CustomizeTemplateConfig build(Function<String, String> subPathFunction, String templatePath) {
         return new CustomizeTemplateConfig(subPathFunction, templatePath);
@@ -125,7 +126,7 @@ public class CustomizeTemplateConfig {
      * 1. java文件: 获取子包
      * 2. 非java文件: 获取子路径函数
      */
-    public String getSubPath(String className){
+    public String getSubPath(String className) {
         if (isJavaFile()) {
             return subPackage;
         }
@@ -157,8 +158,6 @@ public class CustomizeTemplateConfig {
         Assert.hasText(fileSuffix, "自定义模板文件后缀不能为空");
         Assert.notNull(fileNameFunction, "自定义模板文件名函数不能为空");
     }
-
-
 
 
 }

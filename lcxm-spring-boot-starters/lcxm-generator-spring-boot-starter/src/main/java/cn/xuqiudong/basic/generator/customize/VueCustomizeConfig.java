@@ -11,9 +11,9 @@ import java.util.List;
  * Description:
  * vue 的代码生成： 以customize 的方式追加进来
  * <p>
- *     vue/className/apis/type.ts
- *     vue/className/apis/index.ts
- *     vue/className/index.vue
+ * vue/className/apis/type.ts
+ * vue/className/apis/index.ts
+ * vue/className/index.vue
  * </p>
  *
  * @author Vic.xu

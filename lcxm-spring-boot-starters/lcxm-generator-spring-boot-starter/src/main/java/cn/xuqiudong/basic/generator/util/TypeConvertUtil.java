@@ -4,7 +4,8 @@ import cn.xuqiudong.basic.generator.model.DataType;
 
 /**
  * Description:
- *   类型转换工具类
+ * 类型转换工具类
+ *
  * @author Vic.xu
  * @since 2026-05-13 10:33
  */
@@ -12,6 +13,7 @@ public class TypeConvertUtil {
 
     /**
      * java类型 转 typescript类型
+     *
      * @param dataType java类型
      * @return typescript类型
      */
@@ -25,8 +27,7 @@ public class TypeConvertUtil {
         }
         return switch (javaSimpleTypeName.trim()) {
             // 数字
-            case "Byte", "Short", "Integer", "Long", "Float", "Double", "BigDecimal"
-                    -> "number";
+            case "Byte", "Short", "Integer", "Long", "Float", "Double", "BigDecimal" -> "number";
             // 布尔
             case "Boolean" -> "boolean";
             // 字符串
@@ -40,6 +41,7 @@ public class TypeConvertUtil {
 
     /**
      * 根据java类型获取TS 类型的默认值
+     *
      * @param dataType java类型
      */
     public static String getTsDefault(DataType dataType) {

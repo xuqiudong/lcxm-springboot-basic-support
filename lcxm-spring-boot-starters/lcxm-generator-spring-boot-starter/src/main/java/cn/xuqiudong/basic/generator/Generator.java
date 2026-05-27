@@ -20,8 +20,9 @@ import java.util.function.Consumer;
  * 描述:
  * 代码生成入口:  收集全部的配置,然后调用生成工厂进行生成
  * 可以通过 CommonGeneratorFacade 使用一些通用的配置
- * @see CommonGeneratorFacade#build(CommonFacadeConfig)
+ *
  * @author Vic.xu
+ * @see CommonGeneratorFacade#build(CommonFacadeConfig)
  * @since 2025-09-12 16:54
  */
 public class Generator {
@@ -129,6 +130,7 @@ public class Generator {
         }
         return this;
     }
+
     /**
      * 6. 添加自定义模板
      */

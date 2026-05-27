@@ -234,8 +234,6 @@ public class CommonFacadeConfig {
     }
 
 
-
-
     /**
      * 在默认的 entityConfig 基础上继续追加配置细节
      */
@@ -292,6 +290,7 @@ public class CommonFacadeConfig {
         this.controllerConfig = this.controllerConfig.andThen(cc -> cc.addRequestMapping(tableName, requestMapping));
         return this;
     }
+
     /**
      * 配置 controller 上的请求路径 map
      */
@@ -303,6 +302,7 @@ public class CommonFacadeConfig {
 
     /**
      * 添加自定义的默认的 vue 模板
+     *
      * @see VueCustomizeConfig#getDefaultVueTemplates()
      */
     public CommonFacadeConfig addCustomizeVueTemplates() {
@@ -324,7 +324,6 @@ public class CommonFacadeConfig {
                 .addControllerConfig(cc -> cc.disable(disable));
         return this;
     }
-
 
 
 }

@@ -4,10 +4,10 @@ import cn.xuqiudong.basic.generator.engine.FreemarkerTemplateEngine;
 
 /**
  * 描述:
- *   提供一个通用的代码生成器， 默认一些配置 ， 最终依然是调用 Generator#generate() 方法进行生成
- *
- *   使用方式：
- *   <pre>{@code
+ * 提供一个通用的代码生成器， 默认一些配置 ， 最终依然是调用 Generator#generate() 方法进行生成
+ * <p>
+ * 使用方式：
+ * <pre>{@code
  *
  *       CommonFacadeConfig config = CommonFacadeConfig
  *                 .mysql("127.0.0.1", "3306", "qiudong", "qiudong", "qiudong12345678");
@@ -21,6 +21,7 @@ import cn.xuqiudong.basic.generator.engine.FreemarkerTemplateEngine;
  *         generator.generate();
  *         </code>
  *   }</pre>
+ *
  * @author Vic.xu
  * @since 2026-03-11 8:52
  */
@@ -29,10 +30,10 @@ public class CommonGeneratorFacade {
 
     /**
      * 构建代码生成器 Generator, 然后调用 Generator#generate()  生成代码即可
-     * @see Generator#generate()
      *
      * @param config 生成器配置
      * @return Generator
+     * @see Generator#generate()
      */
     public static Generator build(CommonFacadeConfig config) {
         Generator generator = Generator.create(config.getDatabaseType(), config.getUrl(), config.getUsername(), config.getPassword());
@@ -74,7 +75,6 @@ public class CommonGeneratorFacade {
         generator.templateEngine(new FreemarkerTemplateEngine());
         return generator;
     }
-
 
 
 }

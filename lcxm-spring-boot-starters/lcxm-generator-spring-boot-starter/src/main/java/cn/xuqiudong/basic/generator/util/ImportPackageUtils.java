@@ -44,11 +44,12 @@ public class ImportPackageUtils {
         }
         return String.format(FORMAT, clazz.getName());
     }
+
     /**
      * 获取导包字符串: 形如 import java.time.LocalTime;
      */
     public static String getImport(String className) {
-        if (StringUtils.isBlank( className)) {
+        if (StringUtils.isBlank(className)) {
             return "";
         }
         return String.format(FORMAT, className);

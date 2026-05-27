@@ -2,14 +2,11 @@ package cn.xuqiudong.basic.generator.config;
 
 import cn.xuqiudong.basic.generator.config.template.CustomizeTemplateConfig;
 import cn.xuqiudong.basic.generator.engine.BaseTemplateEngine;
-import cn.xuqiudong.basic.generator.enums.TemplateType;
 import cn.xuqiudong.basic.generator.plugin.IGeneratorPlugin;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -56,7 +53,7 @@ public class ConfigBundle {
     public ConfigBundle(DataSourceConfig dataSourceConfig, GlobalConfig globalConfig, StrategyConfig strategyConfig,
                         BaseTemplateEngine templateEngine, Set<IGeneratorPlugin> plugins,
                         List<CustomizeTemplateConfig> customizedTemplates
-                        ) {
+    ) {
         this.dataSourceConfig = dataSourceConfig;
         this.globalConfig = globalConfig;
         this.strategyConfig = strategyConfig;

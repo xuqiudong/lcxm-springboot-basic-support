@@ -127,7 +127,7 @@ public class FieldInfo implements Cloneable {
         this.fieldName = StringUtils.uncapitalize(className);
         //列的数据类型
         DataType originDataType = DataTypeMappingRegistry.get(meta.getDataType());
-        this.dataType = JavaTypeInferUtil.inferJavaType(originDataType,  comments);
+        this.dataType = JavaTypeInferUtil.inferJavaType(originDataType, comments);
         // 是否是主键
         this.pk = meta.isPk();
     }
