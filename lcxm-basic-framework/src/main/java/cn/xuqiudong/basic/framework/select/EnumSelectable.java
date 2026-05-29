@@ -1,10 +1,12 @@
 package cn.xuqiudong.basic.framework.select;
 
 import cn.xuqiudong.basic.core.model.SelectOption;
+import cn.xuqiudong.basic.framework.select.annotation.RegisterSelectEnum;
 
 /**
  * 描述:
  *   标记枚举可转为下拉选项的接口
+ * @see RegisterSelectEnum
  * @see SelectOption
  * @author Vic.xu
  * @since 2025-11-13 17:03
