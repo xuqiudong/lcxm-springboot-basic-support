@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,12 +38,12 @@ public class Code2TextPreloadRunner implements ApplicationRunner {
             return;
         }
 
-
         Collection<Code2TextResolver<?>> allResolvers = Code2TextResolverRegistry.getAllResolvers();
         if (allResolvers.isEmpty()) {
             return;
         }
-        LOGGER.info("code2text: 开始预加载 Code2TextResolver 缓存数据, 共 {} 个", allResolvers.size());
+        // 获取所有需要预加载的缓存数据
+        List<Code2TextPreloadable<?>> preloadableResolvers = new ArrayList<>();
         for (Code2TextResolver<?> resolver : allResolvers) {
             Code2TextResolver<?> target = resolver;
             // 如果是代理对象，则获取原始对象
@@ -52,15 +54,22 @@ public class Code2TextPreloadRunner implements ApplicationRunner {
             if (!(target instanceof Code2TextPreloadable<?> preloadable)) {
                 continue;
             }
-            String region = resolver.annotationType().getSimpleName();
+            preloadableResolvers.add(preloadable);
+        }
 
+        if (preloadableResolvers.isEmpty()) {
+            LOGGER.info("code2text: 没有需要预加载的Code2TextResolver");
+            return;
+        }
+        LOGGER.info("code2text: 开始预加载 Code2TextResolver 缓存数据, 共 {} 个", allResolvers.size());
+        for (Code2TextPreloadable<?> preloadable : preloadableResolvers) {
+            String region = preloadable.annotationType().getSimpleName();
             Map<String, String> data = preloadable.preload();
             if (data == null || data.isEmpty()) {
                 continue;
             }
             LOGGER.info("code2text: 预加载 {} 缓存数据完成, size: {}", region, data.size());
             cacheManager.preload(region, data);
-
         }
     }
 }
