@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xuqiudong.basic.quartz.mapper.TaskJobMapper">
+
+    <sql id="tableName">t_task_job</sql>
+
+    <!-- 列表数据列 -->
+    <sql id="base_list">
+        a.id,
+        a.create_time,
+        a.update_time,
+        a.enabled,
+        a.create_by,
+        a.update_by,
+        a.`name`,
+        a.`code`,
+        a.`group`,
+        a.cron,
+        a.`status`,
+        a.note,
+        a.deleted
+    </sql>
+
+    <!-- 详情数据列 -->
+    <sql id="detail_list">
+        <include refid="base_list"/>
+    </sql>
+
+    <!-- 只包含主键 -->
+    <resultMap id="BaseResultMap" type="cn.xuqiudong.basic.quartz.entity.TaskJob">
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <!-- 通用查询映射结果: 去掉lob 字段 -->
+    <resultMap id="ListResultMap" type="cn.xuqiudong.basic.quartz.entity.TaskJob" extends="BaseResultMap">
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="enabled" property="enabled"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="group" property="group"/>
+        <result column="cron" property="cron"/>
+        <result column="status" property="status"/>
+        <result column="note" property="note"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!-- 全字段映射结果 -->
+    <resultMap id="DetailResultMap" type="cn.xuqiudong.basic.quartz.entity.TaskJob" extends="ListResultMap">
+    </resultMap>
+</mapper>

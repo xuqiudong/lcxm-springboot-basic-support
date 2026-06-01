@@ -1,2 +1,2 @@
 # for 2.7.x +  no longer  org.springframework.boot.autoconfigure.EnableAutoConfiguration=
-cn.xuqiudong.quartz.autoconfigure.LcxmQuartzAutoConfiguration
+cn.xuqiudong.basic.quartz.autoconfigure.LcxmQuartzAutoConfiguration
