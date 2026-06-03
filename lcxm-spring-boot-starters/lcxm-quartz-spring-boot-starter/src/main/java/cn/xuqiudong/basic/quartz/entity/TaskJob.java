@@ -31,15 +31,15 @@ public class TaskJob extends BaseMpEntity<String> {
      * 任务code
      */
     @Schema(description = "任务code")
-    @TableField(value = "`code`")
-    private String code;
+    @TableField(value = "task_code")
+    private String taskCode;
 
     /**
      * 任务组
      */
     @Schema(description = "任务组")
-    @TableField(value = "`group`")
-    private String group;
+    @TableField(value = "task_group")
+    private String taskGroup;
 
     /**
      * cron表达式

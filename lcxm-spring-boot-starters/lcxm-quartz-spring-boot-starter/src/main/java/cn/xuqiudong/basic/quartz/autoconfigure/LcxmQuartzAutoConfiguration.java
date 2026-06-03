@@ -23,6 +23,9 @@ import java.util.List;
  * 描述:
  * 自定义的定时器starter配置
  *
+ * 此处使用了 @MapperScan
+ * 主项目也需要自行定义@MapperScan 扫描自己的Mapper
+ *
  * @author Vic.xu
  * @since 2025-01-17 16:35
  */

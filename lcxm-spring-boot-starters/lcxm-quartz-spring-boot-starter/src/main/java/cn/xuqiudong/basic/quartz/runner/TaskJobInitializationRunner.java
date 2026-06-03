@@ -36,7 +36,7 @@ public class TaskJobInitializationRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         taskJobs().forEach(taskJob -> {
             LOGGER.info("定时任务[{}] 初始化. code=[{}], group=[{}], cron=[{}]",
-                    taskJob.getName(), taskJob.getCode(), taskJob.getGroup(), taskJob.getCron());
+                    taskJob.getName(), taskJob.getTaskCode(), taskJob.getTaskGroup(), taskJob.getCron());
             commonJobQuartzHelper.createJob(taskJob);
         });
     }

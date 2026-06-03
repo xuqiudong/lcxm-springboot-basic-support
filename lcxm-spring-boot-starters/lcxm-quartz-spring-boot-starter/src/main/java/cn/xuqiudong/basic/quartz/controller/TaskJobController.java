@@ -149,7 +149,7 @@ public class TaskJobController {
             return BaseResponse.error("任务状态不合法");
         }
         JobDataMap jobDataMap = JobUserHolder.buildJobDataMap(CurrentUserInfoContext.getUserId(), CurrentUserInfoContext.getUsername());
-        BooleanWithMsg result = commonJobQuartzHelper.runJobNow(taskJob.getCode(), taskJob.getGroup(), jobDataMap);
+        BooleanWithMsg result = commonJobQuartzHelper.runJobNow(taskJob.getTaskCode(), taskJob.getTaskGroup(), jobDataMap);
         return toResponse(result);
 
     }
@@ -168,7 +168,7 @@ public class TaskJobController {
             return BaseResponse.error("任务状态不合法");
         }
         updateStatus(id, QuartzStatusEnum.PAUSE);
-        BooleanWithMsg result = commonJobQuartzHelper.pauseJob(taskJob.getCode(), taskJob.getGroup());
+        BooleanWithMsg result = commonJobQuartzHelper.pauseJob(taskJob.getTaskCode(), taskJob.getTaskGroup());
         return toResponse(result);
     }
 
@@ -186,7 +186,7 @@ public class TaskJobController {
             return BaseResponse.error("任务状态不合法");
         }
         updateStatus(id, QuartzStatusEnum.WORKING);
-        BooleanWithMsg result = commonJobQuartzHelper.resumeJob(taskJob.getCode(), taskJob.getGroup());
+        BooleanWithMsg result = commonJobQuartzHelper.resumeJob(taskJob.getTaskCode(), taskJob.getTaskGroup());
         return toResponse(result);
     }
 
@@ -204,7 +204,7 @@ public class TaskJobController {
             return BaseResponse.error("任务状态不合法");
         }
         updateStatus(id, QuartzStatusEnum.REMOVE);
-        BooleanWithMsg result = commonJobQuartzHelper.deleteJob(taskJob.getCode(), taskJob.getGroup());
+        BooleanWithMsg result = commonJobQuartzHelper.deleteJob(taskJob.getTaskCode(), taskJob.getTaskGroup());
         return toResponse(result);
 
     }
@@ -224,7 +224,7 @@ public class TaskJobController {
         if (!isStatusValid(taskJob, QuartzStatusEnum.WORKING, QuartzStatusEnum.PAUSE)) {
             return BaseResponse.error("任务状态不合法");
         }
-        BooleanWithMsg result = commonJobQuartzHelper.modifyJobTime(taskJob.getCode(), taskJob.getGroup(), cron);
+        BooleanWithMsg result = commonJobQuartzHelper.modifyJobTime(taskJob.getTaskCode(), taskJob.getTaskGroup(), cron);
         if (result.isSuccess()) {
             taskJob.setCron(cron);
             service.save(taskJob);

@@ -32,9 +32,9 @@ public class CommonJobQuartzHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonJobQuartzHelper.class);
 
-    private static final Class COMMON_JOB_CLASS = CommonJob.class;
+    private static final Class<CommonJob> COMMON_JOB_CLASS = CommonJob.class;
 
-    private Scheduler scheduler;
+    private final Scheduler scheduler;
 
     public CommonJobQuartzHelper(Scheduler scheduler) {
         this.scheduler = scheduler;
@@ -49,7 +49,7 @@ public class CommonJobQuartzHelper {
         }
         Map<String, Object> params = new HashMap<>();
         params.put(QuartzConstant.TASK_JOB_HOLDER_KEY, taskJob);
-        return createJob(taskJob.getCode(), taskJob.getGroup(), COMMON_JOB_CLASS, taskJob.getCron(), taskJob.getStatus(), params);
+        return createJob(taskJob.getTaskCode(), taskJob.getTaskGroup(), COMMON_JOB_CLASS, taskJob.getCron(), taskJob.getStatus(), params);
 
     }
 

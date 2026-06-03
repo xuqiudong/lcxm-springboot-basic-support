@@ -30,14 +30,14 @@ public class TaskJobQuery extends PageQuery {
      */
     @Schema(description = "任务code")
     @QueryCondition(operation = QueryOperation.LIKE)
-    private String code;
+    private String taskCode;
 
     /**
      * 任务组
      */
     @Schema(description = "任务组")
     @QueryCondition(operation = QueryOperation.LIKE)
-    private String group;
+    private String taskGroup;
 
     /**
      * cron表达式
@@ -60,12 +60,6 @@ public class TaskJobQuery extends PageQuery {
     @Schema(description = "备注")
     private String note;
 
-    /**
-     * 是否删除
-     */
-    @QueryCondition(operation = QueryOperation.EQ)
-    @Schema(description = "是否删除")
-    private Boolean deleted;
 
 
 }
