@@ -13,7 +13,6 @@
     import { useTableSort } from "@@/composables/useTableSort"
     import { checkPermission } from "@@/utils/permission"
     // import { validateUniqueField } from "@@/composables/useFormValidate"
-    import { checkPermission } from "@@/utils/permission"
     import { CirclePlus, Close, Refresh, RefreshRight, Search } from "@element-plus/icons-vue"
     import { cloneDeep } from "lodash-es"
     import * as ${entity.className}Api from "./apis"
