@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.generator.customize;
 
 import cn.xuqiudong.basic.generator.config.template.CustomizeTemplateConfig;
 import cn.xuqiudong.basic.generator.constant.GeneratorConstant;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +44,7 @@ public class VueCustomizeConfig {
      */
     private static CustomizeTemplateConfig buildVueConfig(String subPath, String templateName, String fileSuffix, String fileNameSuffix) {
         return CustomizeTemplateConfig
-                .build(name -> "vue/" + name + (subPath.isEmpty() ? "" : "/" + subPath), templateName)
+                .build(name -> "vue/" + StringUtils.uncapitalize( name) + (subPath.isEmpty() ? "" : "/" + subPath), templateName)
                 .setFileSuffix(fileSuffix)
                 .setFileNameFunction(name -> fileNameSuffix);
     }
