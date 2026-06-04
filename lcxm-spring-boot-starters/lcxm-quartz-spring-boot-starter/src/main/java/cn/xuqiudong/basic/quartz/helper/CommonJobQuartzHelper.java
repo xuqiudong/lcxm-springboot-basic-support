@@ -3,6 +3,7 @@ package cn.xuqiudong.basic.quartz.helper;
 import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.basic.quartz.constant.QuartzConstant;
 import cn.xuqiudong.basic.quartz.entity.TaskJob;
+import cn.xuqiudong.basic.quartz.entry.UnifyTaskEntry;
 import cn.xuqiudong.basic.quartz.enums.QuartzStatusEnum;
 import cn.xuqiudong.basic.quartz.job.CommonJob;
 import org.quartz.CronScheduleBuilder;
@@ -36,8 +37,11 @@ public class CommonJobQuartzHelper {
 
     private final Scheduler scheduler;
 
-    public CommonJobQuartzHelper(Scheduler scheduler) {
+    private final UnifyTaskEntry unifyTaskEntry;
+
+    public CommonJobQuartzHelper(Scheduler scheduler, UnifyTaskEntry unifyTaskEntry) {
         this.scheduler = scheduler;
+        this.unifyTaskEntry = unifyTaskEntry;
     }
 
     /**
@@ -49,6 +53,10 @@ public class CommonJobQuartzHelper {
         }
         Map<String, Object> params = new HashMap<>();
         params.put(QuartzConstant.TASK_JOB_HOLDER_KEY, taskJob);
+        BooleanWithMsg booleanWithMsg = beforeCreateCommonJob(taskJob.getTaskCode());
+        if (!booleanWithMsg.isSuccess()) {
+            return booleanWithMsg;
+        }
         return createJob(taskJob.getTaskCode(), taskJob.getTaskGroup(), COMMON_JOB_CLASS, taskJob.getCron(), taskJob.getStatus(), params);
 
     }
@@ -56,13 +64,17 @@ public class CommonJobQuartzHelper {
     /**
      * 创建通用的Job定时任务
      *
-     * @param name   任务名称  是唯一标识
+     * @param name   任务名称  是唯一标识 code
      * @param group  组
      * @param cron   cron 表达式
      * @param status 任务状态，若是暂停，则暂停
      * @param params 任务参数
      */
     public BooleanWithMsg createJob(String name, String group, String cron, QuartzStatusEnum status, Map<String, Object> params) {
+        BooleanWithMsg booleanWithMsg = beforeCreateCommonJob(name);
+        if (!booleanWithMsg.isSuccess()) {
+            return booleanWithMsg;
+        }
         return createJob(name, group, COMMON_JOB_CLASS, cron, status, params);
 
     }
@@ -70,7 +82,7 @@ public class CommonJobQuartzHelper {
     /**
      * 创建定时任务
      *
-     * @param name     任务名称  是唯一标识
+     * @param name     任务名称  是唯一标识 code
      * @param group    组
      * @param jobClass job class
      * @param cron     cron 表达式
@@ -221,6 +233,14 @@ public class CommonJobQuartzHelper {
             LOGGER.error("查询任务失败{}", e);
             return false;
         }
+    }
+
+    public BooleanWithMsg beforeCreateCommonJob(String code){
+        boolean b = unifyTaskEntry.existTask(code);
+        if (!b) {
+            return BooleanWithMsg.fail("没有任务编码[" + code + "]对应的处理函数!");
+        }
+        return BooleanWithMsg.success();
     }
 
     /**

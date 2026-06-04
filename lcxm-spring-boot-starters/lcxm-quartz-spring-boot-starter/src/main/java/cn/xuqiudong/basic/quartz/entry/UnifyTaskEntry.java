@@ -64,14 +64,14 @@ public class UnifyTaskEntry {
     /**
      * 根据定时任务的标识执行相关定时任务
      *
-     * @param taskName   任务的标识  TaskJobNameNameEnum#code
+     * @param taskName   任务的标识  TaskJob 中的 code
      * @param taskJobLog 用于保存日志  TaskJobLog
      * @return 任务结果
      * @throws Exception ex
      */
     @Transactional(rollbackFor = Exception.class)
     public String executeTask(String taskName, TaskJobLog taskJobLog) throws Exception {
-        if (MapUtils.isEmpty(allTaskJob) || allTaskJob.get(taskName) == null) {
+        if (!existTask(taskName)) {
             return "没有[" + taskName + "]的处理函数!";
         }
         long start = System.currentTimeMillis();
@@ -81,5 +81,15 @@ public class UnifyTaskEntry {
         LOGGER.info("执行[{}]任务用时[{}]ms", taskJobHandlerModel.getFlag().text(), (end - start));
         return result;
 
+    }
+
+    /**
+     * 判断任务是否存在
+     *
+     * @param taskName 任务标识 code
+     * @return true:存在
+     */
+    public boolean existTask(String taskName) {
+        return MapUtils.isNotEmpty(allTaskJob) && allTaskJob.get(taskName) != null;
     }
 }

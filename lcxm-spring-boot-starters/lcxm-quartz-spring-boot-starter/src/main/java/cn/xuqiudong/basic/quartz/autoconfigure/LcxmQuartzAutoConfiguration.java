@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * 描述:
  * 自定义的定时器starter配置
- *
+ * <p>
  * 此处使用了 @MapperScan
  * 主项目也需要自行定义@MapperScan 扫描自己的Mapper
  *
@@ -51,9 +51,9 @@ public class LcxmQuartzAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public CommonJobQuartzHelper commonJobQuartzHelper(Scheduler scheduler) {
+    public CommonJobQuartzHelper commonJobQuartzHelper(Scheduler scheduler, UnifyTaskEntry unifyTaskEntry) {
         LOGGER.info("init 通用任务帮助类 CommonJobQuartzHelper");
-        return new CommonJobQuartzHelper(scheduler);
+        return new CommonJobQuartzHelper(scheduler, unifyTaskEntry);
     }
 
     @Bean
