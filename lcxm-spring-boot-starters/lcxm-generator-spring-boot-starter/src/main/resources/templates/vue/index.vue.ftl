@@ -155,7 +155,7 @@
 <template>
     <div class="app-container">
         <el-card v-loading="loading" shadow="never" class="search-wrapper">
-            <el-form ref="searchFormRef" :inline="true" :model="searchData">
+            <el-form ref="searchFormRef" :inline="true" :model="searchData" size="small">
                 <#list entity.fields as field>
                 <el-form-item prop="${field.fieldName}" label="${field.comments}">
                     <el-input v-model="searchData.${field.fieldName}" placeholder="请输入" />
@@ -196,7 +196,7 @@
                     <el-table-column type="selection" width="50" align="center" />
 
                     <#list entity.fields as field>
-                    <el-table-column prop="${field.fieldName}" label="${field.comments}" width="150" align="center"  sortable="custom" />
+                    <el-table-column prop="${field.fieldName}" label="${field.comments}" width="150" align="center"  sortable="custom" show-overflow-tooltip />
                     </#list>
                     <el-table-column prop="enabled" label="状态" align="center" sortable="custom">
                         <template #default="scope">
