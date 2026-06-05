@@ -94,7 +94,7 @@ public class TaskJobService implements BusinessSelectProvider {
     /**
      * 查询所有
      */
-    public List<TaskJob> all() {
+    public List<TaskJob> allEnable() {
         LambdaQueryWrapper<TaskJob> query = Wrappers.lambdaQuery();
         query.eq(TaskJob::getEnabled, true);
         return mapper.selectList(query);
@@ -107,7 +107,7 @@ public class TaskJobService implements BusinessSelectProvider {
 
     @Override
     public List<SelectOption> getSelectOptions() {
-        List<TaskJob> all = all();
+        List<TaskJob> all = mapper.selectList(null);
         return SelectOptionBuilder.buildFlatSelect(all, TaskJob::getId, TaskJob::getName);
     }
 }
