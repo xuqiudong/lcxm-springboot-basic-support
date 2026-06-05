@@ -42,7 +42,7 @@ public class TaskJobInitializationRunner implements ApplicationRunner {
     }
 
     public List<TaskJob> taskJobs() {
-        List<TaskJob> list = taskJobService.all();
+        List<TaskJob> list = taskJobService.allEnable();
         return list.stream().filter(taskJob ->
                 QuartzStatusEnum.REMOVE != taskJob.getStatus()
         ).collect(Collectors.toList());
