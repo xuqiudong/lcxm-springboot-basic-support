@@ -129,9 +129,11 @@ public class TaskJobController {
         if (!isStatusValid(taskJob, QuartzStatusEnum.REMOVE)) {
             return BaseResponse.error("任务状态不合法");
         }
-        updateStatus(id, QuartzStatusEnum.WORKING);
         taskJob.setStatus(QuartzStatusEnum.WORKING);
         BooleanWithMsg result = commonJobQuartzHelper.createJob(taskJob);
+        if (result.isSuccess()) {
+            updateStatus(id, QuartzStatusEnum.WORKING);
+        }
         return toResponse(result);
     }
 
