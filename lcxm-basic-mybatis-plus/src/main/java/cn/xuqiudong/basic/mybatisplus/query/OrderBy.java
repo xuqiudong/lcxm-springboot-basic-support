@@ -1,6 +1,7 @@
 package cn.xuqiudong.basic.mybatisplus.query;
 
 import cn.xuqiudong.basic.mybatisplus.util.ColumnUtils;
+import lombok.Getter;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -133,11 +134,12 @@ public class OrderBy {
     /**
      * 排序字段
      */
+    @Getter
     public static class OrderColumn {
 
-        public String column;
+        private String column;
 
-        public OrderType orderType;
+        private OrderType orderType;
 
         /**
          * 构建降序排序字段

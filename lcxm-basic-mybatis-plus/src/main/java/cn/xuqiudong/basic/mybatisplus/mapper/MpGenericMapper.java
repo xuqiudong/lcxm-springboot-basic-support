@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.mybatisplus.mapper;
 
+import cn.xuqiudong.basic.mybatisplus.annotation.QueryCondition;
 import cn.xuqiudong.basic.mybatisplus.helper.MpGenericMapperHelper;
 import cn.xuqiudong.basic.mybatisplus.injector.SelectByIdWithLob;
 import cn.xuqiudong.basic.mybatisplus.query.Column;
@@ -8,11 +9,12 @@ import cn.xuqiudong.basic.mybatisplus.query.OrderBy;
 import cn.xuqiudong.basic.mybatisplus.query.PageQuery;
 import cn.xuqiudong.basic.mybatisplus.util.ColumnUtils;
 import cn.xuqiudong.basic.mybatisplus.util.WrapUtils;
-import cn.xuqiudong.basic.mybatisplus.annotation.QueryCondition;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -21,6 +23,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 /**
@@ -143,10 +146,37 @@ public interface MpGenericMapper<ID extends Serializable, T> extends BaseMapper<
     /**
      * 根据字段查询
      */
-    default <R> T selectOneByColumn(Column<T, R> colum, R value) {
-        QueryWrapper<T> wrapper = WrapUtils.createWrapper(colum, value);
-        List<T> ts = this.selectList(wrapper);
+    default <R> T selectOneByColumn(Column<T, R> column, R value) {
+        List<T> ts = this.selectListByColumn(column, value);
         return helper().selectOne(ts);
+    }
+
+    /**
+     * 根据字段查询
+     */
+    default <R> List<T> selectListByColumn(Column<T, R> column, R value) {
+        QueryWrapper<T> wrapper = WrapUtils.createWrapper(column, value);
+        return this.selectList(wrapper);
+    }
+
+    /**
+     * 根据字段查询 且排序
+     */
+    default <R> List<T> selectListByColumn(Column<T, R> colum, R value, OrderBy orderBy) {
+        QueryWrapper<T> wrapper = WrapUtils.createWrapper(colum, value);
+        return this.selectList(wrapper);
+    }
+
+
+    /**
+     * 灵活多条件查询， 自行处理排序
+     *
+     * @param consumer w -> w.eq(T::getId, id).eq(T::getName, name)
+     */
+    default List<T> listBy(Consumer<LambdaQueryWrapper<T>> consumer) {
+        LambdaQueryWrapper<T> wrapper = Wrappers.lambdaQuery();
+        consumer.accept(wrapper);
+        return this.selectList(wrapper);
     }
 
     /**

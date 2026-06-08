@@ -16,7 +16,8 @@ import java.util.List;
 
 /**
  * 描述:
- *    封装查询条件  QueryWrapper 的 工具类
+ * 封装查询条件  QueryWrapper 的 工具类
+ *
  * @author Vic.xu
  * @since 2025-11-06 16:29
  */
@@ -26,9 +27,9 @@ public class WrapUtils {
      * 创建查询条件
      */
     public static <T, R> QueryWrapper<T> createWrapper(Column<T, R> column, R value) {
-       QueryWrapper<T> queryWrapper = Wrappers.query();
-       queryWrapper.eq(isNotEmpty(value), ColumnUtils.safeColumn(column), value);
-       return queryWrapper;
+        QueryWrapper<T> queryWrapper = Wrappers.query();
+        queryWrapper.eq(isNotEmpty(value), ColumnUtils.safeColumn(column), value);
+        return queryWrapper;
     }
 
     /**
@@ -47,8 +48,6 @@ public class WrapUtils {
     }
 
 
-
-
     private static boolean isNotEmpty(Object value) {
         if (value instanceof CharSequence) {
             return StrUtil.isNotEmpty((CharSequence) value);
@@ -59,34 +58,35 @@ public class WrapUtils {
     /**
      * 为查询设置排序
      */
-    public static <T> void setOrderBy(QueryWrapper<T> queryWrapper, OrderBy orderBy) {
-        if (orderBy == null) {
-            return;
+    public static <T> QueryWrapper<T> setOrderBy(QueryWrapper<T> queryWrapper, OrderBy orderBy) {
+        if (orderBy == null || queryWrapper == null) {
+            return queryWrapper;
         }
         List<OrderBy.OrderColumn> orderColumns = orderBy.getOrderColumns();
         for (OrderBy.OrderColumn orderColumn : orderColumns) {
-            if (orderColumn.orderType == OrderBy.OrderType.ASC) {
-                queryWrapper.orderByAsc(orderColumn.column);
+            if (orderColumn.getOrderType() == OrderBy.OrderType.ASC) {
+                queryWrapper.orderByAsc(orderColumn.getColumn());
             } else {
-                queryWrapper.orderByDesc(orderColumn.column);
+                queryWrapper.orderByDesc(orderColumn.getColumn());
             }
         }
+        return queryWrapper;
     }
 
     /**
      * 为分页设置排序
      */
-    public static <T> void setOrderBy(Page<T> page, OrderBy orderBy){
+    public static <T> void setOrderBy(Page<T> page, OrderBy orderBy) {
         if (orderBy == null) {
             return;
         }
         List<OrderBy.OrderColumn> orderColumns = orderBy.getOrderColumns();
         List<OrderItem> orders = new ArrayList<>();
         for (OrderBy.OrderColumn orderColumn : orderColumns) {
-            if (orderColumn.orderType == OrderBy.OrderType.ASC) {
-                orders.add(OrderItem.asc(orderColumn.column));
+            if (orderColumn.getOrderType() == OrderBy.OrderType.ASC) {
+                orders.add(OrderItem.asc(orderColumn.getColumn()));
             } else {
-                orders.add(OrderItem.desc(orderColumn.column));
+                orders.add(OrderItem.desc(orderColumn.getColumn()));
             }
         }
         page.setOrders(orders);
