@@ -40,6 +40,10 @@ public class TaskJobLogDetailService {
         return mapper.selectByIdWithLob(id);
     }
 
+    public List<TaskJobLogDetail> selectByLogId(String id) {
+        return mapper.selectListByColumn(TaskJobLogDetail::getTaskJobLogId, id);
+    }
+
     /**
      * 分页查询
      */
@@ -48,6 +52,7 @@ public class TaskJobLogDetailService {
         Page<TaskJobLogDetail> page = mapper.selectPage(query);
         return PageConvert.convert(page);
     }
+
 
     /**
      * 删除
@@ -117,5 +122,6 @@ public class TaskJobLogDetailService {
         save(detail);
         return detail;
     }
+
 
 }

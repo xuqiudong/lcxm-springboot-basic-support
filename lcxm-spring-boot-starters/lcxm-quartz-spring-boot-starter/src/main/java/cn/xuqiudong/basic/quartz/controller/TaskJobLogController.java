@@ -3,7 +3,9 @@ package cn.xuqiudong.basic.quartz.controller;
 import cn.xuqiudong.basic.core.model.BaseResponse;
 import cn.xuqiudong.basic.core.model.PageInfo;
 import cn.xuqiudong.basic.quartz.entity.TaskJobLog;
+import cn.xuqiudong.basic.quartz.entity.TaskJobLogDetail;
 import cn.xuqiudong.basic.quartz.query.TaskJobLogQuery;
+import cn.xuqiudong.basic.quartz.service.TaskJobLogDetailService;
 import cn.xuqiudong.basic.quartz.service.TaskJobLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +31,9 @@ import java.util.List;
 public class TaskJobLogController {
     @Autowired
     private TaskJobLogService service;
+
+    @Autowired
+    private TaskJobLogDetailService detailService;
 
     @Operation(summary = "分页查询")
     @PostMapping(value = "/page")
@@ -74,5 +79,13 @@ public class TaskJobLogController {
         }
         return BaseResponse.success(service.delete(ids.toArray(new String[0])));
     }
+
+    @Operation(summary = "日志明细", description = "根据日志id,查询对应的明细列表")
+    @GetMapping(value = "/details/{id}")
+    public BaseResponse<List<TaskJobLogDetail>>  details(@PathVariable String id) {
+        List<TaskJobLogDetail> list = detailService.selectByLogId(id);
+        return BaseResponse.success(list);
+    }
+
 
 }
