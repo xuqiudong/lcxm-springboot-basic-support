@@ -75,6 +75,15 @@ public class ${controller.className} {
         return BaseResponse.success(service.delete(id));
     }
 
+    @Operation(summary = "批量删除", description = "根据id批量删除")
+    @PostMapping(value = "/deleteBatch")
+    public BaseResponse<Integer> delete(@RequestBody List<String> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return BaseResponse.error("请选择要删除的记录");
+        }
+        return BaseResponse.success(service.delete(ids.toArray(new String[0])));
+    }
+
 
     @Operation(summary = "检测字段是否可用", description = "检测字段是否可用")
     @PostMapping(value = "/check")

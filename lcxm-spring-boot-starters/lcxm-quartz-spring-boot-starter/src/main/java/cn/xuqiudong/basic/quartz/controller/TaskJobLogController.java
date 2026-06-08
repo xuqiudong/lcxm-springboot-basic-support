@@ -67,7 +67,7 @@ public class TaskJobLogController {
      * @return
      */
     @Operation(summary = "批量删除", description = "批量删除")
-    @PostMapping(value = "/delete")
+    @PostMapping(value = "/deleteBatch")
     public BaseResponse<Integer> delete(@RequestBody List<String> ids) {
         if (ids == null || ids.isEmpty()) {
             return BaseResponse.error("请选择要删除的记录");

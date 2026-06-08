@@ -54,7 +54,10 @@ public class TaskJobLogService {
      * 删除
      */
     public int delete(String id) {
-        return mapper.deleteById(id);
+        int num = mapper.deleteById(id);
+        // 删除关联的详情
+        detailMapper.deleteBatchByJobLogIds(new String[]{id});
+        return num;
     }
 
     /**

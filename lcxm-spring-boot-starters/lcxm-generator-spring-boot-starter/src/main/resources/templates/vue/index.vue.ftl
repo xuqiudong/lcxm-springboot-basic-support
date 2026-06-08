@@ -5,7 +5,7 @@
 <#-- vue 页面 -->
 <!-- ${table.comments!} -->
 <script lang="ts" setup>
-    import type { FormInstance, FormRules } from "element-plus"
+    import type { TableInstance, FormInstance, FormRules } from "element-plus"
     import type { ${entity.className}Data } from "./apis/type"
     import { validateUniqueField } from "@@/composables/useFormValidate"
     import { useFullscreen } from "@@/composables/useFullscreen"
@@ -79,6 +79,44 @@
         })
     }
     // #endregion
+
+    // #region 批量删除
+    const multipleSelection = ref<${entity.className}Data[]>([])
+    function handleSelectionChange(val: ${entity.className}Data[]) {
+        multipleSelection.value = val
+    }
+
+    // 点击行 选中 / 取消选中
+    function handleRowClick(row: ${entity.className}Data) {
+        if (tableRef.value) {
+            const isSelected = multipleSelection.value.includes(row)
+            // 切换行的选中状态
+            tableRef.value.toggleRowSelection(row, !isSelected)
+        }
+    }
+
+    function handleBatchDelete(){
+        ElMessageBox.confirm(
+            `确认批量删除选中的${r'${multipleSelection.value.length}'}条记录吗？`,
+            "提示",
+            {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(() => {
+            loading.value = true
+            const ids: string[] = multipleSelection.value.map(item => item.id!)
+            ${entity.className}Api.batchDel(ids).then(() => {
+                ElMessage.success("删除成功")
+                getTableData()
+            })
+        }).finally(() => {
+                loading.value = false
+                multipleSelection.value = []
+            }
+        )
+    }
+    //#endregion
 
     // #region 改
     function handleUpdate(row: ${entity.className}Data) {

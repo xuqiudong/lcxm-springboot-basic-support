@@ -40,8 +40,14 @@ export function del(id: string) {
     })
 }
 
-
-
+/** 批量删除 */
+export function batchDel(ids: string[]) {
+    return request({
+        url: "${controller.requestMapping}/deleteBatch",
+        method: "post",
+        data: ids
+    })
+}
 
 /**
 * 修改状态
