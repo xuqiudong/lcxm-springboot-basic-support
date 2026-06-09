@@ -38,12 +38,40 @@ public class ColumnUtils {
     private static final Pattern SAFE_COLUMN_PATTERN = Pattern.compile("^[a-zA-Z0-9_.]+$");
 
     /**
-     * 安全字段名称, 如果被转义引号包裹，会除去后检测，最终返回的时候再追加回去
-     * <p>
-     * 1. SQL注入检查
-     * 2. 驼峰转下划线
-     * 3. 支持数据库字段转义符
-     * </p>
+     * 安全字段名称，如果字段被数据库标识符转义符包裹，
+     * 会先去除转义符进行安全检查，处理完成后再恢复转义符。
+     *
+     * <p>处理流程：</p>
+     * <ol>
+     *     <li>去除首尾空格</li>
+     *     <li>解析并临时移除字段转义符</li>
+     *     <li>执行 SQL 注入检查</li>
+     *     <li>执行字段名合法性检查</li>
+     *     <li>驼峰转下划线</li>
+     *     <li>恢复原有转义符</li>
+     *     <li>缓存结果</li>
+     * </ol>
+     *
+     * <p>支持的字段格式：</p>
+     * <pre>
+     * group
+     * createTime
+     * user.group
+     * sysUser.createTime
+     *
+     * `group`          // MySQL
+     * "group"          // Oracle / PostgreSQL / GaussDB
+     * [group]          // SQL Server
+     * </pre>
+     *
+     * <p>不支持的格式：</p>
+     * <pre>
+     * `user`.`group`
+     * "user"."group"
+     * [user].[group]
+     * </pre>
+
+     *
      */
     public static String safeColumn(String column) {
         Assert.notNull(column, "column can not be null");
@@ -120,7 +148,6 @@ public class ColumnUtils {
         }
         return new ColumnParseResult(column, null);
     }
-
 
     /**
      * 字段名称的引号:  数据库字段转义符
