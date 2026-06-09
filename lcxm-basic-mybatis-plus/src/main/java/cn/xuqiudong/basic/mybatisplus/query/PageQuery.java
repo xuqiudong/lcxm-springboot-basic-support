@@ -88,6 +88,9 @@ public class PageQuery implements MpQuery {
             String[] split = orders.split(",");
             Assert.isTrue(split.length == 2, "排序字段格式错误, 请使用: column1,desc;column2,asc;....");
             String column = split[0];
+            // 允许子类处理排序字段
+            column = processSortColumn(column);
+            // 安全处理字段
             column = ColumnUtils.safeColumn(column);
             String order = split[1].trim();
             if (ASC.equalsIgnoreCase(order)) {
@@ -99,5 +102,13 @@ public class PageQuery implements MpQuery {
             }
         }
         return orderItems;
+    }
+
+    /**
+     * 处理排序字段:  子类可以复写此方法 对一些排序特殊字段进行特殊处理
+     * 比如 : group -> `group`
+     */
+    protected String processSortColumn(String column) {
+        return column;
     }
 }
