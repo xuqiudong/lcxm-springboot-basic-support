@@ -110,7 +110,7 @@ public class ColumnUtils {
     }
 
     /**
-     * 解析字段: 检测是否需包含转义符
+     * 解析字段: 检测是否被转义符引号包裹
      */
     private static ColumnParseResult unwrapColumn(String column) {
         for (ColumnQuote quote : ColumnQuote.values()) {
