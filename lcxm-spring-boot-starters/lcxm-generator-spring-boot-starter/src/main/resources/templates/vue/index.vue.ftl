@@ -25,6 +25,7 @@
     const loading = ref<boolean>(false)
     const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
     const { orders, handleSortChange } = useTableSort({})
+    const tableRef = ref<TableInstance>()
     // 编辑弹窗是否全屏
     const { isFullscreen, fullscreenSvgName, toggleFullscreen } = useFullscreen()
     // #region 增
@@ -230,7 +231,8 @@
                 </div>
             </div>
             <div class="table-wrapper">
-                <el-table :data="tableData" size="small" @sort-change="handleSortChange" stripe>
+                <el-table :data="tableData" ref="tableRef" size="small" @sort-change="handleSortChange" stripe
+                          @row-click="handleRowClick" @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="50" align="center" />
 
                     <#list entity.fields as field>
