@@ -217,9 +217,9 @@
                     <el-button type="primary" :icon="CirclePlus" @click="dialogVisible = true">
                         新增
                     </el-button>
-                    <!-- <el-button type="danger" :icon="Delete">
-                      批量删除
-                    </el-button> -->
+                    <el-button type="danger" :icon="Delete" :disabled="multipleSelection.length === 0" @click="handleBatchDelete">
+                        批量删除
+                    </el-button>
                 </div>
                 <div>
                     <!-- <el-tooltip content="下载">
