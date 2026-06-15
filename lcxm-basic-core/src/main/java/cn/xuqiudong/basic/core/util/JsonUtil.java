@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,6 +35,8 @@ public class JsonUtil {
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 提供对 Java 8 java.time 日期/时间 API 的支持，例如 LocalDate、LocalDateTime、ZonedDateTime 等
         OBJECT_MAPPER.registerModule(new JavaTimeModule());
+        // config to use ISO-8601 formatted timestamps
+        OBJECT_MAPPER.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
     /**
@@ -61,7 +64,7 @@ public class JsonUtil {
      * @param typeReference
      * EG: 转单个对象的时候  类似new TypeReference<User>(){}
      * EG: 转list对象的时候 类似 new TypeReference<List<User>>() {}
-     * EG: 转map对象jsonToObject(json, new TypeReference<Map<String,User>>() {});  
+     * EG: 转map对象jsonToObject(json, new TypeReference<Map<String,User>>() {});
      * @param <T>
      * @return
      */
