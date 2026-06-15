@@ -42,9 +42,11 @@ public class CommonJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+
         JobKey key = context.getJobDetail().getKey();
         // 对应task  code
         String taskName = key.getName();
+        LOGGER.info("任务开始执行，任务CODE：{}", taskName);
         JobDataMap jobDataMap = context.getMergedJobDataMap();
         //获取当前任务携带的用户信息
         JobUserHolder.setJobUser(jobDataMap);
