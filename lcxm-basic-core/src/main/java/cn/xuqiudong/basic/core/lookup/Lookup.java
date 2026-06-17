@@ -11,17 +11,24 @@ import java.util.Arrays;
 
 /**
  * 查询参数 默认带分页信息
+ *
  * @author VIC.xu
  *
  */
 public class Lookup implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    protected int page = 1;
+    private static final int DEFAULT_PAGE = 1;
+
+    public static final int DEFAULT_SIZE = 10;
+
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    protected int size = 10;
+    protected int page = DEFAULT_PAGE;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    protected int size = DEFAULT_SIZE;
 
     /**
      * 排序字段
@@ -46,7 +53,7 @@ public class Lookup implements Serializable {
     }
 
     public int getPage() {
-        return page;
+        return page <= 0 ? DEFAULT_PAGE : page;
     }
 
     public void setPage(int page) {
@@ -54,7 +61,7 @@ public class Lookup implements Serializable {
     }
 
     public int getSize() {
-        return size;
+        return size <= 0 ? DEFAULT_SIZE : size;
     }
 
     public void setSize(int size) {
@@ -89,11 +96,14 @@ public class Lookup implements Serializable {
         this.sortOrder = sortOrder;
     }
 
+    /**
+     * 是否合法的排序方式： asc  desc
+     */
     protected void isValidSortOrder(String sortOrder) {
         if (StringUtils.isNotBlank(sortOrder)) {
             boolean match = Arrays.stream(LookupSortOrder.values()).anyMatch(v -> v.name().equalsIgnoreCase(sortOrder));
             if (!match) {
-                throw  new CommonException("Illegal sorting column");
+                throw new CommonException("Illegal sorting column");
             }
         }
 
