@@ -57,6 +57,8 @@
         <pagehelper.starter.version>2.1.0</pagehelper.starter.version>
         <odbc.version>21.1.0.0</odbc.version>
         <sa-token.version>1.43.0</sa-token.version>
+        <!--   meilisearch   替代 es   https://github.com/meilisearch/meilisearch-java   -->
+        <meilisearch.version>0.20.1</meilisearch.version>
 
 
         <!--spring and common middleware version ↑ ↑ ↑-->
@@ -183,6 +185,11 @@
                 <version>${sa-token.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.meilisearch.sdk</groupId>
+                <artifactId>meilisearch-java</artifactId>
+                <version>${meilisearch.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.jsoup</groupId>
