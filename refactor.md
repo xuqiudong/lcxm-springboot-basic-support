@@ -29,4 +29,4 @@ mybatis-plus 模块
 
 ### lcxm-generate-spring-boot-starter → lcxm-generator-spring-boot-starter
 原来基于velocity 模板生成的  mybatis 的 增删改查， 主要是实体和xml
-现在是基于freemarker末班生成的mybatis-plus 的 增删改查， 主要是实体， 依赖 lcxm-basic-mybatis-plus 模板
+现在是基于freemarker模板生成的mybatis-plus 的 增删改查， 主要是实体， 依赖 lcxm-basic-mybatis-plus 模板
