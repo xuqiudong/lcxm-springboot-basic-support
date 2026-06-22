@@ -32,7 +32,7 @@ public class Code2TextSpringEvictListener implements ApplicationListener<Code2Te
      */
     @Override
     public void onApplicationEvent(Code2TextCacheEvictEvent event) {
-        LOGGER.debug("监听到Code2TextCacheEvictEvent事件， 将要清除{}下的{}缓存", event.getRegion(), event.isAll() ? "所有" : event.getKey());
+        LOGGER.debug("监听到spring的Code2TextCacheEvictEvent事件， 将要清除{}下的{}缓存", event.getRegion(), event.isAll() ? "所有" : event.getKey());
 
         if (event.isAll()) {
             cacheManager.invalidateAll(event.getRegion());

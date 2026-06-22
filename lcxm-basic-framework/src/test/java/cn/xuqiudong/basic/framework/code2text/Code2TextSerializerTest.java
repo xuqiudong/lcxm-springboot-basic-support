@@ -41,7 +41,7 @@ public class Code2TextSerializerTest extends BaseTest {
     @Test
     @DisplayName("测试缓存")
     public void testCode2TextCache() {
-        Code2TextCacheHelper.evict(DemoCode2TextResolver.class, "code1");
+        Code2TextCacheHelper.evict(DemoCode2Text.class, "code1");
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
