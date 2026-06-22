@@ -1,8 +1,6 @@
 package cn.xuqiudong.basic.framework.code2text;
 
 import cn.xuqiudong.basic.framework.code2text.annotation.Code2Text;
-import cn.xuqiudong.basic.framework.code2text.annotation.EnumCode2Text;
-import cn.xuqiudong.basic.framework.code2text.annotation.UserCode2Text;
 import cn.xuqiudong.basic.framework.code2text.cache.CacheRegionConfigProvider;
 import cn.xuqiudong.basic.framework.code2text.cache.CacheRegionFactory;
 import cn.xuqiudong.basic.framework.code2text.cache.Code2TextCacheManager;
@@ -13,12 +11,12 @@ import cn.xuqiudong.basic.framework.code2text.cache.impl.DefaultCacheRegionConfi
 import cn.xuqiudong.basic.framework.code2text.cache.impl.DefaultCacheRegionFactory;
 import cn.xuqiudong.basic.framework.code2text.cache.impl.DefaultCode2TextCacheManager;
 import cn.xuqiudong.basic.framework.code2text.cache.runner.Code2TextPreloadRunner;
-import cn.xuqiudong.basic.framework.condition.ConditionalOnMissingGenericBean;
 import cn.xuqiudong.basic.framework.code2text.core.Code2TextResolverRegistry;
 import cn.xuqiudong.basic.framework.code2text.helper.Code2TextCacheHelper;
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
 import cn.xuqiudong.basic.framework.code2text.resolver.impl.DefaultUserCode2TextResolver;
 import cn.xuqiudong.basic.framework.code2text.resolver.impl.EnumCode2TextResolver;
+import cn.xuqiudong.basic.framework.code2text.resolver.impl.VoidCode2TextResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +89,7 @@ public class Code2TextAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public Code2TextResolverRegistry code2TextResolverRegistry(ObjectProvider<Code2TextResolver<?>> resolverProvider,
+    public Code2TextResolverRegistry code2TextResolverRegistry(ObjectProvider<Code2TextResolver> resolverProvider,
                                                                CacheRegionFactory regionFactory,
                                                                Code2TextCacheManager cacheManager,
                                                                CacheRegionConfigProvider configProvider) {
@@ -103,8 +101,9 @@ public class Code2TextAutoConfiguration {
      * 枚举解析器
      */
     @Bean
-    @ConditionalOnMissingGenericBean(beanInterface = Code2TextResolver.class, genericType = EnumCode2Text.class)
-    public Code2TextResolver<EnumCode2Text> enumCode2TextResolver() {
+//    @ConditionalOnMissingGenericBean(beanInterface = Code2TextResolver.class, genericType = EnumCode2Text.class)
+    @ConditionalOnMissingBean
+    public EnumCode2TextResolver enumCode2TextResolver() {
         LOGGER.info("code2text: EnumCode2TextResolver init...");
         return new EnumCode2TextResolver();
     }
@@ -113,10 +112,20 @@ public class Code2TextAutoConfiguration {
      * userCode 解析器
      */
     @Bean
-    @ConditionalOnMissingGenericBean(beanInterface = Code2TextResolver.class, genericType = UserCode2Text.class)
-    public Code2TextResolver<UserCode2Text> userCode2TextResolver() {
+//    @ConditionalOnMissingGenericBean(beanInterface = Code2TextResolver.class, genericType = UserCode2Text.class)
+    @ConditionalOnMissingBean
+    public DefaultUserCode2TextResolver defaultUserCode2TextResolver() {
         LOGGER.warn("code2text: DefaultUserCode2TextResolver init. Please define an implementation class for UserCode2Text by yourself");
         return new DefaultUserCode2TextResolver();
+    }
+
+    /**
+     * void code2TextResolver
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public VoidCode2TextResolver voidCode2TextResolver() {
+        return new VoidCode2TextResolver();
     }
 
     /* ************************** 缓存清理相关 bean below *********************************** */

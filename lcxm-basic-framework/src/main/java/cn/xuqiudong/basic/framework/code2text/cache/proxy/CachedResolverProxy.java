@@ -1,10 +1,10 @@
 package cn.xuqiudong.basic.framework.code2text.cache.proxy;
 
 import cn.xuqiudong.basic.framework.code2text.cache.Code2TextCacheManager;
+import cn.xuqiudong.basic.framework.code2text.cache.model.ResolverMeta;
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.annotation.Annotation;
 import java.util.StringJoiner;
 
 /**
@@ -14,14 +14,13 @@ import java.util.StringJoiner;
  * @author Vic.xu
  * @since 2026-01-14 14:09
  */
-public class CachedResolverProxy<A extends Annotation>
-        implements Code2TextResolver<A> {
+public class CachedResolverProxy        implements Code2TextResolver{
 
-    private final Code2TextResolver<A> delegate;
+    private final Code2TextResolver delegate;
     private final String region;
     private final Code2TextCacheManager cacheManager;
 
-    public CachedResolverProxy(Code2TextResolver<A> delegate,
+    public CachedResolverProxy(Code2TextResolver delegate,
                                String region,
                                Code2TextCacheManager cacheManager) {
         this.delegate = delegate;
@@ -32,13 +31,13 @@ public class CachedResolverProxy<A extends Annotation>
     /**
      * 获取代理对象
      */
-    public Code2TextResolver<A> getDelegate() {
+    public Code2TextResolver getDelegate() {
         return delegate;
     }
 
     @Override
-    public Class<A> annotationType() {
-        return delegate.annotationType();
+    public ResolverMeta meta() {
+        return delegate.meta();
     }
 
     @Override

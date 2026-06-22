@@ -2,7 +2,6 @@ package cn.xuqiudong.basic.framework.code2text.cache;
 
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
 
-import java.lang.annotation.Annotation;
 import java.util.Map;
 
 /**
@@ -14,7 +13,7 @@ import java.util.Map;
  * @author Vic.xu
  * @since 2026-01-16 11:26
  */
-public interface Code2TextPreloadable<A extends Annotation> extends Code2TextResolver<A> {
+public interface Code2TextPreloadable extends Code2TextResolver {
 
     /**
      * 预加载

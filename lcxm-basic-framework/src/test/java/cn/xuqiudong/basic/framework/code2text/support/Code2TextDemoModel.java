@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.framework.code2text.support;
 
+import cn.xuqiudong.basic.framework.code2text.annotation.Code2Text;
 import lombok.Data;
 
 /**
@@ -11,13 +12,13 @@ import lombok.Data;
 @Data
 public class Code2TextDemoModel {
 
-    @DemoCode2Text
+    @Code2Text(resolver = DemoCode2TextResolver.class)
     private String demoCode;
 
-    @DemoCode2Text
+    @Code2Text
     private String demoCode2;
 
-    @DemoCode2Text(textKey = "code3Text")
+    @Code2Text(textKey = "code3Text", resolver = DemoCode2TextResolver.class)
     private String demoCode3;
 
 }

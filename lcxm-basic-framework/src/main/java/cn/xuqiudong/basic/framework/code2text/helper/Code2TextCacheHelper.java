@@ -1,15 +1,13 @@
 package cn.xuqiudong.basic.framework.code2text.helper;
 
-import cn.xuqiudong.basic.framework.code2text.annotation.Code2Text;
 import cn.xuqiudong.basic.framework.code2text.cache.event.Code2TextCacheEvictEvent;
-import cn.xuqiudong.basic.framework.code2text.cache.event.Code2TextSpringEvictListener;
 import cn.xuqiudong.basic.framework.code2text.cache.event.Code2TextRedisEvictListener;
+import cn.xuqiudong.basic.framework.code2text.cache.event.Code2TextSpringEvictListener;
+import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.util.Assert;
-
-import java.lang.annotation.Annotation;
 
 /**
  * 描述:
@@ -30,15 +28,15 @@ public class Code2TextCacheHelper {
         publisher = p;
     }
 
-    public static void evict(Class<? extends Annotation> annoType, String code) {
-        publish(annoType, code);
+    public static void evict(Class<? extends Code2TextResolver> resolveClass, String code) {
+        publish(resolveClass, code);
     }
 
     /**
      * 清除所有
      */
-    public static void evictAll(Class<? extends Annotation> annoType) {
-        publish(annoType, null);
+    public static void evictAll(Class<? extends Code2TextResolver> resolveClass) {
+        publish(resolveClass, null);
     }
 
     /**
@@ -47,12 +45,12 @@ public class Code2TextCacheHelper {
      * @see Code2TextRedisEvictListener
      * @param code 为null 表示清除所有
      */
-    private static void publish(Class<? extends Annotation> annoType, String code) {
-        Assert.isTrue(annoType.isAnnotationPresent(Code2Text.class), annoType.getName() + " is not a Code2Text annotation");
+    private static void publish(Class<? extends Code2TextResolver> resolveClass, String code) {
+        Assert.isTrue(Code2TextResolver.class.isAssignableFrom(resolveClass), resolveClass.getName() + " is not a Code2TextResolver annotation");
         if (publisher == null) {
             LOGGER.error("Code2Text not initialized");
             return;
         }
-        publisher.publishEvent(new Code2TextCacheEvictEvent(annoType.getSimpleName(), code));
+        publisher.publishEvent(new Code2TextCacheEvictEvent(resolveClass.getSimpleName(), code));
     }
 }

@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
  * * 因此所有与字段元数据相关的解析必须在 createContextual 阶段完成。
  *
  * @author Vic.xu
+ * @see Code2Text
  * @since 2026-01-09 17:40
  */
 public class Code2TextSerializer extends JsonSerializer<Object>
@@ -36,7 +37,7 @@ public class Code2TextSerializer extends JsonSerializer<Object>
 
     private final JsonSerializer<Object> originSerializer;
     private final Code2TextResolver resolver;
-    private final Annotation bizAnno;
+    private final Code2Text code2Text;
 
     private final String textFieldName;
     private final boolean fallbackToRaw;
@@ -47,12 +48,12 @@ public class Code2TextSerializer extends JsonSerializer<Object>
 
     private Code2TextSerializer(JsonSerializer<Object> originSerializer,
                                 Code2TextResolver resolver,
-                                Annotation bizAnno,
+                                Code2Text code2Text,
                                 String textFieldName,
                                 boolean fallbackToRaw) {
         this.originSerializer = originSerializer;
         this.resolver = resolver;
-        this.bizAnno = bizAnno;
+        this.code2Text = code2Text;
         this.textFieldName = textFieldName;
         this.fallbackToRaw = fallbackToRaw;
     }
@@ -61,7 +62,7 @@ public class Code2TextSerializer extends JsonSerializer<Object>
     public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers)
             throws IOException {
 
-        if (originSerializer == null || resolver == null || bizAnno == null) {
+        if (originSerializer == null || resolver == null || code2Text == null) {
             serializers.defaultSerializeValue(value, gen);
             return;
         }
@@ -95,34 +96,31 @@ public class Code2TextSerializer extends JsonSerializer<Object>
             return prov.findValueSerializer(Object.class);
         }
         // 具体的子注解
-        Annotation bizAnno = findBizAnnotation(property);
-        if (bizAnno == null) {
+//        Annotation bizAnno = findBizAnnotation(property);
+        // 读取字段上的 @Code2Text 注解
+        Code2Text code2TextAnno = property.getAnnotation(Code2Text.class);
+        if (code2TextAnno == null) {
             return prov.findValueSerializer(property.getType(), property);
         }
-
-        // 获得子注解上的Code2Text注解
-        Code2Text code2Text =
-                bizAnno.annotationType().getAnnotation(Code2Text.class);
 
         JsonSerializer<Object> origin =
                 prov.findValueSerializer(property.getType(), property);
 
         // 获取文本字段名
-        String textFieldName = resolveTextFieldName(property, bizAnno, code2Text);
+        String textFieldName = resolveTextFieldName(property, code2TextAnno, code2TextAnno);
 
         // 获取解析器
         Code2TextResolver resolver =
-                Code2TextResolverRegistry.get(bizAnno.annotationType());
+                Code2TextResolverRegistry.get(code2TextAnno.resolver());
 
         if (resolver == null) {
             throw new IllegalStateException(
-                    "No Code2TextResolver found for annotation: "
-                            + bizAnno.annotationType().getName());
+                    "No Code2TextResolver found for resolverClass: " + code2TextAnno.resolver().getSimpleName());
         }
 
-        boolean fallbackToRaw = code2Text.fallbackToRaw();
+        boolean fallbackToRaw = code2TextAnno.fallbackToRaw();
 
-        return new Code2TextSerializer(origin, resolver, bizAnno, textFieldName, fallbackToRaw);
+        return new Code2TextSerializer(origin, resolver, code2TextAnno, textFieldName, fallbackToRaw);
     }
 
     //  获得具体的被Code2Text标注的子注解
@@ -143,8 +141,8 @@ public class Code2TextSerializer extends JsonSerializer<Object>
 
     /**
      * 获取文本字段名:
-     *  1. 如果定义了textKey，则使用textKey
-     *  2. 否则使用原字段名 + 自定义后缀
+     * 1. 如果定义了textKey，则使用textKey
+     * 2. 否则使用原字段名 + 自定义后缀
      */
     private String resolveTextFieldName(BeanProperty property,
                                         Annotation bizAnno,

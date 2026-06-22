@@ -3,8 +3,6 @@ package cn.xuqiudong.basic.framework.code2text.helper;
 import cn.xuqiudong.basic.framework.code2text.core.Code2TextResolverRegistry;
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
 
-import java.lang.annotation.Annotation;
-
 /**
  * 描述:
  * 静态方法获取 code 对应的 text
@@ -20,13 +18,13 @@ public class Code2TextHelper {
     /**
      * 获取 code 对应的 text
      *   需要在spring环境下 使用
-     * @param annoType 注解类型
+     * @param resolverClass resolverClass
      * @param code     code
      * @return text
      */
-    public static String getText(Class<? extends Annotation> annoType, String code) {
+    public static String getText(Class<? extends Code2TextResolver> resolverClass, String code) {
 
-        Code2TextResolver resolver = Code2TextResolverRegistry.get(annoType);
+        Code2TextResolver resolver = Code2TextResolverRegistry.get(resolverClass);
 
         if (resolver == null) {
             return null;
@@ -34,9 +32,16 @@ public class Code2TextHelper {
         return resolver.codeToText(code);
     }
 
-    public static Object getCode(Class<? extends Annotation> annoType, String text) {
+    /**
+     * 获取 text 对应的 code
+     *   需要在spring环境下 使用
+     * @param resolverClass resolverClass
+     * @param text          text
+     * @return code
+     */
+    public static Object getCode(Class<? extends Code2TextResolver> resolverClass, String text) {
 
-        Code2TextResolver resolver = Code2TextResolverRegistry.get(annoType);
+        Code2TextResolver resolver = Code2TextResolverRegistry.get(resolverClass);
 
         if (resolver == null) {
             return null;
@@ -48,13 +53,13 @@ public class Code2TextHelper {
     /**
      * 获取 code 对应的 text
      *   需要在spring环境下 使用
-     * @param annoType 注解类型
+     * @param resolverClass 解析器类型
      * @param code     code
      * @param defaultText 默认值
      * @return text
      */
-    public static String getText(Class<? extends Annotation> annoType, String code, String defaultText) {
-        Code2TextResolver resolver = Code2TextResolverRegistry.get(annoType);
+    public static String getText(Class<? extends Code2TextResolver> resolverClass, String code, String defaultText) {
+        Code2TextResolver resolver = Code2TextResolverRegistry.get(resolverClass);
 
         if (resolver == null) {
             return defaultText;

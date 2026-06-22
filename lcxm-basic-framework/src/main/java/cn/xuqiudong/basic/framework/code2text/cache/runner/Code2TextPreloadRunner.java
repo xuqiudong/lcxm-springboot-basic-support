@@ -38,20 +38,20 @@ public class Code2TextPreloadRunner implements ApplicationRunner {
             return;
         }
 
-        Collection<Code2TextResolver<?>> allResolvers = Code2TextResolverRegistry.getAllResolvers();
+        Collection<Code2TextResolver> allResolvers = Code2TextResolverRegistry.getAllResolvers();
         if (allResolvers.isEmpty()) {
             return;
         }
         // 获取所有需要预加载的缓存数据
-        List<Code2TextPreloadable<?>> preloadableResolvers = new ArrayList<>();
-        for (Code2TextResolver<?> resolver : allResolvers) {
-            Code2TextResolver<?> target = resolver;
+        List<Code2TextPreloadable> preloadableResolvers = new ArrayList<>();
+        for (Code2TextResolver resolver : allResolvers) {
+            Code2TextResolver target = resolver;
             // 如果是代理对象，则获取原始对象
             if (target instanceof CachedResolverProxy proxy) {
                 target = proxy.getDelegate();
             }
 
-            if (!(target instanceof Code2TextPreloadable<?> preloadable)) {
+            if (!(target instanceof Code2TextPreloadable preloadable)) {
                 continue;
             }
             preloadableResolvers.add(preloadable);
@@ -62,8 +62,9 @@ public class Code2TextPreloadRunner implements ApplicationRunner {
             return;
         }
         LOGGER.info("code2text: 开始预加载 Code2TextResolver 缓存数据, 共 {} 个", allResolvers.size());
-        for (Code2TextPreloadable<?> preloadable : preloadableResolvers) {
-            String region = preloadable.annotationType().getSimpleName();
+        for (Code2TextPreloadable preloadable : preloadableResolvers) {
+            // TODO
+            String region = preloadable.getRegion();
             Map<String, String> data = preloadable.preload();
             if (data == null || data.isEmpty()) {
                 continue;

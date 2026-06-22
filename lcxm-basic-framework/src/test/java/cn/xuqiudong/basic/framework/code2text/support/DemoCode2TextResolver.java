@@ -1,6 +1,7 @@
 package cn.xuqiudong.basic.framework.code2text.support;
 
 import cn.xuqiudong.basic.framework.code2text.cache.Code2TextPreloadable;
+import cn.xuqiudong.basic.framework.code2text.cache.model.ResolverMeta;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,12 +12,12 @@ import java.util.Map;
  * @author Vic.xu
  * @since 2026-01-12 10:46
  */
-public class DemoCode2TextResolver implements Code2TextPreloadable<DemoCode2Text> {
+public class DemoCode2TextResolver implements Code2TextPreloadable {
 
 
     @Override
-    public Class<DemoCode2Text> annotationType() {
-        return DemoCode2Text.class;
+    public ResolverMeta meta() {
+        return new ResolverMeta("DemoCode2TextResolver", DemoCode2TextResolver.class);
     }
 
     @Override
@@ -39,5 +40,11 @@ public class DemoCode2TextResolver implements Code2TextPreloadable<DemoCode2Text
         map.put("code2", "code2-preload");
         map.put("code3", "code3-preload");
         return map;
+    }
+
+    public static void main(String[] args) {
+        DemoCode2TextResolver resolver = new DemoCode2TextResolver();
+        System.out.println(resolver.getClass().getSimpleName());
+        System.out.println(resolver.codeToText("1"));
     }
 }

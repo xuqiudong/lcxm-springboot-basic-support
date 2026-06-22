@@ -1,6 +1,8 @@
 package cn.xuqiudong.basic.framework.code2text.annotation;
 
 import cn.xuqiudong.basic.framework.code2text.core.Code2TextSerializer;
+import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
+import cn.xuqiudong.basic.framework.code2text.resolver.impl.VoidCode2TextResolver;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -31,7 +33,7 @@ import java.lang.annotation.Target;
  * @since 2026-01-09 11:41
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
+@Target({ ElementType.FIELD})
 @Documented
 // 标记为Jackson内部注解，确保序列化器生效
 @JacksonAnnotationsInside
@@ -54,5 +56,10 @@ public @interface Code2Text {
      * true：返回原值；false：返回null
      */
     boolean fallbackToRaw() default true;
+
+    /**
+     * 解析器类  必填 不然会返回code自身
+     */
+    Class<? extends Code2TextResolver> resolver() default VoidCode2TextResolver.class;
 
 }

@@ -1,9 +1,8 @@
 package cn.xuqiudong.basic.framework.code2text.resolver;
 
 import cn.xuqiudong.basic.framework.code2text.cache.Code2TextPreloadable;
+import cn.xuqiudong.basic.framework.code2text.cache.model.ResolverMeta;
 import cn.xuqiudong.basic.framework.code2text.cache.proxy.CachedResolverProxy;
-
-import java.lang.annotation.Annotation;
 
 /**
  * 描述:
@@ -13,10 +12,15 @@ import java.lang.annotation.Annotation;
  * @author Vic.xu
  * @see Code2TextPreloadable
  * @since 2026-01-09 16:43
+ * @since 2026-06-21  Code2Text 2.0.0 去除 Class<A> annotationType 修改为 ResolverMeta
  */
-public interface Code2TextResolver<A extends Annotation> {
+public interface Code2TextResolver {
 
-    Class<A> annotationType();
+    /**
+     * 解析器的一些元数据
+     *
+     */
+    ResolverMeta meta();
 
     String codeToText(Object code);
 
@@ -43,5 +47,12 @@ public interface Code2TextResolver<A extends Annotation> {
      */
     default String getSeparator() {
         return ",";
+    }
+
+    /**
+     * 缓存数据所属的 region: 默认 为 resolver 的类名 TODO check it
+     */
+    default String getRegion() {
+        return getClass().getSimpleName();
     }
 }
