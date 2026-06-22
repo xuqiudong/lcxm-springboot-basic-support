@@ -1,8 +1,7 @@
 package cn.xuqiudong.basic.framework.code2text.annotation;
 
 import cn.xuqiudong.basic.framework.code2text.core.Code2TextSerializer;
-import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
-import cn.xuqiudong.basic.framework.code2text.resolver.impl.VoidCode2TextResolver;
+import cn.xuqiudong.basic.framework.code2text.type.Code2TextType;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -42,6 +41,11 @@ import java.lang.annotation.Target;
 public @interface Code2Text {
 
     /**
+     * 编码转文本的类型, 通过它查找解析器 Code2TextResolver
+     */
+    Class<? extends Code2TextType> type() ;
+
+    /**
      * 自定义文本字段名（如指定"userName"则追加该字段）
      */
     String textKey() default "";
@@ -56,10 +60,5 @@ public @interface Code2Text {
      * true：返回原值；false：返回null
      */
     boolean fallbackToRaw() default true;
-
-    /**
-     * 解析器类  必填 不然会返回code自身
-     */
-    Class<? extends Code2TextResolver> resolver() default VoidCode2TextResolver.class;
 
 }

@@ -1,7 +1,10 @@
 package cn.xuqiudong.basic.framework.code2text.resolver.impl;
 
-import cn.xuqiudong.basic.framework.code2text.cache.model.ResolverMeta;
+import cn.xuqiudong.basic.framework.code2text.model.ResolverMeta;
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
+import cn.xuqiudong.basic.framework.code2text.resolver.PlaceholderCode2TextResolver;
+import cn.xuqiudong.basic.framework.code2text.type.Code2TextType;
+import cn.xuqiudong.basic.framework.code2text.type.EnumCode2Text;
 import cn.xuqiudong.basic.framework.select.EnumSelectAutoConfiguration;
 import cn.xuqiudong.basic.framework.select.EnumSelectable;
 
@@ -14,11 +17,17 @@ import cn.xuqiudong.basic.framework.select.EnumSelectable;
  * @author Vic.xu
  * @since 2026-01-09 17:03
  */
-public class EnumCode2TextResolver implements Code2TextResolver {
+public class EnumCode2TextResolver implements Code2TextResolver, PlaceholderCode2TextResolver {
+
 
     @Override
     public ResolverMeta meta() {
-        return new ResolverMeta("enum 2 text", EnumCode2TextResolver.class);
+        return new ResolverMeta("enum2text", EnumCode2TextResolver.class);
+    }
+
+    @Override
+    public Class<? extends Code2TextType> type() {
+        return EnumCode2Text.class;
     }
 
     @Override

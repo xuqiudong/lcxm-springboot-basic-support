@@ -61,12 +61,12 @@ public class Code2TextPreloadRunner implements ApplicationRunner {
             LOGGER.info("code2text: 没有需要预加载的Code2TextResolver");
             return;
         }
-        LOGGER.info("code2text: 开始预加载 Code2TextResolver 缓存数据, 共 {} 个", allResolvers.size());
+        LOGGER.info("code2text: 开始预加载 resolver 缓存数据, 共 {} 个预加载resolver", preloadableResolvers.size());
         for (Code2TextPreloadable preloadable : preloadableResolvers) {
-            // TODO
             String region = preloadable.getRegion();
             Map<String, String> data = preloadable.preload();
             if (data == null || data.isEmpty()) {
+                LOGGER.info("code2text: 预加载 {} 缓存数据为空", region);
                 continue;
             }
             LOGGER.info("code2text: 预加载 {} 缓存数据完成, size: {}", region, data.size());

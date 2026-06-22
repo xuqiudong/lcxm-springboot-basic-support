@@ -1,7 +1,8 @@
 package cn.xuqiudong.basic.framework.code2text.support;
 
 import cn.xuqiudong.basic.framework.code2text.cache.Code2TextPreloadable;
-import cn.xuqiudong.basic.framework.code2text.cache.model.ResolverMeta;
+import cn.xuqiudong.basic.framework.code2text.model.ResolverMeta;
+import cn.xuqiudong.basic.framework.code2text.type.Code2TextType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +16,15 @@ import java.util.Map;
 public class DemoCode2TextResolver implements Code2TextPreloadable {
 
 
+
     @Override
     public ResolverMeta meta() {
         return new ResolverMeta("DemoCode2TextResolver", DemoCode2TextResolver.class);
+    }
+
+    @Override
+    public Class<? extends Code2TextType> type() {
+        return DemoCode2Text.class;
     }
 
     @Override

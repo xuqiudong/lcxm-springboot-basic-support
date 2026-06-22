@@ -1,7 +1,6 @@
 package cn.xuqiudong.basic.mybatisplus.entity;
 
 
-import cn.xuqiudong.basic.framework.code2text.annotation.UserCode2Text;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -27,7 +26,6 @@ public class BaseMpEntity<ID  extends Serializable> extends IdEntity<ID> {
     /**
      * 创建人账号
      */
-    @UserCode2Text
     @Schema(description = "创建人账号")
     @TableField(value = "create_by", fill = FieldFill.INSERT, updateStrategy = FieldStrategy.NEVER)
     protected String createBy;
@@ -42,7 +40,6 @@ public class BaseMpEntity<ID  extends Serializable> extends IdEntity<ID> {
     /**
      * 最后更新人账号
      */
-    @UserCode2Text
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
     protected String updateBy;
 

@@ -1,13 +1,14 @@
 package cn.xuqiudong.basic.framework.code2text;
 
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.basic.framework.BaseTest;
 import cn.xuqiudong.basic.framework.code2text.core.Code2TextSerializer;
 import cn.xuqiudong.basic.framework.code2text.helper.Code2TextCacheHelper;
 import cn.xuqiudong.basic.framework.code2text.helper.Code2TextHelper;
 import cn.xuqiudong.basic.framework.code2text.support.Code2TextDemoModel;
+import cn.xuqiudong.basic.framework.code2text.support.DemoCode2Text;
 import cn.xuqiudong.basic.framework.code2text.support.DemoCode2TextResolver;
 import cn.xuqiudong.basic.framework.code2text.support.TestCode2TextConfig;
-import cn.xuqiudong.basic.core.util.JsonUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,7 @@ public class Code2TextSerializerTest extends BaseTest {
     @DisplayName("测试静态转换code(内部其实使用的是resolve的缓存功能)")
     public void testCode2TextHelper() {
         String code = "code1";
-        String text = Code2TextHelper.getText(DemoCode2TextResolver.class, code);
+        String text = Code2TextHelper.getText(DemoCode2Text.class, code);
         System.out.println(code + " -> " + text);
         Assertions.assertEquals("code1-preload", text);
     }
@@ -65,7 +66,7 @@ public class Code2TextSerializerTest extends BaseTest {
     @DisplayName("测试静态转换text(内部其实使用的是resolve的缓存功能)")
     public void testText2CodeHelper() {
         String text = "code2-preload";
-        Object code = Code2TextHelper.getCode(DemoCode2TextResolver.class, text);
+        Object code = Code2TextHelper.getCode(DemoCode2Text.class, text);
         System.out.println(text + " -> " + code);
         Assertions.assertEquals("code2", code);
     }

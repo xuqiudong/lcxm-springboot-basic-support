@@ -111,11 +111,11 @@ public class Code2TextSerializer extends JsonSerializer<Object>
 
         // 获取解析器
         Code2TextResolver resolver =
-                Code2TextResolverRegistry.get(code2TextAnno.resolver());
+                Code2TextResolverRegistry.get(code2TextAnno.type());
 
         if (resolver == null) {
             throw new IllegalStateException(
-                    "No Code2TextResolver found for resolverClass: " + code2TextAnno.resolver().getSimpleName());
+                    "No Code2TextResolver found for type: " + code2TextAnno.type().getName());
         }
 
         boolean fallbackToRaw = code2TextAnno.fallbackToRaw();

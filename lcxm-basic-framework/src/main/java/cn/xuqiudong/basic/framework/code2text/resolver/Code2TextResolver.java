@@ -1,8 +1,9 @@
 package cn.xuqiudong.basic.framework.code2text.resolver;
 
 import cn.xuqiudong.basic.framework.code2text.cache.Code2TextPreloadable;
-import cn.xuqiudong.basic.framework.code2text.cache.model.ResolverMeta;
 import cn.xuqiudong.basic.framework.code2text.cache.proxy.CachedResolverProxy;
+import cn.xuqiudong.basic.framework.code2text.type.Code2TextType;
+import cn.xuqiudong.basic.framework.code2text.model.ResolverMeta;
 
 /**
  * 描述:
@@ -16,11 +17,12 @@ import cn.xuqiudong.basic.framework.code2text.cache.proxy.CachedResolverProxy;
  */
 public interface Code2TextResolver {
 
+
+
     /**
-     * 解析器的一些元数据
-     *
+     *  解析器类型
      */
-    ResolverMeta meta();
+    Class<? extends Code2TextType> type();
 
     String codeToText(Object code);
 
@@ -50,9 +52,18 @@ public interface Code2TextResolver {
     }
 
     /**
-     * 缓存数据所属的 region: 默认 为 resolver 的类名 TODO check it
+     * 缓存数据所属的 region: 默认 为 Code2TextType 的 simpleName
      */
     default String getRegion() {
-        return getClass().getSimpleName();
+        return type().getSimpleName();
+    }
+
+
+    /**
+     * 解析器的一些元数据
+     *
+     */
+    default   ResolverMeta meta() {
+        return new ResolverMeta(getClass().getSimpleName(), getClass());
     }
 }

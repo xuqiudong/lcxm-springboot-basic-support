@@ -16,7 +16,6 @@ import cn.xuqiudong.basic.framework.code2text.helper.Code2TextCacheHelper;
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
 import cn.xuqiudong.basic.framework.code2text.resolver.impl.DefaultUserCode2TextResolver;
 import cn.xuqiudong.basic.framework.code2text.resolver.impl.EnumCode2TextResolver;
-import cn.xuqiudong.basic.framework.code2text.resolver.impl.VoidCode2TextResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,21 +111,13 @@ public class Code2TextAutoConfiguration {
      * userCode 解析器
      */
     @Bean
-//    @ConditionalOnMissingGenericBean(beanInterface = Code2TextResolver.class, genericType = UserCode2Text.class)
     @ConditionalOnMissingBean
     public DefaultUserCode2TextResolver defaultUserCode2TextResolver() {
         LOGGER.warn("code2text: DefaultUserCode2TextResolver init. Please define an implementation class for UserCode2Text by yourself");
         return new DefaultUserCode2TextResolver();
     }
 
-    /**
-     * void code2TextResolver
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public VoidCode2TextResolver voidCode2TextResolver() {
-        return new VoidCode2TextResolver();
-    }
+
 
     /* ************************** 缓存清理相关 bean below *********************************** */
 

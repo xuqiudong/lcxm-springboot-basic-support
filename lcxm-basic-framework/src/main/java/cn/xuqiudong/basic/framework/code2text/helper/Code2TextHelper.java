@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.framework.code2text.helper;
 
 import cn.xuqiudong.basic.framework.code2text.core.Code2TextResolverRegistry;
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
+import cn.xuqiudong.basic.framework.code2text.type.Code2TextType;
 
 /**
  * 描述:
@@ -17,14 +18,15 @@ public class Code2TextHelper {
 
     /**
      * 获取 code 对应的 text
-     *   需要在spring环境下 使用
-     * @param resolverClass resolverClass
-     * @param code     code
+     * 需要在spring环境下 使用
+     *
+     * @param typeClass type
+     * @param code      code
      * @return text
      */
-    public static String getText(Class<? extends Code2TextResolver> resolverClass, String code) {
+    public static String getText(Class<? extends Code2TextType> typeClass, String code) {
 
-        Code2TextResolver resolver = Code2TextResolverRegistry.get(resolverClass);
+        Code2TextResolver resolver = Code2TextResolverRegistry.get(typeClass);
 
         if (resolver == null) {
             return null;
@@ -34,14 +36,15 @@ public class Code2TextHelper {
 
     /**
      * 获取 text 对应的 code
-     *   需要在spring环境下 使用
-     * @param resolverClass resolverClass
-     * @param text          text
+     * 需要在spring环境下 使用
+     *
+     * @param typeClass type
+     * @param text      text
      * @return code
      */
-    public static Object getCode(Class<? extends Code2TextResolver> resolverClass, String text) {
+    public static Object getCode(Class<? extends Code2TextType> typeClass, String text) {
 
-        Code2TextResolver resolver = Code2TextResolverRegistry.get(resolverClass);
+        Code2TextResolver resolver = Code2TextResolverRegistry.get(typeClass);
 
         if (resolver == null) {
             return null;
@@ -52,14 +55,15 @@ public class Code2TextHelper {
 
     /**
      * 获取 code 对应的 text
-     *   需要在spring环境下 使用
-     * @param resolverClass 解析器类型
-     * @param code     code
+     * 需要在spring环境下 使用
+     *
+     * @param typeClass   解析器类型
+     * @param code        code
      * @param defaultText 默认值
      * @return text
      */
-    public static String getText(Class<? extends Code2TextResolver> resolverClass, String code, String defaultText) {
-        Code2TextResolver resolver = Code2TextResolverRegistry.get(resolverClass);
+    public static String getText(Class<? extends Code2TextType> typeClass, String code, String defaultText) {
+        Code2TextResolver resolver = Code2TextResolverRegistry.get(typeClass);
 
         if (resolver == null) {
             return defaultText;

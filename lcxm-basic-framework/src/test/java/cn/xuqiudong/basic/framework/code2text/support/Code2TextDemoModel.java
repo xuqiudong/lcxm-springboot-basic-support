@@ -12,13 +12,13 @@ import lombok.Data;
 @Data
 public class Code2TextDemoModel {
 
-    @Code2Text(resolver = DemoCode2TextResolver.class)
+    @Code2Text(type = DemoCode2Text.class)
     private String demoCode;
 
-    @Code2Text
+    @Code2Text(type = DemoCode2Text.class)
     private String demoCode2;
 
-    @Code2Text(textKey = "code3Text", resolver = DemoCode2TextResolver.class)
+    @Code2Text(textKey = "code3Text", type = DemoCode2Text.class)
     private String demoCode3;
 
 }

@@ -1,8 +1,9 @@
 package cn.xuqiudong.basic.framework.code2text.cache.proxy;
 
 import cn.xuqiudong.basic.framework.code2text.cache.Code2TextCacheManager;
-import cn.xuqiudong.basic.framework.code2text.cache.model.ResolverMeta;
+import cn.xuqiudong.basic.framework.code2text.model.ResolverMeta;
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
+import cn.xuqiudong.basic.framework.code2text.type.Code2TextType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.StringJoiner;
@@ -14,7 +15,8 @@ import java.util.StringJoiner;
  * @author Vic.xu
  * @since 2026-01-14 14:09
  */
-public class CachedResolverProxy        implements Code2TextResolver{
+public class CachedResolverProxy implements Code2TextResolver{
+
 
     private final Code2TextResolver delegate;
     private final String region;
@@ -38,6 +40,12 @@ public class CachedResolverProxy        implements Code2TextResolver{
     @Override
     public ResolverMeta meta() {
         return delegate.meta();
+    }
+
+
+    @Override
+    public Class<? extends Code2TextType> type() {
+        return delegate.type();
     }
 
     @Override

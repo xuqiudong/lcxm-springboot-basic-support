@@ -1,4 +1,4 @@
-package cn.xuqiudong.basic.framework.code2text.cache.model;
+package cn.xuqiudong.basic.framework.code2text.model;
 
 import cn.xuqiudong.basic.framework.code2text.resolver.Code2TextResolver;
 import lombok.Data;
@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
 public class ResolverMeta {
 
     /**
-     * 解析器的名称
+     * 解析器的名称: 唯一标识
      */
     private String name;
 
@@ -22,6 +22,11 @@ public class ResolverMeta {
      * 解析器class
      */
     private Class<? extends Code2TextResolver> resolverClass;
+
+    /**
+     *  标识当前解析器是否为占位符解析器: 是则 最终使用具体的实现类，除非没有配置解析器，则使用占位符解析器
+     */
+    private boolean placeholder;
 
    public ResolverMeta(String name, Class<? extends Code2TextResolver> resolverClass) {
        Assert.notNull(name, "name must not be null");
