@@ -37,6 +37,8 @@ public class JsonUtil {
         OBJECT_MAPPER.registerModule(new JavaTimeModule());
         // config to use ISO-8601 formatted timestamps
         OBJECT_MAPPER.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        // 忽略空bean转json的错误
+        OBJECT_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
     /**
