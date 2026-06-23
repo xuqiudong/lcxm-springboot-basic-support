@@ -164,6 +164,7 @@ public interface MpGenericMapper<ID extends Serializable, T> extends BaseMapper<
      */
     default <R> List<T> selectListByColumn(Column<T, R> colum, R value, OrderBy orderBy) {
         QueryWrapper<T> wrapper = WrapUtils.createWrapper(colum, value);
+        WrapUtils.setOrderBy(wrapper, orderBy);
         return this.selectList(wrapper);
     }
 
