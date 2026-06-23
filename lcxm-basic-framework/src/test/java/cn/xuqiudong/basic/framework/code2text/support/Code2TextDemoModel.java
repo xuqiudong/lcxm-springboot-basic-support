@@ -21,4 +21,12 @@ public class Code2TextDemoModel {
     @Code2Text(textKey = "code3Text", type = DemoCode2Text.class)
     private String demoCode3;
 
+    public Code2TextDemoModel() {
+    }
+
+    public Code2TextDemoModel(String demoCode, String demoCode2, String demoCode3) {
+        this.demoCode = demoCode;
+        this.demoCode2 = demoCode2;
+        this.demoCode3 = demoCode3;
+    }
 }
