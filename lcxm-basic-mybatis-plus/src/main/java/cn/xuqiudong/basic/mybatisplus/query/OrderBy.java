@@ -162,6 +162,13 @@ public class OrderBy {
             return column + " " + orderType.name().toLowerCase();
         }
 
+        /**
+         * 是否升序
+         */
+        public boolean isAsc() {
+            return orderType == OrderType.ASC;
+        }
+
         public OrderColumn(String column, OrderType orderType) {
             this.column = column;
             this.orderType = orderType;
