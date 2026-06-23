@@ -82,8 +82,23 @@ public class PageInfo<T> implements Serializable {
     }
 
 
-
-
+    /**
+     * 转换分页，不携带列表数据
+     *  依然保留curSize
+     *  需要自行设置datas
+     */
+    public <R> PageInfo<R> convertWithoutData() {
+        PageInfo<R> target = new PageInfo<>();
+        target.setTotal(this.total);
+        // datas 不赋值，保持null
+        target.setSize(this.size);
+        target.setPage(this.page);
+        target.setPages(this.pages);
+        // 依然保留curSize
+        target.setCurSize(this.curSize);
+        target.setLookup(this.lookup);
+        return target;
+    }
     /**
      * hasMore是否有更多的数据 page * size < total
      */
