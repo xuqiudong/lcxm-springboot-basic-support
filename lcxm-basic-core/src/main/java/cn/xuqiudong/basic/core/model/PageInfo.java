@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 /**
@@ -73,7 +75,7 @@ public class PageInfo<T> implements Serializable {
             this.page = lookup.getPage();
             this.size = lookup.getSize();
             this.curSize = datas.size();
-            this.pages =(int) (total % (long) size == 0 ? total / (long) size : total / (long) size + 1);
+            this.pages = (int) (total % (long) size == 0 ? total / (long) size : total / (long) size + 1);
         }
     }
 
@@ -84,8 +86,8 @@ public class PageInfo<T> implements Serializable {
 
     /**
      * 转换分页，不携带列表数据
-     *  依然保留curSize
-     *  需要自行设置datas
+     * 依然保留curSize
+     * 需要自行设置datas
      */
     public <R> PageInfo<R> convertWithoutData() {
         PageInfo<R> target = new PageInfo<>();
@@ -99,6 +101,26 @@ public class PageInfo<T> implements Serializable {
         target.setLookup(this.lookup);
         return target;
     }
+
+    /**
+     * 转换分页，携带列表数据
+     * Producer Extends, Consumer Super
+     *
+     * @param convertFunction 转换函数
+     * @param <R>             转换后的泛型
+     *
+     */
+    public <R> PageInfo<R> convert(Function<? super T, ? extends R> convertFunction) {
+        PageInfo<R> target = convertWithoutData();
+
+        if (datas != null) {
+            List<R> list = datas.stream().map(convertFunction).collect(Collectors.toList());
+            target.setDatas(list);
+        }
+        return target;
+    }
+
+
     /**
      * hasMore是否有更多的数据 page * size < total
      */
