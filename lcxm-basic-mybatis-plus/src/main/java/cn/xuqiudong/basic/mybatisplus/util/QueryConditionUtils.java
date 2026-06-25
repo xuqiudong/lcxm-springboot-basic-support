@@ -24,8 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 描述:
  * 解析包含QueryCondition注解的查询对象  最终构建QueryWrapper
- * @see QueryCondition
+ *
  * @author Vic.xu
+ * @see QueryCondition
  * @since 2025-10-29 15:42
  */
 public class QueryConditionUtils {
@@ -123,7 +124,7 @@ public class QueryConditionUtils {
 
     public static boolean isPossibleEqualQueryField(String columnName) {
         for (String field : POSSIBLE_EQUAL_QUERY_FIELDS) {
-            boolean eq = field.equalsIgnoreCase( columnName)
+            boolean eq = field.equalsIgnoreCase(columnName)
                     || StringUtils.startsWithIgnoreCase(columnName, field)
                     || StringUtils.endsWithIgnoreCase(columnName, field);
             if (eq) {
@@ -139,12 +140,21 @@ public class QueryConditionUtils {
     private static void inferCondition(WrapperBuilder wrapperBuilder, QueryFieldModel queryField, Object value) {
         String[] columns = queryField.getColumns();
         QueryOperation operation = queryField.getOperation();
-        if (columns.length == 1) {
-            wrapperBuilder.addCondition(columns[0], operation, value);
+        //2026-06-25 新增apply 条件
+        if (operation == QueryOperation.APPLY) {
+            String applySql = queryField.getApplySql();
+            if (StringUtils.isNotBlank(applySql)) {
+                wrapperBuilder.addApply(applySql, value);
+            }
+        } else {
+            if (columns.length == 1) {
+                wrapperBuilder.addCondition(columns[0], operation, value);
+            }
+            if (columns.length > 1) {
+                wrapperBuilder.addNestedOrCondition(columns, operation, value);
+            }
         }
-        if (columns.length > 1) {
-            wrapperBuilder.addNestedOrCondition(columns, operation, value);
-        }
+
 
     }
 

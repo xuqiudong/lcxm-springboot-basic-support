@@ -49,6 +49,11 @@ public class QueryFieldModel {
     private Class<?> fieldType;
 
     /**
+     * sql 片段, 用于自定义查询条件
+     */
+    private String applySql;
+
+    /**
      * 字段描述
      */
     private PropDesc propDesc;
@@ -59,6 +64,7 @@ public class QueryFieldModel {
         this.allowNullQuery = queryCondition.allowNullQuery();
         this.trim = queryCondition.trim();
         this.delimiter = queryCondition.delimiter();
+        this.applySql = queryCondition.applySql();
         this.fieldType = fieldType;
         this.propDesc = propDesc;
 

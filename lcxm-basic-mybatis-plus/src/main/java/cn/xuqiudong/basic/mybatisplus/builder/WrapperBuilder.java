@@ -80,6 +80,14 @@ public class WrapperBuilder {
     }
 
     /**
+     * 添加Apply条件, 用于自定义SQL语句
+     */
+    public WrapperBuilder addApply(String applySql, Object... params) {
+        this.conditions.add(new ApplyCondition(applySql, params));
+        return this;
+    }
+
+    /**
      * 添加嵌套条件 内部多个条件 之间是or关系
      */
     public void addNestedOrCondition(String[] columns, QueryOperation operation, Object value) {
@@ -116,6 +124,25 @@ public class WrapperBuilder {
     }
 
     /**
+     * Apply 条件
+     */
+    private static class ApplyCondition implements Condition {
+        String applySql;
+        Object[] params;
+
+        public ApplyCondition(String applySql, Object value) {
+            this.applySql = applySql;
+            this.params = toArray(value);
+
+        }
+
+        @Override
+        public <T> void build(QueryWrapper<T> queryWrapper) {
+            queryWrapper.apply(applySql, params);
+        }
+    }
+
+    /**
      * 多条件嵌套or
      */
     private static class NestedOrCondition implements Condition {
@@ -132,14 +159,7 @@ public class WrapperBuilder {
             this.size = Math.max(columns.length, values.length);
         }
 
-        private Object[] toArray(Object value) {
-            if (ArrayUtil.isArray(value)) {
-                return (Object[]) value;
-            } else if (value instanceof Collection) {
-                return ((Collection) value).toArray(new Object[0]);
-            }
-            return new Object[]{value};
-        }
+
 
         @Override
         public <T> void build(QueryWrapper<T> queryWrapper) {
@@ -155,4 +175,16 @@ public class WrapperBuilder {
             });
         }
     }
+
+    public static Object[] toArray(Object value) {
+        if (ArrayUtil.isArray(value)) {
+            return (Object[]) value;
+        } else if (value instanceof Collection) {
+            return ((Collection<?>) value).toArray(new Object[0]);
+        }
+        return new Object[]{value};
+    }
+
+
+
 }

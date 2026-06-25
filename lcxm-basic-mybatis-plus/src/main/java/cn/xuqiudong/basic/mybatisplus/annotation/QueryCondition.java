@@ -53,4 +53,14 @@ public @interface QueryCondition {
      */
     String delimiter() default ",";
 
+
+    /**
+     * apply 操作的sql片段, 当 operation 为 APPLY 时， 必填项
+     *  支持 {0} 单占位符，参数来自当前字段值
+     *  EG: "date_format(create_time, '%Y-%m-%d') = {0}"
+     *  EG: "FIND_IN_SET({0}, tags)"
+     * @see QueryOperation#APPLY
+     */
+    String applySql() default "";
+
 }

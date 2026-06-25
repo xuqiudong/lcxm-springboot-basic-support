@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.mybatisplus.enums;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
+import cn.xuqiudong.basic.mybatisplus.annotation.QueryCondition;
 import cn.xuqiudong.basic.mybatisplus.function.WrapperProcessor;
 import cn.xuqiudong.basic.mybatisplus.query.MpQuery;
 import cn.xuqiudong.basic.mybatisplus.util.QueryConditionUtils;
@@ -40,7 +41,15 @@ public enum QueryOperation {
 
     GT(false, AbstractWrapper::gt),
 
-    GE(false, AbstractWrapper::ge);
+    GE(false, AbstractWrapper::ge),
+    /**
+     * 暂时先支持单占位符的sql片段：
+     * @see QueryCondition
+     * 多占位符的场景较多， 是否有实现的必要?
+     */
+    APPLY(false, AbstractWrapper::apply);
+
+
 
 
     /**
