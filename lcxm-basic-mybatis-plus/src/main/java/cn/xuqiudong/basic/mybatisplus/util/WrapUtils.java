@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -90,5 +91,14 @@ public class WrapUtils {
             }
         }
         page.setOrders(orders);
+    }
+
+    /**
+     * 创建in查询条件
+     */
+    public static <T, R> QueryWrapper<T> columnIn(Column<T, R> column, Collection<R> values){
+        QueryWrapper<T> queryWrapper = Wrappers.query();
+        queryWrapper.in(ColumnUtils.safeColumn(column), values);
+        return queryWrapper;
     }
 }
