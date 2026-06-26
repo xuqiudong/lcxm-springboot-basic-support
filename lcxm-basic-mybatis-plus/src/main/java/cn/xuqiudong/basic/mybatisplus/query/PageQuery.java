@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class PageQuery implements MpQuery {
     private String orders;
 
     @Schema(description = "默认排序字段, 默认:  id,desc", hidden = true)
+    @Setter(AccessLevel.NONE)
     private String defaultOrders = "id,desc";
 
     private static final String ASC = "asc";
@@ -50,6 +53,16 @@ public class PageQuery implements MpQuery {
         if (orderBy != null) {
             this.orders = orderBy.toOrderSqlWithSemicolon();
         }
+    }
+    @JsonIgnore
+    public void setDefaultOrders(OrderBy defaultOrders) {
+        if (defaultOrders != null) {
+            this.defaultOrders = defaultOrders.toOrderSqlWithSemicolon();
+        }
+    }
+
+    public void setDefaultOrders(String defaultOrders) {
+        this.defaultOrders = defaultOrders;
     }
 
     /**
@@ -111,4 +124,5 @@ public class PageQuery implements MpQuery {
     protected String processSortColumn(String column) {
         return column;
     }
+
 }
