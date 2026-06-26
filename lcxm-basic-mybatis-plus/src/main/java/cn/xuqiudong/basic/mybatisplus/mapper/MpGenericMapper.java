@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.mybatisplus.mapper;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.xuqiudong.basic.mybatisplus.annotation.QueryCondition;
 import cn.xuqiudong.basic.mybatisplus.helper.MpGenericMapperHelper;
 import cn.xuqiudong.basic.mybatisplus.injector.SelectByIdWithLob;
@@ -16,12 +17,14 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -208,6 +211,29 @@ public interface MpGenericMapper<ID extends Serializable, T> extends BaseMapper<
     default <R> T selectFirst(Column<T, R> column, R value, OrderBy orderBy) {
         QueryWrapper<T> queryWrapper = WrapUtils.createWrapper(column, value);
         return helper().selectFirstByWrapper(queryWrapper, orderBy);
+    }
+
+    /**
+     * column in (?,?) 查询
+     */
+    default <R> List<T> selectColumnIn(Column<T, R> column, Collection<R> values) {
+        if (CollectionUtils.isEmpty(values)) {
+            return Collections.emptyList();
+        }
+        QueryWrapper<T> queryWrapper = WrapUtils.columnIn(column, values);
+        return this.selectList(queryWrapper);
+    }
+
+    /**
+     * column in (?,?) 查询
+     */
+    default <R> List<T> selectColumnIn(Column<T, R> column, R[] values) {
+        if (ArrayUtils.isEmpty(values)) {
+            return Collections.emptyList();
+        }
+        List<R> inValues = CollUtil.newArrayList(values);
+        QueryWrapper<T> queryWrapper = WrapUtils.columnIn(column, inValues);
+        return this.selectList(queryWrapper);
     }
 
 }
