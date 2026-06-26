@@ -54,6 +54,7 @@ public class PageQuery implements MpQuery {
             this.orders = orderBy.toOrderSqlWithSemicolon();
         }
     }
+
     @JsonIgnore
     public void setDefaultOrders(OrderBy defaultOrders) {
         if (defaultOrders != null) {
