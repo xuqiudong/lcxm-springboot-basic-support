@@ -110,6 +110,18 @@
 
         <spotbugs-maven-plugin.version>4.9.8.2</spotbugs-maven-plugin.version>
         <spotbugs.version>4.9.8</spotbugs.version>
+
+        <!--classfinal  class文件安全加密工具, 防止反编译和 源码泄露https://gitee.com/lcm742320521/class-final  -->
+        <classfinal.version>1.4.1</classfinal.version>
+        <!-- 密码: 加密解密使用-->
+        <classfinal.password>12345678</classfinal.password>
+        <!--加密的包, 多个逗号分隔-->
+        <classfinal.packages>cn.xuqiudong.blog</classfinal.packages>
+        <!--加密的jar包, 多个逗号分隔-->
+        <classfinal.libjars>
+            lcxm-basic-framework:3.5.0-jdk21-3.0.0.jar,
+            lcxm-basic-core:3.5.0-jdk21-3.0.0.jar
+        </classfinal.libjars>
         <!--maven plugin version ↑ ↑ ↑-->
 
         <!-- skip for  plugin  start ↓ ↓ ↓ -->
@@ -635,6 +647,39 @@
                     </configuration>
                 </plugin>
 
+                <plugin>
+
+                    <!-- https://gitee.com/lcm742320521/class-final -->
+                    <!-- https://gitee.com/roseboy/classfinal
+                        <groupId>net.roseboy</groupId>
+                         源库只到1.2.1版本 不支持jdk 高版本, 修改为 lcm742320521的fork版 1.4.1 支持更高版本的jdk
+                    -->
+                    <groupId>com.gitee.lcm742320521</groupId>
+                    <artifactId>classfinal-maven-plugin</artifactId>
+                    <version>${classfinal.version}</version>
+                    <configuration>
+                        <!--加密打包之后pom.xml会被删除，不用担心在jar包里找到此密码-->
+                        <password>${classfinal.password}</password>
+                        <!--需要加密的包, 多个包用逗号分隔-->
+                        <packages>${classfinal.packages}</packages>
+                        <!-- 需要加密的配置文件, 多个文件用逗号分隔 -->
+                        <!--<cfgfiles>application.yml</cfgfiles>-->
+                        <!--<excludes>org.spring</excludes>-->
+                        <!-- 需要加密的jar包, 多个jar包用逗号分隔 -->
+                        <libjars>
+                            ${classfinal.libjars}
+                        </libjars>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>classFinal</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
             </plugins>
         </pluginManagement>
 
@@ -716,6 +761,22 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!--classfinal  profile 源码加密 -->
+        <profile>
+            <id>classfinal</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.gitee.lcm742320521</groupId>
+                        <artifactId>classfinal-maven-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
