@@ -1,11 +1,6 @@
-# ClassFinal 代码加密方案
+# springboot项目中使用ClassFinal 进行代码加密
 
-> 源码仓库：
->
-> - 源库 https://gitee.com/roseboy/classfinal 只到1.2.1版本 不支持jdk 高版本,
-> - lcm742320521的fork版：https://gitee.com/lcm742320521/class-final 1.4.1 支持更高版本的jdk
-
-## 1.  ClassFinal 插件作用
+## 1. ClassFinal 插件作用
 
 用于 SpringBoot 项目 **class 文件加密 + 防反编译保护**：
 
@@ -51,6 +46,7 @@
 ```
 <pluginManagement>
     <plugins>
+       <plugin>
         <groupId>com.gitee.lcm742320521</groupId>
             <artifactId>classfinal-maven-plugin</artifactId>
             <version>${classfinal.version}</version>
@@ -119,5 +115,22 @@ target/
 ### 3.3 运行方式
 
 ```
-java -javaagent:xxx-encrypted.jar="-pwd 12345678 -jar xxx-encrypted.jar"
+java -javaagent:xxx-encrypted.jar="-pwd 12345678" -jar xxx-encrypted.jar"
 ```
+
+## 注意事项:
+**在 Spring Boot 项目中，classfinal-maven-plugin 需要在 spring-boot-maven-plugin 之后执行。**
+- 其当父项目的 profile 中已经声明了 classfinal-maven-plugin 时，子项目激活该 profile 后，执行顺序通常不容易直接判断。
+
+### 解决方案
+1. 将 classfinal-maven-plugin 只定义在实际启动模块中，并放在 spring-boot-maven-plugin 之后。
+2. 父项目仅通过 pluginManagement 管理公共配置，不直接下发 classfinal 的执行。
+3. 如果无法调整父 profile 结构，可将 classfinal-maven-plugin 的执行阶段从 package 改为 verify，避免早于 spring-boot:repackage 执行。
+   (此时打包则 需要先mvn package, 再执行一次mvn verify )
+
+4. 或者直接在具体的项目内的springboot插件下新增classfinal插件， 因为package只会多出个加密的jar，按需使用即可
+
+#### 附录：
+
+- 源库 https://gitee.com/roseboy/classfinal 只到1.2.1版本 不支持jdk 高版本,
+- lcm742320521的fork版：https://gitee.com/lcm742320521/class-final 1.4.1 支持更高版本的jdk
