@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -99,6 +100,7 @@ public class PageInfo<T> implements Serializable {
         // 依然保留curSize
         target.setCurSize(this.curSize);
         target.setLookup(this.lookup);
+        target.datas = new ArrayList<>();
         return target;
     }
 
