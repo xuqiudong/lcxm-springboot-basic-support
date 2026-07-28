@@ -6,3 +6,7 @@
 版本二 (2025-05~):   [3.5.0-jdk17-1.0.0  ~~](docs/CHANGELOG/202505-springboot3.5_jdk17.md)
 
 当前版本(2026-04~): 3.5.0-jdk21-3.0.0  
+
+
+[![Maven Central](https://img.shields.io/maven-central/v/cn.xuqiudong.basic/lcxm-springboot-parent.svg)](https://central.sonatype.com/artifact/cn.xuqiudong.basic/lcxm-springboot-parent)
+
