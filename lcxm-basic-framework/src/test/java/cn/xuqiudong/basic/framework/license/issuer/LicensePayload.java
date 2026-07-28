@@ -34,9 +34,16 @@ public class LicensePayload extends LcPayload {
     private String subject;
 
     /**
+     * 随机数
+     */
+    protected String nonce;
+
+    /**
      * 签名
      */
     private String sign;
+
+
 
 
 }

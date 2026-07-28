@@ -24,7 +24,7 @@ class LicenseRuntimeTest {
         LcPayload payload = LcRuntimeHelper.instance();
 
         Assertions.assertNotNull(payload);
-        Assertions.assertEquals("Vic.xu", payload.getSubject());
+        Assertions.assertEquals("hhny", payload.getSubject());
         Assertions.assertEquals("1.0.0", payload.getVersion());
         Assertions.assertFalse(payload.expired());
         String jsonStr = JSONUtil.toJsonStr(payload);

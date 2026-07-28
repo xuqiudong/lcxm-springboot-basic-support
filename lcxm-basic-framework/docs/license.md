@@ -36,6 +36,7 @@ JSON 原始结构对应 `LcPayload`：
   "expireAt": 1785800000000,
   "version": "1.0.0",
   "subject": "Vic.xu",
+  "nonce": "...",
   "sign": "..."
 }
 ```
@@ -46,13 +47,14 @@ JSON 原始结构对应 `LcPayload`：
 - `expireAt`：过期时间，毫秒时间戳。
 - `version`：授权版本。
 - `subject`：授权主体。
+- `nonce`：签发时生成的随机值，参与签名，避免 license 内容过于固定。
 - `sign`：RSA 私钥签名结果。
 
 ## 签发流程
 
 签发端使用 `LicenseIssuer` 生成 license：
 
-1. 创建 `LcPayload`，写入授权主体、版本、签发时间和过期时间。
+1. 创建 `LcPayload`，写入授权主体、版本、签发时间、过期时间和随机值。
 2. 使用 `SignaturePayloadBuilder` 构造待签名字符串。
 3. 使用私钥调用 `RsaSignatureUtils` 生成签名。
 4. 将 payload 转成 JSON。
@@ -61,7 +63,7 @@ JSON 原始结构对应 `LcPayload`：
 待签名字符串格式：
 
 ```text
-subject={subject}&issueAt={issueAt}&expireAt={expireAt}&version={version}
+subject={subject}&issueAt={issueAt}&expireAt={expireAt}&nonce={nonce}&version={version}
 ```
 
 运行端和签发端必须使用同一个签名串构造规则。

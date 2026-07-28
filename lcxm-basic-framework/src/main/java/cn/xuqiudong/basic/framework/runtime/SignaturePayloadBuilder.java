@@ -21,14 +21,16 @@ public class SignaturePayloadBuilder {
 
     public static String buildIssuerPayload(LcPayload payload) {
         Assert.notNull(payload, "payload can not be null");
-        return buildIssuerPayload(payload.getSubject(), payload.getVersion(), payload.getIssueAt(), payload.getExpireAt());
+        return buildIssuerPayload(payload.getSubject(), payload.getVersion(),
+                payload.getIssueAt(), payload.getExpireAt(), payload.getNonce());
     }
 
 
-    public static String buildIssuerPayload(String subject, String version, long issueAt, long expireAt) {
+    public static String buildIssuerPayload(String subject, String version, long issueAt, long expireAt, String nonce) {
         return "subject=" + encode(subject)
                 + "&issueAt=" + issueAt
                 + "&expireAt=" + expireAt
+                + "&nonce=" + encode(nonce)
                 + "&version=" + encode(version);
     }
 

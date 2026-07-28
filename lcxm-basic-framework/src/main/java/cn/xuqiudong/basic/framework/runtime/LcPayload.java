@@ -15,6 +15,8 @@ public class LcPayload {
     protected long expireAt;
     protected String version;
     protected String subject;
+    protected String nonce;
+
     protected String sign;
 
     public boolean expired() {

@@ -1,6 +1,7 @@
 package cn.xuqiudong.basic.framework.license.issuer;
 
 import cn.hutool.core.codec.Base62;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.json.JSONUtil;
 import cn.xuqiudong.basic.framework.runtime.LcPayload;
@@ -18,7 +19,7 @@ public class LicenseIssuer {
 
 
     public static void main(String[] args) {
-        LicenseIssuer issue = LicenseIssuer.create("Vic.xu", 7, LicenseSecretPairs.P1)
+        LicenseIssuer issue = LicenseIssuer.create("hhny", 180, LicenseSecretPairs.P1)
                 .issue();
         issue.print();
         issue.validate();
@@ -79,8 +80,8 @@ public class LicenseIssuer {
 
     public void validate(){
         // 原始待签名字符串
-        String origin = SignaturePayloadBuilder.buildIssuerPayload(license.getPayload());
         LcPayload payload = JSONUtil.toBean(Base62.decodeStr(licenseString), LcPayload.class);
+        String origin = SignaturePayloadBuilder.buildIssuerPayload(payload);
 
         boolean b = RsaSignatureUtils.publicVerify(payload.getSign(), origin, rsa.getPublicKeyBase64());
         if (!b) {
@@ -110,6 +111,7 @@ public class LicenseIssuer {
         licensePayload.setIssueAt(System.currentTimeMillis());
         licensePayload.setSubject(subject);
         licensePayload.setVersion("1.0.0");
+        licensePayload.setNonce(IdUtil.fastSimpleUUID());
         String privateKeyBase64 = rsa.getPrivateKeyBase64();
         String publicKeyBase64 = rsa.getPublicKeyBase64();
         license.setPayload(licensePayload);
