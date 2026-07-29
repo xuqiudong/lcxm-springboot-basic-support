@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * <p>
  *     META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports下：
- *     cn.xuqiudong.common.FrameworkAutoConfiguration
+ *     cn.xuqiudong.basic.framework.FrameworkAutoConfiguration
  * </p>
  * @author Vic.xu
  * @since 2025-11-13 17:59

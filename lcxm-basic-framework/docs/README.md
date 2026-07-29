@@ -4,6 +4,7 @@
 
 ## 文档索引
 
+- [Design](design.md)：framework 设计边界、自动配置和主要流程。
 - [Code2Text](code2text.md)：字段 code 到 text 的自动转换能力。
 - [License](license.md)：轻量级运行时授权校验能力。
 
@@ -14,6 +15,7 @@
 ```text
 docs/
   README.md
+  design.md
   code2text.md
   license.md
 ```

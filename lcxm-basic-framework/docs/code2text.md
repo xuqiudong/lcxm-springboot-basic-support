@@ -41,7 +41,7 @@ Code2Text 框架的目标是：
    实现 `Code2TextResolver` 接口
    如果预加载缓存数据，则同时实现 `Code2TextPreloadable`
 3. 引入 starter 即可生效
-  参见入口类：cn.xuqiudong.common.base.code2text.Code2TextAutoConfiguration
+  参见入口类：`cn.xuqiudong.basic.framework.code2text.Code2TextAutoConfiguration`
 
 序列化时框架会自动追加对应的 `xxxText` 字段。
 

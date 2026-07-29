@@ -9,7 +9,6 @@
         <version>3.5.0-jdk21-3.0.0</version>
     </parent>
 
-    <groupId>cn.xuqiudong.common</groupId>
     <artifactId>lcxm-basic-srpc</artifactId>
     <name>lcxm-basic-srpc</name>
     <description>封装自定义 simple RPC 框架（SrpcService/SrpcReference 相关）的核心能力，包括注解、序列化、协议通信等，可独立使用或结合 Spring 使用。</description>

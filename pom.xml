@@ -11,7 +11,7 @@
 
     <!-- sonatype: 下列三项是需要的 -->
     <name>lcxm-springboot-basic-support</name>
-    <description>lcxm的基于springboot的通用基础框架: springboot版本2.7.3, jdk17</description>
+    <description>面向 Spring Boot 3.5 / JDK 21 的可复用基础能力模块集合</description>
     <url>https://gitee.com/xuqiudong/${project.git.name}</url>
 
     <modules>
