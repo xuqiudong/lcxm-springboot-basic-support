@@ -1,0 +1,44 @@
+package cn.xuqiudong.basic.third.inbound.store;
+
+import java.time.Duration;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.springframework.data.redis.core.RedisTemplate;
+
+/**
+ * Redis nonce store based on Spring Data Redis.
+ *
+ * @author Vic.xu
+ */
+public class RedisNonceStore implements NonceStore {
+
+    public static final String DEFAULT_KEY_PREFIX = "third:inbound:nonce:";
+
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    private final String keyPrefix;
+
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required RedisTemplate.")
+    public RedisNonceStore(RedisTemplate<String, Object> redisTemplate) {
+        this(redisTemplate, DEFAULT_KEY_PREFIX);
+    }
+
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required RedisTemplate.")
+    public RedisNonceStore(RedisTemplate<String, Object> redisTemplate, String keyPrefix) {
+        if (redisTemplate == null) {
+            throw new IllegalArgumentException("redisTemplate can not be null");
+        }
+        this.redisTemplate = redisTemplate;
+        this.keyPrefix = keyPrefix == null || keyPrefix.isBlank() ? DEFAULT_KEY_PREFIX : keyPrefix;
+    }
+
+    @Override
+    public boolean saveIfAbsent(String appId, String nonce, Duration ttl) {
+        Boolean success = redisTemplate.opsForValue().setIfAbsent(buildKey(appId, nonce), "1", ttl);
+        return Boolean.TRUE.equals(success);
+    }
+
+    private String buildKey(String appId, String nonce) {
+        return keyPrefix + appId + ":" + nonce;
+    }
+}
