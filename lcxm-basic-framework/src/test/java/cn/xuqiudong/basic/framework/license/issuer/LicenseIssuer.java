@@ -19,7 +19,7 @@ public class LicenseIssuer {
 
 
     public static void main(String[] args) {
-        LicenseIssuer issue = LicenseIssuer.create("hhny", 180, LicenseSecretPairs.P1)
+        LicenseIssuer issue = LicenseIssuer.create("hhny", 0, LicenseSecretPairs.P1)
                 .issue();
         issue.print();
         issue.validate();
