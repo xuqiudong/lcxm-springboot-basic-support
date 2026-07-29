@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.third.security;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.xuqiudong.basic.third.inbound.model.TokenSignPayload;
 
@@ -27,10 +28,10 @@ public final class SignaturePayloadBuilder {
      * 按固定字段顺序构建 token 签名原文。
      */
     public static String buildTokenPayload(String appId, String nonce, long timestamp, String username) {
-        if (appId == null || appId.isBlank()) {
+        if (StrUtil.isBlank(appId)) {
             throw new IllegalArgumentException("appId can not be blank");
         }
-        if (username == null || username.isBlank()) {
+        if (StrUtil.isBlank(username)) {
             throw new IllegalArgumentException("username can not be blank");
         }
         return "appId=" + encode(appId)

@@ -5,13 +5,14 @@ import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
  * 第三方出站运行参数。
  *
- * <p>公共模块只提供通用 HTTP 参数；baseUrl、密钥、业务参数等由项目侧自行维护。</p>
+ * <p>公共模块只维护通用 HTTP 参数。baseUrl、密钥、业务参数等由具体项目自行维护。</p>
  *
  * @author Vic.xu
  */
@@ -43,7 +44,7 @@ public class ThirdClientOptions {
      * 追加一个默认 header。
      */
     public ThirdClientOptions addDefaultHeader(String name, String value) {
-        if (name != null && !name.isBlank() && value != null) {
+        if (StrUtil.isNotBlank(name) && value != null) {
             this.defaultHeaders.put(name, value);
         }
         return this;

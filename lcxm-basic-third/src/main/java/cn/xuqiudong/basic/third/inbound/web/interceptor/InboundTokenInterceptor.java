@@ -6,12 +6,12 @@ import java.nio.charset.StandardCharsets;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import cn.xuqiudong.basic.core.model.BaseResponse;
+import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.inbound.constant.InboundTokenConstants;
-import cn.xuqiudong.basic.third.inbound.model.TokenCheckResult;
 import cn.xuqiudong.basic.third.inbound.service.InboundTokenService;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
@@ -23,41 +23,30 @@ import org.springframework.web.servlet.HandlerInterceptor;
  */
 public class InboundTokenInterceptor implements HandlerInterceptor {
 
-    private final InboundTokenService tokenService;
+    private InboundTokenService tokenService;
 
-    private final String tokenHeaderName;
+    private String tokenHeaderName = InboundTokenConstants.TOKEN_HEADER_NAME;
 
-    private final String tokenParameterName;
-
-    /**
-     * 创建默认 token 拦截器。
-     *
-     * <p>默认从 header {@code X-Third-Token} 读取 token，并兼容参数 {@code token}。</p>
-     */
-    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required interceptor service.")
-    public InboundTokenInterceptor(InboundTokenService tokenService) {
-        this(tokenService, InboundTokenConstants.TOKEN_HEADER_NAME, InboundTokenConstants.TOKEN_PARAMETER_NAME);
-    }
+    private String tokenParameterName = InboundTokenConstants.TOKEN_PARAMETER_NAME;
 
     /**
-     * 自定义 token 名称，同时用于 header 和 parameter。
+     * 设置 token 服务。
      */
-    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required interceptor service.")
-    public InboundTokenInterceptor(InboundTokenService tokenService, String tokenName) {
-        this(tokenService, tokenName, tokenName);
-    }
-
-    /**
-     * 自定义 token header 和 parameter 名称。
-     */
-    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required interceptor service.")
-    public InboundTokenInterceptor(InboundTokenService tokenService, String tokenHeaderName,
-            String tokenParameterName) {
-        if (tokenService == null) {
-            throw new IllegalArgumentException("tokenService can not be null");
-        }
+    public void setTokenService(InboundTokenService tokenService) {
         this.tokenService = tokenService;
+    }
+
+    /**
+     * 设置 token header 名称；为空时使用默认值 {@code X-Third-Token}。
+     */
+    public void setTokenHeaderName(String tokenHeaderName) {
         this.tokenHeaderName = StrUtil.blankToDefault(tokenHeaderName, InboundTokenConstants.TOKEN_HEADER_NAME);
+    }
+
+    /**
+     * 设置 token parameter 名称；为空时使用默认值 {@code token}。
+     */
+    public void setTokenParameterName(String tokenParameterName) {
         this.tokenParameterName = StrUtil.blankToDefault(tokenParameterName, InboundTokenConstants.TOKEN_PARAMETER_NAME);
     }
 
@@ -67,12 +56,16 @@ public class InboundTokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws IOException {
-        TokenCheckResult result = tokenService.checkToken(resolveToken(request));
-        if (!result.isSuccess()) {
-            writeJson(response, BaseResponse.error(result.getMessage()));
+        try {
+            if (tokenService == null) {
+                throw new ThirdException("tokenService can not be null");
+            }
+            tokenService.checkToken(resolveToken(request));
+            return true;
+        } catch (ThirdException e) {
+            writeJson(response, BaseResponse.error(e.getMessage()));
             return false;
         }
-        return true;
     }
 
     /**
@@ -92,7 +85,7 @@ public class InboundTokenInterceptor implements HandlerInterceptor {
      */
     private void writeJson(HttpServletResponse response, BaseResponse<?> result) throws IOException {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setContentType("application/json;charset=UTF-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(JSONUtil.toJsonStr(result));
     }
 }

@@ -1,12 +1,10 @@
 package cn.xuqiudong.basic.third.inbound.service;
 
-import java.util.List;
-
 import cn.hutool.core.date.DateUtil;
+import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.inbound.config.InboundAppConfig;
 import cn.xuqiudong.basic.third.inbound.model.TokenApplyRequest;
-import cn.xuqiudong.basic.third.inbound.model.TokenCheckResult;
-import cn.xuqiudong.basic.third.inbound.model.TokenIssueResult;
+import cn.xuqiudong.basic.third.inbound.model.TokenValue;
 import cn.xuqiudong.basic.third.inbound.registry.InboundAppConfigRegistry;
 import cn.xuqiudong.basic.third.inbound.store.CaffeineNonceStore;
 import cn.xuqiudong.basic.third.inbound.store.CaffeineTokenStore;
@@ -14,9 +12,9 @@ import cn.xuqiudong.basic.third.security.RsaSignatureUtils;
 import cn.xuqiudong.basic.third.security.SignaturePayloadBuilder;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
+import java.util.List;
+
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Minimal token issue/check/revoke flow test.
@@ -37,19 +35,22 @@ public class InboundTokenServiceTest {
                 new CaffeineNonceStore());
 
         TokenApplyRequest request = buildSignedRequest(keyPair.getPrivateKey());
-        TokenIssueResult tokenResponse = service.issueToken(request);
+        String token = service.issueToken(request);
 
-        assertTrue(tokenResponse.isSuccess());
-        assertNotNull(tokenResponse.getToken());
+        assertNotNull(token);
 
-        TokenCheckResult checkResponse = service.checkToken(tokenResponse.getToken());
-        assertTrue(checkResponse.isSuccess());
+        TokenValue checkResponse = service.checkToken(token);
+        assertNotNull(checkResponse);
 
-        TokenCheckResult revokeResponse = service.revokeToken(tokenResponse.getToken());
-        assertTrue(revokeResponse.isSuccess());
+        TokenValue revokeResponse = service.revokeToken(token);
+        assertNotNull(revokeResponse);
 
-        TokenCheckResult afterRevoke = service.checkToken(tokenResponse.getToken());
-        assertFalse(afterRevoke.isSuccess());
+        try {
+            service.checkToken(token);
+        } catch (ThirdException e) {
+            return;
+        }
+        throw new AssertionError("revoked token should be invalid");
     }
 
     private TokenApplyRequest buildSignedRequest(String privateKey) {

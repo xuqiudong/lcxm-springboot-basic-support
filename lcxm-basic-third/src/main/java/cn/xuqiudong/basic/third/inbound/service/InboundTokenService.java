@@ -10,10 +10,9 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.inbound.config.InboundAppConfig;
 import cn.xuqiudong.basic.third.inbound.model.TokenApplyRequest;
-import cn.xuqiudong.basic.third.inbound.model.TokenCheckResult;
-import cn.xuqiudong.basic.third.inbound.model.TokenIssueResult;
 import cn.xuqiudong.basic.third.inbound.model.TokenValue;
 import cn.xuqiudong.basic.third.inbound.registry.InboundAppConfigRegistry;
 import cn.xuqiudong.basic.third.inbound.store.NonceStore;
@@ -62,62 +61,59 @@ public class InboundTokenService {
     /**
      * 校验第三方签名并签发 token。
      */
-    public TokenIssueResult issueToken(TokenApplyRequest request) {
+    public String issueToken(TokenApplyRequest request) {
         String invalidMessage = validateBasicRequest(request);
         if (invalidMessage != null) {
-            return TokenIssueResult.failed(invalidMessage);
+            throw new ThirdException(invalidMessage);
         }
         InboundAppConfig config = configByAppId.get(request.getAppId());
         invalidMessage = validateConfigAndRequest(config, request);
         if (invalidMessage != null) {
-            return TokenIssueResult.failed(invalidMessage);
+            throw new ThirdException(invalidMessage);
         }
         String payload = SignaturePayloadBuilder.buildTokenPayload(request);
         boolean verified = RsaSignatureUtils.publicVerify(request.getSign(), payload, config.getPublicKey());
         if (!verified) {
-            return TokenIssueResult.failed("invalid sign");
+            throw new ThirdException("invalid sign");
         }
         if (config.isNonceRequired() && nonceStore != null) {
             boolean saved = nonceStore.saveIfAbsent(request.getAppId(), request.getNonce(), config.getTimestampTolerance());
             if (!saved) {
-                return TokenIssueResult.failed("repeated nonce");
+                throw new ThirdException("repeated nonce");
             }
         }
         String token = IdUtil.simpleUUID();
         Duration ttl = config.getTokenTtl();
         TokenValue value = new TokenValue(config.getAppId(), config.getThirdCode(), request.getUsername(), expireAt(ttl));
         tokenStore.put(token, value, ttl);
-        return TokenIssueResult.success(token);
+        return token;
     }
 
     /**
      * 校验 token 是否存在且仍在有效期内。
      */
-    public TokenCheckResult checkToken(String token) {
+    public TokenValue checkToken(String token) {
         if (StrUtil.isBlank(token)) {
-            return TokenCheckResult.failed("blank token");
+            throw new ThirdException("blank token");
         }
         TokenValue tokenValue = tokenStore.get(token);
         if (tokenValue == null) {
-            return TokenCheckResult.failed("invalid token");
+            throw new ThirdException("invalid token");
         }
         if (tokenValue.isExpired()) {
             tokenStore.remove(token);
-            return TokenCheckResult.failed("expired token");
+            throw new ThirdException("expired token");
         }
-        return TokenCheckResult.success(tokenValue);
+        return tokenValue;
     }
 
     /**
      * 主动注销 token。
      */
-    public TokenCheckResult revokeToken(String token) {
-        TokenCheckResult result = checkToken(token);
-        if (!result.isSuccess()) {
-            return result;
-        }
+    public TokenValue revokeToken(String token) {
+        TokenValue tokenValue = checkToken(token);
         tokenStore.remove(token);
-        return TokenCheckResult.success(result.getTokenValue());
+        return tokenValue;
     }
 
     /**
@@ -133,6 +129,9 @@ public class InboundTokenService {
     private Map<String, InboundAppConfig> buildConfigMap(Collection<InboundAppConfigRegistry> registries) {
         Map<String, InboundAppConfig> result = new LinkedHashMap<>();
         for (InboundAppConfigRegistry registry : registries) {
+            if (registry == null) {
+                throw new IllegalArgumentException("registry can not be null");
+            }
             InboundAppConfig config = registry.inboundConfig();
             validateRegistry(registry, config);
             config.setThirdCode(StrUtil.blankToDefault(config.getThirdCode(), registry.thirdCode()));
@@ -148,9 +147,6 @@ public class InboundTokenService {
      * 校验 registry 的基础配置，提前暴露 appId/publicKey 等配置错误。
      */
     private void validateRegistry(InboundAppConfigRegistry registry, InboundAppConfig config) {
-        if (registry == null) {
-            throw new IllegalArgumentException("registry can not be null");
-        }
         if (config == null) {
             throw new IllegalArgumentException("inboundConfig can not be null: " + registry.thirdCode());
         }
@@ -188,12 +184,23 @@ public class InboundTokenService {
         if (StrUtil.isBlank(config.getPublicKey())) {
             return "publicKey can not be blank";
         }
+        if (config.getTokenTtl() == null || config.getTokenTtl().isNegative() || config.getTokenTtl().isZero()) {
+            return "tokenTtl must be positive";
+        }
+        if (config.getTimestampTolerance() == null
+                || config.getTimestampTolerance().isNegative()
+                || config.getTimestampTolerance().isZero()) {
+            return "timestampTolerance must be positive";
+        }
         long toleranceMillis = config.getTimestampTolerance().toMillis();
         if (Math.abs(DateUtil.current() - request.getTimestamp()) > toleranceMillis) {
             return "request timestamp out of tolerance";
         }
         if (config.isNonceRequired() && StrUtil.isBlank(request.getNonce())) {
             return "nonce can not be blank";
+        }
+        if (config.isNonceRequired() && nonceStore == null) {
+            return "nonceStore can not be null when nonce required";
         }
         if (!config.allowsUsername(request.getUsername())) {
             return "invalid username";

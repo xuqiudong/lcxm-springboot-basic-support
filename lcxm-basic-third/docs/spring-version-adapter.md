@@ -84,3 +84,16 @@ lcxm-basic-third-springmvc4-adapter
 ```
 
 该模块只放低版本 Web 适配类，核心 service/store/security/outbound 继续复用 `lcxm-basic-third`。
+
+## 复制到 JDK 8 时需要调整
+
+如果不是新建适配模块，而是直接复制当前代码到 JDK 8 环境，至少需要检查这些点：
+
+- `jakarta.servlet` 改为 `javax.servlet`。
+- Spring 6 / Boot 3 依赖改为 Spring 4.x/5.x 对应依赖。
+- 模式匹配 `instanceof Xxx xxx` 改为普通 `instanceof` 后强转。
+- `String.isBlank()` 改为 Hutool `StrUtil.isBlank(...)`。
+- `Map.of(...)`、`List.of(...)` 改为 `Collections.singletonMap(...)`、`Arrays.asList(...)` 或手动构造。
+- `InputStream.readAllBytes()` 改为循环读取或使用 Hutool/Commons IO。
+- `java.time.Duration` 在 JDK 8 可用，但如果低版本项目配置体系不方便绑定，可在适配层改为毫秒数。
+- Lombok、Hutool、Caffeine、Jackson 版本需要选择仍支持 JDK 8 的版本。

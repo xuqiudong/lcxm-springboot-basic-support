@@ -1,10 +1,11 @@
 package cn.xuqiudong.basic.third.inbound.config;
 
-import lombok.Data;
-
 import java.time.Duration;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import cn.hutool.core.util.StrUtil;
+import lombok.Data;
 
 /**
  * 第三方入站 app 配置。
@@ -55,7 +56,7 @@ public class InboundAppConfig {
      * 追加一个允许访问的 username。
      */
     public InboundAppConfig addUsername(String username) {
-        if (username != null && !username.isBlank()) {
+        if (StrUtil.isNotBlank(username)) {
             this.usernames.add(username);
         }
         return this;
@@ -65,7 +66,7 @@ public class InboundAppConfig {
      * 判断当前 username 是否允许访问。
      */
     public boolean allowsUsername(String username) {
-        if (usernames.isEmpty()) {
+        if (usernames == null || usernames.isEmpty()) {
             return true;
         }
         return usernames.stream().anyMatch(item -> item.equalsIgnoreCase(username));

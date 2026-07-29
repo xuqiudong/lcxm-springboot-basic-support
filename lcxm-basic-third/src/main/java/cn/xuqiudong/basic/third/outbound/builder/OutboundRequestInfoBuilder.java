@@ -4,10 +4,12 @@ import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
 import cn.xuqiudong.basic.third.outbound.parser.OutboundResponseParser;
+import cn.xuqiudong.basic.third.outbound.util.ResponseTypeUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -104,7 +106,7 @@ public class OutboundRequestInfoBuilder<T> {
      * 设置单个 header。
      */
     public OutboundRequestInfoBuilder<T> header(String name, String value) {
-        if (name != null && !name.isBlank() && value != null) {
+        if (StrUtil.isNotBlank(name) && value != null) {
             this.headers.put(name, value);
         }
         return this;
@@ -114,7 +116,7 @@ public class OutboundRequestInfoBuilder<T> {
      * 设置单个 query 参数。
      */
     public OutboundRequestInfoBuilder<T> queryParam(String name, Object value) {
-        if (name != null && !name.isBlank() && value != null) {
+        if (StrUtil.isNotBlank(name) && value != null) {
             this.queryParams.put(name, String.valueOf(value));
         }
         return this;
@@ -134,7 +136,7 @@ public class OutboundRequestInfoBuilder<T> {
      * 设置单个 form 参数。
      */
     public OutboundRequestInfoBuilder<T> formParam(String name, Object value) {
-        if (name != null && !name.isBlank() && value != null) {
+        if (StrUtil.isNotBlank(name) && value != null) {
             this.formParams.put(name, String.valueOf(value));
         }
         return this;
@@ -191,6 +193,22 @@ public class OutboundRequestInfoBuilder<T> {
     }
 
     /**
+     * 设置包装对象响应类型，例如 {@code ThirdResponse<OrderDTO>}。
+     */
+    public OutboundRequestInfoBuilder<T> wrapperResponseType(Class<?> wrapper, Class<?> inner) {
+        this.responseJavaType = ResponseTypeUtils.objectType(wrapper, inner);
+        return this;
+    }
+
+    /**
+     * 设置包装 List 响应类型，例如 {@code ThirdResponse<List<OrderDTO>>}。
+     */
+    public OutboundRequestInfoBuilder<T> wrapperListResponseType(Class<?> wrapper, Class<?> element) {
+        this.responseJavaType = ResponseTypeUtils.wrapperListType(wrapper, element);
+        return this;
+    }
+
+    /**
      * 设置自定义响应解析器，适合非标准 JSON、纯文本等响应。
      */
     public OutboundRequestInfoBuilder<T> responseParser(OutboundResponseParser<T> responseParser) {
@@ -216,7 +234,7 @@ public class OutboundRequestInfoBuilder<T> {
      * 构建不可变请求模型。
      */
     public OutboundRequestInfo<T> build() {
-        if (url == null || url.isBlank()) {
+        if (StrUtil.isBlank(url)) {
             throw new IllegalArgumentException("url can not be blank");
         }
         return new OutboundRequestInfo<>(this);

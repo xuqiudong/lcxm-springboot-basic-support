@@ -1,11 +1,13 @@
 package cn.xuqiudong.basic.third.inbound.web.controller;
 
 import cn.xuqiudong.basic.core.model.BaseResponse;
+import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.inbound.model.TokenApplyRequest;
-import cn.xuqiudong.basic.third.inbound.model.TokenCheckResult;
-import cn.xuqiudong.basic.third.inbound.model.TokenIssueResult;
 import cn.xuqiudong.basic.third.inbound.model.TokenValue;
 import cn.xuqiudong.basic.third.inbound.service.InboundTokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/inbound/api")
 public class InboundTokenController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(InboundTokenController.class);
+
     private final InboundTokenService tokenService;
 
     /**
@@ -38,8 +42,11 @@ public class InboundTokenController {
      */
     @PostMapping("/obtain-token")
     public BaseResponse<String> obtainToken(@RequestBody TokenApplyRequest request) {
-        TokenIssueResult result = tokenService.issueToken(request);
-        return result.isSuccess() ? BaseResponse.success(result.getToken()) : BaseResponse.error(result.getMessage());
+        try {
+            return BaseResponse.success(tokenService.issueToken(request));
+        } catch (ThirdException e) {
+            return BaseResponse.error(e.getMessage());
+        }
     }
 
     /**
@@ -47,9 +54,19 @@ public class InboundTokenController {
      */
     @PostMapping("/revoke-token")
     public BaseResponse<TokenValue> revokeToken(@RequestParam("token") String token) {
-        TokenCheckResult result = tokenService.revokeToken(token);
-        return result.isSuccess()
-                ? BaseResponse.success(result.getTokenValue())
-                : BaseResponse.error(result.getMessage());
+        try {
+            return BaseResponse.success(tokenService.revokeToken(token));
+        } catch (ThirdException e) {
+            return BaseResponse.error(e.getMessage());
+        }
+    }
+
+    /**
+     * token 接口对第三方开放，默认兜底返回业务错误，避免把异常转换成 HTTP 500。
+     */
+    @ExceptionHandler(Exception.class)
+    public BaseResponse<?> handleException(Exception e) {
+        LOGGER.warn("third inbound token api failed", e);
+        return BaseResponse.error("third inbound token api failed");
     }
 }

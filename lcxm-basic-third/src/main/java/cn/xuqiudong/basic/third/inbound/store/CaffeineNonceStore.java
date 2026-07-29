@@ -29,12 +29,15 @@ public class CaffeineNonceStore implements NonceStore {
     @Override
     public boolean saveIfAbsent(String appId, String nonce, Duration ttl) {
         String key = buildKey(appId, nonce);
-        Date current = cache.getIfPresent(key);
-        if (current != null && DateUtil.date().before(current)) {
+        Date expireAt = DateUtil.date(DateUtil.current() + ttl.toMillis());
+        Date old = cache.asMap().putIfAbsent(key, expireAt);
+        if (old == null) {
+            return true;
+        }
+        if (DateUtil.date().before(old)) {
             return false;
         }
-        cache.put(key, DateUtil.date(DateUtil.current() + ttl.toMillis()));
-        return true;
+        return cache.asMap().replace(key, old, expireAt);
     }
 
     private String buildKey(String appId, String nonce) {

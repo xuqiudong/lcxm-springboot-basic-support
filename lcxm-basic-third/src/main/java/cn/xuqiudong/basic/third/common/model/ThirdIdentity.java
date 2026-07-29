@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.third.common.model;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -27,11 +28,11 @@ public final class ThirdIdentity {
     private final String name;
 
     public ThirdIdentity(String code, String name) {
-        if (code == null || code.isBlank()) {
+        if (StrUtil.isBlank(code)) {
             throw new IllegalArgumentException("third code can not be blank");
         }
         this.code = code;
-        this.name = name == null || name.isBlank() ? code : name;
+        this.name = StrUtil.isBlank(name) ? code : name;
     }
 
     public static ThirdIdentity of(String code) {

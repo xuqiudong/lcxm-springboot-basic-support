@@ -1,7 +1,7 @@
 package cn.xuqiudong.basic.third.common.exception;
 
 /**
- * Base runtime exception for third-party interaction.
+ * 第三方交互统一运行时异常。
  *
  * @author Vic.xu
  */

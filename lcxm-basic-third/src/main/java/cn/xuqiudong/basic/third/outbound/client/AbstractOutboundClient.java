@@ -2,10 +2,10 @@ package cn.xuqiudong.basic.third.outbound.client;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Collections;
 
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
-import cn.xuqiudong.basic.third.config.provider.DefaultThirdOptionsProvider;
-import cn.xuqiudong.basic.third.config.provider.ThirdOptionsProvider;
+import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
 import cn.xuqiudong.basic.third.outbound.builder.OutboundRequestInfoBuilder;
 import cn.xuqiudong.basic.third.outbound.executor.HttpOutboundExecutor;
 import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
@@ -22,25 +22,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
  */
 public abstract class AbstractOutboundClient {
 
-    private final ThirdOptionsProvider optionsProvider;
+    private final ThirdClientOptions options;
 
     private final OutboundExecutor executor;
 
     /**
-     * 使用默认出站配置和 Hutool HTTP 执行器。
+     * 使用项目传入的出站配置和执行器。
      */
-    protected AbstractOutboundClient() {
-        this(new DefaultThirdOptionsProvider(), null);
-    }
-
-    /**
-     * 使用项目传入的配置 provider 和执行器。
-     */
-    protected AbstractOutboundClient(ThirdOptionsProvider optionsProvider, OutboundExecutor executor) {
-        this.optionsProvider = optionsProvider == null ? new DefaultThirdOptionsProvider() : optionsProvider;
-        this.executor = executor == null
-                ? new HttpOutboundExecutor(this.optionsProvider.getOptions(thirdIdentity().getCode()))
-                : executor;
+    protected AbstractOutboundClient(ThirdClientOptions options, OutboundExecutor executor) {
+        this.options = options == null ? new ThirdClientOptions() : options;
+        this.executor = executor == null ? new HttpOutboundExecutor(this.options) : executor;
     }
 
     /**
@@ -57,7 +48,7 @@ public abstract class AbstractOutboundClient {
      * 构建当前第三方请求头；返回值会覆盖默认 header 中同名项。
      */
     protected Map<String, String> buildHeaders() {
-        return Map.of();
+        return Collections.emptyMap();
     }
 
     /**
@@ -129,8 +120,7 @@ public abstract class AbstractOutboundClient {
      * 合并全局默认 header 和当前 Client header。
      */
     protected Map<String, String> mergedHeaders() {
-        Map<String, String> headers = new LinkedHashMap<>(
-                optionsProvider.getOptions(thirdIdentity().getCode()).getDefaultHeaders());
+        Map<String, String> headers = new LinkedHashMap<>(options.getDefaultHeaders());
         headers.putAll(buildHeaders());
         return headers;
     }

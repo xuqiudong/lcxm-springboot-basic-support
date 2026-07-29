@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -53,6 +54,7 @@ public class HttpOutboundExecutor implements OutboundExecutor {
 
     @Override
     public <T> T execute(OutboundRequestInfo<T> request) {
+        validateRequest(request);
         long start = DateUtil.current();
         Integer httpStatus = null;
         String requestBody = null;
@@ -64,13 +66,14 @@ public class HttpOutboundExecutor implements OutboundExecutor {
                 httpStatus = response.getStatus();
                 responseBody = response.body();
             }
+            checkHttpStatus(httpStatus);
             T result = parse(responseBody, request);
             log(request, httpStatus, DateUtil.current() - start, requestBody, responseBody, null);
             return result;
         } catch (Exception e) {
             log(request, httpStatus, DateUtil.current() - start, requestBody, responseBody, e);
-            if (e instanceof ThirdException thirdException) {
-                throw thirdException;
+            if (e instanceof ThirdException) {
+                throw (ThirdException) e;
             }
             throw new ThirdException("execute outbound request failed", e);
         }
@@ -78,6 +81,7 @@ public class HttpOutboundExecutor implements OutboundExecutor {
 
     @Override
     public byte[] executeBytes(OutboundRequestInfo<?> request) {
+        validateRequest(request);
         long start = DateUtil.current();
         Integer httpStatus = null;
         String requestBody = null;
@@ -89,11 +93,21 @@ public class HttpOutboundExecutor implements OutboundExecutor {
                 httpStatus = response.getStatus();
                 bodyBytes = response.bodyBytes();
             }
+            checkHttpStatus(httpStatus);
             log(request, httpStatus, DateUtil.current() - start, requestBody, null, null);
             return bodyBytes;
         } catch (Exception e) {
             log(request, httpStatus, DateUtil.current() - start, requestBody, null, e);
+            if (e instanceof ThirdException) {
+                throw (ThirdException) e;
+            }
             throw new ThirdException("execute outbound bytes request failed", e);
+        }
+    }
+
+    private void validateRequest(OutboundRequestInfo<?> request) {
+        if (request == null) {
+            throw new ThirdException("outbound request can not be null");
         }
     }
 
@@ -156,7 +170,7 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         if (request.getResponseParser() != null) {
             return request.getResponseParser().parse(responseBody);
         }
-        if (responseBody == null || responseBody.isBlank()) {
+        if (StrUtil.isBlank(responseBody)) {
             return null;
         }
         if (request.getResponseTypeReference() != null) {
@@ -173,6 +187,12 @@ public class HttpOutboundExecutor implements OutboundExecutor {
             return responseType.cast(responseBody);
         }
         return objectMapper.readValue(responseBody, responseType);
+    }
+
+    private void checkHttpStatus(Integer httpStatus) {
+        if (httpStatus != null && httpStatus >= 400) {
+            throw new ThirdException("third http status failed: " + httpStatus);
+        }
     }
 
     private void log(OutboundRequestInfo<?> request, Integer httpStatus, long elapsedMillis, String requestBody,

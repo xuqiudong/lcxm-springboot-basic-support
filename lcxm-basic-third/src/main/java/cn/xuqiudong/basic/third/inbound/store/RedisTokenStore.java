@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.third.inbound.store;
 
 import java.time.Duration;
 
+import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.basic.third.inbound.model.TokenValue;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -33,7 +34,7 @@ public class RedisTokenStore implements TokenStore {
             throw new IllegalArgumentException("redisTemplate can not be null");
         }
         this.redisTemplate = redisTemplate;
-        this.keyPrefix = keyPrefix == null || keyPrefix.isBlank() ? DEFAULT_KEY_PREFIX : keyPrefix;
+        this.keyPrefix = StrUtil.blankToDefault(keyPrefix, DEFAULT_KEY_PREFIX);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class RedisTokenStore implements TokenStore {
     @Override
     public TokenValue get(String token) {
         Object value = redisTemplate.opsForValue().get(buildKey(token));
-        return value instanceof TokenValue tokenValue ? tokenValue : null;
+        return value instanceof TokenValue ? (TokenValue) value : null;
     }
 
     @Override

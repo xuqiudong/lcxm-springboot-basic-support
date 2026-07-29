@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.third.inbound.store;
 
 import java.time.Duration;
 
+import cn.hutool.core.util.StrUtil;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -29,7 +30,7 @@ public class RedisNonceStore implements NonceStore {
             throw new IllegalArgumentException("redisTemplate can not be null");
         }
         this.redisTemplate = redisTemplate;
-        this.keyPrefix = keyPrefix == null || keyPrefix.isBlank() ? DEFAULT_KEY_PREFIX : keyPrefix;
+        this.keyPrefix = StrUtil.blankToDefault(keyPrefix, DEFAULT_KEY_PREFIX);
     }
 
     @Override

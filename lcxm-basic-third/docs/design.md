@@ -30,6 +30,8 @@
 | nonce | 可选，默认关闭 |
 | RSA/HTTP | 使用 Hutool |
 | 出站业务 | 只抽公共请求骨架，不沉淀具体厂商参数 |
+| 出站响应 | 提供 JavaType 构建工具，不强制统一厂商响应基类 |
+| 出站日志 | 默认 slf4j，可组合项目自定义 logger；请求体、响应体、异常信息默认裁剪 |
 
 ## 配置基类
 
@@ -49,14 +51,10 @@ AbstractThirdInboundConfiguration
   -> inboundExcludePathPatterns()
 
 AbstractThirdOutboundConfiguration
-  -> thirdOptionsProvider()               # @Bean；委托 thirdClientOptions(thirdCode)
-  -> thirdClientOptions(thirdCode)        # 默认返回 defaultThirdClientOptions()
-  -> defaultThirdClientOptions()
-  -> thirdExchangeLogger()                # @Bean；委托 recordThirdExchangeLog(log)
-  -> recordThirdExchangeLog(log)          # 先按开关写 slf4j，再调用 saveThirdExchangeLog(log)
+  -> thirdExchangeLogger()                # @Bean；返回 CompositeThirdExchangeLogger
   -> printThirdExchangeLog()              # 默认 true
-  -> saveThirdExchangeLog(log)            # 默认不处理；落库、MQ、审计时覆盖这里
-  -> thirdOutboundExecutor(...)           # 创建 Hutool HTTP 执行器
+  -> thirdSlf4jExchangeLogTextMaxLength() # 默认 4000；只影响 slf4j 打印，不影响日志模型
+  -> customThirdExchangeLogger()          # 默认 null；落库、MQ、审计时返回项目侧 logger
 ```
 
 配置基类不做自动配置。项目接入时显式继承，显式加 `@Configuration`，按需覆盖方法。
@@ -113,10 +111,12 @@ AbstractThirdOutboundConfiguration
 
 ```text
 1. 项目配置类继承 AbstractThirdOutboundConfiguration
-   -> 提供 ThirdOptionsProvider / ThirdExchangeLogger
+   -> 提供 ThirdExchangeLogger
+   -> 具体第三方 Client 声明时由项目侧组装 ThirdClientOptions
 
 2. 业务方编写某厂商 Client
    -> 继承 AbstractOutboundClient
+   -> 构造函数传入 ThirdClientOptions / OutboundExecutor
    -> 实现 thirdIdentity/buildUrl/buildHeaders
 
 3. 业务方法构建请求
@@ -129,10 +129,14 @@ AbstractThirdOutboundConfiguration
 
 5. 解析响应
    -> ObjectMapper 默认解析
+   -> ResponseTypeUtils 构建包装泛型 JavaType
    -> 特殊格式走 OutboundResponseParser
 
 6. 记录日志
-   -> ThirdExchangeLogger
+   -> HttpOutboundExecutor 生成完整 ThirdExchangeLog
+   -> CompositeThirdExchangeLogger
+   -> Slf4jThirdExchangeLogger 按配置裁剪打印内容
+   -> 项目自定义 ThirdExchangeLogger 获取完整模型，自行决定是否裁剪入库
 ```
 
 ## NonceStore

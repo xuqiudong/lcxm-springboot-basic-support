@@ -77,8 +77,11 @@ public abstract class AbstractThirdInboundConfiguration {
      */
     @Bean
     public InboundTokenInterceptor inboundTokenInterceptor(InboundTokenService tokenService) {
-        return new InboundTokenInterceptor(tokenService, inboundTokenHeaderName(),
-                InboundTokenConstants.TOKEN_PARAMETER_NAME);
+        InboundTokenInterceptor interceptor = new InboundTokenInterceptor();
+        interceptor.setTokenService(tokenService);
+        interceptor.setTokenHeaderName(inboundTokenHeaderName());
+        interceptor.setTokenParameterName(InboundTokenConstants.TOKEN_PARAMETER_NAME);
+        return interceptor;
     }
 
     /**

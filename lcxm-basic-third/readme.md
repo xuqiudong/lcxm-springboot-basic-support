@@ -7,6 +7,29 @@
 
 模块只提供通用机制，不维护具体项目的第三方参数、缓存配置、厂商接口、业务 URL 和日志落库策略。
 
+## 如何阅读
+
+| 你要做什么 | 先看 |
+| --- | --- |
+| 快速了解模块结构和核心类 | 本文的 [主包 Tree](#主包-tree) |
+| 判断设计边界、配置基类、请求流程 | [设计说明](docs/design.md) |
+| 开发“第三方请求我方”的项目代码 | [开发流程：第三方接入我方](docs/开发流程-接入我方.md) |
+| 开发“我方调用第三方”的项目代码 | [开发流程：我方调用第三方](docs/开发流程-调用他方.md) |
+| 给第三方系统看的接口协议 | [第三方入站接口文档](docs/第三方入站接口文档.md) |
+| 迁移到 Spring MVC 低版本 / JDK 8 | [Spring 低版本适配说明](docs/spring-version-adapter.md) |
+
+推荐阅读顺序：
+
+```text
+readme.md
+  -> docs/design.md
+  -> 按方向选择：
+       入站：docs/开发流程-接入我方.md
+       出站：docs/开发流程-调用他方.md
+  -> 对外提供：docs/第三方入站接口文档.md
+  -> 低版本迁移：docs/spring-version-adapter.md
+```
+
 ## 主包 Tree
 
 ```text
@@ -20,9 +43,6 @@ cn.xuqiudong.basic.third
 |-- config
 |   |-- model
 |   |   `-- ThirdClientOptions             # 出站通用参数：超时、默认 header、代理、日志开关
-|   |-- provider
-|   |   |-- ThirdOptionsProvider           # 按 thirdCode 提供出站配置
-|   |   `-- DefaultThirdOptionsProvider    # 默认出站配置 provider
 |   `-- spring
 |       |-- AbstractThirdInboundConfiguration  # 入站 Spring 配置基类；不加 @Configuration
 |       `-- AbstractThirdOutboundConfiguration # 出站 Spring 配置基类；不加 @Configuration
@@ -38,8 +58,10 @@ cn.xuqiudong.basic.third
 |   |-- model
 |   |   |-- OutboundRequestInfo            # 出站请求模型
 |   |   `-- ThirdHttpMethod                # HTTP method
-|   `-- parser
-|       `-- OutboundResponseParser         # 特殊响应解析扩展点
+|   |-- parser
+|   |   `-- OutboundResponseParser         # 特殊响应解析扩展点
+|   `-- util
+|       `-- ResponseTypeUtils              # 泛型响应 JavaType 构建工具
 |
 |-- inbound                               # 第三方请求我们
 |   |-- config
@@ -49,9 +71,7 @@ cn.xuqiudong.basic.third
 |   |-- model
 |   |   |-- TokenApplyRequest              # 获取 token 请求
 |   |   |-- TokenSignPayload               # 签名字段
-|   |   |-- TokenValue                     # token 存储值
-|   |   |-- TokenIssueResult               # token 签发结果
-|   |   `-- TokenCheckResult               # token 校验/注销结果
+|   |   `-- TokenValue                     # token 存储值
 |   |-- service
 |   |   `-- InboundTokenService            # 验签、签发、校验、注销
 |   |-- store
@@ -77,12 +97,13 @@ cn.xuqiudong.basic.third
     |   `-- ThirdExchangeStatus            # SUCCESS/FAILED
     `-- service
         |-- ThirdExchangeLogger            # 日志处理接口
+        |-- CompositeThirdExchangeLogger   # 组合 slf4j 和项目自定义 logger
         `-- Slf4jThirdExchangeLogger       # slf4j 默认实现
 ```
 
-## 入站接入
+## 接入摘要
 
-业务项目通常只做这些事：
+入站方向，业务项目通常只做这些事：
 
 - 写配置类继承 `AbstractThirdInboundConfiguration`，并在子类加 `@Configuration`。
 - 默认使用 Redis 存储 token 和 nonce，项目需要提供 `inboundRedisTemplate()`。
@@ -93,15 +114,14 @@ cn.xuqiudong.basic.third
 
 默认 token header 为 `X-Third-Token`，参数兼容 `token`。
 
-## 出站接入
-
-业务项目通常只做这些事：
+出站方向，业务项目通常只做这些事：
 
 - 写配置类继承 `AbstractThirdOutboundConfiguration`，并在子类加 `@Configuration`。
 - 每个第三方写一个 Client，继承 `AbstractOutboundClient`。
 - 实现 `thirdIdentity()`、`buildUrl(String path)`、`buildHeaders()`。
-- 需要按厂商配置参数时覆盖 `thirdClientOptions(String thirdCode)`。
-- 需要日志落库时覆盖 `saveThirdExchangeLog(ThirdExchangeLog log)`。
+- 第三方参数由项目侧自行读取并组装为 `ThirdClientOptions`。
+- 需要日志落库时覆盖 `customThirdExchangeLogger()` 返回项目侧 logger。
+- 默认 slf4j 日志会裁剪请求体、响应体、异常信息，长度由配置基类方法 `thirdSlf4jExchangeLogTextMaxLength()` 控制。
 - 需要特殊响应解析时使用 `OutboundResponseParser`。
 
 ## Token 过期
@@ -120,10 +140,7 @@ cn.xuqiudong.basic.third
 - RSA、HTTP、Date、UUID 优先使用 Hutool。
 - `spring-webmvc`、`spring-data-redis` 为 optional。
 - 当前主线面向 Spring Boot 3 / Spring 6 / JDK 21，使用 `jakarta.servlet`。
-- 低版本 Spring MVC 适配见 [spring-version-adapter.md](spring-version-adapter.md)。
+- 低版本 Spring MVC 适配见 [Spring 低版本适配说明](docs/spring-version-adapter.md)。
 
-## 文档
 
-- [第三方入站接口文档](docs/第三方入站接口文档.md)
-- [开发流程：第三方接入我方](docs/开发流程-接入我方.md)
-- [开发流程：我方调用第三方](docs/开发流程-调用他方.md)
+019fa7df-c155-77c2-afd1-23a57deafc43
