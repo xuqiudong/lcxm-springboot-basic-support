@@ -30,7 +30,7 @@
 | nonce | 可选，默认关闭 |
 | RSA/HTTP | 使用 Hutool |
 | 出站业务 | 只抽公共请求骨架，不沉淀具体厂商参数 |
-| 出站厂商基类 | `AbstractOutboundPartner<C>` 负责 host、API 枚举、配置、常用请求封装 |
+| 出站厂商基类 | `AbstractOutboundPartner<C>` 负责 host、API 枚举、配置短缓存、常用请求封装 |
 | 出站请求类型 | `OutboundRequestType` 明确 JSON/FORM/TEXT/BYTES/QUERY/NONE，默认可推断 |
 | 出站响应 | 提供 JavaType 构建工具，不强制统一厂商响应基类 |
 | 出站日志 | 默认 slf4j，可组合项目自定义 logger；请求体、响应体、异常信息默认裁剪 |
@@ -119,12 +119,13 @@ AbstractThirdOutboundConfiguration
 2. 业务方定义厂商 API 和配置
    -> enum XxxApi implements ThirdApi
    -> XxxConfig implements OutboundPartnerConfig
-   -> OutboundPartnerConfigProvider<XxxConfig> 从配置文件/DB/Redis/配置中心读取
-   -> 可选 CachingOutboundPartnerConfigProvider 做 Caffeine 短缓存
+   -> 配置来源由项目自行处理，可来自配置文件/DB/Redis/配置中心
 
 3. 业务方编写某厂商 Client
    -> 继承 AbstractOutboundPartner<XxxConfig>
    -> 实现 thirdIdentity
+   -> 实现 loadConfig
+   -> 默认 Caffeine 缓存配置 5 分钟；按需覆盖 configCacheTtl
    -> 按需覆盖 resolveApiPath/buildHeaders/afterResponse
 
 4. 业务方法构建请求

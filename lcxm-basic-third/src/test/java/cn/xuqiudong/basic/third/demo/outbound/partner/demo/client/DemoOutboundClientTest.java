@@ -1,10 +1,11 @@
 package cn.xuqiudong.basic.third.demo.outbound.partner.demo.client;
 
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
-import cn.xuqiudong.basic.third.demo.outbound.partner.demo.config.DemoOutboundConfigProvider;
+import cn.xuqiudong.basic.third.demo.outbound.partner.demo.config.DemoOutboundConfig;
 import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoRequest;
 import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoResponse;
 import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoThirdResponse;
@@ -25,7 +26,6 @@ public class DemoOutboundClientTest {
     public void submitOrderShouldBuildPartnerRequest() {
         AtomicReference<OutboundRequestInfo<?>> requestRef = new AtomicReference<>();
         DemoOutboundClient client = new DemoOutboundClient(
-                new DemoOutboundConfigProvider(),
                 new ThirdClientOptions(),
                 new DemoExecutor(requestRef, true));
 
@@ -48,7 +48,6 @@ public class DemoOutboundClientTest {
     @Test
     public void submitOrderShouldThrowWhenPartnerResponseFailed() {
         DemoOutboundClient client = new DemoOutboundClient(
-                new DemoOutboundConfigProvider(),
                 new ThirdClientOptions(),
                 new DemoExecutor(new AtomicReference<>(), false));
 
@@ -58,6 +57,18 @@ public class DemoOutboundClientTest {
         } catch (ThirdException e) {
             assertEquals("demo third api failed: 提交订单, failed", e.getMessage());
         }
+    }
+
+    @Test
+    public void submitOrderShouldReuseCachedConfig() {
+        CountingDemoOutboundClient client = new CountingDemoOutboundClient(
+                new ThirdClientOptions(),
+                new DemoExecutor(new AtomicReference<>(), true));
+
+        client.submitOrder(new DemoRequest());
+        client.submitOrder(new DemoRequest());
+
+        assertEquals(1, client.getLoadCount());
     }
 
     private static class DemoExecutor implements OutboundExecutor {
@@ -89,6 +100,25 @@ public class DemoOutboundClientTest {
         public byte[] executeBytes(OutboundRequestInfo<?> request) {
             requestRef.set(request);
             return new byte[0];
+        }
+    }
+
+    private static class CountingDemoOutboundClient extends DemoOutboundClient {
+
+        private final AtomicInteger loadCount = new AtomicInteger();
+
+        private CountingDemoOutboundClient(ThirdClientOptions options, OutboundExecutor executor) {
+            super(options, executor);
+        }
+
+        @Override
+        protected DemoOutboundConfig loadConfig() {
+            loadCount.incrementAndGet();
+            return super.loadConfig();
+        }
+
+        private int getLoadCount() {
+            return loadCount.get();
         }
     }
 }

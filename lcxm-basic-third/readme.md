@@ -53,9 +53,7 @@ cn.xuqiudong.basic.third
 |   |-- api
 |   |   `-- ThirdApi                      # 厂商 API 枚举接口：apiName/path/method/successCode
 |   |-- config
-|   |   |-- OutboundPartnerConfig         # 厂商出站配置基类：host、通用 HTTP options
-|   |   |-- OutboundPartnerConfigProvider # 厂商配置提供者；项目侧实现
-|   |   `-- CachingOutboundPartnerConfigProvider # Caffeine 配置缓存包装器
+|   |   `-- OutboundPartnerConfig         # 厂商出站配置基类：host、通用 HTTP options
 |   |-- client
 |   |   |-- AbstractOutboundClient         # 出站 HTTP 执行底座
 |   |   `-- AbstractOutboundPartner        # 厂商 Client 基类：配置、host、API、常用 request 封装
@@ -131,15 +129,14 @@ src/test/java/cn/xuqiudong/basic/third/demo
 |               `-- DemoInboundBusinessController # demo 第三方请求我方的业务接口
 `-- outbound
     |-- config
-    |   `-- DemoThirdOutboundConfiguration    # 出站方向全局配置：logger、provider、client bean 装配
+    |   `-- DemoThirdOutboundConfiguration    # 出站方向全局配置：logger、client bean 装配
     `-- partner                              # 出站厂商实现
         `-- demo
             |-- client
             |   |-- DemoOutboundClient        # demo 第三方出站 Client
             |   `-- DemoOutboundClientTest    # demo Client 直接运行测试
             |-- config
-            |   |-- DemoOutboundConfig        # demo 第三方出站配置模型
-            |   `-- DemoOutboundConfigProvider # demo 第三方配置来源
+            |   `-- DemoOutboundConfig        # demo 第三方出站配置模型
             |-- enums
             |   `-- DemoApi                   # demo 第三方 API 枚举
             `-- model
@@ -171,7 +168,8 @@ src/test/java/cn/xuqiudong/basic/third/demo
 - 每个第三方定义一个 API 枚举，实现 `ThirdApi`。
 - 每个第三方定义一个配置模型，实现 `OutboundPartnerConfig`，至少提供 `host`。
 - 每个第三方写一个 Client，优先继承 `AbstractOutboundPartner<C>`。
-- 实现 `thirdIdentity()`，按需覆盖 `resolveApiPath(...)`、`buildHeaders(api)`、`afterResponse(...)`。
+- 实现 `thirdIdentity()` 和 `loadConfig()`，按需覆盖 `resolveApiPath(...)`、`buildHeaders(api)`、`afterResponse(...)`。
+- `loadConfig()` 的返回结果默认使用 Caffeine 缓存 5 分钟；覆盖 `configCacheTtl()` 可调整，返回小于等于 0 表示不缓存。
 - 需要日志落库时覆盖 `customThirdExchangeLogger()` 返回项目侧 logger。
 - 默认 slf4j 日志会裁剪请求体、响应体、异常信息，长度由配置基类方法 `thirdSlf4jExchangeLogTextMaxLength()` 控制。
 - JSON/FORM/TEXT/BYTES 请求通过 `OutboundRequestType` 明确表达，builder 也会按 body/form/query 自动推断。

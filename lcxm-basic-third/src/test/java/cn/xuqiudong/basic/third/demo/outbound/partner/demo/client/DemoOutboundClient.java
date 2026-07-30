@@ -13,7 +13,6 @@ import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoResponse;
 import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoThirdResponse;
 import cn.xuqiudong.basic.third.outbound.api.ThirdApi;
 import cn.xuqiudong.basic.third.outbound.client.AbstractOutboundPartner;
-import cn.xuqiudong.basic.third.outbound.config.OutboundPartnerConfigProvider;
 import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
 import cn.xuqiudong.basic.third.outbound.util.ResponseTypeUtils;
 import com.fasterxml.jackson.databind.JavaType;
@@ -25,9 +24,8 @@ import com.fasterxml.jackson.databind.JavaType;
  */
 public class DemoOutboundClient extends AbstractOutboundPartner<DemoOutboundConfig> {
 
-    public DemoOutboundClient(OutboundPartnerConfigProvider<DemoOutboundConfig> configProvider,
-            ThirdClientOptions options, OutboundExecutor executor) {
-        super(configProvider, options, executor);
+    public DemoOutboundClient(ThirdClientOptions options, OutboundExecutor executor) {
+        super(options, executor);
     }
 
     @Override
@@ -75,5 +73,22 @@ public class DemoOutboundClient extends AbstractOutboundPartner<DemoOutboundConf
     private String getToken() {
         DemoOutboundConfig config = getConfig();
         return config.getClientId() + ":" + config.getClientSecret();
+    }
+
+    /**
+     * demo 配置读取逻辑。
+     *
+     * <p>真实项目可在这里读取数据库、Redis、配置中心，或调用项目自己的配置服务。
+     * 基类默认会对加载结果做 Caffeine 短缓存。</p>
+     */
+    @Override
+    protected DemoOutboundConfig loadConfig() {
+        DemoOutboundConfig config = new DemoOutboundConfig();
+        config.setHost("https://third.example.com");
+        config.setClientId("demo-client-id");
+        config.setClientSecret("demo-client-secret");
+        config.setClientOptions(new ThirdClientOptions()
+                .addDefaultHeader("X-Demo-Client", "demo"));
+        return config;
     }
 }
