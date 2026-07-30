@@ -19,6 +19,7 @@ import cn.xuqiudong.basic.third.log.model.ThirdExchangeStatus;
 import cn.xuqiudong.basic.third.log.service.Slf4jThirdExchangeLogger;
 import cn.xuqiudong.basic.third.log.service.ThirdExchangeLogger;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
+import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,6 +37,10 @@ public class HttpOutboundExecutor implements OutboundExecutor {
     private final ThirdClientOptions options;
 
     private final ThirdExchangeLogger exchangeLogger;
+
+    private static final String CONTENT_TYPE = "Content-Type";
+
+    private static final String ACCEPT = "Accept";
 
     public HttpOutboundExecutor() {
         this(new ThirdClientOptions());
@@ -61,7 +66,7 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         String responseBody = null;
         try {
             HttpRequest httpRequest = buildRequest(request);
-            requestBody = resolveRequestBody(request);
+            requestBody = resolveLogRequestBody(request);
             try (HttpResponse response = httpRequest.execute()) {
                 httpStatus = response.getStatus();
                 responseBody = response.body();
@@ -87,7 +92,7 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         String requestBody = null;
         try {
             HttpRequest httpRequest = buildRequest(request);
-            requestBody = resolveRequestBody(request);
+            requestBody = resolveLogRequestBody(request);
             byte[] bodyBytes;
             try (HttpResponse response = httpRequest.execute()) {
                 httpStatus = response.getStatus();
@@ -121,11 +126,8 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         }
         httpRequest.addHeaders(options.getDefaultHeaders());
         httpRequest.addHeaders(request.getHeaders());
-        if (request.getBody() != null) {
-            httpRequest.body(resolveRequestBody(request));
-        } else if (!request.getFormParams().isEmpty()) {
-            httpRequest.form(toObjectMap(request.getFormParams()));
-        }
+        applyRequestTypeHeaders(httpRequest, request);
+        writeRequestBody(httpRequest, request);
         return httpRequest;
     }
 
@@ -157,13 +159,81 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         return Method.valueOf((method == null ? ThirdHttpMethod.GET : method).name());
     }
 
-    private String resolveRequestBody(OutboundRequestInfo<?> request) throws Exception {
+    private void applyRequestTypeHeaders(HttpRequest httpRequest, OutboundRequestInfo<?> request) {
+        OutboundRequestType requestType = resolveRequestType(request);
+        String contentType = requestType.getContentType();
+        if (contentType != null && !hasHeader(request, CONTENT_TYPE)) {
+            httpRequest.header(CONTENT_TYPE, contentType);
+        }
+        if (OutboundRequestType.JSON == requestType && !hasHeader(request, ACCEPT)) {
+            httpRequest.header(ACCEPT, OutboundRequestType.JSON.getContentType());
+        }
+    }
+
+    private boolean hasHeader(OutboundRequestInfo<?> request, String name) {
+        return containsHeader(options.getDefaultHeaders(), name) || containsHeader(request.getHeaders(), name);
+    }
+
+    private boolean containsHeader(Map<String, String> headers, String name) {
+        if (headers == null || headers.isEmpty()) {
+            return false;
+        }
+        return headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase(name));
+    }
+
+    private void writeRequestBody(HttpRequest httpRequest, OutboundRequestInfo<?> request) throws Exception {
+        OutboundRequestType requestType = resolveRequestType(request);
+        switch (requestType) {
+            case FORM:
+                httpRequest.form(toObjectMap(request.getFormParams()));
+                break;
+            case TEXT:
+                if (request.getBody() != null) {
+                    httpRequest.body(String.valueOf(request.getBody()));
+                }
+                break;
+            case BYTES:
+                if (request.getBody() instanceof byte[]) {
+                    httpRequest.body((byte[]) request.getBody());
+                } else if (request.getBody() != null) {
+                    httpRequest.body(String.valueOf(request.getBody()).getBytes(StandardCharsets.UTF_8));
+                }
+                break;
+            case JSON:
+                if (request.getBody() != null) {
+                    httpRequest.body(resolveJsonBody(request.getBody()));
+                }
+                break;
+            case QUERY:
+            case NONE:
+            default:
+                break;
+        }
+    }
+
+    private OutboundRequestType resolveRequestType(OutboundRequestInfo<?> request) {
+        return request.getRequestType() == null ? OutboundRequestType.NONE : request.getRequestType();
+    }
+
+    private String resolveLogRequestBody(OutboundRequestInfo<?> request) throws Exception {
+        OutboundRequestType requestType = resolveRequestType(request);
+        if (OutboundRequestType.FORM == requestType) {
+            return request.getFormParams().isEmpty() ? null : request.getFormParams().toString();
+        }
+        if (OutboundRequestType.BYTES == requestType) {
+            return request.getBody() instanceof byte[] ? "byte[" + ((byte[]) request.getBody()).length + "]" : null;
+        }
         if (request.getBody() == null) {
             return null;
         }
-        return request.getBody() instanceof String
-                ? (String) request.getBody()
-                : objectMapper.writeValueAsString(request.getBody());
+        return OutboundRequestType.JSON == requestType ? resolveJsonBody(request.getBody()) : String.valueOf(request.getBody());
+    }
+
+    private String resolveJsonBody(Object body) throws Exception {
+        if (body == null) {
+            return null;
+        }
+        return body instanceof String ? (String) body : objectMapper.writeValueAsString(body);
     }
 
     private <T> T parse(String responseBody, OutboundRequestInfo<T> request) throws Exception {

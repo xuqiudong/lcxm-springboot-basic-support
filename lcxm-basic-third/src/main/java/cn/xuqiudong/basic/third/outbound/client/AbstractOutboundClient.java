@@ -108,6 +108,13 @@ public abstract class AbstractOutboundClient {
     }
 
     /**
+     * 执行已完整构建的出站请求并返回原始字节。
+     */
+    protected byte[] executeBytes(OutboundRequestInfo<?> request) {
+        return executor.executeBytes(request);
+    }
+
+    /**
      * 创建带默认 thirdIdentity/header/responseType 的请求构建器。
      */
     protected <T> OutboundRequestInfoBuilder<T> builder(Class<T> responseType) {
@@ -123,5 +130,12 @@ public abstract class AbstractOutboundClient {
         Map<String, String> headers = new LinkedHashMap<>(options.getDefaultHeaders());
         headers.putAll(buildHeaders());
         return headers;
+    }
+
+    /**
+     * 当前 Client 的通用 HTTP 配置。
+     */
+    protected ThirdClientOptions options() {
+        return options;
     }
 }

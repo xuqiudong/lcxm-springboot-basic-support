@@ -30,6 +30,8 @@
 | nonce | 可选，默认关闭 |
 | RSA/HTTP | 使用 Hutool |
 | 出站业务 | 只抽公共请求骨架，不沉淀具体厂商参数 |
+| 出站厂商基类 | `AbstractOutboundPartner<C>` 负责 host、API 枚举、配置、常用请求封装 |
+| 出站请求类型 | `OutboundRequestType` 明确 JSON/FORM/TEXT/BYTES/QUERY/NONE，默认可推断 |
 | 出站响应 | 提供 JavaType 构建工具，不强制统一厂商响应基类 |
 | 出站日志 | 默认 slf4j，可组合项目自定义 logger；请求体、响应体、异常信息默认裁剪 |
 
@@ -112,27 +114,35 @@ AbstractThirdOutboundConfiguration
 ```text
 1. 项目配置类继承 AbstractThirdOutboundConfiguration
    -> 提供 ThirdExchangeLogger
-   -> 具体第三方 Client 声明时由项目侧组装 ThirdClientOptions
+   -> 具体第三方 Client 声明时注入 ThirdExchangeLogger / OutboundExecutor
 
-2. 业务方编写某厂商 Client
-   -> 继承 AbstractOutboundClient
-   -> 构造函数传入 ThirdClientOptions / OutboundExecutor
-   -> 实现 thirdIdentity/buildUrl/buildHeaders
+2. 业务方定义厂商 API 和配置
+   -> enum XxxApi implements ThirdApi
+   -> XxxConfig implements OutboundPartnerConfig
+   -> OutboundPartnerConfigProvider<XxxConfig> 从配置文件/DB/Redis/配置中心读取
+   -> 可选 CachingOutboundPartnerConfigProvider 做 Caffeine 短缓存
 
-3. 业务方法构建请求
+3. 业务方编写某厂商 Client
+   -> 继承 AbstractOutboundPartner<XxxConfig>
+   -> 实现 thirdIdentity
+   -> 按需覆盖 resolveApiPath/buildHeaders/afterResponse
+
+4. 业务方法构建请求
    -> OutboundRequestInfoBuilder
-   -> 设置 method/query/form/body/responseType
+   -> 设置 method/query/form/jsonBody/textBody/bytesBody/responseType
+   -> OutboundRequestType 显式指定或自动推断
 
-4. 执行请求
+5. 执行请求
    -> HttpOutboundExecutor
    -> Hutool HTTP
+   -> 按 OutboundRequestType 补 Content-Type/Accept 并写入请求体
 
-5. 解析响应
+6. 解析响应
    -> ObjectMapper 默认解析
    -> ResponseTypeUtils 构建包装泛型 JavaType
    -> 特殊格式走 OutboundResponseParser
 
-6. 记录日志
+7. 记录日志
    -> HttpOutboundExecutor 生成完整 ThirdExchangeLog
    -> CompositeThirdExchangeLogger
    -> Slf4jThirdExchangeLogger 按配置裁剪打印内容

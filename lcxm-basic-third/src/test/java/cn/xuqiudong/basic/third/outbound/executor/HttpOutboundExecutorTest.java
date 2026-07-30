@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -36,6 +37,10 @@ public class HttpOutboundExecutorTest {
     private final AtomicReference<String> query = new AtomicReference<>();
 
     private final AtomicReference<String> body = new AtomicReference<>();
+
+    private final AtomicReference<String> contentType = new AtomicReference<>();
+
+    private final AtomicReference<String> accept = new AtomicReference<>();
 
     @Before
     public void setUp() throws IOException {
@@ -87,6 +92,8 @@ public class HttpOutboundExecutorTest {
         assertEquals("POST", method.get());
         assertEquals("access_token=token", query.get());
         assertEquals("{\"name\":\"vic\"}", body.get());
+        assertTrue(contentType.get().startsWith("application/json"));
+        assertEquals("application/json", accept.get());
     }
 
     @Test
@@ -105,6 +112,7 @@ public class HttpOutboundExecutorTest {
         assertEquals("POST", method.get());
         assertEquals(null, query.get());
         assertEquals("name=vic&page=1", body.get());
+        assertTrue(contentType.get().startsWith("application/x-www-form-urlencoded"));
     }
 
     @Test
@@ -143,6 +151,8 @@ public class HttpOutboundExecutorTest {
     private void handle(HttpExchange exchange) throws IOException {
         method.set(exchange.getRequestMethod());
         query.set(exchange.getRequestURI().getRawQuery());
+        contentType.set(exchange.getRequestHeaders().getFirst("Content-Type"));
+        accept.set(exchange.getRequestHeaders().getFirst("Accept"));
         body.set(new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
         byte[] response = "ok".getBytes(StandardCharsets.UTF_8);
         exchange.sendResponseHeaders(200, response.length);

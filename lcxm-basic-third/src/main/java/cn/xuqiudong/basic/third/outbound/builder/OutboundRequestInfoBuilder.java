@@ -7,6 +7,7 @@ import java.util.Map;
 import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
+import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
 import cn.xuqiudong.basic.third.outbound.parser.OutboundResponseParser;
 import cn.xuqiudong.basic.third.outbound.util.ResponseTypeUtils;
@@ -38,6 +39,8 @@ public class OutboundRequestInfoBuilder<T> {
     private final Map<String, String> queryParams = new LinkedHashMap<>();
 
     private final Map<String, String> formParams = new LinkedHashMap<>();
+
+    private OutboundRequestType requestType;
 
     private Object body;
 
@@ -138,6 +141,7 @@ public class OutboundRequestInfoBuilder<T> {
     public OutboundRequestInfoBuilder<T> formParam(String name, Object value) {
         if (StrUtil.isNotBlank(name) && value != null) {
             this.formParams.put(name, String.valueOf(value));
+            this.requestType = OutboundRequestType.FORM;
         }
         return this;
     }
@@ -153,10 +157,44 @@ public class OutboundRequestInfoBuilder<T> {
     }
 
     /**
-     * 设置请求 body；对象会由默认执行器序列化为 JSON。
+     * 设置 JSON 请求体；对象会由默认执行器序列化为 JSON。
      */
     public OutboundRequestInfoBuilder<T> body(Object body) {
+        return jsonBody(body);
+    }
+
+    /**
+     * 设置 JSON 请求体。
+     */
+    public OutboundRequestInfoBuilder<T> jsonBody(Object body) {
         this.body = body;
+        this.requestType = body == null ? this.requestType : OutboundRequestType.JSON;
+        return this;
+    }
+
+    /**
+     * 设置纯文本请求体。
+     */
+    public OutboundRequestInfoBuilder<T> textBody(String body) {
+        this.body = body;
+        this.requestType = body == null ? this.requestType : OutboundRequestType.TEXT;
+        return this;
+    }
+
+    /**
+     * 设置二进制请求体。
+     */
+    public OutboundRequestInfoBuilder<T> bytesBody(byte[] body) {
+        this.body = body;
+        this.requestType = body == null ? this.requestType : OutboundRequestType.BYTES;
+        return this;
+    }
+
+    /**
+     * 显式设置请求体类型；通常优先使用 jsonBody/formParams/textBody/bytesBody。
+     */
+    public OutboundRequestInfoBuilder<T> requestType(OutboundRequestType requestType) {
+        this.requestType = requestType;
         return this;
     }
 
@@ -227,7 +265,7 @@ public class OutboundRequestInfoBuilder<T> {
      * 快捷设置 POST 请求。
      */
     public OutboundRequestInfoBuilder<T> post(String url, Object body, Class<T> responseType) {
-        return url(url).method(ThirdHttpMethod.POST).body(body).responseType(responseType);
+        return url(url).method(ThirdHttpMethod.POST).jsonBody(body).responseType(responseType);
     }
 
     /**
@@ -237,6 +275,23 @@ public class OutboundRequestInfoBuilder<T> {
         if (StrUtil.isBlank(url)) {
             throw new IllegalArgumentException("url can not be blank");
         }
+        this.requestType = inferRequestType();
         return new OutboundRequestInfo<>(this);
+    }
+
+    private OutboundRequestType inferRequestType() {
+        if (requestType != null) {
+            return requestType;
+        }
+        if (body != null) {
+            return OutboundRequestType.JSON;
+        }
+        if (!formParams.isEmpty()) {
+            return OutboundRequestType.FORM;
+        }
+        if (!queryParams.isEmpty()) {
+            return OutboundRequestType.QUERY;
+        }
+        return OutboundRequestType.NONE;
     }
 }

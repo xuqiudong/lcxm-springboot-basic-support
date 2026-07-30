@@ -56,6 +56,11 @@ public class OutboundRequestInfo<T> {
     private final Map<String, String> formParams;
 
     /**
+     * 请求体类型；默认执行器按此决定请求体写入方式和 Content-Type。
+     */
+    private final OutboundRequestType requestType;
+
+    /**
      * 请求 body；默认执行器会将非 String 对象序列化为 JSON。
      */
     private final Object body;
@@ -93,6 +98,7 @@ public class OutboundRequestInfo<T> {
         this.headers = unmodifiableCopy(builder.getHeaders());
         this.queryParams = unmodifiableCopy(builder.getQueryParams());
         this.formParams = unmodifiableCopy(builder.getFormParams());
+        this.requestType = builder.getRequestType();
         this.body = builder.getBody();
         this.timeout = builder.getTimeout();
         this.responseType = builder.getResponseType();
