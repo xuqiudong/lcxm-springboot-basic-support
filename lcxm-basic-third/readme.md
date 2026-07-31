@@ -191,6 +191,7 @@ src/test/java/cn/xuqiudong/basic/third/demo
 - 默认值：`InboundAppConfig.tokenTtl = Duration.ofHours(1)`。
 - 每个 `appId` 可以通过 `InboundAppConfigRegistry` 返回不同 TTL。
 - Redis 版本由 Redis TTL 控制过期；Caffeine 版本通过 `TokenValue.expireAt` 校验过期。
+- Store 接口 TTL 使用秒值 `ttlSeconds`，兼容低版本 Spring Data Redis。
 
 ## 依赖策略
 

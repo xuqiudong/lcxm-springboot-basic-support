@@ -1,7 +1,5 @@
 package cn.xuqiudong.basic.third.inbound.store;
 
-import java.time.Duration;
-
 import cn.xuqiudong.basic.third.inbound.model.TokenValue;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -29,7 +27,7 @@ public class CaffeineTokenStore implements TokenStore {
     }
 
     @Override
-    public void put(String token, TokenValue value, Duration ttl) {
+    public void put(String token, TokenValue value, long ttlSeconds) {
         if (token != null && value != null) {
             cache.put(token, value);
         }

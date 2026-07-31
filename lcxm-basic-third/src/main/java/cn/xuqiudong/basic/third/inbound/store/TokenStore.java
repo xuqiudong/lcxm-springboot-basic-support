@@ -1,7 +1,5 @@
 package cn.xuqiudong.basic.third.inbound.store;
 
-import java.time.Duration;
-
 import cn.xuqiudong.basic.third.inbound.model.TokenValue;
 
 /**
@@ -18,9 +16,9 @@ public interface TokenStore {
      *
      * @param token token 字符串
      * @param value token 对应的业务信息
-     * @param ttl token 有效期
+     * @param ttlSeconds token 有效期，单位秒
      */
-    void put(String token, TokenValue value, Duration ttl);
+    void put(String token, TokenValue value, long ttlSeconds);
 
     /**
      * 根据 token 查询存储值。

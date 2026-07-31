@@ -77,7 +77,8 @@ public class InboundTokenService {
             throw new ThirdException("invalid sign");
         }
         if (config.isNonceRequired() && nonceStore != null) {
-            boolean saved = nonceStore.saveIfAbsent(request.getAppId(), request.getNonce(), config.getTimestampTolerance());
+            boolean saved = nonceStore.saveIfAbsent(request.getAppId(), request.getNonce(),
+                    toSeconds(config.getTimestampTolerance()));
             if (!saved) {
                 throw new ThirdException("repeated nonce");
             }
@@ -85,7 +86,7 @@ public class InboundTokenService {
         String token = IdUtil.simpleUUID();
         Duration ttl = config.getTokenTtl();
         TokenValue value = new TokenValue(config.getAppId(), config.getThirdCode(), request.getUsername(), expireAt(ttl));
-        tokenStore.put(token, value, ttl);
+        tokenStore.put(token, value, toSeconds(ttl));
         return token;
     }
 
@@ -121,6 +122,14 @@ public class InboundTokenService {
      */
     private Date expireAt(Duration ttl) {
         return DateUtil.date(DateUtil.current() + ttl.toMillis());
+    }
+
+    /**
+     * Store 层使用秒作为 TTL 单位，兼容低版本 Spring Data Redis。
+     */
+    private long toSeconds(Duration ttl) {
+        long seconds = ttl.getSeconds();
+        return seconds > 0 ? seconds : 1;
     }
 
     /**

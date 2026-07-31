@@ -1,6 +1,6 @@
 package cn.xuqiudong.basic.third.inbound.store;
 
-import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import cn.hutool.core.util.StrUtil;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -34,9 +34,15 @@ public class RedisNonceStore implements NonceStore {
     }
 
     @Override
-    public boolean saveIfAbsent(String appId, String nonce, Duration ttl) {
-        Boolean success = redisTemplate.opsForValue().setIfAbsent(buildKey(appId, nonce), "1", ttl);
-        return Boolean.TRUE.equals(success);
+    public boolean saveIfAbsent(String appId, String nonce, long ttlSeconds) {
+        String key = buildKey(appId, nonce);
+        Boolean success = redisTemplate.opsForValue().setIfAbsent(key, "1");
+        if (Boolean.TRUE.equals(success)) {
+            // Compatible with older Spring Data Redis. This is not strictly atomic like SET NX EX.
+            redisTemplate.expire(key, ttlSeconds, TimeUnit.SECONDS);
+            return true;
+        }
+        return false;
     }
 
     private String buildKey(String appId, String nonce) {

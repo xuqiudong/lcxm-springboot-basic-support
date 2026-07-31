@@ -1,6 +1,6 @@
 package cn.xuqiudong.basic.third.inbound.store;
 
-import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.basic.third.inbound.model.TokenValue;
@@ -38,8 +38,10 @@ public class RedisTokenStore implements TokenStore {
     }
 
     @Override
-    public void put(String token, TokenValue value, Duration ttl) {
-        redisTemplate.opsForValue().set(buildKey(token), value, ttl);
+    public void put(String token, TokenValue value, long ttlSeconds) {
+        String key = buildKey(token);
+        redisTemplate.opsForValue().set(key, value);
+        redisTemplate.expire(key, ttlSeconds, TimeUnit.SECONDS);
     }
 
     @Override

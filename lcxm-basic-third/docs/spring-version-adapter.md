@@ -7,7 +7,7 @@
 - Spring Framework 6.x
 - Servlet `jakarta.servlet`
 
-如果复制到 JDK 8 Maven 项目，或后续做 Spring MVC 4.x/5.x 适配版，重点处理下面这些差异。
+复制到 JDK 8 Maven 项目，或后续做 Spring MVC 4.x/5.x 适配版时，重点处理下面这些差异。
 
 ## 1. Java 版本
 
@@ -26,8 +26,7 @@
 
 ## 2. Servlet 包名
 
-Spring Boot 3 / Spring 6 使用 `jakarta.servlet`。
-
+Spring Boot 3 / Spring 6 使用 `jakarta.servlet`。  
 Spring Boot 2 / Spring 5 / Spring MVC 4.x 使用 `javax.servlet`。
 
 需要将：
@@ -89,8 +88,6 @@ void afterCompletion(HttpServletRequest request,
 
 JDK 8 需要选择仍支持 JDK 8 的版本。
 
-建议：
-
 | 依赖 | JDK 21 主线 | JDK 8 建议 |
 | --- | --- | --- |
 | Caffeine | 3.x | 2.9.3 |
@@ -109,7 +106,40 @@ Caffeine 示例：
 </dependency>
 ```
 
-## 5. JDK API 检查
+## 5. Spring Data Redis 1.x TTL
+
+`spring-data-redis-1.6.6` 不支持：
+
+```java
+opsForValue().set(key, value, Duration)
+opsForValue().setIfAbsent(key, value, Duration)
+```
+
+当前模块的 store 边界已经改为秒值：
+
+```java
+TokenStore.put(token, value, ttlSeconds)
+NonceStore.saveIfAbsent(appId, nonce, ttlSeconds)
+```
+
+Redis 低版本实现使用：
+
+```java
+redisTemplate.opsForValue().set(key, value);
+redisTemplate.expire(key, ttlSeconds, TimeUnit.SECONDS);
+
+Boolean success = redisTemplate.opsForValue().setIfAbsent(key, "1");
+if (Boolean.TRUE.equals(success)) {
+    redisTemplate.expire(key, ttlSeconds, TimeUnit.SECONDS);
+}
+```
+
+说明：
+
+- 配置层仍可使用 `Duration`，由 `InboundTokenService` 转换为秒。
+- `RedisNonceStore` 的 `setIfAbsent + expire` 不是严格原子操作；如果项目要求强防重，项目侧改为 Redis 原生命令 `SET key value NX EX seconds`。
+
+## 6. JDK API 检查
 
 主代码当前基本未使用 JDK 9+ 集合工厂方法，但复制后仍建议全局检查：
 
@@ -118,38 +148,38 @@ Caffeine 示例：
 - `Set.of(...)` -> `new HashSet<>(Arrays.asList(...))`
 - `String.isBlank()` -> `StrUtil.isBlank(...)`
 - `InputStream.readAllBytes()` -> Hutool / Commons IO / 手动读取
+- `Files.writeString(...)` -> `Files.write(...)`
 - `instanceof Xxx xxx` -> 普通 `instanceof` 后强转
 
-`java.time.Duration` 是 JDK 8 API，可以保留。  
-如果老项目配置绑定不方便，也可以在适配层改成毫秒数。
+`java.time.Duration` 是 JDK 8 API，可以保留在配置层。Store 层建议使用 `long ttlSeconds`，兼容老 Redis API。
 
-## 6. 当前模块重点改动位置
-
-复制到 JDK 8 后优先检查：
+## 7. 当前模块重点检查位置
 
 ```text
 src/main/java
 `-- cn/xuqiudong/basic/third
     |-- inbound/web/interceptor/InboundTokenInterceptor.java  # jakarta -> javax；Spring MVC 4.3 补全方法
     |-- config/spring/*                                      # Boot 条件注解按项目情况保留或移除
+    |-- inbound/store/Redis*                                 # Redis 低版本使用 expire(key, ttl, TimeUnit.SECONDS)
     |-- inbound/store/Caffeine*                              # Caffeine 版本降到 2.x
     `-- outbound/*                                           # 基本可复用，重点看依赖版本
 
 src/test/java
-`-- ...                                                      # Map.of/List.of 改为 JDK 8 写法
+`-- ...                                                      # Map.of/List.of/readAllBytes 等改为 JDK 8 写法
 ```
 
-## 7. 推荐落地方式
+## 8. 推荐落地方式
 
-如果只是某个 JDK 8 项目临时使用：
+临时复制到某个 JDK 8 项目：
 
 1. 复制 `lcxm-basic-third`。
 2. 修改 `pom.xml` 的 Java、Servlet、Caffeine、Spring 版本。
 3. 将 `jakarta.servlet` 改为 `javax.servlet`。
-4. 删除或改造 `src/test/java` 中的 JDK 9+ 写法。
-5. 先执行 `mvn -DskipTests compile`，按编译错误逐个适配。
+4. 保留当前 store 层 `ttlSeconds` 写法。
+5. 删除或改造 `src/test/java` 中的 JDK 9+ 写法。
+6. 先执行 `mvn -DskipTests compile`，按编译错误逐个适配。
 
-如果后续要长期维护：
+长期维护建议拆适配模块：
 
 ```text
 lcxm-basic-third                  # 主线：Spring Boot 3 / JDK 21

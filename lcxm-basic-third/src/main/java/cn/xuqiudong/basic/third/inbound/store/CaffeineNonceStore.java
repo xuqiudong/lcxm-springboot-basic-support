@@ -1,6 +1,5 @@
 package cn.xuqiudong.basic.third.inbound.store;
 
-import java.time.Duration;
 import java.util.Date;
 
 import cn.hutool.core.date.DateUtil;
@@ -27,9 +26,9 @@ public class CaffeineNonceStore implements NonceStore {
     }
 
     @Override
-    public boolean saveIfAbsent(String appId, String nonce, Duration ttl) {
+    public boolean saveIfAbsent(String appId, String nonce, long ttlSeconds) {
         String key = buildKey(appId, nonce);
-        Date expireAt = DateUtil.date(DateUtil.current() + ttl.toMillis());
+        Date expireAt = DateUtil.date(DateUtil.current() + ttlSeconds * 1000);
         Date old = cache.asMap().putIfAbsent(key, expireAt);
         if (old == null) {
             return true;

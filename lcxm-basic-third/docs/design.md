@@ -99,7 +99,7 @@ AbstractThirdOutboundConfiguration
 4. 签发 token
    InboundTokenService
    -> Hutool IdUtil.simpleUUID()
-   -> TokenStore.put(token, TokenValue, ttl)
+   -> TokenStore.put(token, TokenValue, ttlSeconds)
 
 5. 访问业务接口
    InboundTokenInterceptor
