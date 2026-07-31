@@ -30,6 +30,13 @@ public enum OutboundRequestType {
     FORM("application/x-www-form-urlencoded"),
 
     /**
+     * multipart/form-data 请求体，适合文件上传。
+     *
+     * <p>Content-Type 由 Hutool 自动生成，包含 boundary，基础模块不手动设置。</p>
+     */
+    MULTIPART(null),
+
+    /**
      * 纯文本请求体。
      */
     TEXT("text/plain"),

@@ -1,9 +1,15 @@
 package cn.xuqiudong.basic.third.outbound.executor;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -12,6 +18,7 @@ import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
 import cn.xuqiudong.basic.third.log.model.ThirdExchangeLog;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
+import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -78,11 +85,13 @@ public class HttpOutboundExecutorTest {
 
     @Test
     public void executePostShouldKeepQueryParamsInUrlAndJsonInBody() {
+        Map<String, Object> bodyMap = new HashMap<>();
+        bodyMap.put("name", "vic");
         OutboundRequestInfo<String> request = OutboundRequestInfo.<String>builder(ThirdIdentity.of("demo"))
                 .url(baseUrl)
                 .method(ThirdHttpMethod.POST)
                 .queryParam("access_token", "token")
-                .body(Map.of("name", "vic"))
+                .body(bodyMap)
                 .responseType(String.class)
                 .build();
 
@@ -113,6 +122,59 @@ public class HttpOutboundExecutorTest {
         assertEquals(null, query.get());
         assertEquals("name=vic&page=1", body.get());
         assertTrue(contentType.get().startsWith("application/x-www-form-urlencoded"));
+    }
+
+    @Test
+    public void executePostShouldSendMultipartInputStream() {
+        CloseAwareInputStream inputStream =
+                new CloseAwareInputStream("hello multipart".getBytes(StandardCharsets.UTF_8));
+        OutboundRequestInfo<String> request = OutboundRequestInfo.<String>builder(ThirdIdentity.of("demo"))
+                .url(baseUrl)
+                .method(ThirdHttpMethod.POST)
+                .multipartParam("path", "/apps/demo.txt")
+                .multipartFile("file", "demo.txt", inputStream)
+                .responseType(String.class)
+                .build();
+
+        String response = new HttpOutboundExecutor().execute(request);
+
+        assertEquals("ok", response);
+        assertEquals("POST", method.get());
+        assertEquals(OutboundRequestType.MULTIPART, request.getRequestType());
+        assertTrue(contentType.get().startsWith("multipart/form-data"));
+        assertTrue(body.get().contains("name=\"file\""));
+        assertTrue(body.get().contains("filename=\"demo.txt\""));
+        assertTrue(body.get().contains("hello multipart"));
+        assertTrue(inputStream.isClosed());
+    }
+
+    @Test
+    public void executePostShouldSendMultipleFilesWithSameFieldName() throws IOException {
+        File first = File.createTempFile("third-upload-a", ".txt");
+        File second = File.createTempFile("third-upload-b", ".txt");
+        try {
+            Files.write(first.toPath(), "first file".getBytes(StandardCharsets.UTF_8));
+            Files.write(second.toPath(), "second file".getBytes(StandardCharsets.UTF_8));
+            OutboundRequestInfo<String> request = OutboundRequestInfo.<String>builder(ThirdIdentity.of("demo"))
+                    .url(baseUrl)
+                    .method(ThirdHttpMethod.POST)
+                    .multipartFile("file", first, "a.txt")
+                    .multipartFile("file", second, "b.txt")
+                    .responseType(String.class)
+                    .build();
+
+            String response = new HttpOutboundExecutor().execute(request);
+
+            assertEquals("ok", response);
+            assertEquals(2, count(body.get(), "name=\"file\""));
+            assertTrue(body.get().contains("filename=\"a.txt\""));
+            assertTrue(body.get().contains("filename=\"b.txt\""));
+            assertTrue(body.get().contains("first file"));
+            assertTrue(body.get().contains("second file"));
+        } finally {
+            first.delete();
+            second.delete();
+        }
     }
 
     @Test
@@ -153,7 +215,7 @@ public class HttpOutboundExecutorTest {
         query.set(exchange.getRequestURI().getRawQuery());
         contentType.set(exchange.getRequestHeaders().getFirst("Content-Type"));
         accept.set(exchange.getRequestHeaders().getFirst("Accept"));
-        body.set(new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
+        body.set(readToString(exchange.getRequestBody()));
         byte[] response = "ok".getBytes(StandardCharsets.UTF_8);
         exchange.sendResponseHeaders(200, response.length);
         try (OutputStream outputStream = exchange.getResponseBody()) {
@@ -166,6 +228,45 @@ public class HttpOutboundExecutorTest {
         exchange.sendResponseHeaders(500, response.length);
         try (OutputStream outputStream = exchange.getResponseBody()) {
             outputStream.write(response);
+        }
+    }
+
+    private String readToString(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) >= 0) {
+            outputStream.write(buffer, 0, length);
+        }
+        return new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+    }
+
+    private int count(String source, String target) {
+        int count = 0;
+        int index = 0;
+        while ((index = source.indexOf(target, index)) >= 0) {
+            count++;
+            index += target.length();
+        }
+        return count;
+    }
+
+    private static class CloseAwareInputStream extends ByteArrayInputStream {
+
+        private boolean closed;
+
+        private CloseAwareInputStream(byte[] buf) {
+            super(buf);
+        }
+
+        @Override
+        public void close() throws IOException {
+            this.closed = true;
+            super.close();
+        }
+
+        private boolean isClosed() {
+            return closed;
         }
     }
 }

@@ -1,12 +1,7 @@
 package cn.xuqiudong.basic.third.outbound.executor;
 
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.StringJoiner;
-
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.resource.InputStreamResource;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
@@ -18,12 +13,20 @@ import cn.xuqiudong.basic.third.log.model.ThirdExchangeLog;
 import cn.xuqiudong.basic.third.log.model.ThirdExchangeStatus;
 import cn.xuqiudong.basic.third.log.service.Slf4jThirdExchangeLogger;
 import cn.xuqiudong.basic.third.log.service.ThirdExchangeLogger;
+import cn.xuqiudong.basic.third.outbound.model.MultipartPart;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * Hutool HTTP implementation of {@link OutboundExecutor}.
@@ -187,6 +190,9 @@ public class HttpOutboundExecutor implements OutboundExecutor {
             case FORM:
                 httpRequest.form(toObjectMap(request.getFormParams()));
                 break;
+            case MULTIPART:
+                writeMultipartBody(httpRequest, request.getMultipartParts());
+                break;
             case TEXT:
                 if (request.getBody() != null) {
                     httpRequest.body(String.valueOf(request.getBody()));
@@ -220,6 +226,9 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         if (OutboundRequestType.FORM == requestType) {
             return request.getFormParams().isEmpty() ? null : request.getFormParams().toString();
         }
+        if (OutboundRequestType.MULTIPART == requestType) {
+            return request.getMultipartParts().isEmpty() ? null : summarizeMultipartParts(request.getMultipartParts());
+        }
         if (OutboundRequestType.BYTES == requestType) {
             return request.getBody() instanceof byte[] ? "byte[" + ((byte[]) request.getBody()).length + "]" : null;
         }
@@ -234,6 +243,52 @@ public class HttpOutboundExecutor implements OutboundExecutor {
             return null;
         }
         return body instanceof String ? (String) body : objectMapper.writeValueAsString(body);
+    }
+
+    private void writeMultipartBody(HttpRequest httpRequest, List<MultipartPart> multipartParts) {
+        if (multipartParts == null || multipartParts.isEmpty()) {
+            return;
+        }
+        for (MultipartPart part : multipartParts) {
+            switch (part.getType()) {
+                case FIELD:
+                    httpRequest.form(part.getName(), part.getValue());
+                    break;
+                case FILE:
+                    if (StrUtil.isBlank(part.getFileName())) {
+                        httpRequest.form(part.getName(), part.getFile());
+                    } else {
+                        httpRequest.form(part.getName(), part.getFile(), part.getFileName());
+                    }
+                    break;
+                case STREAM:
+                    httpRequest.form(part.getName(), new InputStreamResource(part.getInputStream(), part.getFileName()));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private String summarizeMultipartParts(List<MultipartPart> multipartParts) {
+        StringJoiner joiner = new StringJoiner(", ", "[", "]");
+        for (MultipartPart part : multipartParts) {
+            joiner.add(part.getName() + "=" + summarizeMultipartPart(part));
+        }
+        return joiner.toString();
+    }
+
+    private String summarizeMultipartPart(MultipartPart part) {
+        switch (part.getType()) {
+            case FIELD:
+                return "String";
+            case FILE:
+                return "File(" + part.getFile().getName() + ")";
+            case STREAM:
+                return "InputStream(" + part.getFileName() + ")";
+            default:
+                return part.getType().name();
+        }
     }
 
     private <T> T parse(String responseBody, OutboundRequestInfo<T> request) throws Exception {

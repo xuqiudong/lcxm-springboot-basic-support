@@ -1,8 +1,10 @@
 package cn.xuqiudong.basic.third.outbound.model;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
@@ -56,6 +58,11 @@ public class OutboundRequestInfo<T> {
     private final Map<String, String> formParams;
 
     /**
+     * multipart/form-data 参数。
+     */
+    private final List<MultipartPart> multipartParts;
+
+    /**
      * 请求体类型；默认执行器按此决定请求体写入方式和 Content-Type。
      */
     private final OutboundRequestType requestType;
@@ -98,6 +105,7 @@ public class OutboundRequestInfo<T> {
         this.headers = unmodifiableCopy(builder.getHeaders());
         this.queryParams = unmodifiableCopy(builder.getQueryParams());
         this.formParams = unmodifiableCopy(builder.getFormParams());
+        this.multipartParts = unmodifiableListCopy(builder.getMultipartParts());
         this.requestType = builder.getRequestType();
         this.body = builder.getBody();
         this.timeout = builder.getTimeout();
@@ -116,5 +124,12 @@ public class OutboundRequestInfo<T> {
             return Collections.emptyMap();
         }
         return Collections.unmodifiableMap(new LinkedHashMap<>(source));
+    }
+
+    private List<MultipartPart> unmodifiableListCopy(List<MultipartPart> source) {
+        if (source == null || source.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(new ArrayList<>(source));
     }
 }

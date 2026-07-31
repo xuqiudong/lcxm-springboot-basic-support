@@ -1,11 +1,17 @@
 package cn.xuqiudong.basic.third.outbound.builder;
 
+import java.io.File;
+import java.io.InputStream;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
+import cn.xuqiudong.basic.third.outbound.model.MultipartPart;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
@@ -39,6 +45,8 @@ public class OutboundRequestInfoBuilder<T> {
     private final Map<String, String> queryParams = new LinkedHashMap<>();
 
     private final Map<String, String> formParams = new LinkedHashMap<>();
+
+    private final List<MultipartPart> multipartParts = new ArrayList<>();
 
     private OutboundRequestType requestType;
 
@@ -152,6 +160,84 @@ public class OutboundRequestInfoBuilder<T> {
     public OutboundRequestInfoBuilder<T> formParams(Map<String, ?> formParams) {
         if (formParams != null) {
             formParams.forEach(this::formParam);
+        }
+        return this;
+    }
+
+    /**
+     * 设置 multipart 普通字段。
+     */
+    public OutboundRequestInfoBuilder<T> multipartParam(String name, String value) {
+        if (StrUtil.isNotBlank(name) && value != null) {
+            this.multipartParts.add(MultipartPart.field(name, value));
+            this.requestType = OutboundRequestType.MULTIPART;
+        }
+        return this;
+    }
+
+    /**
+     * 批量设置 multipart 字段。
+     */
+    public OutboundRequestInfoBuilder<T> multipartParams(Map<String, String> multipartParams) {
+        if (multipartParams != null) {
+            multipartParams.forEach(this::multipartParam);
+        }
+        return this;
+    }
+
+    /**
+     * 设置 multipart 文件。
+     */
+    public OutboundRequestInfoBuilder<T> multipartFile(String name, File file) {
+        if (StrUtil.isNotBlank(name) && file != null) {
+            this.multipartParts.add(MultipartPart.file(name, file));
+            this.requestType = OutboundRequestType.MULTIPART;
+        }
+        return this;
+    }
+
+    /**
+     * 设置 multipart 文件，并显式指定上传文件名。
+     */
+    public OutboundRequestInfoBuilder<T> multipartFile(String name, File file, String fileName) {
+        if (StrUtil.isNotBlank(name) && file != null) {
+            this.multipartParts.add(MultipartPart.file(name, file, fileName));
+            this.requestType = OutboundRequestType.MULTIPART;
+        }
+        return this;
+    }
+
+    /**
+     * 设置同一个 field name 下的多个 File 文件。
+     */
+    public OutboundRequestInfoBuilder<T> multipartFiles(String name, Collection<File> files) {
+        if (files != null) {
+            files.forEach(file -> multipartFile(name, file));
+        }
+        return this;
+    }
+
+    /**
+     * 设置同一个 field name 下的多个 File 文件。
+     */
+    public OutboundRequestInfoBuilder<T> multipartFiles(String name, File... files) {
+        if (files != null) {
+            for (File file : files) {
+                multipartFile(name, file);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 设置 multipart 文件流。
+     *
+     * <p>正常执行到 multipart 写入时，Hutool 会在读取后关闭流；如果请求在写入前失败，调用方仍应自行兜底关闭。</p>
+     */
+    public OutboundRequestInfoBuilder<T> multipartFile(String name, String fileName, InputStream inputStream) {
+        if (StrUtil.isNotBlank(name) && inputStream != null && StrUtil.isNotBlank(fileName)) {
+            this.multipartParts.add(MultipartPart.stream(name, fileName, inputStream));
+            this.requestType = OutboundRequestType.MULTIPART;
         }
         return this;
     }
@@ -285,6 +371,9 @@ public class OutboundRequestInfoBuilder<T> {
         }
         if (body != null) {
             return OutboundRequestType.JSON;
+        }
+        if (!multipartParts.isEmpty()) {
+            return OutboundRequestType.MULTIPART;
         }
         if (!formParams.isEmpty()) {
             return OutboundRequestType.FORM;

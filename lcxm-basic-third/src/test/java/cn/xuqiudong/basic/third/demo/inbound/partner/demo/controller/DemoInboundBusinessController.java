@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.third.demo.inbound.partner.demo.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,9 @@ public class DemoInboundBusinessController {
 
     @PostMapping("/submit")
     public Map<String, Object> submit(@RequestBody Map<String, Object> body) {
-        return Map.of("success", true, "received", body);
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("received", body);
+        return result;
     }
 }

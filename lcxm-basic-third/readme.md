@@ -56,15 +56,17 @@ cn.xuqiudong.basic.third
 |   |   `-- OutboundPartnerConfig         # 厂商出站配置基类：host、通用 HTTP options
 |   |-- client
 |   |   |-- AbstractOutboundClient         # 出站 HTTP 执行底座
-|   |   `-- AbstractOutboundPartner        # 厂商 Client 基类：配置、host、API、常用 request 封装
+|   |   `-- AbstractOutboundPartner        # 厂商 Client 基类：配置、host、具体 API 枚举、常用 request 封装和 builder 高级入口
 |   |-- builder
-|   |   `-- OutboundRequestInfoBuilder     # 请求构建器
+|   |   |-- OutboundRequestInfoBuilder     # 请求构建器
+|   |   `-- OutboundParams                 # 普通 query/form 参数构建器
 |   |-- executor
 |   |   |-- OutboundExecutor               # HTTP 执行器接口
 |   |   `-- HttpOutboundExecutor           # Hutool HTTP 默认实现
 |   |-- model
 |   |   |-- OutboundRequestInfo            # 出站请求模型
-|   |   |-- OutboundRequestType            # JSON/FORM/TEXT/BYTES/QUERY/NONE
+|   |   |-- OutboundRequestType            # JSON/FORM/MULTIPART/TEXT/BYTES/QUERY/NONE
+|   |   |-- MultipartPart                  # multipart 显式字段模型，支持同名 field 多文件
 |   |   `-- ThirdHttpMethod                # HTTP method
 |   |-- parser
 |   |   `-- OutboundResponseParser         # 特殊响应解析扩展点
@@ -167,9 +169,14 @@ src/test/java/cn/xuqiudong/basic/third/demo
 - 写配置类继承 `AbstractThirdOutboundConfiguration`，并在子类加 `@Configuration`。
 - 每个第三方定义一个 API 枚举，实现 `ThirdApi`。
 - 每个第三方定义一个配置模型，实现 `OutboundPartnerConfig`，至少提供 `host`。
-- 每个第三方写一个 Client，优先继承 `AbstractOutboundPartner<C>`。
+- 每个第三方写一个 Client，优先继承 `AbstractOutboundPartner<C, A>`，其中 `A` 是具体 API 枚举。
 - 实现 `thirdIdentity()` 和 `loadConfig()`，按需覆盖 `resolveApiPath(...)`、`buildHeaders(api)`、`afterResponse(...)`。
 - `loadConfig()` 的返回结果默认使用 Caffeine 缓存 5 分钟；覆盖 `configCacheTtl()` 可调整，返回小于等于 0 表示不缓存。
+- 简单请求可用 `requestJson(...)`、`requestForm(...)`、`requestMultipart(...)` 等终结方法。
+- 参数较多但结构单一时，可用 `createParams()` 组织普通 query/form 参数，再传给终结方法或 builder。
+- 需要混合 query/header/form/multipart/parser/timeout 时，从 `builder(api, responseType)` 开始构建请求，最后 `execute(api, request)`。
+- `execute(api, request)` 中的 `api` 用于执行后的 `afterResponse(api, response)` 厂商响应校验。
+- 文件上传使用 `requestMultipart(...)`，支持 `File`、`InputStream + fileName`；同一个 field 多个文件使用 builder 连续 `multipartFile("file", ...)` 或 `multipartFiles(...)`。
 - 需要日志落库时覆盖 `customThirdExchangeLogger()` 返回项目侧 logger。
 - 默认 slf4j 日志会裁剪请求体、响应体、异常信息，长度由配置基类方法 `thirdSlf4jExchangeLogTextMaxLength()` 控制。
 - JSON/FORM/TEXT/BYTES 请求通过 `OutboundRequestType` 明确表达，builder 也会按 body/form/query 自动推断。

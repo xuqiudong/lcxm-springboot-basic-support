@@ -12,7 +12,7 @@ import cn.xuqiudong.basic.third.security.RsaSignatureUtils;
 import cn.xuqiudong.basic.third.security.SignaturePayloadBuilder;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Collections;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -30,7 +30,7 @@ public class InboundTokenServiceTest {
         config.setPublicKey(keyPair.getPublicKey());
         config.addUsername("thirdUser");
         InboundTokenService service = new InboundTokenService(
-                List.of(new DemoRegistry(config)),
+                Collections.singletonList(new DemoRegistry(config)),
                 new CaffeineTokenStore(),
                 new CaffeineNonceStore());
 

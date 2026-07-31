@@ -30,8 +30,12 @@
 | nonce | 可选，默认关闭 |
 | RSA/HTTP | 使用 Hutool |
 | 出站业务 | 只抽公共请求骨架，不沉淀具体厂商参数 |
-| 出站厂商基类 | `AbstractOutboundPartner<C>` 负责 host、API 枚举、配置短缓存、常用请求封装 |
-| 出站请求类型 | `OutboundRequestType` 明确 JSON/FORM/TEXT/BYTES/QUERY/NONE，默认可推断 |
+| 出站厂商基类 | `AbstractOutboundPartner<C, A>` 负责 host、具体 API 枚举、配置短缓存、常用请求封装 |
+| 出站高级入口 | `builder(api, responseType)` 负责复杂请求构建，最后 `execute(api, request)` |
+| 普通参数构建 | `createParams()` 返回 `OutboundParams`，只处理 query/form 普通键值参数 |
+| 出站响应钩子 | `execute(api, request)` 中的 `api` 用于 `afterResponse(api, response)` |
+| 出站请求类型 | `OutboundRequestType` 明确 JSON/FORM/MULTIPART/TEXT/BYTES/QUERY/NONE，默认可推断 |
+| multipart 上传 | 使用 `MultipartPart` 列表表达字段，支持 `File`、`InputStream + fileName`、同名 field 多文件 |
 | 出站响应 | 提供 JavaType 构建工具，不强制统一厂商响应基类 |
 | 出站日志 | 默认 slf4j，可组合项目自定义 logger；请求体、响应体、异常信息默认裁剪 |
 
@@ -122,15 +126,17 @@ AbstractThirdOutboundConfiguration
    -> 配置来源由项目自行处理，可来自配置文件/DB/Redis/配置中心
 
 3. 业务方编写某厂商 Client
-   -> 继承 AbstractOutboundPartner<XxxConfig>
+   -> 继承 AbstractOutboundPartner<XxxConfig, XxxApi>
    -> 实现 thirdIdentity
    -> 实现 loadConfig
    -> 默认 Caffeine 缓存配置 5 分钟；按需覆盖 configCacheTtl
    -> 按需覆盖 resolveApiPath/buildHeaders/afterResponse
 
 4. 业务方法构建请求
-   -> OutboundRequestInfoBuilder
-   -> 设置 method/query/form/jsonBody/textBody/bytesBody/responseType
+   -> 简单请求使用 requestJson/requestForm/requestMultipart 等终结方法
+   -> 参数较多但结构单一时，使用 createParams() 组织 query/form 普通参数
+   -> 复杂请求使用 OutboundRequestInfoBuilder
+   -> 设置 method/query/form/jsonBody/textBody/bytesBody/multipartFile/responseType
    -> OutboundRequestType 显式指定或自动推断
 
 5. 执行请求

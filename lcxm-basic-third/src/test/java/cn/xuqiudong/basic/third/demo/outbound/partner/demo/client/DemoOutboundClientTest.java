@@ -1,7 +1,11 @@
 package cn.xuqiudong.basic.third.demo.outbound.partner.demo.client;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
@@ -56,6 +60,60 @@ public class DemoOutboundClientTest {
             fail("partner failed response should throw ThirdException");
         } catch (ThirdException e) {
             assertEquals("demo third api failed: 提交订单, failed", e.getMessage());
+        }
+    }
+
+    @Test
+    public void queryOrderShouldSupportBuilderRequest() {
+        AtomicReference<OutboundRequestInfo<?>> requestRef = new AtomicReference<>();
+        DemoOutboundClient client = new DemoOutboundClient(
+                new ThirdClientOptions(),
+                new DemoExecutor(requestRef, true));
+
+        DemoThirdResponse<DemoResponse> response = client.queryOrder("O-001");
+
+        assertEquals("0000", response.getCode());
+        assertEquals("https://third.example.com/order/query", requestRef.get().getUrl());
+        assertEquals("O-001", requestRef.get().getQueryParams().get("orderNo"));
+        assertEquals("query-order", requestRef.get().getHeaders().get("X-Demo-Trace"));
+        assertEquals(OutboundRequestType.QUERY, requestRef.get().getRequestType());
+    }
+
+    @Test
+    public void queryOrderByFormShouldBuildFormRequest() {
+        AtomicReference<OutboundRequestInfo<?>> requestRef = new AtomicReference<>();
+        DemoOutboundClient client = new DemoOutboundClient(
+                new ThirdClientOptions(),
+                new DemoExecutor(requestRef, true));
+
+        DemoThirdResponse<DemoResponse> response = client.queryOrderByForm("O-001", "T-001");
+
+        assertEquals("0000", response.getCode());
+        assertEquals("https://third.example.com/order/query-form", requestRef.get().getUrl());
+        assertEquals("O-001", requestRef.get().getFormParams().get("orderNo"));
+        assertEquals("T-001", requestRef.get().getFormParams().get("tenantId"));
+        assertEquals(OutboundRequestType.FORM, requestRef.get().getRequestType());
+    }
+
+    @Test
+    public void uploadOrderFileShouldBuildMultipartRequest() throws IOException {
+        AtomicReference<OutboundRequestInfo<?>> requestRef = new AtomicReference<>();
+        DemoOutboundClient client = new DemoOutboundClient(
+                new ThirdClientOptions(),
+                new DemoExecutor(requestRef, true));
+        File file = File.createTempFile("demo-order", ".txt");
+        try {
+            Files.write(file.toPath(), "order file".getBytes(StandardCharsets.UTF_8));
+
+            DemoThirdResponse<DemoResponse> response = client.uploadOrderFile("O-001", file);
+
+            assertEquals("0000", response.getCode());
+            assertEquals("https://third.example.com/order/upload", requestRef.get().getUrl());
+            assertEquals("O-001", requestRef.get().getQueryParams().get("orderNo"));
+            assertEquals(2, requestRef.get().getMultipartParts().size());
+            assertEquals(OutboundRequestType.MULTIPART, requestRef.get().getRequestType());
+        } finally {
+            file.delete();
         }
     }
 

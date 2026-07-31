@@ -1,9 +1,17 @@
 package cn.xuqiudong.basic.third.outbound.client;
 
+import java.io.File;
+import java.io.InputStream;
+import java.time.Duration;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
 import cn.xuqiudong.basic.third.outbound.api.ThirdApi;
+import cn.xuqiudong.basic.third.outbound.builder.OutboundParams;
 import cn.xuqiudong.basic.third.outbound.builder.OutboundRequestInfoBuilder;
 import cn.xuqiudong.basic.third.outbound.config.OutboundPartnerConfig;
 import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
@@ -13,20 +21,24 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import java.time.Duration;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 /**
  * 第三方厂商出站 Client 基类。
  *
- * <p>本类在 {@link AbstractOutboundClient} 的 HTTP 执行底座上，增加配置获取、host 拼接、
- * API 枚举和常用请求封装。具体厂商的 token、签名、响应成功判断仍由子类实现。</p>
+ * <p>本类在 {@link AbstractOutboundClient} 的 HTTP 执行底座上，增加厂商配置读取、host 拼接、
+ * 具体 API 枚举、默认 header 合并、配置短缓存和常用请求封装。</p>
+ *
+ * <p>使用场景：</p>
+ * <p>1. 简单请求：直接使用 requestJson/requestForm/requestMultipart/requestText/requestBytes 这类终结方法。</p>
+ * <p>2. 参数较多但结构单一：项目侧先用 Map 或自己的参数对象组织参数，再传给终结方法。</p>
+ * <p>3. 混合 query/header/form/multipart/parser/timeout 等复杂请求：从 builder(api, responseType) 开始，
+ * build 后调用 execute(api, request)。</p>
+ *
+ * <p>具体厂商的 token、签名、业务成功码判断、特殊响应处理仍由子类实现。</p>
  *
  * @author Vic.xu
  */
-public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> extends AbstractOutboundClient {
+public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A extends ThirdApi>
+        extends AbstractOutboundClient {
 
     private static final String CONFIG_CACHE_KEY = "config";
 
@@ -84,14 +96,14 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
      *
      * <p>默认直接使用 {@link ThirdApi#getPath()}。如果枚举中存的是配置项编码，子类覆盖本方法读取真实路径。</p>
      */
-    protected String resolveApiPath(ThirdApi api) {
+    protected String resolveApiPath(A api) {
         return api.getPath();
     }
 
     /**
      * 将 host 和 API path 拼成完整 URL。
      */
-    protected String buildUrl(ThirdApi api) {
+    protected String buildUrl(A api) {
         if (api == null) {
             throw new ThirdException("third api can not be null");
         }
@@ -109,47 +121,49 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
     /**
      * 构建 API 级请求头；子类通常在这里追加 token、签名、幂等键等。
      */
-    protected Map<String, String> buildHeaders(ThirdApi api) {
+    protected Map<String, String> buildHeaders(A api) {
         return Collections.emptyMap();
     }
 
     @Override
     protected Map<String, String> buildHeaders() {
-        return buildHeaders(null);
+        return Collections.emptyMap();
     }
 
     /**
      * 创建厂商 API 请求构建器。
+     *
+     * <p>当 requestJson/requestForm/requestMultipart 等终结方法不满足时，从这里开始按需追加
+     * query、header、form、multipart、responseParser、timeout 等参数，再调用 {@link #execute(ThirdApi, OutboundRequestInfo)}。</p>
      */
-    protected <R> OutboundRequestInfoBuilder<R> builder(ThirdApi api, Class<R> responseType) {
+    protected <R> OutboundRequestInfoBuilder<R> builder(A api, Class<R> responseType) {
         return this.<R>baseBuilder(api).responseType(responseType);
     }
 
     /**
-     * 创建厂商 API 请求构建器。
+     * 创建厂商 API 请求构建器，支持 Jackson JavaType 泛型响应。
+     *
+     * <p>复杂请求的高级入口；用途同 {@link #builder(ThirdApi, Class)}。</p>
      */
-    protected <R> OutboundRequestInfoBuilder<R> builder(ThirdApi api, JavaType responseJavaType) {
+    protected <R> OutboundRequestInfoBuilder<R> builder(A api, JavaType responseJavaType) {
         return this.<R>baseBuilder(api).responseJavaType(responseJavaType);
     }
 
     /**
-     * 默认 JSON 请求，HTTP method 由 {@link ThirdApi#getMethod()} 决定。
+     * 创建普通 query/form 参数构建器。
+     *
+     * <p>仅用于普通键值参数；文件上传和 header 请使用 request builder 或 buildHeaders。</p>
      */
-    protected <R> R request(ThirdApi api, Object body, Class<R> responseType) {
-        return requestJson(api, body, responseType);
+    protected OutboundParams createParams() {
+        return OutboundParams.create();
     }
 
     /**
-     * 默认 JSON 请求，支持 Jackson JavaType 泛型响应。
+     * JSON 请求终结方法，HTTP method 由 {@link ThirdApi#getMethod()} 决定。
+     *
+     * <p>适合只有 JSON body 的简单请求；如果还需要 query/header/parser 等，使用 builder(api, responseType)。</p>
      */
-    protected <R> R request(ThirdApi api, Object body, JavaType responseJavaType) {
-        return requestJson(api, body, responseJavaType);
-    }
-
-    /**
-     * JSON 请求，HTTP method 由 {@link ThirdApi#getMethod()} 决定。
-     */
-    protected <R> R requestJson(ThirdApi api, Object body, Class<R> responseType) {
+    protected <R> R requestJson(A api, Object body, Class<R> responseType) {
         OutboundRequestInfo<R> request = builder(api, responseType)
                 .method(resolveMethod(api))
                 .jsonBody(body)
@@ -158,9 +172,9 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
     }
 
     /**
-     * JSON 请求，HTTP method 由 {@link ThirdApi#getMethod()} 决定。
+     * JSON 请求终结方法，支持 Jackson JavaType 泛型响应。
      */
-    protected <R> R requestJson(ThirdApi api, Object body, JavaType responseJavaType) {
+    protected <R> R requestJson(A api, Object body, JavaType responseJavaType) {
         OutboundRequestInfo<R> request = this.<R>builder(api, responseJavaType)
                 .method(resolveMethod(api))
                 .jsonBody(body)
@@ -169,9 +183,11 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
     }
 
     /**
-     * form 请求，HTTP method 由 {@link ThirdApi#getMethod()} 决定。
+     * form 请求终结方法，HTTP method 由 {@link ThirdApi#getMethod()} 决定。
+     *
+     * <p>适合只有 form 参数的简单请求；参数需要逐项追加或混合 query/header 时，使用 builder(api, responseType)。</p>
      */
-    protected <R> R requestForm(ThirdApi api, Map<String, ?> formParams, Class<R> responseType) {
+    protected <R> R requestForm(A api, Map<String, ?> formParams, Class<R> responseType) {
         OutboundRequestInfo<R> request = builder(api, responseType)
                 .method(resolveMethod(api))
                 .formParams(formParams)
@@ -180,9 +196,37 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
     }
 
     /**
-     * text 请求，HTTP method 由 {@link ThirdApi#getMethod()} 决定。
+     * multipart 文件上传终结方法，文件来自本地 File。
+     *
+     * <p>适合单文件简单上传；如果需要 query、普通 multipart 字段、多个文件或特殊响应解析，使用 builder(api, responseType)。</p>
      */
-    protected <R> R requestText(ThirdApi api, String body, Class<R> responseType) {
+    protected <R> R requestMultipart(A api, String fieldName, File file, Class<R> responseType) {
+        OutboundRequestInfo<R> request = builder(api, responseType)
+                .method(resolveMethod(api))
+                .multipartFile(fieldName, file)
+                .build();
+        return execute(api, request);
+    }
+
+    /**
+     * multipart 文件上传终结方法，文件来自输入流。
+     *
+     * <p>正常执行到 multipart 写入时，Hutool 会在读取后关闭 inputStream；
+     * 如果请求在写入前失败，调用方仍应自行兜底关闭。</p>
+     */
+    protected <R> R requestMultipart(A api, String fieldName, String fileName, InputStream inputStream,
+            Class<R> responseType) {
+        OutboundRequestInfo<R> request = builder(api, responseType)
+                .method(resolveMethod(api))
+                .multipartFile(fieldName, fileName, inputStream)
+                .build();
+        return execute(api, request);
+    }
+
+    /**
+     * text 请求终结方法，HTTP method 由 {@link ThirdApi#getMethod()} 决定。
+     */
+    protected <R> R requestText(A api, String body, Class<R> responseType) {
         OutboundRequestInfo<R> request = builder(api, responseType)
                 .method(resolveMethod(api))
                 .textBody(body)
@@ -191,9 +235,9 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
     }
 
     /**
-     * 字节数组响应，适合文件下载。
+     * 字节数组响应终结方法，适合文件下载。
      */
-    protected byte[] requestBytes(ThirdApi api) {
+    protected byte[] requestBytes(A api) {
         OutboundRequestInfo<?> request = this.<Object>baseBuilder(api).build();
         return executeBytes(request);
     }
@@ -201,7 +245,7 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
     /**
      * 执行请求并调用厂商响应钩子。
      */
-    protected <R> R execute(ThirdApi api, OutboundRequestInfo<R> request) {
+    protected <R> R execute(A api, OutboundRequestInfo<R> request) {
         R response = execute(request);
         afterResponse(api, response);
         return response;
@@ -210,11 +254,17 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
     /**
      * 厂商响应钩子；子类可在这里统一校验成功码或抛出业务异常。
      */
-    protected <R> void afterResponse(ThirdApi api, R response) {
+    protected <R> void afterResponse(A api, R response) {
         // default no-op
     }
 
-    private <R> OutboundRequestInfoBuilder<R> baseBuilder(ThirdApi api) {
+    /**
+     * 构建厂商请求的公共基础信息。
+     *
+     * <p>这里统一写入 thirdIdentity、operation、method、url、headers、timeout；
+     * 子类通常使用 builder(api, responseType)，只有要自定义 builder 创建流程时才覆盖或调用本方法。</p>
+     */
+    protected <R> OutboundRequestInfoBuilder<R> baseBuilder(A api) {
         return OutboundRequestInfo.<R>builder(thirdIdentity())
                 .operation(api.getApiName())
                 .method(resolveMethod(api))
@@ -223,7 +273,7 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
                 .timeout(getConfig().getClientOptions().getRequestTimeout());
     }
 
-    private Map<String, String> mergedHeaders(ThirdApi api) {
+    protected Map<String, String> mergedHeaders(A api) {
         Map<String, String> headers = new LinkedHashMap<>();
         headers.putAll(options().getDefaultHeaders());
         headers.putAll(getConfig().getClientOptions().getDefaultHeaders());
@@ -249,14 +299,14 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig> e
                 .build();
     }
 
-    private ThirdHttpMethod resolveMethod(ThirdApi api) {
+    protected ThirdHttpMethod resolveMethod(A api) {
         if (api.getMethod() == null) {
             throw new ThirdException("third api method can not be null: " + api.getApiName());
         }
         return api.getMethod();
     }
 
-    private String joinUrl(String host, String path) {
+    protected String joinUrl(String host, String path) {
         if (StrUtil.isBlank(host)) {
             throw new ThirdException("outbound partner host can not be blank: " + thirdIdentity().getCode());
         }
