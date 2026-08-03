@@ -1,11 +1,11 @@
 package cn.xuqiudong.basic.third.inbound.config;
 
+import cn.hutool.core.util.StrUtil;
+import lombok.Data;
+
 import java.time.Duration;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import cn.hutool.core.util.StrUtil;
-import lombok.Data;
 
 /**
  * 第三方入站 app 配置。
@@ -58,6 +58,19 @@ public class InboundAppConfig {
     public InboundAppConfig addUsername(String username) {
         if (StrUtil.isNotBlank(username)) {
             this.usernames.add(username);
+        }
+        return this;
+    }
+
+    /**
+     * 追加一个usernames (逗号分隔的)
+     */
+    public InboundAppConfig addUsernames(String usernames) {
+        if (StrUtil.isNotBlank(usernames)) {
+            String[] split = usernames.split(",");
+            for (String username : split) {
+                this.addUsername(username);
+            }
         }
         return this;
     }
