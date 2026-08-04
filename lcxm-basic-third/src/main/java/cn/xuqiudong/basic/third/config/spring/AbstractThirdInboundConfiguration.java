@@ -3,6 +3,9 @@ package cn.xuqiudong.basic.third.config.spring;
 import java.util.Collection;
 
 import cn.xuqiudong.basic.third.inbound.constant.InboundTokenConstants;
+import cn.xuqiudong.basic.third.inbound.log.aspect.InboundInvokeLogAspect;
+import cn.xuqiudong.basic.third.inbound.log.service.InboundInvokeLogger;
+import cn.xuqiudong.basic.third.inbound.log.service.Slf4jInboundInvokeLogger;
 import cn.xuqiudong.basic.third.inbound.registry.InboundAppConfigRegistry;
 import cn.xuqiudong.basic.third.inbound.service.InboundTokenService;
 import cn.xuqiudong.basic.third.inbound.store.CaffeineNonceStore;
@@ -21,8 +24,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * 第三方入站 Spring 配置基类。
  *
- * <p>本类不加 {@code @Configuration}，具体项目的配置类继承它并自行添加
- * {@code @Configuration}。默认提供 token 服务、token controller、token 拦截器和拦截路径。</p>
+ * <p>本类不加 {@code @Configuration}，具体项目的配置类继承后自行添加。
+ * 默认提供 token 存储、token 服务、token controller、token 拦截器和入站调用日志切面。</p>
  *
  * @author Vic.xu
  */
@@ -30,8 +33,6 @@ public abstract class AbstractThirdInboundConfiguration {
 
     /**
      * token 存储 bean。
-     *
-     * <p>默认使用 Redis；如需切换本地存储，覆盖 {@link #useInboundRedisStore()}。</p>
      */
     @Bean
     public TokenStore inboundTokenStore() {
@@ -54,9 +55,6 @@ public abstract class AbstractThirdInboundConfiguration {
 
     /**
      * 创建入站 token 服务。
-     *
-     * @param registries Spring 容器中所有第三方入站配置 registry
-     * @param tokenStore token 存储
      */
     @Bean
     public InboundTokenService inboundTokenService(Collection<InboundAppConfigRegistry> registries,
@@ -103,9 +101,18 @@ public abstract class AbstractThirdInboundConfiguration {
     }
 
     /**
-     * 是否使用 Redis 存储 token 和 nonce。
+     * 创建入站业务方法调用日志切面。
      *
-     * <p>默认使用 Redis；返回 {@code false} 时使用 Caffeine 本地存储。</p>
+     * <p>slf4j 打印和项目自定义落库互不替代，可以同时生效。</p>
+     */
+    @Bean
+    public InboundInvokeLogAspect inboundInvokeLogAspect() {
+        return new InboundInvokeLogAspect(printInboundInvokeLog(), inboundInvokeSlf4jTextMaxLength(),
+                customInboundInvokeLogger(), inboundInvokeExtraIgnoreTypes());
+    }
+
+    /**
+     * 是否使用 Redis 存储 token 和 nonce。
      */
     protected boolean useInboundRedisStore() {
         return true;
@@ -113,22 +120,46 @@ public abstract class AbstractThirdInboundConfiguration {
 
     /**
      * 项目侧提供 RedisTemplate。
-     *
-     * <p>token 存储和 nonce 防重存储共用该 RedisTemplate。</p>
      */
     protected abstract RedisTemplate<String, Object> inboundRedisTemplate();
 
     /**
-     * token header 名称，默认避免使用通用的 {@code token} header。
+     * token header 名称。
      */
     protected String inboundTokenHeaderName() {
         return InboundTokenConstants.TOKEN_HEADER_NAME;
     }
 
     /**
+     * 是否打印 slf4j 入站业务方法调用日志。
+     */
+    protected boolean printInboundInvokeLog() {
+        return true;
+    }
+
+    /**
+     * slf4j 打印入参、出参、异常堆栈时的最大长度；小于等于 0 表示不裁剪。
+     */
+    protected int inboundInvokeSlf4jTextMaxLength() {
+        return Slf4jInboundInvokeLogger.DEFAULT_TEXT_MAX_LENGTH;
+    }
+
+    /**
+     * 项目自定义入站业务方法调用日志处理器。
+     */
+    protected InboundInvokeLogger customInboundInvokeLogger() {
+        return null;
+    }
+
+    /**
+     * 入站业务方法日志需要额外忽略的参数类型。
+     */
+    protected Class<?>[] inboundInvokeExtraIgnoreTypes() {
+        return new Class<?>[0];
+    }
+
+    /**
      * 是否由当前配置类自动注册 token 拦截器。
-     *
-     * <p>Spring MVC XML 项目如需在 XML 中手动注册拦截器，覆盖该方法返回 {@code false}。</p>
      */
     protected boolean registerInboundTokenInterceptor() {
         return true;

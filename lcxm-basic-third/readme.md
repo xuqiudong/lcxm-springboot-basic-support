@@ -14,6 +14,7 @@
 | 快速了解模块结构和核心类 | 本文的 [主包 Tree](#主包-tree) |
 | 判断设计边界、配置基类、请求流程 | [设计说明](docs/design.md) |
 | 开发“第三方请求我方”的项目代码 | [开发流程：第三方接入我方](docs/开发流程-接入我方.md) |
+| 记录第三方入站业务方法出入参、异常 | [入站出入参异常日志设计](docs/入站出入参异常日志设计.md) |
 | 开发“我方调用第三方”的项目代码 | [开发流程：我方调用第三方](docs/开发流程-调用他方.md) |
 | 给第三方系统看的接口协议 | [第三方入站接口文档](docs/第三方入站接口文档.md) |
 | 迁移到 Spring MVC 低版本 / JDK 8 | [Spring 低版本适配说明](docs/spring-version-adapter.md) |
@@ -26,6 +27,7 @@ readme.md
   -> docs/design.md
   -> 按方向选择：
        入站：docs/开发流程-接入我方.md
+             docs/入站出入参异常日志设计.md
        出站：docs/开发流程-调用他方.md
   -> 对外提供：docs/第三方入站接口文档.md
   -> 代码参考：仓库源码中的 src/test/java/cn/xuqiudong/basic/third/demo
@@ -78,6 +80,21 @@ cn.xuqiudong.basic.third
 |   |   `-- InboundAppConfig               # appId、公钥、username、tokenTtl、时间窗、nonce 开关
 |   |-- registry
 |   |   `-- InboundAppConfigRegistry       # 入站配置注册点；一个第三方一个实现
+|   |-- log
+|   |   |-- annotation
+|   |   |   |-- InboundLog                   # 标记需要记录出入参异常的业务方法
+|   |   |   `-- InboundLogIgnore             # 标记某个方法参数不记录
+|   |   |-- aspect
+|   |   |   `-- InboundInvokeLogAspect       # 入站业务方法日志核心切面
+|   |   |-- context
+|   |   |   `-- InboundInvokeContextHolder   # 业务代码补充日志上下文
+|   |   |-- model
+|   |   |   `-- InboundInvokeLog             # 切面最终组装出的日志模型
+|   |   |-- service
+|   |   |   |-- InboundInvokeLogger           # 项目自定义入库、MQ、审计扩展
+|   |   |   `-- Slf4jInboundInvokeLogger     # 默认 slf4j 打印
+|   |   `-- util
+|   |       `-- InboundInvokeLogUtils       # 参数过滤、序列化、异常堆栈转换
 |   |-- model
 |   |   |-- TokenApplyRequest              # 获取 token 请求
 |   |   |-- TokenSignPayload               # 签名字段
