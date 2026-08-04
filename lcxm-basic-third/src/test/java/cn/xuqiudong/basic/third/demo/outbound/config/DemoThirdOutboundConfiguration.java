@@ -3,9 +3,9 @@ package cn.xuqiudong.basic.third.demo.outbound.config;
 import cn.xuqiudong.basic.third.config.spring.AbstractThirdOutboundConfiguration;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
 import cn.xuqiudong.basic.third.demo.outbound.partner.demo.client.DemoOutboundClient;
-import cn.xuqiudong.basic.third.log.service.ThirdExchangeLogger;
 import cn.xuqiudong.basic.third.outbound.executor.HttpOutboundExecutor;
 import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
+import cn.xuqiudong.basic.third.outbound.log.service.OutboundExchangeLogger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,9 +22,10 @@ public class DemoThirdOutboundConfiguration extends AbstractThirdOutboundConfigu
      * demo 厂商 Client 装配。
      */
     @Bean
-    public DemoOutboundClient demoOutboundClient(ThirdExchangeLogger exchangeLogger) {
+    public DemoOutboundClient demoOutboundClient() {
         ThirdClientOptions options = new ThirdClientOptions();
-        OutboundExecutor executor = new HttpOutboundExecutor(options, null, exchangeLogger);
+        OutboundExecutor executor = new HttpOutboundExecutor(options, null, printOutboundExchangeLog(),
+                outboundSlf4jExchangeLogTextMaxLength(), customOutboundExchangeLogger());
         return new DemoOutboundClient(options, executor);
     }
 
@@ -32,7 +33,7 @@ public class DemoThirdOutboundConfiguration extends AbstractThirdOutboundConfigu
      * demo 不额外落库；真实项目可返回 DB/MQ/审计 logger。
      */
     @Override
-    protected ThirdExchangeLogger customThirdExchangeLogger() {
+    protected OutboundExchangeLogger customOutboundExchangeLogger() {
         return null;
     }
 }

@@ -9,10 +9,10 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.Method;
 import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
-import cn.xuqiudong.basic.third.log.model.ThirdExchangeLog;
-import cn.xuqiudong.basic.third.log.model.ThirdExchangeStatus;
-import cn.xuqiudong.basic.third.log.service.Slf4jThirdExchangeLogger;
-import cn.xuqiudong.basic.third.log.service.ThirdExchangeLogger;
+import cn.xuqiudong.basic.third.outbound.log.model.OutboundExchangeLog;
+import cn.xuqiudong.basic.third.outbound.log.model.OutboundExchangeStatus;
+import cn.xuqiudong.basic.third.outbound.log.service.OutboundExchangeLogger;
+import cn.xuqiudong.basic.third.outbound.log.service.Slf4jOutboundExchangeLogger;
 import cn.xuqiudong.basic.third.outbound.model.MultipartPart;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
@@ -35,11 +35,15 @@ import java.util.StringJoiner;
  */
 public class HttpOutboundExecutor implements OutboundExecutor {
 
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(HttpOutboundExecutor.class);
+
     private final ObjectMapper objectMapper;
 
     private final ThirdClientOptions options;
 
-    private final ThirdExchangeLogger exchangeLogger;
+    private final Slf4jOutboundExchangeLogger slf4jLogger;
+
+    private final OutboundExchangeLogger customLogger;
 
     private static final String CONTENT_TYPE = "Content-Type";
 
@@ -50,14 +54,30 @@ public class HttpOutboundExecutor implements OutboundExecutor {
     }
 
     public HttpOutboundExecutor(ThirdClientOptions options) {
-        this(options, defaultObjectMapper(), null);
+        this(options, defaultObjectMapper(), true, Slf4jOutboundExchangeLogger.DEFAULT_TEXT_MAX_LENGTH, null);
     }
 
+    /**
+     * 创建 Hutool 出站执行器。
+     *
+     * @param options 出站通用 HTTP 配置
+     * @param objectMapper JSON 序列化配置；为空时使用默认配置
+     * @param customLogger 项目自定义日志处理器；为空时只按默认 slf4j 策略打印
+     */
     public HttpOutboundExecutor(ThirdClientOptions options, ObjectMapper objectMapper,
-            ThirdExchangeLogger exchangeLogger) {
+            OutboundExchangeLogger customLogger) {
+        this(options, objectMapper, true, Slf4jOutboundExchangeLogger.DEFAULT_TEXT_MAX_LENGTH, customLogger);
+    }
+
+    /**
+     * 创建 Hutool 出站执行器，并明确控制 slf4j 打印和自定义日志处理。
+     */
+    public HttpOutboundExecutor(ThirdClientOptions options, ObjectMapper objectMapper, boolean printSlf4jLog,
+            int slf4jTextMaxLength, OutboundExchangeLogger customLogger) {
         this.options = options == null ? new ThirdClientOptions() : options;
         this.objectMapper = objectMapper == null ? defaultObjectMapper() : objectMapper;
-        this.exchangeLogger = exchangeLogger == null ? new Slf4jThirdExchangeLogger() : exchangeLogger;
+        this.slf4jLogger = printSlf4jLog ? new Slf4jOutboundExchangeLogger(slf4jTextMaxLength) : null;
+        this.customLogger = customLogger;
     }
 
     @Override
@@ -325,7 +345,7 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         if (!options.isExchangeLogEnabled()) {
             return;
         }
-        ThirdExchangeLog log = new ThirdExchangeLog()
+        OutboundExchangeLog log = new OutboundExchangeLog()
                 .setThirdCode(request.getThirdIdentity().getCode())
                 .setThirdName(request.getThirdIdentity().getName())
                 .setOperation(request.getOperation())
@@ -337,17 +357,32 @@ public class HttpOutboundExecutor implements OutboundExecutor {
                 .setResponseBody(responseBody)
                 .setStatus(resolveStatus(httpStatus, exception))
                 .setErrorMessage(exception == null ? null : exception.getMessage());
-        exchangeLogger.log(log);
+        safeLog("slf4j", slf4jLogger, log);
+        safeLog("custom", customLogger, log);
+    }
+
+    /**
+     * 日志记录失败不能影响第三方请求主流程。
+     */
+    private void safeLog(String loggerName, OutboundExchangeLogger logger, OutboundExchangeLog log) {
+        if (logger == null) {
+            return;
+        }
+        try {
+            logger.log(log);
+        } catch (RuntimeException e) {
+            LOGGER.warn("third outbound exchange {} log failed", loggerName, e);
+        }
     }
 
     /**
      * HTTP 错误状态码或本地异常都视为失败交换。
      */
-    private ThirdExchangeStatus resolveStatus(Integer httpStatus, Exception exception) {
+    private OutboundExchangeStatus resolveStatus(Integer httpStatus, Exception exception) {
         if (exception != null || (httpStatus != null && httpStatus >= 400)) {
-            return ThirdExchangeStatus.FAILED;
+            return OutboundExchangeStatus.FAILED;
         }
-        return ThirdExchangeStatus.SUCCESS;
+        return OutboundExchangeStatus.SUCCESS;
     }
 
     private static ObjectMapper defaultObjectMapper() {

@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
-import cn.xuqiudong.basic.third.log.model.ThirdExchangeLog;
+import cn.xuqiudong.basic.third.outbound.log.model.OutboundExchangeLog;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
@@ -195,7 +195,7 @@ public class HttpOutboundExecutorTest {
 
     @Test
     public void executeShouldKeepFullExchangeLogTextForCustomLogger() {
-        AtomicReference<ThirdExchangeLog> logRef = new AtomicReference<>();
+        AtomicReference<OutboundExchangeLog> logRef = new AtomicReference<>();
         ThirdClientOptions options = new ThirdClientOptions();
         OutboundRequestInfo<String> request = OutboundRequestInfo.<String>builder(ThirdIdentity.of("demo"))
                 .url(baseUrl)

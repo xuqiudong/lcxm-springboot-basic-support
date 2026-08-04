@@ -37,7 +37,7 @@
 | 出站请求类型 | `OutboundRequestType` 明确 JSON/FORM/MULTIPART/TEXT/BYTES/QUERY/NONE，默认可推断 |
 | multipart 上传 | 使用 `MultipartPart` 列表表达字段，支持 `File`、`InputStream + fileName`、同名 field 多文件 |
 | 出站响应 | 提供 JavaType 构建工具，不强制统一厂商响应基类 |
-| 出站日志 | 默认 slf4j，可组合项目自定义 logger；请求体、响应体、异常信息默认裁剪 |
+| 出站日志 | `HttpOutboundExecutor` 直接执行默认 slf4j 和项目自定义 logger；请求体、响应体、异常信息默认裁剪 |
 
 ## 配置基类
 
@@ -57,10 +57,9 @@ AbstractThirdInboundConfiguration
   -> inboundExcludePathPatterns()
 
 AbstractThirdOutboundConfiguration
-  -> thirdExchangeLogger()                # @Bean；返回 CompositeThirdExchangeLogger
-  -> printThirdExchangeLog()              # 默认 true
-  -> thirdSlf4jExchangeLogTextMaxLength() # 默认 4000；只影响 slf4j 打印，不影响日志模型
-  -> customThirdExchangeLogger()          # 默认 null；落库、MQ、审计时返回项目侧 logger
+  -> printOutboundExchangeLog()              # 默认 true
+  -> outboundSlf4jExchangeLogTextMaxLength() # 默认 4000；只影响 slf4j 打印，不影响日志模型
+  -> customOutboundExchangeLogger()          # 默认 null；落库、MQ、审计时返回项目侧 logger
 ```
 
 配置基类不做自动配置。项目接入时显式继承，显式加 `@Configuration`，按需覆盖方法。
@@ -117,8 +116,8 @@ AbstractThirdOutboundConfiguration
 
 ```text
 1. 项目配置类继承 AbstractThirdOutboundConfiguration
-   -> 提供 ThirdExchangeLogger
-   -> 具体第三方 Client 声明时注入 ThirdExchangeLogger / OutboundExecutor
+   -> 配置 slf4j 打印开关和项目自定义 OutboundExchangeLogger
+   -> 具体第三方 Client 声明时注入 OutboundExecutor
 
 2. 业务方定义厂商 API 和配置
    -> enum XxxApi implements ThirdApi
@@ -150,10 +149,9 @@ AbstractThirdOutboundConfiguration
    -> 特殊格式走 OutboundResponseParser
 
 7. 记录日志
-   -> HttpOutboundExecutor 生成完整 ThirdExchangeLog
-   -> CompositeThirdExchangeLogger
-   -> Slf4jThirdExchangeLogger 按配置裁剪打印内容
-   -> 项目自定义 ThirdExchangeLogger 获取完整模型，自行决定是否裁剪入库
+   -> HttpOutboundExecutor 生成完整 OutboundExchangeLog
+   -> Slf4jOutboundExchangeLogger 按配置裁剪打印内容
+   -> 项目自定义 OutboundExchangeLogger 获取完整模型，自行决定是否裁剪入库
 ```
 
 ## NonceStore

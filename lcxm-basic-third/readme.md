@@ -65,6 +65,13 @@ cn.xuqiudong.basic.third
 |   |-- executor
 |   |   |-- OutboundExecutor               # HTTP 执行器接口
 |   |   `-- HttpOutboundExecutor           # Hutool HTTP 默认实现
+|   |-- log
+|   |   |-- model
+|   |   |   |-- OutboundExchangeLog          # 出站交换日志模型
+|   |   |   `-- OutboundExchangeStatus       # SUCCESS/FAILED
+|   |   `-- service
+|   |       |-- OutboundExchangeLogger       # 项目自定义入库、MQ、审计扩展
+|   |       `-- Slf4jOutboundExchangeLogger # 默认 slf4j 打印
 |   |-- model
 |   |   |-- OutboundRequestInfo            # 出站请求模型
 |   |   |-- OutboundRequestType            # JSON/FORM/MULTIPART/TEXT/BYTES/QUERY/NONE
@@ -118,14 +125,6 @@ cn.xuqiudong.basic.third
 |   |-- RsaSignatureUtils                  # Hutool RSA SHA256withRSA
 |   `-- SignaturePayloadBuilder            # 固定顺序构建签名原文
 |
-`-- log
-    |-- model
-    |   |-- ThirdExchangeLog               # 出站交换日志模型
-    |   `-- ThirdExchangeStatus            # SUCCESS/FAILED
-    `-- service
-        |-- ThirdExchangeLogger            # 日志处理接口
-        |-- CompositeThirdExchangeLogger   # 组合 slf4j 和项目自定义 logger
-        `-- Slf4jThirdExchangeLogger       # slf4j 默认实现
 ```
 
 ## 接入摘要
@@ -194,8 +193,8 @@ src/test/java/cn/xuqiudong/basic/third/demo
 - 需要混合 query/header/form/multipart/parser/timeout 时，从 `builder(api, responseType)` 开始构建请求，最后 `execute(api, request)`。
 - `execute(api, request)` 中的 `api` 用于执行后的 `afterResponse(api, response)` 厂商响应校验。
 - 文件上传使用 `requestMultipart(...)`，支持 `File`、`InputStream + fileName`；同一个 field 多个文件使用 builder 连续 `multipartFile("file", ...)` 或 `multipartFiles(...)`。
-- 需要日志落库时覆盖 `customThirdExchangeLogger()` 返回项目侧 logger。
-- 默认 slf4j 日志会裁剪请求体、响应体、异常信息，长度由配置基类方法 `thirdSlf4jExchangeLogTextMaxLength()` 控制。
+- 需要日志落库时覆盖 `customOutboundExchangeLogger()` 返回项目侧 logger，并在创建 `HttpOutboundExecutor` 时传入。
+- 默认 slf4j 日志会裁剪请求体、响应体、异常信息，长度由配置基类方法 `outboundSlf4jExchangeLogTextMaxLength()` 控制。
 - JSON/FORM/TEXT/BYTES 请求通过 `OutboundRequestType` 明确表达，builder 也会按 body/form/query 自动推断。
 - 需要特殊响应解析时使用 `OutboundResponseParser`；包装泛型响应使用 `ResponseTypeUtils`。
 
