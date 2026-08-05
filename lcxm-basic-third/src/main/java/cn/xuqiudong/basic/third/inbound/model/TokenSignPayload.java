@@ -19,4 +19,9 @@ public class TokenSignPayload {
     private long timestamp;
 
     private String username;
+
+
+    public TokenSignPayload() {
+        this.timestamp = System.currentTimeMillis();
+    }
 }
