@@ -48,6 +48,7 @@ AbstractThirdInboundConfiguration
   -> useInboundRedisStore()               # 默认 true；返回 false 使用 Caffeine 本地存储
   -> inboundRedisTemplate()               # 抽象方法；项目侧提供 RedisTemplate
   -> inboundTokenService(...)             # 聚合 InboundAppConfigRegistry + TokenStore + NonceStore
+  -> inboundAppConfigCacheTtl()           # 默认 5 分钟；小于等于 0 表示不缓存 app 配置
   -> inboundTokenController(...)
   -> inboundTokenInterceptor(...)
   -> inboundTokenWebMvcConfigurer(...)    # 提供 WebMvcConfigurer；内部按开关注册拦截器
@@ -98,8 +99,9 @@ XxxOutboundPartner
 
 2. 查询业务配置
    InboundTokenService
-   -> 启动时聚合多个 InboundAppConfigRegistry
-   -> 按 appId 查询 InboundAppConfig
+   -> 启动时建立 appId -> InboundAppConfigRegistry 索引
+   -> 按 appId 短缓存 InboundAppConfig
+   -> 缓存过期后重新调用 registry.inboundConfig()
 
 3. 验签
    SignaturePayloadBuilder

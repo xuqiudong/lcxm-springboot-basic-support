@@ -12,8 +12,11 @@ import cn.xuqiudong.basic.third.security.RsaSignatureUtils;
 import cn.xuqiudong.basic.third.security.SignaturePayloadBuilder;
 import org.junit.Test;
 
+import java.time.Duration;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -53,12 +56,35 @@ public class InboundTokenServiceTest {
         throw new AssertionError("revoked token should be invalid");
     }
 
+    @Test
+    public void serviceShouldReloadConfigWhenCacheDisabled() {
+        RsaSignatureUtils.RsaKeyPair keyPair = RsaSignatureUtils.createKeys();
+        ReloadableRegistry registry = new ReloadableRegistry(keyPair.getPublicKey(), "firstUser");
+        InboundTokenService service = new InboundTokenService(
+                Collections.singletonList(registry),
+                new CaffeineTokenStore(),
+                new CaffeineNonceStore(),
+                Duration.ZERO);
+
+        TokenApplyRequest firstRequest = buildSignedRequest(keyPair.getPrivateKey(), "firstUser");
+        assertNotNull(service.issueToken(firstRequest));
+
+        registry.setUsername("secondUser");
+        TokenApplyRequest secondRequest = buildSignedRequest(keyPair.getPrivateKey(), "secondUser");
+        assertNotNull(service.issueToken(secondRequest));
+        assertEquals(3, registry.getLoadCount());
+    }
+
     private TokenApplyRequest buildSignedRequest(String privateKey) {
+        return buildSignedRequest(privateKey, "thirdUser");
+    }
+
+    private TokenApplyRequest buildSignedRequest(String privateKey, String username) {
         TokenApplyRequest request = new TokenApplyRequest();
         request.setAppId("demo-app");
         request.setNonce("nonce-1");
         request.setTimestamp(DateUtil.current());
-        request.setUsername("thirdUser");
+        request.setUsername(username);
         request.setSign(RsaSignatureUtils.privateSign(SignaturePayloadBuilder.buildTokenPayload(request), privateKey));
         return request;
     }
@@ -79,6 +105,44 @@ public class InboundTokenServiceTest {
         @Override
         public InboundAppConfig inboundConfig() {
             return config;
+        }
+    }
+
+    private static class ReloadableRegistry implements InboundAppConfigRegistry {
+
+        private final String publicKey;
+
+        private final AtomicInteger loadCount = new AtomicInteger();
+
+        private String username;
+
+        private ReloadableRegistry(String publicKey, String username) {
+            this.publicKey = publicKey;
+            this.username = username;
+        }
+
+        @Override
+        public String thirdCode() {
+            return "demo";
+        }
+
+        @Override
+        public InboundAppConfig inboundConfig() {
+            loadCount.incrementAndGet();
+            InboundAppConfig config = new InboundAppConfig();
+            config.setAppId("demo-app");
+            config.setThirdCode("demo");
+            config.setPublicKey(publicKey);
+            config.addUsername(username);
+            return config;
+        }
+
+        private void setUsername(String username) {
+            this.username = username;
+        }
+
+        private int getLoadCount() {
+            return loadCount.get();
         }
     }
 }

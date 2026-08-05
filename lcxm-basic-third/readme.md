@@ -175,6 +175,8 @@ src/test/java/cn/xuqiudong/basic/third/demo
 - 默认使用 Redis 存储 token 和 nonce，项目需要提供 `inboundRedisTemplate()`。
 - 如需切换为 Caffeine 本地存储，覆盖 `useInboundRedisStore()` 返回 `false`。
 - 每个第三方实现一个 `InboundAppConfigRegistry`。
+- `InboundAppConfigRegistry.inboundConfig()` 可以读取 DB、Redis、配置中心；公共模块默认短缓存 5 分钟。
+- 如需调整缓存时间，覆盖 `inboundAppConfigCacheTtl()`；小于等于 0 表示不缓存。
 - 按需覆盖 nonce 开关、拦截路径、token header 名称、拦截器自动注册开关。
 - 编写业务 Controller。
 
@@ -207,6 +209,7 @@ src/test/java/cn/xuqiudong/basic/third/demo
 
 - 默认值：`InboundAppConfig.tokenTtl = Duration.ofHours(1)`。
 - 每个 `appId` 可以通过 `InboundAppConfigRegistry` 返回不同 TTL。
+- `InboundAppConfig` 默认短缓存 5 分钟；缓存过期后重新调用 `registry.inboundConfig()`。
 - Redis 版本由 Redis TTL 控制过期；Caffeine 版本通过 `TokenValue.expireAt` 校验过期。
 - Store 接口 TTL 使用秒值 `ttlSeconds`，兼容低版本 Spring Data Redis。
 

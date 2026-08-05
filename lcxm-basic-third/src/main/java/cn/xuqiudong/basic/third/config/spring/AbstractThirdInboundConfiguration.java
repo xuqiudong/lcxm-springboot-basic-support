@@ -1,6 +1,7 @@
 package cn.xuqiudong.basic.third.config.spring;
 
 import java.util.Collection;
+import java.time.Duration;
 
 import cn.xuqiudong.basic.third.inbound.constant.InboundTokenConstants;
 import cn.xuqiudong.basic.third.inbound.log.aspect.InboundInvokeLogAspect;
@@ -59,7 +60,7 @@ public abstract class AbstractThirdInboundConfiguration {
     @Bean
     public InboundTokenService inboundTokenService(Collection<InboundAppConfigRegistry> registries,
             TokenStore tokenStore, NonceStore nonceStore) {
-        return new InboundTokenService(registries, tokenStore, nonceStore);
+        return new InboundTokenService(registries, tokenStore, nonceStore, inboundAppConfigCacheTtl());
     }
 
     /**
@@ -128,6 +129,13 @@ public abstract class AbstractThirdInboundConfiguration {
      */
     protected String inboundTokenHeaderName() {
         return InboundTokenConstants.TOKEN_HEADER_NAME;
+    }
+
+    /**
+     * 入站 app 配置短缓存时间；小于等于 0 表示每次都调用 registry.inboundConfig()。
+     */
+    protected Duration inboundAppConfigCacheTtl() {
+        return Duration.ofMinutes(5);
     }
 
     /**

@@ -19,6 +19,8 @@ import cn.xuqiudong.basic.third.inbound.store.NonceStore;
 import cn.xuqiudong.basic.third.inbound.store.TokenStore;
 import cn.xuqiudong.basic.third.security.RsaSignatureUtils;
 import cn.xuqiudong.basic.third.security.SignaturePayloadBuilder;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -31,7 +33,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class InboundTokenService {
 
-    private final Map<String, InboundAppConfig> configByAppId;
+    private static final Duration DEFAULT_CONFIG_CACHE_TTL = Duration.ofMinutes(5);
+
+    private final Map<String, InboundAppConfigRegistry> registryByAppId;
+
+    private final Cache<String, InboundAppConfig> configCache;
+
+    private final Duration configCacheTtl;
 
     private final TokenStore tokenStore;
 
@@ -47,13 +55,29 @@ public class InboundTokenService {
     @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required service collaborators.")
     public InboundTokenService(Collection<InboundAppConfigRegistry> registries, TokenStore tokenStore,
             NonceStore nonceStore) {
+        this(registries, tokenStore, nonceStore, DEFAULT_CONFIG_CACHE_TTL);
+    }
+
+    /**
+     * 创建入站 token 服务。
+     *
+     * @param registries 第三方入站配置注册点，一个第三方通常一个 registry
+     * @param tokenStore token 存储实现
+     * @param nonceStore nonce 防重存储
+     * @param configCacheTtl app 配置短缓存时间；小于等于 0 表示不缓存
+     */
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required service collaborators.")
+    public InboundTokenService(Collection<InboundAppConfigRegistry> registries, TokenStore tokenStore,
+            NonceStore nonceStore, Duration configCacheTtl) {
         if (CollUtil.isEmpty(registries)) {
             throw new IllegalArgumentException("registries can not be empty");
         }
         if (tokenStore == null) {
             throw new IllegalArgumentException("tokenStore can not be null");
         }
-        this.configByAppId = buildConfigMap(registries);
+        this.registryByAppId = buildRegistryMap(registries);
+        this.configCacheTtl = configCacheTtl == null ? DEFAULT_CONFIG_CACHE_TTL : configCacheTtl;
+        this.configCache = buildConfigCache(this.configCacheTtl);
         this.tokenStore = tokenStore;
         this.nonceStore = nonceStore;
     }
@@ -66,7 +90,7 @@ public class InboundTokenService {
         if (invalidMessage != null) {
             throw new ThirdException(invalidMessage);
         }
-        InboundAppConfig config = configByAppId.get(request.getAppId());
+        InboundAppConfig config = getConfig(request.getAppId());
         invalidMessage = validateConfigAndRequest(config, request);
         if (invalidMessage != null) {
             throw new ThirdException(invalidMessage);
@@ -133,23 +157,58 @@ public class InboundTokenService {
     }
 
     /**
-     * 将多个第三方 registry 初始化为 appId 索引，避免每次申请 token 时循环查找。
+     * 获取 app 配置；缓存过期后重新调用 registry.inboundConfig()。
      */
-    private Map<String, InboundAppConfig> buildConfigMap(Collection<InboundAppConfigRegistry> registries) {
-        Map<String, InboundAppConfig> result = new LinkedHashMap<>();
+    private InboundAppConfig getConfig(String appId) {
+        InboundAppConfigRegistry registry = registryByAppId.get(appId);
+        if (registry == null) {
+            return null;
+        }
+        if (isCacheDisabled()) {
+            return loadConfig(registry);
+        }
+        return configCache.get(appId, key -> loadConfig(registry));
+    }
+
+    /**
+     * 从 registry 重新加载 app 配置。
+     */
+    private InboundAppConfig loadConfig(InboundAppConfigRegistry registry) {
+        InboundAppConfig config = registry.inboundConfig();
+        validateRegistry(registry, config);
+        config.setThirdCode(StrUtil.blankToDefault(config.getThirdCode(), registry.thirdCode()));
+        return config;
+    }
+
+    /**
+     * 将多个第三方 registry 初始化为 appId 索引，避免每次申请 token 时循环查找。
+     *
+     * <p>这里只固定 appId 和 registry 的关系；具体 InboundAppConfig 内容仍按短缓存从 registry 重新读取。</p>
+     */
+    private Map<String, InboundAppConfigRegistry> buildRegistryMap(Collection<InboundAppConfigRegistry> registries) {
+        Map<String, InboundAppConfigRegistry> result = new LinkedHashMap<>();
         for (InboundAppConfigRegistry registry : registries) {
             if (registry == null) {
                 throw new IllegalArgumentException("registry can not be null");
             }
-            InboundAppConfig config = registry.inboundConfig();
-            validateRegistry(registry, config);
-            config.setThirdCode(StrUtil.blankToDefault(config.getThirdCode(), registry.thirdCode()));
-            InboundAppConfig old = result.putIfAbsent(config.getAppId(), config);
+            InboundAppConfig config = loadConfig(registry);
+            InboundAppConfigRegistry old = result.putIfAbsent(config.getAppId(), registry);
             if (old != null) {
                 throw new IllegalArgumentException("duplicate inbound appId: " + config.getAppId());
             }
         }
         return result;
+    }
+
+    private Cache<String, InboundAppConfig> buildConfigCache(Duration ttl) {
+        Duration actualTtl = ttl == null || ttl.isZero() || ttl.isNegative() ? DEFAULT_CONFIG_CACHE_TTL : ttl;
+        return Caffeine.newBuilder()
+                .expireAfterWrite(actualTtl)
+                .build();
+    }
+
+    private boolean isCacheDisabled() {
+        return configCacheTtl.isZero() || configCacheTtl.isNegative();
     }
 
     /**
