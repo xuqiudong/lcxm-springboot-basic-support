@@ -1,10 +1,11 @@
 package cn.xuqiudong.basic.third.inbound.model;
 
-import java.util.Date;
-
 import cn.hutool.core.date.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Stored token value.
@@ -13,7 +14,9 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class TokenValue {
+public class TokenValue implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String appId;
 
