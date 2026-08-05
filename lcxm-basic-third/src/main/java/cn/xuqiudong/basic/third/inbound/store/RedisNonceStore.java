@@ -1,10 +1,10 @@
 package cn.xuqiudong.basic.third.inbound.store;
 
-import java.util.concurrent.TimeUnit;
-
 import cn.hutool.core.util.StrUtil;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Redis nonce store based on Spring Data Redis.
@@ -15,9 +15,9 @@ public class RedisNonceStore implements NonceStore {
 
     public static final String DEFAULT_KEY_PREFIX = "third:inbound:nonce:";
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    protected final RedisTemplate<String, Object> redisTemplate;
 
-    private final String keyPrefix;
+    protected final String keyPrefix;
 
     @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required RedisTemplate.")
     public RedisNonceStore(RedisTemplate<String, Object> redisTemplate) {
@@ -45,7 +45,7 @@ public class RedisNonceStore implements NonceStore {
         return false;
     }
 
-    private String buildKey(String appId, String nonce) {
+    protected String buildKey(String appId, String nonce) {
         return keyPrefix + appId + ":" + nonce;
     }
 }

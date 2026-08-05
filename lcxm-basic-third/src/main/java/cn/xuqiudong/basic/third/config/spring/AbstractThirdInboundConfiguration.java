@@ -1,8 +1,5 @@
 package cn.xuqiudong.basic.third.config.spring;
 
-import java.util.Collection;
-import java.time.Duration;
-
 import cn.xuqiudong.basic.third.inbound.constant.InboundTokenConstants;
 import cn.xuqiudong.basic.third.inbound.log.aspect.InboundInvokeLogAspect;
 import cn.xuqiudong.basic.third.inbound.log.service.InboundInvokeLogger;
@@ -22,6 +19,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.Duration;
+import java.util.Collection;
+
 /**
  * 第三方入站 Spring 配置基类。
  *
@@ -38,9 +38,13 @@ public abstract class AbstractThirdInboundConfiguration {
     @Bean
     public TokenStore inboundTokenStore() {
         if (useInboundRedisStore()) {
-            return new RedisTokenStore(inboundRedisTemplate());
+            return createTokenStore();
         }
         return new CaffeineTokenStore();
+    }
+
+    protected TokenStore createTokenStore() {
+        return new RedisTokenStore(inboundRedisTemplate());
     }
 
     /**
@@ -49,9 +53,13 @@ public abstract class AbstractThirdInboundConfiguration {
     @Bean
     public NonceStore inboundNonceStore() {
         if (useInboundRedisStore()) {
-            return new RedisNonceStore(inboundRedisTemplate());
+            return createRedisNonceStore();
         }
         return new CaffeineNonceStore();
+    }
+
+    protected NonceStore createRedisNonceStore() {
+        return new RedisNonceStore(inboundRedisTemplate());
     }
 
     /**
@@ -59,7 +67,7 @@ public abstract class AbstractThirdInboundConfiguration {
      */
     @Bean
     public InboundTokenService inboundTokenService(Collection<InboundAppConfigRegistry> registries,
-            TokenStore tokenStore, NonceStore nonceStore) {
+                                                   TokenStore tokenStore, NonceStore nonceStore) {
         return new InboundTokenService(registries, tokenStore, nonceStore, inboundAppConfigCacheTtl());
     }
 
@@ -177,13 +185,13 @@ public abstract class AbstractThirdInboundConfiguration {
      * 需要 token 校验的入站业务路径。
      */
     protected String[] inboundInterceptPathPatterns() {
-        return new String[] {InboundTokenConstants.API_PATH_PATTERN};
+        return new String[]{InboundTokenConstants.API_PATH_PATTERN};
     }
 
     /**
      * 不需要 token 校验的入站路径。
      */
     protected String[] inboundExcludePathPatterns() {
-        return new String[] {InboundTokenConstants.OBTAIN_TOKEN_PATH, InboundTokenConstants.REVOKE_TOKEN_PATH};
+        return new String[]{InboundTokenConstants.OBTAIN_TOKEN_PATH, InboundTokenConstants.REVOKE_TOKEN_PATH};
     }
 }

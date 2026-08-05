@@ -1,11 +1,11 @@
 package cn.xuqiudong.basic.third.inbound.store;
 
-import java.util.concurrent.TimeUnit;
-
 import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.basic.third.inbound.model.TokenValue;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Redis token store based on Spring Data Redis.
@@ -19,9 +19,9 @@ public class RedisTokenStore implements TokenStore {
 
     public static final String DEFAULT_KEY_PREFIX = "third:inbound:token:";
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    protected final RedisTemplate<String, Object> redisTemplate;
 
-    private final String keyPrefix;
+    protected final String keyPrefix;
 
     @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required RedisTemplate.")
     public RedisTokenStore(RedisTemplate<String, Object> redisTemplate) {
@@ -55,7 +55,7 @@ public class RedisTokenStore implements TokenStore {
         redisTemplate.delete(buildKey(token));
     }
 
-    private String buildKey(String token) {
+    protected String buildKey(String token) {
         return keyPrefix + token;
     }
 }
