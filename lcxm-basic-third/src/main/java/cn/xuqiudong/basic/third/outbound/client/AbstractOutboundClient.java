@@ -22,9 +22,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
  */
 public abstract class AbstractOutboundClient {
 
-    private final ThirdClientOptions options;
+    private ThirdClientOptions options;
 
-    private final OutboundExecutor executor;
+    private OutboundExecutor executor;
+
+    /**
+     * 延迟创建出站配置和执行器。
+     */
+    protected AbstractOutboundClient() {
+    }
 
     /**
      * 使用项目传入的出站配置和执行器。
@@ -81,7 +87,7 @@ public abstract class AbstractOutboundClient {
      * 发起 GET 请求并返回原始字节，适合文件下载。
      */
     protected byte[] getBytes(String path) {
-        return executor.executeBytes(OutboundRequestInfo.builder(thirdIdentity())
+        return executor().executeBytes(OutboundRequestInfo.builder(thirdIdentity())
                 .method(ThirdHttpMethod.GET)
                 .url(buildUrl(path))
                 .headers(mergedHeaders())
@@ -92,7 +98,7 @@ public abstract class AbstractOutboundClient {
      * 发起 POST 请求并返回原始字节。
      */
     protected byte[] postBytes(String path, Object body) {
-        return executor.executeBytes(OutboundRequestInfo.builder(thirdIdentity())
+        return executor().executeBytes(OutboundRequestInfo.builder(thirdIdentity())
                 .method(ThirdHttpMethod.POST)
                 .url(buildUrl(path))
                 .headers(mergedHeaders())
@@ -104,14 +110,14 @@ public abstract class AbstractOutboundClient {
      * 执行已完整构建的出站请求。
      */
     protected <T> T execute(OutboundRequestInfo<T> request) {
-        return executor.execute(request);
+        return executor().execute(request);
     }
 
     /**
      * 执行已完整构建的出站请求并返回原始字节。
      */
     protected byte[] executeBytes(OutboundRequestInfo<?> request) {
-        return executor.executeBytes(request);
+        return executor().executeBytes(request);
     }
 
     /**
@@ -136,6 +142,30 @@ public abstract class AbstractOutboundClient {
      * 当前 Client 的通用 HTTP 配置。
      */
     protected ThirdClientOptions options() {
+        if (options == null) {
+            options = resolveOptions();
+        }
         return options;
+    }
+
+    /**
+     * 延迟解析当前 Client 的通用 HTTP 配置。
+     */
+    protected ThirdClientOptions resolveOptions() {
+        return new ThirdClientOptions();
+    }
+
+    /**
+     * 延迟解析当前 Client 的出站执行器。
+     */
+    protected OutboundExecutor resolveExecutor(ThirdClientOptions options) {
+        return new HttpOutboundExecutor(options);
+    }
+
+    private OutboundExecutor executor() {
+        if (executor == null) {
+            executor = resolveExecutor(options());
+        }
+        return executor;
     }
 }

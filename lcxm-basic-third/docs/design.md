@@ -22,7 +22,7 @@
 | 点 | 结论 |
 | --- | --- |
 | Spring 形态 | 当前主线面向 Spring Boot 3 / Spring 6 / JDK 21 |
-| 配置基类 | 提供两个抽象配置基类，不加 `@Configuration`，项目继承类自己加 |
+| 配置基类 | 入站配置基类负责 token 体系；出站配置基类只负责统一 `OutboundExecutorFactory` |
 | Web 鉴权 | 使用 Spring MVC `HandlerInterceptor`，不使用 servlet filter |
 | token 存储 | 抽象 `TokenStore`，内置 Redis 和 Caffeine |
 | token 过期 | 默认 1 小时，可按 appId 配置 |
@@ -57,12 +57,24 @@ AbstractThirdInboundConfiguration
   -> inboundExcludePathPatterns()
 
 AbstractThirdOutboundConfiguration
-  -> printOutboundExchangeLog()              # 默认 true
-  -> outboundSlf4jExchangeLogTextMaxLength() # 默认 4000；只影响 slf4j 打印，不影响日志模型
-  -> customOutboundExchangeLogger()          # 默认 null；落库、MQ、审计时返回项目侧 logger
+  -> outboundExecutorFactory()              # @Bean；创建系统级出站执行器工厂
+  -> outboundObjectMapper()                 # 默认 null；返回 null 使用执行器默认 ObjectMapper
+  -> printOutboundExchangeLog()             # 默认 true
+  -> outboundSlf4jExchangeLogTextMaxLength()# 默认 4000；只影响 slf4j 打印
+  -> customOutboundExchangeLogger()         # 默认 null；落库、MQ、审计时返回项目侧 logger
 ```
 
 配置基类不做自动配置。项目接入时显式继承，显式加 `@Configuration`，按需覆盖方法。
+
+出站配置基类不装配具体 partner。一个系统可能调用多个外部系统，核心仍是各自的 partner：
+
+```text
+XxxOutboundPartner
+  -> 继承 AbstractOutboundPartner<XxxConfig, XxxApi>
+  -> 构造方法传入 OutboundExecutorFactory
+  -> 实现 thirdClientOptions() 提供当前 partner 自己的 ThirdClientOptions
+  -> 基类通过 factory.create(options) 创建 HttpOutboundExecutor
+```
 
 ## ConditionalOnMissingBean
 
@@ -115,17 +127,18 @@ AbstractThirdOutboundConfiguration
 ## 出站流程
 
 ```text
-1. 项目配置类继承 AbstractThirdOutboundConfiguration
-   -> 配置 slf4j 打印开关和项目自定义 OutboundExchangeLogger
-   -> 具体第三方 Client 声明时注入 OutboundExecutor
+1. 业务方编写某厂商 Client
+   -> 可直接 @Component，或由项目自己的配置类声明 @Bean
+   -> 继承 AbstractOutboundPartner<XxxConfig, XxxApi>
+   -> 注入 OutboundExecutorFactory
+   -> 实现 thirdClientOptions
 
 2. 业务方定义厂商 API 和配置
    -> enum XxxApi implements ThirdApi
    -> XxxConfig implements OutboundPartnerConfig
    -> 配置来源由项目自行处理，可来自配置文件/DB/Redis/配置中心
 
-3. 业务方编写某厂商 Client
-   -> 继承 AbstractOutboundPartner<XxxConfig, XxxApi>
+3. 实现 partner 细节
    -> 实现 thirdIdentity
    -> 实现 loadConfig
    -> 默认 Caffeine 缓存配置 5 分钟；按需覆盖 configCacheTtl

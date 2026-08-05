@@ -1,18 +1,5 @@
 package cn.xuqiudong.basic.third.outbound.executor;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-
 import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
@@ -25,6 +12,19 @@ import com.sun.net.httpserver.HttpServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -205,6 +205,7 @@ public class HttpOutboundExecutorTest {
                 .build();
 
         new HttpOutboundExecutor(options, null, logRef::set).execute(request);
+
 
         assertEquals("1234567890", logRef.get().getRequestBody());
         assertEquals("ok", logRef.get().getResponseBody());

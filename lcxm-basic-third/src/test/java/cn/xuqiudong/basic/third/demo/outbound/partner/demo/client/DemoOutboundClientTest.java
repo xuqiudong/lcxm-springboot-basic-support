@@ -14,6 +14,7 @@ import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoRequest;
 import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoResponse;
 import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoThirdResponse;
 import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
+import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutorFactory;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
 import org.junit.Test;
@@ -29,9 +30,7 @@ public class DemoOutboundClientTest {
     @Test
     public void submitOrderShouldBuildPartnerRequest() {
         AtomicReference<OutboundRequestInfo<?>> requestRef = new AtomicReference<>();
-        DemoOutboundClient client = new DemoOutboundClient(
-                new ThirdClientOptions(),
-                new DemoExecutor(requestRef, true));
+        DemoOutboundClient client = new DemoOutboundClient(demoFactory(new DemoExecutor(requestRef, true)));
 
         DemoRequest request = new DemoRequest();
         request.setOrderNo("O-001");
@@ -52,8 +51,7 @@ public class DemoOutboundClientTest {
     @Test
     public void submitOrderShouldThrowWhenPartnerResponseFailed() {
         DemoOutboundClient client = new DemoOutboundClient(
-                new ThirdClientOptions(),
-                new DemoExecutor(new AtomicReference<>(), false));
+                demoFactory(new DemoExecutor(new AtomicReference<>(), false)));
 
         try {
             client.submitOrder(new DemoRequest());
@@ -66,9 +64,7 @@ public class DemoOutboundClientTest {
     @Test
     public void queryOrderShouldSupportBuilderRequest() {
         AtomicReference<OutboundRequestInfo<?>> requestRef = new AtomicReference<>();
-        DemoOutboundClient client = new DemoOutboundClient(
-                new ThirdClientOptions(),
-                new DemoExecutor(requestRef, true));
+        DemoOutboundClient client = new DemoOutboundClient(demoFactory(new DemoExecutor(requestRef, true)));
 
         DemoThirdResponse<DemoResponse> response = client.queryOrder("O-001");
 
@@ -82,9 +78,7 @@ public class DemoOutboundClientTest {
     @Test
     public void queryOrderByFormShouldBuildFormRequest() {
         AtomicReference<OutboundRequestInfo<?>> requestRef = new AtomicReference<>();
-        DemoOutboundClient client = new DemoOutboundClient(
-                new ThirdClientOptions(),
-                new DemoExecutor(requestRef, true));
+        DemoOutboundClient client = new DemoOutboundClient(demoFactory(new DemoExecutor(requestRef, true)));
 
         DemoThirdResponse<DemoResponse> response = client.queryOrderByForm("O-001", "T-001");
 
@@ -98,9 +92,7 @@ public class DemoOutboundClientTest {
     @Test
     public void uploadOrderFileShouldBuildMultipartRequest() throws IOException {
         AtomicReference<OutboundRequestInfo<?>> requestRef = new AtomicReference<>();
-        DemoOutboundClient client = new DemoOutboundClient(
-                new ThirdClientOptions(),
-                new DemoExecutor(requestRef, true));
+        DemoOutboundClient client = new DemoOutboundClient(demoFactory(new DemoExecutor(requestRef, true)));
         File file = File.createTempFile("demo-order", ".txt");
         try {
             Files.write(file.toPath(), "order file".getBytes(StandardCharsets.UTF_8));
@@ -120,8 +112,7 @@ public class DemoOutboundClientTest {
     @Test
     public void submitOrderShouldReuseCachedConfig() {
         CountingDemoOutboundClient client = new CountingDemoOutboundClient(
-                new ThirdClientOptions(),
-                new DemoExecutor(new AtomicReference<>(), true));
+                demoFactory(new DemoExecutor(new AtomicReference<>(), true)));
 
         client.submitOrder(new DemoRequest());
         client.submitOrder(new DemoRequest());
@@ -161,12 +152,21 @@ public class DemoOutboundClientTest {
         }
     }
 
+    private static OutboundExecutorFactory demoFactory(OutboundExecutor executor) {
+        return new OutboundExecutorFactory(null, true, 4000, null) {
+            @Override
+            public OutboundExecutor create(ThirdClientOptions options) {
+                return executor;
+            }
+        };
+    }
+
     private static class CountingDemoOutboundClient extends DemoOutboundClient {
 
         private final AtomicInteger loadCount = new AtomicInteger();
 
-        private CountingDemoOutboundClient(ThirdClientOptions options, OutboundExecutor executor) {
-            super(options, executor);
+        private CountingDemoOutboundClient(OutboundExecutorFactory executorFactory) {
+            super(executorFactory);
         }
 
         @Override

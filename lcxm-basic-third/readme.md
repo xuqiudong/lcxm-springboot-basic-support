@@ -49,7 +49,7 @@ cn.xuqiudong.basic.third
 |   |   `-- ThirdClientOptions             # 出站通用参数：超时、默认 header、代理、日志开关
 |   `-- spring
 |       |-- AbstractThirdInboundConfiguration  # 入站 Spring 配置基类；不加 @Configuration
-|       `-- AbstractThirdOutboundConfiguration # 出站 Spring 配置基类；不加 @Configuration
+|       `-- AbstractThirdOutboundConfiguration # 出站 Spring 配置基类；只创建 OutboundExecutorFactory
 |
 |-- outbound                              # 我们请求第三方
 |   |-- api
@@ -64,6 +64,7 @@ cn.xuqiudong.basic.third
 |   |   `-- OutboundParams                 # 普通 query/form 参数构建器
 |   |-- executor
 |   |   |-- OutboundExecutor               # HTTP 执行器接口
+|   |   |-- OutboundExecutorFactory        # 出站执行器工厂；统一 ObjectMapper 和日志策略
 |   |   `-- HttpOutboundExecutor           # Hutool HTTP 默认实现
 |   |-- log
 |   |   |-- model
@@ -80,6 +81,7 @@ cn.xuqiudong.basic.third
 |   |-- parser
 |   |   `-- OutboundResponseParser         # 特殊响应解析扩展点
 |   `-- util
+|       |-- OutboundUrlUtils               # host/path 拼接工具
 |       `-- ResponseTypeUtils              # 泛型响应 JavaType 构建工具
 |
 |-- inbound                               # 第三方请求我们
@@ -146,8 +148,6 @@ src/test/java/cn/xuqiudong/basic/third/demo
 |           `-- controller
 |               `-- DemoInboundBusinessController # demo 第三方请求我方的业务接口
 `-- outbound
-    |-- config
-    |   `-- DemoThirdOutboundConfiguration    # 出站方向全局配置：logger、client bean 装配
     `-- partner                              # 出站厂商实现
         `-- demo
             |-- client
@@ -165,7 +165,7 @@ src/test/java/cn/xuqiudong/basic/third/demo
 
 说明：
 
-- `inbound/config`、`outbound/config` 是方向级全局配置。
+- `inbound/config` 是入站方向全局配置。
 - `inbound/partner/demo`、`outbound/partner/demo` 是某个具体第三方实现。
 - 方向内确实有多个 partner 共享的对象时，再增加 `common`；没有共享逻辑不要建空包。
 
@@ -182,10 +182,11 @@ src/test/java/cn/xuqiudong/basic/third/demo
 
 出站方向，业务项目通常只做这些事：
 
-- 写配置类继承 `AbstractThirdOutboundConfiguration`，并在子类加 `@Configuration`。
+- 写配置类继承 `AbstractThirdOutboundConfiguration`，并在子类加 `@Configuration`；它只负责创建全局 `OutboundExecutorFactory`。
 - 每个第三方定义一个 API 枚举，实现 `ThirdApi`。
 - 每个第三方定义一个配置模型，实现 `OutboundPartnerConfig`，至少提供 `host`。
-- 每个第三方写一个 Client，优先继承 `AbstractOutboundPartner<C, A>`，其中 `A` 是具体 API 枚举。
+- 每个第三方写一个 Client，优先继承 `AbstractOutboundPartner<C, A>`，其中 `A` 是具体 API 枚举；构造方法传入 `OutboundExecutorFactory`。
+- 每个 Client 实现 `thirdClientOptions()`，提供当前 partner 自己的 timeout、proxy、默认 header、日志开关等。
 - 实现 `thirdIdentity()` 和 `loadConfig()`，按需覆盖 `resolveApiPath(...)`、`buildHeaders(api)`、`afterResponse(...)`。
 - `loadConfig()` 的返回结果默认使用 Caffeine 缓存 5 分钟；覆盖 `configCacheTtl()` 可调整，返回小于等于 0 表示不缓存。
 - 简单请求可用 `requestJson(...)`、`requestForm(...)`、`requestMultipart(...)` 等终结方法。
@@ -193,8 +194,8 @@ src/test/java/cn/xuqiudong/basic/third/demo
 - 需要混合 query/header/form/multipart/parser/timeout 时，从 `builder(api, responseType)` 开始构建请求，最后 `execute(api, request)`。
 - `execute(api, request)` 中的 `api` 用于执行后的 `afterResponse(api, response)` 厂商响应校验。
 - 文件上传使用 `requestMultipart(...)`，支持 `File`、`InputStream + fileName`；同一个 field 多个文件使用 builder 连续 `multipartFile("file", ...)` 或 `multipartFiles(...)`。
-- 需要日志落库时覆盖 `customOutboundExchangeLogger()` 返回项目侧 logger，并在创建 `HttpOutboundExecutor` 时传入。
-- 默认 slf4j 日志会裁剪请求体、响应体、异常信息，长度由配置基类方法 `outboundSlf4jExchangeLogTextMaxLength()` 控制。
+- 需要日志落库时实现 `OutboundExchangeLogger`，并在出站配置类中覆盖 `customOutboundExchangeLogger()`。
+- 默认 slf4j 日志会裁剪请求体、响应体、异常信息，长度由 `outboundSlf4jExchangeLogTextMaxLength()` 控制。
 - JSON/FORM/TEXT/BYTES 请求通过 `OutboundRequestType` 明确表达，builder 也会按 body/form/query 自动推断。
 - 需要特殊响应解析时使用 `OutboundResponseParser`；包装泛型响应使用 `ResponseTypeUtils`。
 

@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
 import cn.xuqiudong.basic.third.outbound.api.ThirdApi;
@@ -15,8 +14,10 @@ import cn.xuqiudong.basic.third.outbound.builder.OutboundParams;
 import cn.xuqiudong.basic.third.outbound.builder.OutboundRequestInfoBuilder;
 import cn.xuqiudong.basic.third.outbound.config.OutboundPartnerConfig;
 import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
+import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutorFactory;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
+import cn.xuqiudong.basic.third.outbound.util.OutboundUrlUtils;
 import com.fasterxml.jackson.databind.JavaType;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -46,13 +47,38 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
 
     private final Cache<String, C> configCache;
 
-    protected AbstractOutboundPartner() {
-        this(new ThirdClientOptions(), null);
+    private final OutboundExecutorFactory executorFactory;
+
+    /**
+     * 使用全局出站执行器工厂创建当前 partner 的执行器。
+     *
+     * <p>子类通过 {@link #thirdClientOptions()} 提供自己的 ThirdClientOptions。</p>
+     */
+    protected AbstractOutboundPartner(OutboundExecutorFactory executorFactory) {
+        super();
+        this.executorFactory = executorFactory;
+        this.configCache = buildConfigCache();
     }
 
-    protected AbstractOutboundPartner(ThirdClientOptions options, OutboundExecutor executor) {
-        super(options, executor);
-        this.configCache = buildConfigCache();
+    /**
+     * 当前 partner 自己的 HTTP 配置。
+     *
+     * <p>例如 timeout、proxy、默认 header、是否记录交换日志等。</p>
+     */
+    protected abstract ThirdClientOptions thirdClientOptions();
+
+    @Override
+    protected ThirdClientOptions resolveOptions() {
+        ThirdClientOptions options = thirdClientOptions();
+        return options == null ? new ThirdClientOptions() : options;
+    }
+
+    @Override
+    protected OutboundExecutor resolveExecutor(ThirdClientOptions options) {
+        if (executorFactory == null) {
+            throw new ThirdException("outbound executor factory can not be null");
+        }
+        return executorFactory.create(options);
     }
 
     /**
@@ -107,7 +133,7 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
         if (api == null) {
             throw new ThirdException("third api can not be null");
         }
-        return joinUrl(getConfig().getHost(), resolveApiPath(api));
+        return OutboundUrlUtils.joinHostPath(getConfig().getHost(), resolveApiPath(api), thirdIdentity().getCode());
     }
 
     /**
@@ -115,7 +141,7 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
      */
     @Override
     protected String buildUrl(String path) {
-        return joinUrl(getConfig().getHost(), path);
+        return OutboundUrlUtils.joinHostPath(getConfig().getHost(), path, thirdIdentity().getCode());
     }
 
     /**
@@ -306,21 +332,4 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
         return api.getMethod();
     }
 
-    protected String joinUrl(String host, String path) {
-        if (StrUtil.isBlank(host)) {
-            throw new ThirdException("outbound partner host can not be blank: " + thirdIdentity().getCode());
-        }
-        if (StrUtil.isBlank(path)) {
-            return host;
-        }
-        boolean hostEndsWithSlash = host.endsWith("/");
-        boolean pathStartsWithSlash = path.startsWith("/");
-        if (hostEndsWithSlash && pathStartsWithSlash) {
-            return host + path.substring(1);
-        }
-        if (!hostEndsWithSlash && !pathStartsWithSlash) {
-            return host + "/" + path;
-        }
-        return host + path;
-    }
 }

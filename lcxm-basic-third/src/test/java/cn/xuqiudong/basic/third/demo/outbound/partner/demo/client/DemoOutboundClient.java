@@ -10,7 +10,7 @@ import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoResponse;
 import cn.xuqiudong.basic.third.demo.outbound.partner.demo.model.DemoThirdResponse;
 import cn.xuqiudong.basic.third.outbound.builder.OutboundRequestInfoBuilder;
 import cn.xuqiudong.basic.third.outbound.client.AbstractOutboundPartner;
-import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
+import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutorFactory;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.util.ResponseTypeUtils;
 import com.fasterxml.jackson.databind.JavaType;
@@ -26,8 +26,13 @@ import java.util.Map;
  */
 public class DemoOutboundClient extends AbstractOutboundPartner<DemoOutboundConfig, DemoApi> {
 
-    public DemoOutboundClient(ThirdClientOptions options, OutboundExecutor executor) {
-        super(options, executor);
+    public DemoOutboundClient(OutboundExecutorFactory executorFactory) {
+        super(executorFactory);
+    }
+
+    @Override
+    protected ThirdClientOptions thirdClientOptions() {
+        return new ThirdClientOptions();
     }
 
     @Override
