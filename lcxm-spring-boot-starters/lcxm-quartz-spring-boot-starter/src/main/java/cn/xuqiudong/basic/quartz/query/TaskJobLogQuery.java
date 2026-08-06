@@ -23,7 +23,7 @@ public class TaskJobLogQuery extends PageQuery {
      */
     @Schema(description = "任务id")
     @QueryCondition(operation = QueryOperation.EQ)
-    private Integer taskJobId;
+    private String taskJobId;
 
     /**
      * 任务名称
