@@ -1,12 +1,5 @@
 package cn.xuqiudong.basic.third.outbound.client;
 
-import java.io.File;
-import java.io.InputStream;
-import java.time.Duration;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
 import cn.xuqiudong.basic.third.outbound.api.ThirdApi;
@@ -21,6 +14,13 @@ import cn.xuqiudong.basic.third.outbound.util.OutboundUrlUtils;
 import com.fasterxml.jackson.databind.JavaType;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+
+import java.io.File;
+import java.io.InputStream;
+import java.time.Duration;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 第三方厂商出站 Client 基类。
@@ -133,7 +133,7 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
         if (api == null) {
             throw new ThirdException("third api can not be null");
         }
-        return OutboundUrlUtils.joinHostPath(getConfig().getHost(), resolveApiPath(api), thirdIdentity().getCode());
+        return joinUrl(getConfig().getHost(), resolveApiPath(api));
     }
 
     /**
@@ -141,7 +141,11 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
      */
     @Override
     protected String buildUrl(String path) {
-        return OutboundUrlUtils.joinHostPath(getConfig().getHost(), path, thirdIdentity().getCode());
+        return joinUrl(getConfig().getHost(), path);
+    }
+
+    protected String joinUrl(String host, String path) {
+        return OutboundUrlUtils.joinHostPath(host, path, thirdIdentity().getCode());
     }
 
     /**
