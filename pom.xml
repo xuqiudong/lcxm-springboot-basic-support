@@ -127,6 +127,7 @@
         <!-- skip for  plugin  start ↓ ↓ ↓ -->
         <skip.pmd>true</skip.pmd>
         <skip.spotbugs>false</skip.spotbugs>
+        <skip.test>true</skip.test>
         <!-- skip for  plugin  end   ↑ ↑ ↑ -->
 
     </properties>
@@ -478,7 +479,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
-                        <skipTests>true</skipTests>
+                        <skipTests>${skip.test}</skipTests>
                         <testFailureIgnore>true</testFailureIgnore>
                     </configuration>
                 </plugin>
