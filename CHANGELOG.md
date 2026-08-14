@@ -19,11 +19,12 @@
 
 - `readme.md`: 重写为项目级产品入口，补充模块列表、Quick Start、文档导航、版本和发版说明。
 - `lcxm-basic-third`: 简化第三方对接设计，删除无必要 provider/result/noop 结构，按入站、出站、日志、配置等子包重新组织。
-- `lcxm-springboot-parent`: Spring Boot 3.5 补丁线升级至 3.5.16，并同步升级 SpringDoc、Redisson、MyBatis、PageHelper、Sa-Token 等 Boot 3 兼容线依赖。
-- `lcxm-springboot-parent`: 升级 Commons、Hutool、HttpClient 4 及 Maven 编译、测试、打包、发布相关插件；Servlet API、Caffeine、Commons Codec/Lang3、FreeMarker 改为跟随 Spring Boot BOM。详细版本和兼容性边界见 [父 POM 依赖与插件升级记录](docs/CHANGELOG/202608-parent-dependency-plugin-upgrade.md)。
-- `lcxm-springboot-parent`: 删除未被父项目、profile 或子模块引用的 Flatten Maven Plugin 配置。
-- `lcxm-spring-boot-starters`: 修正两级子目录 starter 的父 POM `relativePath`，避免构建时回退到本地仓库中的旧父 POM。
-- `lcxm-spring-boot-starters`: 删除 generator 的空 Jar Plugin 声明和聚合 POM 中与 `maven.deploy.skip` 重复的 Deploy Plugin 配置。
+-  **2026-08-14 依赖版本升级**:详细版本和兼容性边界见 [父 POM 依赖与插件升级记录](docs/CHANGELOG/202608-parent-dependency-plugin-upgrade.md)。
+  - `lcxm-springboot-parent`: Spring Boot 3.5 补丁线升级至 3.5.16，并同步升级 SpringDoc、Redisson、MyBatis、PageHelper、Sa-Token 等 Boot 3 兼容线依赖。
+  - `lcxm-springboot-parent`: 升级 Commons、Hutool、HttpClient 4 及 Maven 编译、测试、打包、发布相关插件；Servlet API、Caffeine、Commons Codec/Lang3、FreeMarker 改为跟随 Spring Boot BOM。
+  - `lcxm-springboot-parent`: 删除未被父项目、profile 或子模块引用的 Flatten Maven Plugin 配置。
+  - `lcxm-spring-boot-starters`: 修正两级子目录 starter 的父 POM `relativePath`，避免构建时回退到本地仓库中的旧父 POM。
+  - `lcxm-spring-boot-starters`: 删除 generator 的空 Jar Plugin 声明和聚合 POM 中与 `maven.deploy.skip` 重复的 Deploy Plugin 配置。
 
 ## [3.5.0-jdk21-3.0.0] - 2026-04-25
 
