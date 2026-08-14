@@ -7,6 +7,7 @@
         <groupId>cn.xuqiudong.basic</groupId>
         <artifactId>lcxm-springboot-parent</artifactId>
         <version>3.5.0-jdk21-3.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>lcxm-mq-data-bridge-spring-boot-starter</artifactId>

@@ -7,6 +7,7 @@
         <groupId>cn.xuqiudong.basic</groupId>
         <artifactId>lcxm-springboot-parent</artifactId>
         <version>3.5.0-jdk21-3.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>lcxm-generator-spring-boot-starter</artifactId>
@@ -114,27 +115,4 @@
 
 
     </dependencies>
-
-
-    <build>
-
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <!--
-                    <excludes>
-                        排除测试用的启动类
-                        <exclude>cn/xuqiudong/generator/GeneratorApplication.class</exclude>
-                         排除测试用的 application.properties
-                        <exclude>application.properties</exclude>
-                    </excludes>
-                    -->
-                </configuration>
-            </plugin>
-        </plugins>
-
-    </build>
 </project>
