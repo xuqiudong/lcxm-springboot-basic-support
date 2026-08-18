@@ -38,6 +38,11 @@ public class InboundAppConfig {
     private Set<String> usernames = new LinkedHashSet<>();
 
     /**
+     * 自定义 username 校验回调；配置后优先于 usernames 白名单。
+     */
+    private InboundUsernameChecker usernameChecker;
+
+    /**
      * token 有效期，默认 1 小时。
      */
     private Duration tokenTtl = Duration.ofHours(1);
@@ -79,6 +84,9 @@ public class InboundAppConfig {
      * 判断当前 username 是否允许访问。
      */
     public boolean allowsUsername(String username) {
+        if (usernameChecker != null) {
+            return usernameChecker.checkUsername(username);
+        }
         if (usernames == null || usernames.isEmpty()) {
             return true;
         }

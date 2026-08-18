@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  * Minimal token issue/check/revoke flow test.
@@ -73,6 +74,29 @@ public class InboundTokenServiceTest {
         TokenApplyRequest secondRequest = buildSignedRequest(keyPair.getPrivateKey(), "secondUser");
         assertNotNull(service.issueToken(secondRequest));
         assertEquals(3, registry.getLoadCount());
+    }
+
+    @Test
+    public void serviceShouldUseCustomUsernameCheckerBeforeConfiguredUsernames() {
+        RsaSignatureUtils.RsaKeyPair keyPair = RsaSignatureUtils.createKeys();
+        InboundAppConfig config = new InboundAppConfig();
+        config.setAppId("demo-app");
+        config.setPublicKey(keyPair.getPublicKey());
+        config.addUsername("configuredUser");
+        config.setUsernameChecker("dynamicUser"::equals);
+        InboundTokenService service = new InboundTokenService(
+                Collections.singletonList(new DemoRegistry(config)),
+                new CaffeineTokenStore(),
+                new CaffeineNonceStore());
+
+        assertNotNull(service.issueToken(buildSignedRequest(keyPair.getPrivateKey(), "dynamicUser")));
+
+        try {
+            service.issueToken(buildSignedRequest(keyPair.getPrivateKey(), "configuredUser"));
+            fail("custom username checker should take precedence over configured usernames");
+        } catch (ThirdException e) {
+            assertEquals("invalid username", e.getMessage());
+        }
     }
 
     private TokenApplyRequest buildSignedRequest(String privateKey) {
