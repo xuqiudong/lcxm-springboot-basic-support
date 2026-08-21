@@ -27,6 +27,10 @@ public class IdUtil {
     //匹配加密id的正则表达式
     private static final String ENCRYPTED_REGEX = ID_PREFIX + "(.*?)" + ID_SUFFIX;
 
+    private static final Pattern ENCRYPTED_PATTERN = Pattern.compile(ENCRYPTED_REGEX, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
+    private static final Pattern EXACT_ENCRYPTED_PATTERN = Pattern.compile("^" + ENCRYPTED_REGEX + "$", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
 
     //默认加密盐值
     private static final String DEFAULT_SALT = "secure-id";
@@ -71,6 +75,10 @@ public class IdUtil {
      */
     public static String decrypt(String id) {
         if (isEncrypted(id)) {
+            Matcher matcher = EXACT_ENCRYPTED_PATTERN.matcher(id);
+            if (matcher.matches()) {
+                return decodeDataInfo(matcher.group(1), getSalt());
+            }
             //修改为全字段匹配解密其中的加密字段并替换回去
             return replacementAllHanderString(id, ENCRYPTED_REGEX, str -> decodeDataInfo(str, getSalt()));
         }
@@ -89,7 +97,7 @@ public class IdUtil {
      * 查看是否加前后缀即可
      */
     private static boolean isEncrypted(String src) {
-        return StringUtils.isNotEmpty(src) && src.matches(".*" + ENCRYPTED_REGEX + ".*");
+        return StringUtils.isNotEmpty(src) && ENCRYPTED_PATTERN.matcher(src).find();
     }
 
     private static String getSalt() {
@@ -108,8 +116,8 @@ public class IdUtil {
      * 带盐值的base62加密
      */
     private static String encodeDataInfo(String srcData, String salt) {
-        byte[] xorArray = salt.getBytes();
-        byte[] srcInfo = srcData.getBytes();
+        byte[] xorArray = salt.getBytes(StandardCharsets.UTF_8);
+        byte[] srcInfo = srcData.getBytes(StandardCharsets.UTF_8);
         for (int i = 0; i < srcInfo.length; i++) {
             for (int j = 0; j < xorArray.length; j++) {
                 srcInfo[i] = (byte) (srcInfo[i] ^ xorArray[j]);
@@ -123,7 +131,7 @@ public class IdUtil {
      * 带盐值的base62解密
      */
     private static String decodeDataInfo(String dicData, String salt) {
-        byte[] xorArray = salt.getBytes();
+        byte[] xorArray = salt.getBytes(StandardCharsets.UTF_8);
         byte[] dicInfo = Base62.decode(dicData);
         for (int i = 0; i < dicInfo.length; i++) {
             for (int j = 0; j < xorArray.length; j++) {
@@ -189,11 +197,13 @@ public class IdUtil {
         if (StringUtils.isAnyBlank(srcStr, regexStr)) {
             return srcStr;
         }
-        Pattern pattern = Pattern.compile(regexStr, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Pattern pattern = ENCRYPTED_REGEX.equals(regexStr)
+                ? ENCRYPTED_PATTERN
+                : Pattern.compile(regexStr, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
         Matcher matcher = pattern.matcher(srcStr);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
-            matcher.appendReplacement(sb, handler.apply(matcher.group(1)));
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(handler.apply(matcher.group(1))));
         }
         matcher.appendTail(sb);
         return sb.toString();
