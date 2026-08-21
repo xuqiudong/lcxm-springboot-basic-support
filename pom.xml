@@ -23,6 +23,7 @@
         <module>lcxm-basic-third</module>
         <module>lcxm-trial</module>
         <module>lcxm-spring-boot-starters</module>
+        <module>lcxm-basic-secure-id</module>
     </modules>
 
     <properties>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.xuqiudong.basic</groupId>
+        <artifactId>lcxm-springboot-parent</artifactId>
+        <version>3.5.0-jdk21-3.0.0</version>
+    </parent>
+
+    <artifactId>lcxm-basic-secure-id</artifactId>
+    <description>平行越权: 安全ID</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.xuqiudong.basic</groupId>
+            <artifactId>lcxm-basic-framework</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+
+
+</project>
