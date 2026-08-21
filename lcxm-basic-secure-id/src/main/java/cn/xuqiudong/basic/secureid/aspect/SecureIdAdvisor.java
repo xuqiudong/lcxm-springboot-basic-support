@@ -59,8 +59,9 @@ public class SecureIdAdvisor extends AbstractPointcutAdvisor {
     }
 
     /**
-     * 初始化 串行化请求的通知 切入点：
-     * 如果没有自定义切入点，则只需要 EnableSecureId注解
+     * 初始化 id 加密通知切入点。
+     * 如果没有自定义切入点，则只处理 {@link EnableSecureId} 注解方法；
+     * 如果存在自定义切入点，则和注解切入点取并集。
      */
     public Pointcut initPointcut() {
         AnnotationMatchingPointcut annotationMethodMatcher = AnnotationMatchingPointcut.forMethodAnnotation(EnableSecureId.class);
@@ -69,9 +70,9 @@ public class SecureIdAdvisor extends AbstractPointcutAdvisor {
         }
         AspectJExpressionPointcut expressionPointcut = new AspectJExpressionPointcut();
         expressionPointcut.setExpression(pointcutExpression);
-        //复合切入点
-        ComposablePointcut composablePointcut = new ComposablePointcut();
-        composablePointcut.intersection(annotationMethodMatcher).intersection(composablePointcut);
+        // 注解切点和自定义表达式取并集。
+        ComposablePointcut composablePointcut = new ComposablePointcut(annotationMethodMatcher);
+        composablePointcut.union((Pointcut) expressionPointcut);
         return composablePointcut;
     }
 
