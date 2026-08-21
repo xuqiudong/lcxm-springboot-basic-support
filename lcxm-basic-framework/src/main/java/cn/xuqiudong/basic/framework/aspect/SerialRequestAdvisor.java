@@ -3,6 +3,7 @@ package cn.xuqiudong.basic.framework.aspect;
 import cn.xuqiudong.basic.framework.aspect.advice.SerialRequestAdvice;
 import cn.xuqiudong.basic.framework.aspect.annotation.SerialRequest;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import jakarta.validation.constraints.NotNull;
 import org.aopalliance.aop.Advice;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -14,8 +15,6 @@ import org.springframework.aop.support.ComposablePointcut;
 import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * 描述: 串行化请求切面
@@ -82,7 +81,8 @@ public class SerialRequestAdvisor extends AbstractPointcutAdvisor {
         expressionPointcut.setExpression(pointcutExpression);
         //复合切入点
         ComposablePointcut pointcut = new ComposablePointcut();
-        pointcut.intersection(annotationMethodMatcher).intersection(pointcut);
+        pointcut.union(annotationMethodMatcher);
+        pointcut.union((Pointcut) expressionPointcut);
         this.serialRequestPointcut = pointcut;
     }
 
