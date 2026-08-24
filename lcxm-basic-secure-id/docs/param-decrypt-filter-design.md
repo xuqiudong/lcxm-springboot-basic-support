@@ -17,7 +17,7 @@
 - multipart 中的文件内容
 - 非请求参数语义的数据流
 - 普通业务字段的强制解析
-- 路径参数中的加密 ID，如 `/api/users/{id}` 中的 `{id}`
+- 路径参数不在 Filter 中处理，改由 Spring MVC 参数解析器处理
 
 ## 2. 核心原则
 
@@ -137,7 +137,7 @@ Wrapper 应该持有：
 - 已处理：移除无意义类型判断。
 - 已处理：修正 input stream 状态。
 - 已处理：明确 body 构造规则，只有 filter 已读取 JSON body 时才接管 body；普通 query/form 包装继续委托原 request body。
-- 待处理：补 query/form/json wrapper 单测。
+- 已处理：补 query/form/json wrapper 单测。
 
 ### 阶段 2：再修 Filter 普通请求
 - 已处理：跳过分支继续 filter chain。
@@ -145,19 +145,20 @@ Wrapper 应该持有：
 - 已处理：GET 不再走 JSON body 特殊处理，统一走 parameterMap。
 - 已处理：Filter 改为 `OncePerRequestFilter`。
 - 已处理：Filter 通过 `FilterRegistrationBean` 注册，拦截路径、order、enabled 由子类配置。
-- 待处理：补 JSON body 可重复读测试。
+- 已处理：补 JSON body 可重复读测试。
 
 ### 阶段 3：最后处理 multipart
 - 已处理：resolver 由配置类注入，启用 filter 时强制要求存在。
 - 已处理：请求已经是 `MultipartHttpServletRequest` 时不重复 resolve。
 - 已处理：只通过 `getParameterMap()` 处理普通字段，不读取文件内容。
 - 已处理：filter 主动解析 multipart 后，在 chain 结束后调用 `cleanupMultipart`。
-- 待处理：补 multipart 普通字段测试。
-- 待处理：补文件上传参数绑定测试。
+- 已处理：补 multipart 普通字段解密和文件对象保留测试。
+- 待补充：真实 Controller 场景下的文件上传参数绑定集成测试。
 
 ## 6. 待确认点
 
 - 解密失败时是否需要记录 warn，还是 debug 即可。
+- multipart 文件参数绑定仍需补更接近真实 Controller 的验证。
 
 ## 6.1 当前处理状态
 
@@ -173,12 +174,9 @@ Wrapper 应该持有：
 - GET 请求不再走 JSON body 逻辑。
 
 暂未处理：
-- multipart 文件参数绑定验证。
-- query/form/json wrapper 单测。
-- JSON body 可重复读单测。
-- multipart 普通字段解密和文件上传单测。
+- 真实 Controller 场景下的 multipart 文件参数绑定集成验证。
 
-## 8. 配置类预留点
+## 7. 配置类预留点
 
 `AbstractSecureIdConfig` 当前要求子类明确提供：
 - `saltSupplier()`：运行时盐值来源。
@@ -187,13 +185,14 @@ Wrapper 应该持有：
 - `paramDecryptFilterUrlPatterns()`：请求解密过滤器拦截路径。
 - `paramDecryptFilterOrder()`：请求解密过滤器顺序。
 - `paramDecryptFilterEnabled()`：是否启用请求解密过滤器。
+- `pathVariableDecryptEnabled()`：是否启用路径参数解密。
 
 其中 `paramDecryptFilterOrder()` 需要特别注意：
 - 如果 salt 依赖用户上下文 filter，应晚于该 filter。
 - 如果需要在 controller 参数绑定前解密，应早于 Spring MVC handler 处理。
 - 如果项目有安全框架、日志链路、body 缓存 filter，需要按实际链路确认顺序。
 
-## 7. 后续单独设计：路径参数解密
+## 8. 路径参数解密设计
 
 路径参数示例：
 
@@ -201,7 +200,7 @@ Wrapper 应该持有：
 /api/users/WdLPex...xgIyHU/detail
 ```
 
-当前 Filter 阶段先不处理路径参数解密。
+Filter 阶段不处理路径参数解密，路径参数由 Spring MVC `HandlerMethodArgumentResolver` 处理。
 
 原因：
 - path variable 不在 `getParameterMap()` 中。
@@ -209,11 +208,17 @@ Wrapper 应该持有：
 - 正确处理可能需要同时覆盖 `getRequestURI()`、`getRequestURL()`、`getServletPath()`、`getPathInfo()`。
 - Spring MVC 可能在某些阶段缓存路径匹配信息，Filter 顺序会影响可行性。
 
-后续可选方案：
-- 基于 `HandlerMethodArgumentResolver` 处理 `@PathVariable`。
-- 增加类似 `@SecurePathVariable` 的注解。
-- 在 Controller 参数绑定后做统一转换。
+当前方案：
+- 继承 Spring 默认 `PathVariableMethodArgumentResolver` 处理普通 `@PathVariable`。
+- Spring MVC 路由匹配完成后，从 `HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE` 获取路径变量。
+- 对路径变量值统一尝试 `IdUtil.decrypt()`。
+- required 校验、空值处理、String 到 Long/Integer 等目标类型转换继续复用 Spring 默认逻辑。
+- 不按常见 ID 名称白名单判断，避免遗漏业务命名。
+- 不接管 `@PathVariable Map<String, String>`，继续交给 Spring 默认解析器。
+- 通过 `AbstractSecureIdConfig#pathVariableDecryptEnabled()` 提供开关。
+- 不提供单参数支持判断；如有极特殊排除需求，由业务项目覆盖 `SecurePathVariableArgumentResolver` bean。
 
-处理顺序：
-1. 先完成 query/form/JSON/multipart 普通字段解密。
-2. 再单独评估路径参数解密方案。
+注意：
+- Spring MVC 参数解析是“第一个支持者处理”，不是每个 resolver 都处理一遍。
+- secure-id resolver 继承默认 `PathVariableMethodArgumentResolver`，当前注册方式是替换默认普通路径参数 resolver。
+- 这不是重写整套路径参数体系；`@PathVariable Map<String, String>` 仍由 Spring 默认 Map resolver 处理。

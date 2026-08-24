@@ -12,6 +12,7 @@
 - 支持 `IdEncryptable#getId()`
 - 支持 `@SecureId` 标注额外 ID 字段
 - 支持 query、form、JSON body、multipart 普通字段解密
+- 支持普通 `@PathVariable` 路径参数解密
 - 支持响应对象递归、集合、数组、Map value
 - 支持分页等特殊对象由业务子类扩展
 - 支持运行时盐值
@@ -20,6 +21,7 @@
 ## 快速入口
 
 - 使用说明：[docs/usage.md](docs/usage.md)
+- 开发手册：[docs/developer-guide.md](docs/developer-guide.md)
 - 设计收口：[docs/secure-id-design-todo.md](docs/secure-id-design-todo.md)
 - 请求解密链路设计：[docs/param-decrypt-filter-design.md](docs/param-decrypt-filter-design.md)
 
@@ -27,6 +29,5 @@
 
 - 数据权限本身
 - 文件内容解密
-- 路径参数解密
 - 普通业务字段加密
 - 旧盐值兼容

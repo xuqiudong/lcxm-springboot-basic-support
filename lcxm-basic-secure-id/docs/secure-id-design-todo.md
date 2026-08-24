@@ -33,6 +33,7 @@
 
 ### 1.5 请求解密范围
 - 支持 query 参数、form、JSON body、multipart、文件上传附带字段。
+- 支持普通 `@PathVariable` 路径参数。
 - 支持单个 ID、多个 ID 分隔、长文本中局部替换。
 
 ### 1.6 切面规则
@@ -179,9 +180,19 @@ multipart 建议：
 - 已增加 class 字段元数据缓存，降低普通对象递归时的反射扫描、注解判断和字段名判断成本。
 
 ### 4.6 `AbstractSecureIdConfig`
-- 配置层需要再分析一次。
-- 明确业务项目必须实现的 bean。
+- 已明确业务项目必须实现的 bean 和抽象方法。
+- 已提供请求参数 Filter 的路径、order、enabled 配置点。
+- 已提供路径参数解密 enabled 配置点。
 - 检查 `@PostConstruct` 设置 salt 的时机是否合理。
+
+### 4.8 `SecurePathVariableArgumentResolver`
+- 已实现普通 `@PathVariable` 解密。
+- 已改为继承 Spring 默认 `PathVariableMethodArgumentResolver`，只额外增加解密过程。
+- 已明确不按参数名白名单判断。
+- 已明确不接管 `@PathVariable Map<String, String>`。
+- 已移除单参数支持判断，避免额外扩展点增加认知负担。
+- 已复用 Spring MVC 已匹配出的 URI template variables，不改写 request URI。
+- 已复用 Spring 默认 required、空值和目标类型转换逻辑。
 
 ### 4.7 注解定义
 - 保持 `@EnableSecureId`、`@SkipIdSecure`、`@SecureId` 三者职责清晰。

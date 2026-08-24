@@ -4,9 +4,12 @@ import cn.xuqiudong.basic.secureid.aspect.AbstractSecureIdAdvice;
 import cn.xuqiudong.basic.secureid.aspect.SecureIdAdvisor;
 import cn.xuqiudong.basic.secureid.filter.ParamDecryptFilter;
 import cn.xuqiudong.basic.secureid.util.IdUtil;
+import cn.xuqiudong.basic.secureid.web.SecurePathVariableArgumentResolver;
+import cn.xuqiudong.basic.secureid.web.SecurePathVariableArgumentResolverPostProcessor;
 import jakarta.annotation.PostConstruct;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartResolver;
 
@@ -83,6 +86,30 @@ public abstract class AbstractSecureIdConfig {
     }
 
     /**
+     * 路径参数解密解析器。
+     * <p>
+     * enabled 和项目级支持判断都放在 resolver 内部，关闭时 resolver 会对所有参数返回不支持，
+     * Spring MVC 会继续使用默认路径参数解析器。
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public SecurePathVariableArgumentResolver securePathVariableArgumentResolver() {
+        return new SecurePathVariableArgumentResolver();
+    }
+
+    /**
+     * 路径参数解密解析器责任链顺序调整。
+     * <p>
+     * 该处理器会用 secure-id resolver 替换 Spring 默认 PathVariable resolver，
+     * 保证普通 {@code @PathVariable} 在保留默认绑定能力的同时增加解密过程。
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "securePathVariableArgumentResolverPostProcessor")
+    public BeanPostProcessor securePathVariableArgumentResolverPostProcessor(SecurePathVariableArgumentResolver resolver) {
+        return new SecurePathVariableArgumentResolverPostProcessor(resolver, this::pathVariableDecryptEnabled);
+    }
+
+    /**
      * 子类实现， 构建 id 加密的切面处理器
      */
     public abstract AbstractSecureIdAdvice realSecureIdAdvice();
@@ -112,4 +139,12 @@ public abstract class AbstractSecureIdConfig {
      * 子类实现，是否启用 id 解密过滤器。
      */
     public abstract boolean paramDecryptFilterEnabled();
+
+    /**
+     * 子类实现，是否启用路径参数解密。
+     * <p>
+     * 启用后会对普通 {@code @PathVariable} 的值统一尝试 {@link IdUtil#decrypt(String)}。
+     * {@code IdUtil.decrypt} 对未加密值会原样返回，所以可以兼容历史明文路径参数。
+     */
+    public abstract boolean pathVariableDecryptEnabled();
 }
