@@ -22,8 +22,7 @@
 
 - 使用说明：[docs/usage.md](docs/usage.md)
 - 开发手册：[docs/developer-guide.md](docs/developer-guide.md)
-- 设计收口：[docs/secure-id-design-todo.md](docs/secure-id-design-todo.md)
-- 请求解密链路设计：[docs/param-decrypt-filter-design.md](docs/param-decrypt-filter-design.md)
+- 设计边界：[docs/design.md](docs/design.md)
 
 ## 当前不处理
 
