@@ -85,6 +85,7 @@
 - `Map`：默认遍历 value；是否处理 key 暂不默认支持。
 - 普通对象：遍历字段，处理 `@SecureId` 字段和子对象。
 - 深度限制和循环引用保护。
+- 普通对象字段列表按 `Class` 缓存，避免大量同类型对象重复反射扫描。
 
 交给子类处理：
 - 是否识别 `BaseResponse`，以及从哪里取 `data`。
@@ -167,9 +168,15 @@ multipart 建议：
 - 明确空表达式时的默认行为。
 
 ### 4.5 `AbstractSecureIdAdvice`
-- 先把遍历主链路写出来。
-- 再拆成子类可覆盖的模板点。
-- 明确哪些规则来自配置，哪些规则由子类决定。
+- 已实现遍历主链路。
+- 已提供子类可覆盖的模板点：
+  - `extractData`
+  - `encryptSpecialObject`
+  - `commonIdFieldNames`
+  - `maxDepth`
+  - `shouldSkip`
+- 已明确基础层处理通用结构，项目响应模型和特殊对象交给子类。
+- 已增加 class 字段元数据缓存，降低普通对象递归时的反射扫描、注解判断和字段名判断成本。
 
 ### 4.6 `AbstractSecureIdConfig`
 - 配置层需要再分析一次。

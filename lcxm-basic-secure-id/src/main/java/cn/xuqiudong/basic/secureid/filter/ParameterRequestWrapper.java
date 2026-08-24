@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,24 +28,21 @@ import java.util.Vector;
  * @since 2026-08-21 9:02
  */
 public class ParameterRequestWrapper extends HttpServletRequestWrapper {
-    Logger logger = LoggerFactory.getLogger(ParameterRequestWrapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(ParameterRequestWrapper.class);
 
-    private Map<String, String[]> params;
+    private final Map<String, String[]> params;
 
     /**
-     * 持有json 请求体
+     * 持有重建后的 JSON 请求体。
+     * <p>
+     * 为 null 表示当前 wrapper 不接管 body，getInputStream/getReader 继续委托原 request；
+     * 非 null 表示 filter 已经读取过 body，后续读取必须从这里重复读取。
      */
-    private byte[] body = new byte[0];
+    private final byte[] body;
 
 
     public ParameterRequestWrapper(HttpServletRequest request, Map<String, String[]> newParams) {
-        super(request);
-        //如果直接 = newParams 在后面向params中put参数的时候可能会报错:.....locaked ParamerMap
-        if (MapUtils.isEmpty(newParams)) {
-            newParams = new HashMap<>();
-        }
-        this.params = new HashMap<>(newParams);
-        renewParameterMap(request);
+        this(request, null, newParams);
     }
 
     /**
@@ -57,21 +53,25 @@ public class ParameterRequestWrapper extends HttpServletRequestWrapper {
      */
     public ParameterRequestWrapper(@NotNull HttpServletRequest request, @Nullable String json,
                                    @Nullable Map<String, String[]> newParams) {
-        this(request, newParams);
-        if (StringUtils.isNotBlank(json)) {
-            json = IdUtil.decrypt(json);
-            body = json.getBytes(StandardCharsets.UTF_8);
-        }
+        super(request);
+        this.params = decryptParameterMap(newParams);
+        this.body = json == null ? null : IdUtil.decrypt(json).getBytes(StandardCharsets.UTF_8);
     }
 
 
     @Override
     public BufferedReader getReader() throws IOException {
+        if (body == null) {
+            return super.getReader();
+        }
         return new BufferedReader(new InputStreamReader(getInputStream(), StandardCharsets.UTF_8));
     }
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
+        if (body == null) {
+            return super.getInputStream();
+        }
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(body);
 
@@ -84,16 +84,17 @@ public class ParameterRequestWrapper extends HttpServletRequestWrapper {
 
             @Override
             public boolean isFinished() {
-                return false;
+                return bais.available() == 0;
             }
 
             @Override
             public boolean isReady() {
-                return false;
+                return true;
             }
 
             @Override
             public void setReadListener(ReadListener readListener) {
+                // 当前 wrapper 基于内存字节数组同步读取，暂不支持异步 ReadListener 回调。
             }
         };
     }
@@ -101,25 +102,11 @@ public class ParameterRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public String getParameter(String name) {
-        String result = "";
-
-        Object v = params.get(name);
-        if (v == null) {
-            result = null;
-        } else if (v instanceof String[]) {
-            String[] strArr = (String[]) v;
-            if (strArr.length > 0) {
-                result = strArr[0];
-            } else {
-                result = null;
-            }
-        } else if (v instanceof String) {
-            result = (String) v;
-        } else {
-            result = v.toString();
+        String[] values = params.get(name);
+        if (values == null || values.length == 0) {
+            return null;
         }
-
-        return result;
+        return values[0];
     }
 
     @Override
@@ -134,57 +121,35 @@ public class ParameterRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public String[] getParameterValues(String name) {
-        String[] result = null;
+        return params.get(name);
+    }
 
-        Object v = params.get(name);
-        if (v == null) {
-            result = null;
-        } else if (v instanceof String[]) {
-            result = (String[]) v;
-        } else if (v instanceof String) {
-            result = new String[]{(String) v};
-        } else {
-            result = new String[]{v.toString()};
+    private Map<String, String[]> decryptParameterMap(@Nullable Map<String, String[]> source) {
+        Map<String, String[]> result = new HashMap<>();
+        if (MapUtils.isEmpty(source)) {
+            return result;
         }
-
+        for (Map.Entry<String, String[]> entry : source.entrySet()) {
+            String[] values = entry.getValue();
+            if (values == null) {
+                result.put(entry.getKey(), null);
+                continue;
+            }
+            String[] copiedValues = new String[values.length];
+            for (int i = 0; i < values.length; i++) {
+                copiedValues[i] = decryptQuietly(values[i]);
+            }
+            result.put(entry.getKey(), copiedValues);
+        }
         return result;
     }
 
-    private void renewParameterMap(HttpServletRequest req) {
-
-        String queryString = req.getQueryString();
-        //加入新的参数
-        if (queryString != null && queryString.trim().length() > 0) {
-            String[] params = queryString.split("&");
-
-            for (int i = 0; i < params.length; i++) {
-                int splitIndex = params[i].indexOf("=");
-                if (splitIndex == -1) {
-                    continue;
-                }
-
-                String key = params[i].substring(0, splitIndex);
-
-                if (!this.params.containsKey(key)) {
-                    if (splitIndex < params[i].length()) {
-                        String value = params[i].substring(splitIndex + 1);
-                        this.params.put(key, new String[]{value});
-                    }
-                }
-            }
+    private String decryptQuietly(String value) {
+        try {
+            return IdUtil.decrypt(value);
+        } catch (Exception e) {
+            logger.debug("secure id request parameter decrypt failed, keep original value", e);
+            return value;
         }
-        // 过滤参数
-        if (this.params != null) {
-            for (Map.Entry<String, String[]> entry : params.entrySet()) {
-                String[] values = entry.getValue();
-                if (values != null) {
-                    int len = values.length;
-                    for (int i = 0; i < len; i++) {
-                        values[i] = IdUtil.decrypt(values[i]);
-                    }
-                }
-            }
-        }
-
     }
 }
