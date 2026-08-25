@@ -118,7 +118,7 @@ public class SecureIdConfig extends AbstractSecureIdConfig {
     matchIfMissing = true
 )
 public class SecureIdConfig extends AbstractSecureIdConfig {
-    ...
+    //...
 }
 ```
 
@@ -208,7 +208,7 @@ public class UserVO implements IdEncryptable {
 @SkipIdSecure
 @GetMapping("/public")
 public BaseResponse<?> publicApi() {
-    ...
+    //...
 }
 ```
 
@@ -218,7 +218,7 @@ public BaseResponse<?> publicApi() {
 @EnableSecureId
 @GetMapping("/user/detail")
 public BaseResponse<UserVO> detail() {
-    ...
+    //...
 }
 ```
 
@@ -260,7 +260,7 @@ multipart 示例：
 ```java
 @GetMapping("/users/{userId}")
 public UserVO detail(@PathVariable("userId") Long userId) {
-    ...
+    //...
 }
 ```
 

@@ -83,7 +83,7 @@ Controller 中拿到的是解密后的真实 ID。
 ```java
 @PostMapping("/users/update")
 public void update(@RequestBody UserUpdateDTO dto) {
-    ...
+    //...
 }
 ```
 
@@ -94,7 +94,7 @@ JSON 中只要包含 secure-id 包裹值，Filter 会在进入 Controller 前替
 ```java
 @PostMapping("/users/update-name")
 public void updateName(@RequestParam("id") Long id, @RequestParam("name") String name) {
-    ...
+    //...
 }
 ```
 
@@ -105,7 +105,7 @@ form 参数中的安全 ID 会自动解密。
 ```java
 @GetMapping("/users/{userId}")
 public UserVO detail(@PathVariable("userId") Long userId) {
-    ...
+    //...
 }
 ```
 
@@ -124,7 +124,7 @@ public UserVO detail(@PathVariable("userId") Long userId) {
 @PostMapping("/files/upload")
 public void upload(@RequestParam("bizId") Long bizId,
                    @RequestParam("file") MultipartFile file) {
-    ...
+    //...
 }
 ```
 
@@ -141,7 +141,7 @@ public void upload(@RequestParam("bizId") Long bizId,
 @SkipIdSecure
 @GetMapping("/public/config")
 public Object publicConfig() {
-    ...
+    //...
 }
 ```
 
