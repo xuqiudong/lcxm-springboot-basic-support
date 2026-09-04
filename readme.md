@@ -19,6 +19,7 @@
 - MyBatis-Plus 通用实体、Mapper、Service 和数据权限扩展。
 - Excel 读取、写入基础能力。
 - 第三方入站/出站对接基础模块。
+- Secure ID 基础组件，用于接口 ID 的可逆隐藏和请求侧解密。
 - Quartz 定时任务、代码生成器、MQ 数据桥接等 starter。
 - Maven 父 POM 统一管理版本、插件和发布配置。
 
@@ -31,6 +32,7 @@
 | `lcxm-basic-mybatis-plus` | MyBatis-Plus 增强，包含实体基类、通用 Mapper/Service、字段级数据权限等。 |
 | `lcxm-basic-excel` | Excel 读取、写入工具，基于 FastExcel / POI。 |
 | `lcxm-basic-third` | 第三方对接基础模块，覆盖第三方请求我方和我方请求第三方。 |
+| `lcxm-basic-secure-id` | Secure ID 基础组件，隐藏接口中的真实 ID 并在请求侧解密。 |
 | `lcxm-basic-srpc` | 自定义 Simple RPC 基础能力，包含注解、代理、序列化和协议通信。 |
 | `lcxm-spring-boot-starters` | Spring Boot starter 聚合模块。 |
 | `lcxm-trial` | 试验、验证和样例模块，不建议业务项目直接依赖。 |
@@ -51,7 +53,7 @@ Starter 子模块：
 <dependency>
     <groupId>cn.xuqiudong.basic</groupId>
     <artifactId>lcxm-basic-core</artifactId>
-    <version>3.5.0-jdk21-3.0.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -61,7 +63,7 @@ Starter 子模块：
 <dependency>
     <groupId>cn.xuqiudong.basic</groupId>
     <artifactId>lcxm-basic-third</artifactId>
-    <version>3.5.0-jdk21-3.0.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -100,13 +102,16 @@ mvn -pl lcxm-basic-third -am clean install
 
 ## Version And Release
 
-当前版本：`3.5.0-jdk21-3.0.0`
+下一次计划发布版本：`4.0.0`（待发布）
 
-版本命名暂按当前工程约定：
+从 `4.0.0` 开始，版本号遵循 Semantic Versioning 2.0.0：
 
 ```text
-{spring-boot-version}-jdk{jdk-version}-{project-version}
+MAJOR.MINOR.PATCH
 ```
+
+Spring Boot、JDK 和 Jakarta EE 兼容信息单独维护，不再编码到 Maven artifact version 中。
+实际发布状态以 Maven Central 徽章、[CHANGELOG.md](CHANGELOG.md) 和中央仓库查询结果为准。
 
 发布前建议检查：
 

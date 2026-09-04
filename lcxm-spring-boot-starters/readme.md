@@ -21,7 +21,7 @@ lcxm-spring-boot-starters
 <dependency>
     <groupId>cn.xuqiudong.basic</groupId>
     <artifactId>lcxm-quartz-spring-boot-starter</artifactId>
-    <version>3.5.0-jdk21-3.0.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 

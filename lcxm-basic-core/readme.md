@@ -61,7 +61,7 @@ cn.xuqiudong.basic.core
 <dependency>
     <groupId>cn.xuqiudong.basic</groupId>
     <artifactId>lcxm-basic-core</artifactId>
-    <version>3.5.0-jdk21-3.0.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 

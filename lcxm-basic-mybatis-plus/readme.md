@@ -49,7 +49,7 @@ cn.xuqiudong.basic.mybatisplus
 <dependency>
     <groupId>cn.xuqiudong.basic</groupId>
     <artifactId>lcxm-basic-mybatis-plus</artifactId>
-    <version>3.5.0-jdk21-3.0.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 

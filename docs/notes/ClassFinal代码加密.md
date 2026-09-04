@@ -34,8 +34,8 @@
 <classfinal.packages>cn.xuqiudong.blog</classfinal.packages>
 <!--加密的jar包, 多个逗号分隔-->
 <classfinal.libjars>
-    lcxm-basic-framework:3.5.0-jdk21-3.0.0.jar,
-    lcxm-basic-core:3.5.0-jdk21-3.0.0.jar
+    lcxm-basic-framework:4.0.0.jar,
+    lcxm-basic-core:4.0.0.jar
 </classfinal.libjars>
 ```
 

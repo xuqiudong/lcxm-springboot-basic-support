@@ -5,6 +5,16 @@
 > 平行越权的根本解决方案仍然是业务系统的数据权限控制。
 > 本组件只负责 ID 的可逆隐藏和请求侧解密，不替代权限校验。
 
+## Maven 依赖
+
+```xml
+<dependency>
+    <groupId>cn.xuqiudong.basic</groupId>
+    <artifactId>lcxm-basic-secure-id</artifactId>
+    <version>4.0.0</version>
+</dependency>
+```
+
 ## 核心能力
 
 - 响应返回前加密 ID

@@ -59,6 +59,7 @@ basic 模块不依赖业务项目
 | `lcxm-basic-mybatis-plus` | MyBatis-Plus 增强，包括实体基类、通用 Mapper/Service、自动填充、字段级数据权限等。 | 使用 MyBatis-Plus 的项目依赖。 |
 | `lcxm-basic-excel` | Excel 读取、写入工具，基于 FastExcel / POI。 | 有 Excel 导入导出需求时依赖。 |
 | `lcxm-basic-third` | 第三方入站/出站对接基础模块。 | 有第三方对接需求时依赖，不放入 framework。 |
+| `lcxm-basic-secure-id` | Secure ID 基础组件，负责 ID 的可逆隐藏和请求侧解密。 | 需要保护接口 ID 时依赖，不替代业务数据权限。 |
 | `lcxm-basic-srpc` | 自定义 Simple RPC 注解、代理、序列化和协议通信。 | 使用该 RPC 体系的项目依赖。 |
 | `lcxm-spring-boot-starters` | starter 聚合模块，本身不作为业务依赖。 | 业务项目依赖具体 starter。 |
 | `lcxm-trial` | 试验、验证和样例模块。 | 不建议业务项目依赖。 |

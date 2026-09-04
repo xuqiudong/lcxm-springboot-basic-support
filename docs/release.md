@@ -10,27 +10,29 @@
 
 ## 版本号
 
-当前工程版本格式暂按：
+从 `4.0.0` 开始，项目版本遵循 Semantic Versioning 2.0.0：
 
 ```text
-{spring-boot-version}-jdk{jdk-version}-{project-version}
+MAJOR.MINOR.PATCH
 ```
 
-示例：
+- `MAJOR`：不兼容的 API、行为或运行环境变化。
+- `MINOR`：向后兼容的新功能。
+- `PATCH`：向后兼容的问题修复。
 
-```text
-3.5.0-jdk21-3.0.0
-```
+下一次正式发布使用 `4.0.0`。它同时是历史版本格式和标准 SemVer
+版本的分界点；已有中央仓库版本不修改、不覆盖。
 
-版本含义：
+Spring Boot、JDK、Jakarta EE 等兼容信息通过 README、兼容性矩阵和发布说明维护，
+不再编码到 Maven artifact version 中。例如：
 
-| 部分 | 说明 |
+| 项目 | 值 |
 | --- | --- |
-| `3.5.0` | Spring Boot 主线版本 |
-| `jdk21` | JDK 主线版本 |
-| `3.0.0` | 本项目版本 |
+| 项目版本 | `4.0.0` |
+| Spring Boot | `3.5.x` |
+| JDK | `21` |
 
-当 Spring Boot 或 JDK 主线变化时，版本号应明确体现。
+后续版本示例为 `4.0.1`、`4.1.0` 和 `5.0.0`。
 
 ## CHANGELOG
 
@@ -54,11 +56,17 @@
 - lcxm-xxx: 移除 xxx。
 ```
 
-发布时将 `Unreleased` 改为具体版本：
+发布时将 `Unreleased` 改为具体版本，并记录发布状态：
 
 ```md
-## [3.5.0-jdk21-3.1.0] - 2026-07-29
+## [4.0.0] - 2026-09-04
+
+> 状态：已发布至 Maven Central
+> Maven Central：<https://central.sonatype.com/artifact/cn.xuqiudong.basic/lcxm-basic-core/4.0.0>
 ```
+
+在尚未完成中央仓库发布前，使用 `状态：待发布`；只有确认所有目标 artifact
+已成功同步后，才改为 `状态：已发布至 Maven Central` 并补上查询链接。
 
 记录原则：
 
@@ -94,7 +102,7 @@ mvn -pl lcxm-basic-third -am clean install
 统一修改父工程和子模块版本：
 
 ```bash
-mvn versions:set -DnewVersion="3.5.0-jdk21-3.1.0" -DprocessAllModules=true -DgenerateBackupPoms=false
+mvn versions:set -DnewVersion="4.0.0" -DprocessAllModules=true -DgenerateBackupPoms=false
 ```
 
 确认版本：
@@ -110,7 +118,7 @@ mvn help:evaluate -Dexpression=project.version -q -DforceStdout
 ```bash
 git status
 git add .
-git commit -m "release: 3.5.0-jdk21-3.1.0"
+git commit -m "release: 4.0.0"
 ```
 
 ## Git Tag
@@ -118,8 +126,8 @@ git commit -m "release: 3.5.0-jdk21-3.1.0"
 正式发布 tag 推荐直接使用版本号：
 
 ```bash
-git tag -a v3.5.0-jdk21-3.1.0 -m "Release 3.5.0-jdk21-3.1.0"
-git push origin v3.5.0-jdk21-3.1.0
+git tag -a v4.0.0 -m "Release 4.0.0"
+git push origin v4.0.0
 ```
 
 如果是架构拆分、迁移前后保留基线，可以使用语义 tag：
@@ -144,7 +152,7 @@ mvn deploy -N -Pdeploy
 基础模块按依赖顺序发布：
 
 ```bash
-mvn clean deploy -pl lcxm-basic-core,lcxm-basic-excel,lcxm-basic-framework,lcxm-basic-mybatis-plus,lcxm-basic-srpc,lcxm-basic-third -Pdeploy
+mvn clean deploy -pl lcxm-basic-core,lcxm-basic-excel,lcxm-basic-framework,lcxm-basic-mybatis-plus,lcxm-basic-srpc,lcxm-basic-third,lcxm-basic-secure-id -Pdeploy
 ```
 
 starter 模块发布：
@@ -189,7 +197,7 @@ Release Notes 应包含：
 <dependency>
     <groupId>cn.xuqiudong.basic</groupId>
     <artifactId>lcxm-basic-core</artifactId>
-    <version>3.5.0-jdk21-3.1.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 

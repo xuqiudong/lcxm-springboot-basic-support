@@ -2,17 +2,21 @@
 
 本文件记录对使用者有影响的变化。
 
-格式参考 Keep a Changelog，版本号遵循当前工程约定：
-
-```text
-{spring-boot-version}-jdk{jdk-version}-{project-version}
-```
+格式参考 Keep a Changelog。自 `4.0.0` 起，版本号遵循 Semantic Versioning 2.0.0；
+Spring Boot 和 JDK 兼容信息单独记录，不编码在 Maven artifact version 中。
 
 ## Unreleased
+
+
+## [4.0.0] - 2026-09-04
+
+> 下一次计划发布版本：`4.0.0`。发布前状态为“待发布”；确认所有目标 artifact
+> 已同步到 Maven Central 后，将本节改为具体版本并标注“已发布至 Maven Central”。
 
 ### Added
 
 - `lcxm-basic-third`: 新增第三方入站/出站对接基础模块，包含 token 签发校验、Spring MVC 拦截器、Hutool HTTP 出站执行器、交换日志扩展点和接入文档。
+- `lcxm-basic-secure-id`: 新增 Secure ID 基础组件，支持响应 ID 加密和请求参数、路径参数解密。
 - `docs`: 新增项目级文档规范、架构说明、依赖与版本策略、发版流程。
 
 ### Changed
