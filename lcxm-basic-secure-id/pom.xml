@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>lcxm-basic-secure-id</artifactId>
+    <name>lcxm-basic-secure-id</name>
     <description>平行越权: 安全ID</description>
 
     <dependencies>
