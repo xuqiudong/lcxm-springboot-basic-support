@@ -7,6 +7,8 @@ Spring Boot 和 JDK 兼容信息单独记录，不编码在 Maven artifact versi
 
 ## Unreleased
 
+### Added
+ - lcxm-basic-mybatis-plus: 新增固定 ID 类型父类Entity,解决批量保存时因泛型丢失找不到TypeHandler
 
 ## [4.0.0] - 2026-09-04
 
