@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.ResolverStyle;
 import java.util.TimeZone;
 
@@ -46,24 +47,42 @@ public class LcxmJacksonAutoConfiguration {
     /**
      * JDK8 日期时间格式化
      */
+
+
     @Bean("dateTimeFormatCustomizer")
     @ConditionalOnMissingBean(name = "dateTimeFormatCustomizer")
     public Jackson2ObjectMapperBuilderCustomizer dateTimeFormatCustomizer() {
         LOGGER.info("注册JDK8日期时间格式化");
+        // 年月日时分秒
         var dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT).withResolverStyle(ResolverStyle.SMART);
+        //年月日
         var df = DateTimeFormatter.ofPattern(DATE_FORMAT).withResolverStyle(ResolverStyle.SMART);
-        var tf = DateTimeFormatter.ofPattern(TIME_FORMAT).withResolverStyle(ResolverStyle.SMART);
+
+        // 输出固定 HH:mm:ss
+        var timeSerializerFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT).withResolverStyle(ResolverStyle.SMART);
+
+        // 输入兼容 HH:mm 和 HH:mm:ss
+        var timeDeserializerFormatter = new DateTimeFormatterBuilder()
+                .appendPattern("HH:mm")
+                .optionalStart()
+                .appendPattern(":ss")
+                .optionalEnd()
+                .toFormatter()
+                .withResolverStyle(ResolverStyle.SMART);
 
         return builder -> builder
                 .serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(dtf))
                 .deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(dtf))
                 .serializerByType(LocalDate.class, new LocalDateSerializer(df))
                 .deserializerByType(LocalDate.class, new LocalDateDeserializer(df))
-                .serializerByType(LocalTime.class, new LocalTimeSerializer(tf))
-                .deserializerByType(LocalTime.class, new LocalTimeDeserializer(tf))
+                .serializerByType(LocalTime.class, new LocalTimeSerializer(timeSerializerFormatter))
+                .deserializerByType(LocalTime.class, new LocalTimeDeserializer(timeDeserializerFormatter))
+                // 禁用转时间戳
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                //  兼容Date 等
                 .timeZone(TimeZone.getTimeZone("Asia/Shanghai"));
     }
+
 
     /**
      * 枚举反序列化可以传入空字符串
