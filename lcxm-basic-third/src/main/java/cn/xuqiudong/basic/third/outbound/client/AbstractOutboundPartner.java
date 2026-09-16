@@ -52,7 +52,7 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
     /**
      * 使用全局出站执行器工厂创建当前 partner 的执行器。
      *
-     * <p>子类通过 {@link #thirdClientOptions()} 提供自己的 ThirdClientOptions。</p>
+     * <p>HTTP 配置统一从 {@link #loadConfig()} 返回的 {@link OutboundPartnerConfig#getClientOptions()} 获取。</p>
      */
     protected AbstractOutboundPartner(OutboundExecutorFactory executorFactory) {
         super();
@@ -61,15 +61,18 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
     }
 
     /**
-     * 当前 partner 自己的 HTTP 配置。
-     *
-     * <p>例如 timeout、proxy、默认 header、是否记录交换日志等。</p>
+     * 旧版 HTTP 配置扩展点。
+     * @deprecated 请将配置放入 {@link OutboundPartnerConfig#getClientOptions()}，并通过 {@link #loadConfig()} 返回。
      */
-    protected abstract ThirdClientOptions thirdClientOptions();
+    @Deprecated
+    protected ThirdClientOptions thirdClientOptions() {
+        return new ThirdClientOptions();
+    }
 
     @Override
     protected ThirdClientOptions resolveOptions() {
-        ThirdClientOptions options = thirdClientOptions();
+        C config = getConfig();
+        ThirdClientOptions options = config.getClientOptions();
         return options == null ? new ThirdClientOptions() : options;
     }
 
@@ -305,8 +308,10 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
 
     protected Map<String, String> mergedHeaders(A api) {
         Map<String, String> headers = new LinkedHashMap<>();
-        headers.putAll(options().getDefaultHeaders());
-        headers.putAll(getConfig().getClientOptions().getDefaultHeaders());
+        ThirdClientOptions options = getConfig().getClientOptions();
+        if (options != null) {
+            headers.putAll(options.getDefaultHeaders());
+        }
         headers.putAll(buildHeaders(api));
         return headers;
     }
