@@ -1,9 +1,5 @@
 package cn.xuqiudong.basic.third.outbound.client;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Collections;
-
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
 import cn.xuqiudong.basic.third.outbound.builder.OutboundRequestInfoBuilder;
@@ -12,6 +8,10 @@ import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
 import com.fasterxml.jackson.core.type.TypeReference;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 出站第三方 Client 基类。
@@ -133,7 +133,7 @@ public abstract class AbstractOutboundClient {
      * 合并全局默认 header 和当前 Client header。
      */
     protected Map<String, String> mergedHeaders() {
-        Map<String, String> headers = new LinkedHashMap<>(options.getDefaultHeaders());
+        Map<String, String> headers = new LinkedHashMap<>(options().getDefaultHeaders());
         headers.putAll(buildHeaders());
         return headers;
     }
