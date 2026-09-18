@@ -12,6 +12,7 @@
 | [documentation-guideline.md](documentation-guideline.md) | 文档编写规范。 |
 | [deploy.md](deploy.md) | Maven deploy 命令记录；正式发版流程以 `release.md` 为准。 |
 | [specification.md](specification.md) | 项目基础规范。 |
+| [code-quality.md](code-quality.md) | Checkstyle、P3C、SpotBugs、SonarQube 等代码质量工具的职责、配置和排除策略。 |
 
 ## 历史与笔记
 

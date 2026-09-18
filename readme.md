@@ -91,6 +91,7 @@ mvn -pl lcxm-basic-third -am clean install
 | 查看版本变化 | [CHANGELOG.md](CHANGELOG.md) |
 | 查看部署说明 | [docs/deploy.md](docs/deploy.md) |
 | 查看基础规范 | [docs/specification.md](docs/specification.md) |
+| 查看代码质量检测与静态分析说明 | [docs/code-quality.md](docs/code-quality.md) |
 | 使用 Spring/Web 基础框架模块 | [lcxm-basic-framework/readme.md](lcxm-basic-framework/readme.md) |
 | 使用第三方对接模块 | [lcxm-basic-third/readme.md](lcxm-basic-third/readme.md) |
 | 使用 MyBatis-Plus 扩展 | [lcxm-basic-mybatis-plus/readme.md](lcxm-basic-mybatis-plus/readme.md) |

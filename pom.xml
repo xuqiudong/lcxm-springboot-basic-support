@@ -9,7 +9,7 @@
     <version>4.0.0</version>
     <packaging>pom</packaging>
 
-    <!-- sonatype: 下列三项是需要的 -->
+    <!-- 项目发布元数据 -->
     <name>lcxm-springboot-basic-support</name>
     <description>面向 Spring Boot 3.5 / JDK 21 的可复用基础能力模块集合</description>
     <url>https://gitee.com/xuqiudong/${project.git.name}</url>
@@ -27,51 +27,37 @@
     </modules>
 
     <properties>
-        <!--用于拼接sonatype信息中关于git 仓库地址相关信息的遍历-->
-        <project.git.name>${project.name}</project.git.name>
+        <!-- 父项目 SCM 元数据使用的仓库名；子项目发布自己的仓库时可以覆盖。 -->
+        <project.git.name>lcxm-springboot-basic-support</project.git.name>
         <spring.boot.version>3.5.16</spring.boot.version>
 
-        <!--system properties ↓ ↓ ↓-->
+        <!-- Maven 构建阶段读取和写入资源时使用的字符集。 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Maven 生成站点、报告和文档时使用的字符集。 -->
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <!-- 项目统一使用的 Java 版本，供编译插件和 Javadoc 插件共同引用。 -->
         <java.version>21</java.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.encoding>UTF-8</project.encoding>
-        <!--system properties ↑ ↑ ↑-->
-        <!--spring and common middleware version ↓ ↓ ↓-->
-        <!--redisson 3.17.7 之后对应的就是redisson-spring-data-3x 也即springboot3.x -->
+        <!-- Redisson 3.17.7 之后使用 redisson-spring-data-3x 适配 Spring Boot 3.x。 -->
         <redisson-spring-boot.version>3.52.0</redisson-spring-boot.version>
         <!-- Spring Boot 3.x 使用 springdoc 2.x，springdoc 3.x 面向 Spring Boot 4.x -->
         <springdoc.version>2.9.0</springdoc.version>
-        <!-- 后面 将逐步替换为 mybatis-plus -->
         <mybatis.starter.version>3.0.5</mybatis.starter.version>
-        <!--https://baomidou.com/getting-started/install/ springboot3 mp-->
         <mybatis-plus-bom.version>3.5.14</mybatis-plus-bom.version>
-        <!--保持和mybatis-plus-bom 中对应的版本一致-->
+        <!-- 与 MyBatis-Plus BOM 使用的版本保持一致。 -->
         <jsqlparser.version>5.2</jsqlparser.version>
         <pagehelper.starter.version>2.1.1</pagehelper.starter.version>
-        <odbc.version>21.1.0.0</odbc.version>
+        <ojdbc.version>21.1.0.0</ojdbc.version>
         <sa-token.version>1.45.0</sa-token.version>
-        <!--   meilisearch   替代 es   https://github.com/meilisearch/meilisearch-java   -->
         <meilisearch.version>0.20.1</meilisearch.version>
 
-
-        <!--spring and common middleware version ↑ ↑ ↑-->
-        <!--util version ↓ ↓ ↓-->
-        <!--原本是使用apache common 的相关util 的， 此处引入 hutool是本着实用的想法-->
         <hutool.version>5.8.47</hutool.version>
         <commons-validator.version>1.11.0</commons-validator.version>
         <commons.fileupload.version>1.6.0</commons.fileupload.version>
         <commons.io.version>2.22.0</commons.io.version>
         <commons.text.version>1.15.0</commons.text.version>
         <commons.collections4.version>4.6.0</commons.collections4.version>
-        <commons-collections.version>3.2.2</commons-collections.version>
         <commons.configuration2.version>2.15.1</commons.configuration2.version>
         <commons-beanutils.version>1.11.0</commons-beanutils.version>
-        <commons.lang.version>2.6</commons.lang.version>
-        <velocity.version>1.7</velocity.version>
         <poi.version>5.4.1</poi.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
         <kaptcha.version>2.3.2</kaptcha.version>
@@ -79,49 +65,26 @@
         <httpclient.version>4.5.14</httpclient.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <lombok.version>1.18.46</lombok.version>
-        <!-- hessian -->
         <hessian.version>4.0.65</hessian.version>
-        <!--能否取代 JSR 305 的空值注解呢-->
         <jspecify.version>1.0.0</jspecify.version>
-        <!--util version ↑ ↑ ↑-->
-        <!--maven plugin version ↓ ↓ ↓ -->
+
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
         <maven-javadoc-plugin.version>3.11.3</maven-javadoc-plugin.version>
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-        <!-- 打包时把源码打到本地 -->
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <!-- spring boot  跟springboot版本走-->
-        <!--<spring-boot-maven-plugin.version>2.7.2</spring-boot-maven-plugin.version>-->
         <spotbugs-maven-plugin.version>4.10.3.0</spotbugs-maven-plugin.version>
         <spotbugs.version>4.9.8</spotbugs.version>
-
-        <!--classfinal  class文件安全加密工具, 防止反编译和 源码泄露https://gitee.com/lcm742320521/class-final  -->
-        <classfinal.version>1.4.1</classfinal.version>
-        <!-- 密码: 加密解密使用-->
-        <classfinal.password>12345678</classfinal.password>
-        <!--加密的包, 多个逗号分隔-->
-        <classfinal.packages>cn.xuqiudong.blog</classfinal.packages>
-        <!--加密的jar包, 多个逗号分隔-->
-        <classfinal.libjars>
-            lcxm-basic-framework:3.5.0-jdk21-3.0.0.jar,
-            lcxm-basic-core:3.5.0-jdk21-3.0.0.jar
-        </classfinal.libjars>
-        <!--maven plugin version ↑ ↑ ↑-->
-
-        <!-- skip for  plugin  start ↓ ↓ ↓ -->
-        <skip.pmd>true</skip.pmd>
+        <!-- skip.spotbugs=true 可在子项目或命令行中跳过 SpotBugs 检查。 -->
         <skip.spotbugs>false</skip.spotbugs>
-        <skip.test>true</skip.test>
-        <!-- skip for  plugin  end   ↑ ↑ ↑ -->
-
+        <!-- skip.test=true 可在子项目或命令行中跳过 Surefire 测试。 -->
+        <skip.test>false</skip.test>
     </properties>
 
-    <!--版本控制-->
     <dependencyManagement>
         <dependencies>
-            <!-- SpringBoot依赖 -->
+            <!-- Spring Boot 依赖版本基线 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -130,7 +93,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <!--springdoc bom-->
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-bom</artifactId>
@@ -139,7 +101,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <!--mybatis plus bom: jsqlparser 不在支持jdk8 需要额外的引入-->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-bom</artifactId>
@@ -154,14 +115,6 @@
                 <version>${jsqlparser.version}</version>
             </dependency>
 
-
-            <!--redisson
-              注意官网的版本提示： https://github.com/redisson/redisson/tree/master/redisson-spring-boot-starter
-              redisson-spring-data	 Spring Boot
-              redisson-spring-data-18	 1.5.y
-              redisson-spring-data-2x	 2.x.y
-              redisson-spring-data-3x	 3.x.y
-             -->
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
@@ -186,131 +139,72 @@
                 <version>${jsoup.version}</version>
             </dependency>
 
-            <!-- mybatis starter -->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.starter.version}</version>
             </dependency>
-
-
-
-
-            <!-- pagehelper分页插件依赖 -->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.starter.version}</version>
             </dependency>
 
-            <!-- odbc -->
             <dependency>
                 <groupId>com.oracle.database.jdbc</groupId>
                 <artifactId>ojdbc8</artifactId>
-                <version>${odbc.version}</version>
+                <version>${ojdbc.version}</version>
             </dependency>
 
-            <!-- util  start-->
-
-            <!--hutool all-->
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
             </dependency>
-
-            <!-- COMMONS工具类 -->
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>${commons.lang.version}</version>
-            </dependency>
-
-            <!-- GenericValidator -->
             <dependency>
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
                 <version>${commons-validator.version}</version>
             </dependency>
-
-
-            <!-- file upload -->
             <dependency>
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
                 <version>${commons.fileupload.version}</version>
             </dependency>
 
-            <!-- IO -->
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons.io.version}</version>
             </dependency>
 
-            <!-- 摘要运算、编码解码 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-text</artifactId>
                 <version>${commons.text.version}</version>
             </dependency>
 
-            <!-- commons-collections4 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${commons.collections4.version}</version>
             </dependency>
 
-            <!-- 消除commons-beanutils 和 velocity 对 commons-collections 传递依赖的冲突 -->
-            <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>${commons-collections.version}</version>
-            </dependency>
-
-            <!-- 读取配置文件 http://commons.apache.org/proper/commons-configuration/userguide/quick_start.html -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-configuration2</artifactId>
                 <version>${commons.configuration2.version}</version>
             </dependency>
-            <!-- commons-configuration2 也需要此依赖 -->
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>${commons-beanutils.version}</version>
             </dependency>
-
-
-            <!-- velocity -->
-            <dependency>
-                <groupId>org.apache.velocity</groupId>
-                <artifactId>velocity</artifactId>
-                <version>${velocity.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-collections</groupId>
-                        <artifactId>commons-collections</artifactId>
-                    </exclusion>
-                    <!-- 此处引入commons-lang2.4 和commons-configuration引入的2.6 冲突 -->
-                    <exclusion>
-                        <groupId>commons-lang</groupId>
-                        <artifactId>commons-lang</artifactId>
-                    </exclusion>
-                </exclusions>
-                <scope>compile</scope>
-            </dependency>
-
-            <!-- 中文转拼音 -->
             <dependency>
                 <groupId>com.belerweb</groupId>
                 <artifactId>pinyin4j</artifactId>
                 <version>${pinyin4j.version}</version>
             </dependency>
-
-
-            <!-- POI 操作office start -->
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
@@ -326,10 +220,6 @@
                 <artifactId>poi-ooxml-lite</artifactId>
                 <version>${poi.version}</version>
             </dependency>
-            <!-- POI 操作office end -->
-
-
-            <!-- google验证码 com.google.code已失效 -->
             <dependency>
                 <groupId>com.github.penggle</groupId>
                 <artifactId>kaptcha</artifactId>
@@ -342,7 +232,6 @@
                 <version>${httpclient.version}</version>
             </dependency>
 
-            <!--mapstruct 对象转换-->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
@@ -366,17 +255,33 @@
                 <artifactId>jspecify</artifactId>
                 <version>${jspecify.version}</version>
             </dependency>
-
-
-
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <!--
+            为子项目提供 @SuppressFBWarnings 等 SpotBugs 注解。
+            provided 使注解可用于编译和静态分析，但不会作为运行时依赖传递给下游项目。
+        -->
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>${spotbugs.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
+    <!--
+        子项目默认继承的插件行为：
+        1. maven-compiler-plugin 使用 Java 21、-parameters、-Xlint:unchecked 和 -Xlint:deprecation。
+        2. maven-surefire-plugin 参与构建，默认执行测试；可通过 skip.test=true 临时跳过。
+        3. maven-source-plugin 在 verify 阶段生成源码 JAR。
+        4. spotbugs-maven-plugin 在 compile 阶段执行检查；Medium 及以上问题报告，High 问题使构建失败。
+        5. spring-boot-maven-plugin 和 maven-javadoc-plugin 只在子项目显式引入或激活时执行。
+    -->
     <build>
         <pluginManagement>
             <plugins>
-                <!--spring-boot-maven-->
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
@@ -390,31 +295,34 @@
                     </executions>
                 </plugin>
 
-                <!-- 指定jdk和编码 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
-                        <!-- 优先用release，推荐Java17+使用 -->
+                        <!-- 限定源码语法、生成字节码版本及可使用的 Java 平台 API。 -->
                         <release>${java.version}</release>
-                        <!-- source/target 可以保留做兼容，也可以删掉 -->
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                        <encoding>${project.encoding}</encoding>
+                        <!-- 编译源码使用项目统一的构建编码。 -->
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <!--
+                            编译参数说明：
+                            -parameters：将方法参数名写入字节码，供 Spring MVC、依赖注入和其他反射场景使用。
+                            -Xlint:unchecked：报告原始类型和不安全泛型转换，帮助发现潜在的类型转换问题。
+                            -Xlint:deprecation：报告使用已废弃的 Java 或第三方 API，便于及时替换过时调用。
+                            Xlint 参数默认只产生编译警告，不会单独导致构建失败。
+                        -->
                         <compilerArgs>
                             <arg>-parameters</arg>
                             <arg>-Xlint:unchecked</arg>
                             <arg>-Xlint:deprecation</arg>
                         </compilerArgs>
                         <annotationProcessorPaths>
-                            <!-- Lombok 处理器 配置在mapstruct 之前-->
+                            <!-- Lombok 处理器放在 MapStruct 之前。 -->
                             <path>
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok</artifactId>
                                 <version>${lombok.version}</version>
                             </path>
-                            <!-- MapStruct 处理器 -->
                             <path>
                                 <groupId>org.mapstruct</groupId>
                                 <artifactId>mapstruct-processor</artifactId>
@@ -424,18 +332,15 @@
                     </configuration>
                 </plugin>
 
-                <!-- 跳过测试 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <skipTests>${skip.test}</skipTests>
-<!--                        <testFailureIgnore>true</testFailureIgnore>-->
                     </configuration>
                 </plugin>
 
-                <!--打包时 把源码打包到本地 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
@@ -451,22 +356,18 @@
                     </executions>
                 </plugin>
 
-                <!-- copy resources -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
                 </plugin>
 
-
-                <!--打jar插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven-jar-plugin.version}</version>
                 </plugin>
 
-                <!--javadoc-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -480,7 +381,7 @@
                                 <goal>jar</goal>
                             </goals>
                             <configuration>
-                                <!--不进行doclint 检测-->
+                                <!-- 关闭 DocLint，避免历史 Javadoc 格式问题阻断发布。 -->
                                 <doclint>none</doclint>
                             </configuration>
                         </execution>
@@ -488,62 +389,36 @@
                     <configuration>
                         <source>${java.version}</source>
                         <maxmemory>1024</maxmemory>
-                        <encoding>UTF-8</encoding>
+                        <!-- Javadoc 输出使用项目统一的报告编码。 -->
+                        <encoding>${project.reporting.outputEncoding}</encoding>
                         <show>protected</show>
                         <notree>true</notree>
-
-                        <!-- Avoid running into Java 8's very restrictive doclint issues -->
                         <failOnError>true</failOnError>
-                        <!-- 防止文档不规范报错 -->
-                        <!--<additionalparam>-Xdoclint:none</additionalparam>-->
-                        <!--<additionalJOption>-Xdoclint:none</additionalJOption>-->
-                        <!-- 自定义tag https://maven.apache.org/plugins/maven-javadoc-plugin/examples/tag-configuration.html-->
                         <tags>
                             <tag>
                                 <name>description</name>
-                                <!-- description tag for all places -->
                                 <placement>a</placement>
                                 <head>description about class or method and so on</head>
                             </tag>
                             <tag>
                                 <name>date</name>
-                                <!-- date tag for all places -->
                                 <placement>a</placement>
                                 <head>create date:</head>
                             </tag>
                         </tags>
-
                     </configuration>
                 </plugin>
 
-                <!-- 阿里p3c插件 -->
-                <!-- 2024-06-03移除阿里p3c插件  使用 Idea 插件手动扫描
-                    主要是在其官网wiki中看见起标注为TODO
-                    https://github.com/alibaba/p3c/wiki/p3c-pmd
-                -->
-                <!--spotbugs 静态bug检测：https://spotbugs.readthedocs.io/en/stable/maven.html
-                 mvn spotbugs:help -Ddetail=true -Dgoal=<goal-name> to display parameter
-                 -->
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
                     <version>${spotbugs-maven-plugin.version}</version>
                     <dependencies>
-                        <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
                         <dependency>
                             <groupId>com.github.spotbugs</groupId>
                             <artifactId>spotbugs</artifactId>
                             <version>${spotbugs.version}</version>
                         </dependency>
-                        <!-- 引入注解(如) SuppressFBWarnings
-                        https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations -->
-                        <dependency>
-                            <groupId>com.github.spotbugs</groupId>
-                            <artifactId>spotbugs-annotations</artifactId>
-                            <version>${spotbugs.version}</version>
-                        </dependency>
-
-
                     </dependencies>
 
                     <executions>
@@ -556,57 +431,19 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <!--参见：所有 detector https://spotbugs.readthedocs.io/en/stable/detectors.html -->
-                        <!-- FindNullDeref : It is a slow detector.-->
-                        <!-- UnreadFields: 未读字段;FindReturnRef:不安全的返回引用;FindNullDeref:空指针引用-->
+                        <!-- 不运行未读字段和可变引用暴露检测器。 -->
                         <omitVisitors>UnreadFields,FindReturnRef</omitVisitors>
-                        <!--子项目按需处理包含和排除的配置-->
-                        <!--<excludeFilterFile>${project.basedir}/spotbugs-exclude.xml</excludeFilterFile>-->
                         <skip>${skip.spotbugs}</skip>
-                        <!-- High  Medium  Low-->
+                        <!-- 报告 Medium 及以上级别的问题。 -->
                         <threshold>Medium</threshold>
+                        <!-- 只有 High 级别的问题会使构建失败。 -->
                         <failThreshold>High</failThreshold>
                     </configuration>
                 </plugin>
-
-                <plugin>
-
-                    <!-- https://gitee.com/lcm742320521/class-final -->
-                    <!-- https://gitee.com/roseboy/classfinal
-                        <groupId>net.roseboy</groupId>
-                         源库只到1.2.1版本 不支持jdk 高版本, 修改为 lcm742320521的fork版 1.4.1 支持更高版本的jdk
-                    -->
-                    <groupId>com.gitee.lcm742320521</groupId>
-                    <artifactId>classfinal-maven-plugin</artifactId>
-                    <version>${classfinal.version}</version>
-                    <configuration>
-                        <!--加密打包之后pom.xml会被删除，不用担心在jar包里找到此密码-->
-                        <password>${classfinal.password}</password>
-                        <!--需要加密的包, 多个包用逗号分隔-->
-                        <packages>${classfinal.packages}</packages>
-                        <!-- 需要加密的配置文件, 多个文件用逗号分隔 -->
-                        <!--<cfgfiles>application.yml</cfgfiles>-->
-                        <!--<excludes>org.spring</excludes>-->
-                        <!-- 需要加密的jar包, 多个jar包用逗号分隔 -->
-                        <libjars>
-                            ${classfinal.libjars}
-                        </libjars>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>classFinal</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
             </plugins>
         </pluginManagement>
 
-
-        <!-- 在此府项目中引入一些常用插件 -->
+        <!-- 所有子项目默认执行的构建插件。 -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -616,31 +453,26 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
-
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
             </plugin>
-
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <!-- 上传的时候使用的配置和插件 -Pdeploy-->
             <id>deploy</id>
             <properties>
                 <skip.spotbugs>true</skip.spotbugs>
             </properties>
             <build>
                 <plugins>
-
-                    <!--javadoc 只在部署到中央仓库的时候生成-->
+                    <!-- Javadoc JAR 只在发布到中央仓库时生成。 -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
@@ -659,7 +491,7 @@
                         </configuration>
                     </plugin>
 
-                    <!--  生成签名，确定使用那个gpg秘钥 -->
+                    <!-- 对发布制品生成 GPG 签名。 -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -672,7 +504,7 @@
                                     <goal>sign</goal>
                                 </goals>
                                 <configuration>
-                                    <!--本地生成了多个秘钥对，所以这里指定一个发布成功的秘钥  gpg -k-->
+                                    <!-- 发布使用的 GPG 密钥标识。 -->
                                     <keyname>877B1FAE177412DFA451E73B6CF967DE5C1F7A9E</keyname>
                                 </configuration>
                             </execution>
@@ -681,49 +513,27 @@
                 </plugins>
             </build>
         </profile>
-
-        <!--classfinal  profile 源码加密 -->
-        <profile>
-            <id>classfinal</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.gitee.lcm742320521</groupId>
-                        <artifactId>classfinal-maven-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 
-
-    <!-- sonatype: 开源许可证声明 有很多不同的开源许可证 Apache Version2.0 表示别人可以直接商用你的开源项目而无任何版权问题 -->
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
-
-    <!-- sonatype:开源地址 -->
     <scm>
-        <connection>scm:git:ssh://git@gitee.com:basic-support/${project.git.name}.git</connection>
+        <connection>scm:git:ssh://git@gitee.com/xuqiudong/${project.git.name}.git</connection>
         <developerConnection>scm:git:https://gitee.com/xuqiudong/${project.git.name}.git</developerConnection>
         <url>https://gitee.com/xuqiudong/${project.git.name}</url>
         <tag>HEAD</tag>
     </scm>
 
-    <!--sonatype: Issue地址 -->
     <issueManagement>
         <system>git Issue</system>
         <url>https://gitee.com/xuqiudong/${project.git.name}/issues</url>
     </issueManagement>
 
-    <!--sonatype: 开发者信息 -->
     <developers>
         <developer>
             <name>vic.xu</name>
