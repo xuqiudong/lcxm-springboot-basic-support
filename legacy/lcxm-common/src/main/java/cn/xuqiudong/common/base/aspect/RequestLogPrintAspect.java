@@ -44,7 +44,7 @@ public class RequestLogPrintAspect {
 
 
     static {
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
     }
 
     /**

@@ -187,7 +187,6 @@ public class ExportExcel {
                 return compareSort(o1, o2);
             }
 
-            ;
         });
         // Initialize
         List<ExcelHeader> headerList = new ArrayList<>();
@@ -264,7 +263,6 @@ public class ExportExcel {
                 return compareSort(o1, o2);
             }
 
-            ;
         });
         // Initialize
         List<ExcelHeader> headerList = new ArrayList<>();
@@ -294,7 +292,6 @@ public class ExportExcel {
         List<ExcelHeader> excelHeaderList = new ArrayList<ExcelHeader>();
         for (String headerName : headers) {
             ExcelHeader excelHeader = new ExcelHeader.Builder().name(headerName).width("").bulid();
-            ;
             excelHeaderList.add(excelHeader);
         }
         initialize(title, excelHeaderList);
@@ -755,8 +752,8 @@ public class ExportExcel {
     /**
      * 清理临时文件
      */
-    public ExportExcel dispose() {
-        wb.dispose();
+    public ExportExcel dispose() throws IOException {
+        wb.close();
         return this;
     }
 

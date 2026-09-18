@@ -10,7 +10,6 @@ import cn.xuqiudong.basic.core.util.reflect.compare.annotations.CompareClassConf
 import cn.xuqiudong.basic.core.util.reflect.compare.model.CompareClassResultModel;
 import cn.xuqiudong.basic.core.util.reflect.compare.model.SameAnnotionField;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -28,11 +27,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 说明 :  比较两个对象
+ *
  * @author Vic.xu
- * @since  2020年4月21日上午10:31:44
+ * @since 2020年4月21日上午10:31:44
  */
 @SuppressWarnings("PMD")
 public class CompareClassUtil {
@@ -50,23 +51,25 @@ public class CompareClassUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(CompareClassUtil.class);
 
-    /** 递归深度 */
+    /**
+     * 递归深度
+     */
     protected static final int MAX_DEEP = 5;
 
     /**
      * 比较两个对象的属性 操作 <br />
-     * @see  CompareClassConfig 参见此注解的详细说明
+     *
+     * @param type   对象类型
+     * @param source 原对象
+     * @param target 目标对象
+     * @throws IntrospectionException
+     * @see CompareClassConfig 参见此注解的详细说明
      * 类型说明：<br/>
      * <ul>
      * <li>添加： 空到非空</li>
      * <li>修改： 非空到非空</li>
      * <li>删除： 非空到空</li>
      * </ul>
-     *
-     * @param type   对象类型
-     * @param source 原对象
-     * @param target 目标对象
-     * @throws IntrospectionException
      */
     public static <T> List<CompareClassResultModel> compare(Class<T> type, T source, T target) throws Exception {
         List<CompareClassResultModel> result = new ArrayList<CompareClassResultModel>();
@@ -185,6 +188,7 @@ public class CompareClassUtil {
 
     /**
      * 比较list类型的子对象， 展开比较
+     *
      * @param result
      * @param main
      * @param field
@@ -283,6 +287,7 @@ public class CompareClassUtil {
 
     /**
      * 获取field 为List 属性的泛型
+     *
      * @param field
      * @return
      */
@@ -308,8 +313,9 @@ public class CompareClassUtil {
 
     /**
      * 把相同组的数据转换并添加到结果集
-     * @param result 存放的结果集
-     * @param group  相同组的属性集
+     *
+     * @param result     存放的结果集
+     * @param group      相同组的属性集
      * @param resultEnum 组类别 只应为新增 或者删除
      */
     private static void addSameGroupResult(List<CompareClassResultModel> result, List<SameAnnotionField> group, CompareResultEnum resultEnum) {
@@ -323,9 +329,10 @@ public class CompareClassUtil {
 
     /**
      * 根据注解获取属性， 用于统一新增 统一删除的属性记录
-     * @param obj 对象
-     * @param clazz 对象类型
-     * @param deep 深度
+     *
+     * @param obj              对象
+     * @param clazz            对象类型
+     * @param deep             深度
      * @param parentFieldNames 包含父类的字段属性
      * @param parentFieldDescs 包含父类的字段属性说明
      * @return
@@ -339,6 +346,7 @@ public class CompareClassUtil {
 
     /**
      * 单个对象属性的：根据注解获取属性， 用于统一新增 统一删除的属性记录； 存在回调 注意代码
+     *
      * @param result
      * @param obj
      * @param clazz
@@ -430,10 +438,11 @@ public class CompareClassUtil {
     }
 
     /**
-     *  集合对象的： 根据注解获取属性， 用于统一新增 统一删除的属性记录
+     * 集合对象的： 根据注解获取属性， 用于统一新增 统一删除的属性记录
+     *
      * @param result
      * @param list
-     * @param clazz 集合中的对象的泛型类型
+     * @param clazz            集合中的对象的泛型类型
      * @param deep
      * @param parentFieldNames
      * @param parentFieldDescs
@@ -448,12 +457,12 @@ public class CompareClassUtil {
     /**
      * 处理单个对象属性的比较 只比较'id'，记录'name'
      *
-     * @param result        存放结果集
-     * @param main          主对象类型
-     * @param field         当前属性
-     * @param source        当前属性的原值
+     * @param result 存放结果集
+     * @param main   主对象类型
+     * @param field  当前属性
+     * @param source 当前属性的原值
      * @param target 当前属性的新值
-     * @param config        当前字段的注解
+     * @param config 当前字段的注解
      * @throws Exception
      */
     private static void handlerCascadeSingle(List<CompareClassResultModel> result, Class<?> main, Field field,
@@ -584,12 +593,13 @@ public class CompareClassUtil {
     public static Method getReadMethod(Class<?> clazz, Field field) {
         return getReadMethod(clazz, field.getName());
     }
+
     public static Method getReadMethod(Class<?> clazz, String name) {
         String getter = "get" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
         try {
             return clazz.getMethod(getter);
         } catch (NoSuchMethodException e) {
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -650,7 +660,6 @@ public class CompareClassUtil {
         Sub s1 = new Sub(2);
         Sub s2 = new Sub(2);
         s2.setAge(21);
-        ;
         TypeTest source = new TypeTest();
         source.setSub2(s1);
         TypeTest target = new TypeTest();
@@ -803,7 +812,7 @@ class TypeTest {
 
 
     public TypeTest(int begin, int end) {
-        int i = RandomUtils.nextInt(end, end);
+        int i = ThreadLocalRandom.current().nextInt(end, end);
         this.id = i;
         this.remark = "备注" + i;
         this.age = 50 + i;
@@ -865,20 +874,20 @@ class Sub {
         this.age = 20 + i;
         this.grandsonList = new ArrayList<Grandson>();
         for (; i > 0; i--) {
-            int j = RandomUtils.nextInt(2, 6);
+            int j = ThreadLocalRandom.current().nextInt(2, 6);
             grandsonList.add(new Grandson(j));
         }
 
     }
 
     public Sub(int begin, int end) {
-        int i = RandomUtils.nextInt(begin, end);
+        int i = ThreadLocalRandom.current().nextInt(begin, end);
         this.id = i + "";
         this.name = "张三" + i;
         this.age = 20 + i;
         this.grandsonList = new ArrayList<Grandson>();
         for (; i > 0; i--) {
-            int j = RandomUtils.nextInt(2, 6);
+            int j = ThreadLocalRandom.current().nextInt(2, 6);
             grandsonList.add(new Grandson(j));
         }
 
@@ -914,7 +923,6 @@ class Grandson {
 
     @CompareClassConfig(value = "孙名:")
     private String name;
-    ;
 
     @CompareClassConfig(value = "孙备:")
     private String remark;
@@ -953,7 +961,6 @@ class Grandson {
     public void setTime(Date time) {
         this.time = time;
     }
-
 
 
 }

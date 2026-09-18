@@ -18,9 +18,7 @@ public class MergerCellUtil {
         try {
             sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, firstCol, lastCol));
         } catch (Exception e) {
-            logger.debug("发生了一次合并单元格错误,{},{},{},{}", new Integer[]{
-                    firstRow, lastRow, firstCol, lastCol
-            });
+            logger.debug("发生了一次合并单元格错误,{},{},{},{}", firstRow, lastRow, firstCol, lastCol);
             logger.debug(e.getMessage(), e);
         }
     }

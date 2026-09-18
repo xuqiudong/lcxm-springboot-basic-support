@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.framework.select.controller;
 
 import cn.xuqiudong.basic.core.model.BaseResponse;
 import cn.xuqiudong.basic.core.model.SelectOption;
+import cn.xuqiudong.basic.framework.select.EnumSelectable;
 import cn.xuqiudong.basic.framework.select.convert.EnumSelectConverter;
 import cn.xuqiudong.basic.framework.select.registry.EnumSelectRegistry;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,13 +36,13 @@ public class EnumSelectController {
     @Operation(summary = "获取指定枚举的下拉选项")
     @GetMapping("/{enumKey}")
     public BaseResponse<List<SelectOption>> getSelectOptions(@PathVariable String enumKey) {
-        Class<?> enumClass = EnumSelectRegistry.getEnumClass(enumKey);
+        Class<? extends EnumSelectable> enumClass = EnumSelectRegistry.getEnumClass(enumKey);
         if (enumClass == null) {
             return BaseResponse.error("枚举[" + enumKey + "]未注册");
         }
 
         // 转换为下拉列表
-        List<SelectOption> options = EnumSelectConverter.convert((Class) enumClass);
+        List<SelectOption> options = EnumSelectConverter.convert(enumClass);
         return BaseResponse.success(options);
     }
 

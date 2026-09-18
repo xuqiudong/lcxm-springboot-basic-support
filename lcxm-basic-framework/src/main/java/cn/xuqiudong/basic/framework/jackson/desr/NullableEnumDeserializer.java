@@ -52,6 +52,8 @@ public class NullableEnumDeserializer extends StdDeserializer<Enum<?>> implement
     @Override
     public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
         JavaType type = property.getType();
-        return new NullableEnumDeserializer((Class<Enum<?>>) type.getRawClass());
+        @SuppressWarnings("unchecked")
+        Class<Enum<?>> enumClass = (Class<Enum<?>>) type.getRawClass();
+        return new NullableEnumDeserializer(enumClass);
     }
 }

@@ -14,8 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -114,7 +115,9 @@ public class LargeExcelImportFacade {
             // 4 StylesTable
             dataImport.stylesTable = reader.getStylesTable();
             // 5. 创建Sax 的XML Reader
-            dataImport.xmlReader = XMLReaderFactory.createXMLReader();
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            dataImport.xmlReader = saxParser.getXMLReader();
             return dataImport;
         }
 

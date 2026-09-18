@@ -50,18 +50,20 @@ public class QueryConditionUtils {
      * 通过 包含QueryCondition注解 的对象 创建查询Wrapper
      */
     public static <T> QueryWrapper<T> createWrapper(MpQuery query) {
-        return builder(query).toWrapper();
+        return QueryConditionUtils.<T>builder(query).toWrapper();
     }
 
     /**
      * 通过 带QueryCondition注解的对象 创建查询WrapperBuilder
+     *
+     * @param <T> 查询条件所作用的实体类型
      */
-    public static WrapperBuilder builder(MpQuery query) {
+    public static <T> WrapperBuilder<T> builder(MpQuery query) {
         Class<?> queryClass = query.getClass();
         String key = queryClass.getName();
         List<QueryFieldModel> queryFields = QUERY_FIELD_MODEL_CACHE.computeIfAbsent(key, (k) -> getQueryFields(queryClass));
 
-        WrapperBuilder wrapperBuilder = WrapperBuilder.create();
+        WrapperBuilder<T> wrapperBuilder = WrapperBuilder.create();
         for (QueryFieldModel queryField : queryFields) {
             Object value = queryField.getValue(query);
             // 判断当前字段值是否为null:
@@ -137,7 +139,7 @@ public class QueryConditionUtils {
     /**
      * 推算查询条件
      */
-    private static void inferCondition(WrapperBuilder wrapperBuilder, QueryFieldModel queryField, Object value) {
+    private static void inferCondition(WrapperBuilder<?> wrapperBuilder, QueryFieldModel queryField, Object value) {
         String[] columns = queryField.getColumns();
         QueryOperation operation = queryField.getOperation();
         //2026-06-25 新增apply 条件

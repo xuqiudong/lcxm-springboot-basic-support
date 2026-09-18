@@ -30,7 +30,7 @@ public class JsonUtil {
 
     static {
         //  空属性不序列化
-        OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        OBJECT_MAPPER.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
         //如果JSON中有新增的字段并且是实体类类中不存在的，不报错
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 提供对 Java 8 java.time 日期/时间 API 的支持，例如 LocalDate、LocalDateTime、ZonedDateTime 等

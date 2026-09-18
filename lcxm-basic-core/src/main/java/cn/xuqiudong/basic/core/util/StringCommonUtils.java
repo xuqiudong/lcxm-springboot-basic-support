@@ -15,11 +15,12 @@ import java.util.stream.Stream;
  */
 
 /**
- *  说明 :  字符串的一些通用操作
- *  @author Vic.xu
- * @since  2020年7月7日上午8:28:28
+ * 说明 :  字符串的一些通用操作
+ *
+ * @author Vic.xu
+ * @since 2020年7月7日上午8:28:28
  */
-public class StringCommonUtils extends StringUtils {
+public class StringCommonUtils {
 
     private StringCommonUtils() {
         throw new IllegalStateException("Utility class");
@@ -28,6 +29,7 @@ public class StringCommonUtils extends StringUtils {
     /**
      * 查询长度 供oracle使用的判断
      * 其实使用 str.getBytes("UTF-8").length 更方便一些，如果确认了字符编码的话
+     *
      * @param str
      * @return
      */
@@ -54,13 +56,14 @@ public class StringCommonUtils extends StringUtils {
 
     /**
      * 字符串填充:把字符source用placeholder填充到length长度
-     * @param source 源字符
+     *
+     * @param source      源字符
      * @param placeholder 用以填充的字符
-     * @param length 总长度
+     * @param length      总长度
      * @return
      */
     public static String fill(String source, String placeholder, int length) {
-        if (isBlank(source)) {
+        if (StringUtils.isBlank(source)) {
             source = "";
         }
         int len = source.length();
@@ -73,11 +76,12 @@ public class StringCommonUtils extends StringUtils {
 
     /**
      * 拼接对象的属性
+     *
      * @param <T>
-     * @param list 对象集合
+     * @param list           对象集合
      * @param fieldSeparator 属性之间的分隔符
-     * @param separator 对象之间的分隔符
-     * @param getMethods  获取对象的属性方法 数组
+     * @param separator      对象之间的分隔符
+     * @param getMethods     获取对象的属性方法 数组
      * @return
      */
     @SafeVarargs
@@ -95,7 +99,7 @@ public class StringCommonUtils extends StringUtils {
             result.append(separator);
         });
 
-        if (isEmpty(separator)) {
+        if (StringUtils.isEmpty(separator)) {
             return result.toString();
         }
 

@@ -4,6 +4,7 @@ import cn.xuqiudong.basic.generator.config.ConfigBundle;
 import cn.xuqiudong.basic.generator.model.TableInfo;
 import cn.xuqiudong.basic.generator.util.ImportPackageUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import java.util.Map;
  * @since 2025-09-18 17:38
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class ControllerContext extends BaseContext {
 
     // controller 上的请求注解 形如: @RequestMapping("requestMapping")

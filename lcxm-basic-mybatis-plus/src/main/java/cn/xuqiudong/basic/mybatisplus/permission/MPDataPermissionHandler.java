@@ -86,7 +86,7 @@ public class MPDataPermissionHandler implements DataPermissionHandler {
                         new AndExpression(preconditionExpr, permissionExpr)
                         : new OrExpression(preconditionExpr, permissionExpr);
                 //  用括号包裹 (前置条件 AND 权限条件)
-                return new ParenthesedExpressionList(combinedExpr);
+                return new ParenthesedExpressionList<>(combinedExpr);
             }
 
             // 3. 无前置条件，直接返回权限条件
@@ -118,6 +118,6 @@ public class MPDataPermissionHandler implements DataPermissionHandler {
      * 加上括号
      */
     private Expression wrap(Expression expr) {
-        return expr == null ? null : new ParenthesedExpressionList(expr);
+        return expr == null ? null : new ParenthesedExpressionList<>(expr);
     }
 }

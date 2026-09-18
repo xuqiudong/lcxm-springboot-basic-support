@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.framework.license.issuer;
 
 import cn.xuqiudong.basic.framework.runtime.LcPayload;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Description:
@@ -11,6 +12,7 @@ import lombok.Data;
  * @since 2026-07-27 16:28
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class LicensePayload extends LcPayload {
 
     /**

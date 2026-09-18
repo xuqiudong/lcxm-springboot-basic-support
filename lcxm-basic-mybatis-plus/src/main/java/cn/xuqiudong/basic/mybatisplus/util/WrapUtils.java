@@ -44,7 +44,7 @@ public class WrapUtils {
      * 创建查询条件
      */
     public static <T> Where<T> createWhere(MpQuery query) {
-        WrapperBuilder builder = QueryConditionUtils.builder(query);
+        WrapperBuilder<T> builder = QueryConditionUtils.builder(query);
         return builder.toWhere();
     }
 

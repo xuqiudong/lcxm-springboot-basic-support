@@ -7,10 +7,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
  * 同 QueryWrapper  主要为了方便使用 ${where} 而不是${ew.customSqlSegment}
  * 也不需要在接口方法内写 @Param(Constants.WRAPPER) Wrapper<T> queryWrapper,
  *
+ * @param <T> 查询条件所作用的实体类型
  * @author Vic.xu
  * @since 2025-11-19 17:38
  */
-public class Where<T> extends QueryWrapper {
+public class Where<T> extends QueryWrapper<T> {
 
     /**
      * 方便在 xml 中使用 ${where} 而不是${ew.customSqlSegment}, <br /

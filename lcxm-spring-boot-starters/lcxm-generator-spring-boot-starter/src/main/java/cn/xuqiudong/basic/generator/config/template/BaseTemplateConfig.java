@@ -80,6 +80,7 @@ public abstract class BaseTemplateConfig {
             this.config = config;
         }
 
+        @SuppressWarnings("unchecked")
         protected T self() {
             return (T) this;
         }

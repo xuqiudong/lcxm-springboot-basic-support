@@ -5,6 +5,8 @@ import cn.xuqiudong.basic.quartz.entity.TaskJobLogDetail;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Arrays;
+
 /**
  * 定时任务执行记录明细 Mapper
  *
@@ -18,7 +20,7 @@ public interface TaskJobLogDetailMapper extends StringCrudMapper<TaskJobLogDetai
         if (jobIds == null || jobIds.length == 0) {
             return 0;
         }
-        return delete(new LambdaQueryWrapper<TaskJobLogDetail>().in(TaskJobLogDetail::getTaskJobLogId, jobIds));
+        return delete(new LambdaQueryWrapper<TaskJobLogDetail>().in(TaskJobLogDetail::getTaskJobLogId, Arrays.asList(jobIds)));
     }
 
 }

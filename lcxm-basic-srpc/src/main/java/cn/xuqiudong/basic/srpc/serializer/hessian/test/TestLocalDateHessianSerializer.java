@@ -1,8 +1,8 @@
 package cn.xuqiudong.basic.srpc.serializer.hessian.test;
 
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.basic.srpc.model.XqdResponse;
 import cn.xuqiudong.basic.srpc.serializer.hessian.Hessian2Serializer;
-import cn.xuqiudong.basic.core.util.JsonUtil;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -98,6 +98,7 @@ public class TestLocalDateHessianSerializer {
     /**
      * 测试 XqdResponse 泛型测试
      */
+    @SuppressWarnings("unchecked")
     public static void testXqdResponse2(Temporal temporal) {
         XqdResponse<Temporal> xqdResponse = XqdResponse.success(temporal);
         System.out.println("测试XqdResponse中的泛型:");

@@ -141,6 +141,7 @@ public abstract class BaseGenericService<M extends BaseGenericMapper<T, K>, T ex
             attachmentStatusOperationService.deleteAttachmentFromObj(findById(id));
         }
         // 安全地创建 K[] 类型的数组并传入 delete 方法
+        @SuppressWarnings("unchecked")
         K[] ids = (K[]) Array.newInstance(id.getClass(), 1);
         ids[0] = id;
         return this.delete(ids);

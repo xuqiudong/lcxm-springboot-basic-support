@@ -16,11 +16,12 @@ import java.util.List;
  * 描述:
  * 查询对象构建器:   QueryWrapper
  *
+ * @param <T> 查询条件所作用的实体类型，也是最终生成的 QueryWrapper 和 Where 的实体类型
  * @author Vic.xu
  * @see QueryConditionUtils
  * @since 2025-10-29 17:12
  */
-public class WrapperBuilder {
+public class WrapperBuilder<T> {
 
     /**
      * 中间需要添加的条件
@@ -30,9 +31,9 @@ public class WrapperBuilder {
     /**
      * 最终构件的查询对象, 在toWrapper()方法中构建一次
      */
-    private QueryWrapper queryWrapper;
+    private QueryWrapper<T> queryWrapper;
 
-    private Where where;
+    private Where<T> where;
 
 
     private WrapperBuilder() {
@@ -40,14 +41,14 @@ public class WrapperBuilder {
 
     }
 
-    public static WrapperBuilder create() {
-        return new WrapperBuilder();
+    public static <T> WrapperBuilder<T> create() {
+        return new WrapperBuilder<>();
     }
 
     /**
      * 构建查询对象
      */
-    public <T> QueryWrapper<T> toWrapper() {
+    public QueryWrapper<T> toWrapper() {
         if (this.queryWrapper == null) {
             queryWrapper = Wrappers.query();
             // 拼接条件
@@ -58,9 +59,9 @@ public class WrapperBuilder {
         return queryWrapper;
     }
 
-    public <T> Where<T> toWhere() {
+    public Where<T> toWhere() {
         if (this.where == null) {
-            where = new Where();
+            where = new Where<>();
             // 拼接条件
             for (Condition condition : conditions) {
                 condition.build(where);
@@ -73,7 +74,7 @@ public class WrapperBuilder {
     /**
      * 添加条件
      */
-    public WrapperBuilder addCondition(String column, QueryOperation operation, Object value) {
+    public WrapperBuilder<T> addCondition(String column, QueryOperation operation, Object value) {
         column = ColumnUtils.safeColumn(column);
         this.conditions.add(new NormalCondition(column, operation, value));
         return this;
@@ -82,7 +83,7 @@ public class WrapperBuilder {
     /**
      * 添加Apply条件, 用于自定义SQL语句
      */
-    public WrapperBuilder addApply(String applySql, Object... params) {
+    public WrapperBuilder<T> addApply(String applySql, Object... params) {
         this.conditions.add(new ApplyCondition(applySql, params));
         return this;
     }

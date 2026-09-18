@@ -396,6 +396,9 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
+                        <!-- 优先用release，推荐Java17+使用 -->
+                        <release>${java.version}</release>
+                        <!-- source/target 可以保留做兼容，也可以删掉 -->
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                         <encoding>${project.encoding}</encoding>

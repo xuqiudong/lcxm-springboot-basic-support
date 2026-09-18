@@ -93,7 +93,7 @@ public class SqlUtil {
         PlainSelect plainSelect = select.getPlainSelect();
         Expression where = CCJSqlParserUtil.parseCondExpression(append);
         if (needParenthesis) {
-            where = new ParenthesedExpressionList(where);
+            where = new ParenthesedExpressionList<>(where);
         }
         if (plainSelect.getWhere() == null) {
             plainSelect.setWhere(where);

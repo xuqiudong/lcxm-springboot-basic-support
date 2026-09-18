@@ -20,7 +20,7 @@ import java.util.TimeZone;
  * @since 2021/10/27
  */
 @SuppressWarnings("PMD")
-public class DateTimeUtils extends DateUtils {
+public class DateTimeUtils {
 
     /**
      * 相差月份
@@ -86,9 +86,8 @@ public class DateTimeUtils extends DateUtils {
     /**
      * 将本地时间,转换成对应时区的时间
      *
-     * @param localDate local date
-     * @param targetTimezone
-     *            转换成目标时区所在的时间
+     * @param localDate      local date
+     * @param targetTimezone 转换成目标时区所在的时间
      * @return
      */
     public static Date convertTimezone(Date localDate, TimeZone targetTimezone) {
@@ -99,10 +98,8 @@ public class DateTimeUtils extends DateUtils {
      * 将sourceDate转换成指定时区的时间
      *
      * @param sourceDate
-     * @param sourceTimezone
-     *            sourceDate所在的时区
-     * @param targetTimezone
-     *            转化成目标时间所在的时区
+     * @param sourceTimezone sourceDate所在的时区
+     * @param targetTimezone 转化成目标时间所在的时区
      * @return
      */
     public static Date convertTimezone(Date sourceDate, TimeZone sourceTimezone, TimeZone targetTimezone) {

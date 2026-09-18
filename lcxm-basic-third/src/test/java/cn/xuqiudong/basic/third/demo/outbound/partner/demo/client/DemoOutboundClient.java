@@ -31,11 +31,6 @@ public class DemoOutboundClient extends AbstractOutboundPartner<DemoOutboundConf
     }
 
     @Override
-    protected ThirdClientOptions thirdClientOptions() {
-        return new ThirdClientOptions();
-    }
-
-    @Override
     protected ThirdIdentity thirdIdentity() {
         return ThirdIdentity.of("demo-partner", "Demo 第三方");
     }

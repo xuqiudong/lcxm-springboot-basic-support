@@ -31,7 +31,7 @@ public class XqdSpringProviderBeanProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         // 获取最终目标class（防止存在代理对象的时候 获取到的时候代理Proxy）,故此处不使用  bean.getClass();
-        Class beanClass = AopProxyUtils.ultimateTargetClass(bean);
+        Class<?> beanClass = AopProxyUtils.ultimateTargetClass(bean);
         if (!beanClass.isAnnotationPresent(SrpcService.class)) {
             return bean;
         }

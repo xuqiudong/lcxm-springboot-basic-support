@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 描述:自定义线程工厂, 设置线程信息   copy  from  {@link Executors#defaultThreadFactory}
+ *
  * @author Vic.xu
  * @since 2021-12-02 9:36
  */
@@ -16,9 +17,8 @@ public class CustomThreadFactory implements ThreadFactory {
     private final String namePrefix;
 
     public CustomThreadFactory(String threadName) {
-        SecurityManager s = System.getSecurityManager();
-        group = (s != null) ? s.getThreadGroup() :
-                Thread.currentThread().getThreadGroup();
+        // 直接获取当前线程的 ThreadGroup，不再检查 SecurityManager
+        group = Thread.currentThread().getThreadGroup();
         namePrefix = threadName + "-" +
                 POOL_NUMBER.getAndIncrement() +
                 "-thread-";

@@ -2,9 +2,8 @@ package cn.xuqiudong.basic.framework.controller;
 
 import cn.xuqiudong.basic.core.lookup.Lookup;
 import cn.xuqiudong.basic.framework.tool.Tools;
-import org.springframework.web.util.WebUtils;
-
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.util.WebUtils;
 
 /**
  * @author Vic.xu
@@ -93,9 +92,10 @@ public abstract class BaseConsoleController {
 
     /**
      * from spring4.x WebUtils.getOrCreateSessionAttribute
+     *
      * @param session session
-     * @param name attribute name
-     * @param clazz attribute class
+     * @param name    attribute name
+     * @param clazz   attribute class
      * @return object
      * @throws IllegalArgumentException ex
      */
@@ -105,7 +105,7 @@ public abstract class BaseConsoleController {
         Object sessionObject = session.getAttribute(name);
         if (sessionObject == null) {
             try {
-                sessionObject = clazz.newInstance();
+                sessionObject = clazz.getDeclaredConstructor().newInstance();
             } catch (InstantiationException ex) {
                 throw new IllegalArgumentException(
                         "Could not instantiate class [" + clazz.getName() +
@@ -114,6 +114,8 @@ public abstract class BaseConsoleController {
                 throw new IllegalArgumentException(
                         "Could not access default constructor of class [" + clazz.getName() +
                                 "] for session attribute '" + name + "': " + ex.getMessage());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
             session.setAttribute(name, sessionObject);
         }

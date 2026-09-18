@@ -4,18 +4,18 @@
 package cn.xuqiudong.basic.core.util;
 
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 /**
- *  说明 :  数字的工具类
- *  @author Vic.xu
- * @since  2020年7月16日下午5:56:37
+ * 说明 :  数字的工具类
+ *
+ * @author Vic.xu
+ * @since 2020年7月16日下午5:56:37
  */
 @SuppressWarnings("PMD")
-public class CommonNumberUtils extends NumberUtils {
+public class CommonNumberUtils {
 
     /**
      * 两个Integer是否相等
+     *
      * @param i one
      * @param j two
      * @return equals

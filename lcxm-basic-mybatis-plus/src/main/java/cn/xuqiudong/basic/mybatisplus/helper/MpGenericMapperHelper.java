@@ -84,6 +84,7 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
     }
 
     public static <ID extends Serializable, T> MpGenericMapperHelper<ID, T> getHelper(MpGenericMapper<ID, T> mpGenericMapper) {
+        @SuppressWarnings("unchecked")
         MpGenericMapperHelper<ID, T> helper = HELPER_MAP.get(mpGenericMapper);
         if (helper == null) {
             synchronized (MpGenericMapperHelper.class) {

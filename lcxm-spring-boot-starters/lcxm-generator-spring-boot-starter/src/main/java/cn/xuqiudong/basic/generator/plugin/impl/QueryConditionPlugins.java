@@ -8,7 +8,6 @@ import cn.xuqiudong.basic.generator.util.ImportPackageUtils;
 import cn.xuqiudong.basic.mybatisplus.annotation.QueryCondition;
 import cn.xuqiudong.basic.mybatisplus.enums.QueryOperation;
 import cn.xuqiudong.basic.mybatisplus.util.QueryConditionUtils;
-import lombok.EqualsAndHashCode;
 
 /**
  * 描述:
@@ -18,7 +17,6 @@ import lombok.EqualsAndHashCode;
  * @see QueryCondition ;
  * @since 2025-11-01 14:57
  */
-@EqualsAndHashCode
 public class QueryConditionPlugins extends BaseGeneratorPlugin {
     @Override
     public boolean enable(ConfigBundle config) {

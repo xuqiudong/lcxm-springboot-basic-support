@@ -1,5 +1,9 @@
 ## 部署
 
+
+可以先静态检测一下: 
+`mvn clean compile spotbugs:check`
+
 ### maven deploy
 
 #### 版本修改

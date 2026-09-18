@@ -4,13 +4,13 @@ import cn.xuqiudong.basic.core.model.BaseResponse;
 import cn.xuqiudong.basic.framework.tool.Tools;
 import cn.xuqiudong.mq.bridge.consumer.model.DemoConsumerModel;
 import cn.xuqiudong.mq.bridge.core.DataBridgeMessageProducer;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalTime;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 描述:
@@ -29,7 +29,7 @@ public class DemoController {
     public BaseResponse<DemoConsumerModel> send(DemoConsumerModel model) {
         model.setId(Tools.randomUuid());
         if (model.getAge() == 0) {
-            model.setAge(RandomUtils.nextInt(10, 20));
+            model.setAge(ThreadLocalRandom.current().nextInt(10, 20));
         }
         if (model.getName() == null) {
             model.setName(LocalTime.now().toString());

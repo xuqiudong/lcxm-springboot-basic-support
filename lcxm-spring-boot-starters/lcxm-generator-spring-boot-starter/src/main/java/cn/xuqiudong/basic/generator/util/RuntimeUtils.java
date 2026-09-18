@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 /**
  * 描述:
@@ -31,9 +30,9 @@ public class RuntimeUtils {
         String osName = System.getProperty("os.name");
         if (osName != null) {
             if (osName.contains("Mac")) {
-                Runtime.getRuntime().exec("open " + outDir);
+                new ProcessBuilder("open", outDir).start();
             } else if (osName.contains("Windows")) {
-                Runtime.getRuntime().exec(MessageFormat.format("cmd /c start \"\" \"{0}\"", outDir));
+                new ProcessBuilder("cmd", "/c", "start", "\"\"", outDir).start();
             } else {
                 LOGGER.debug("file output directory:{}", outDir);
             }

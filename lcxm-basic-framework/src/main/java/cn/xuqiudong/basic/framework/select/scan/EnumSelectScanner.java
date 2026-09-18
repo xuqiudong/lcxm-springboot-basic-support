@@ -68,7 +68,9 @@ public class EnumSelectScanner implements SmartInitializingSingleton {
                 String value = annotation.value().isEmpty() ? simpleName : annotation.value();
                 String desc = annotation.desc().isEmpty() ? simpleName : annotation.desc();
                 //noinspection unchecked
-                EnumSelectRegistry.register(value, (Class<? extends EnumSelectable>) clazz, desc);
+                @SuppressWarnings("unchecked")
+                Class<? extends EnumSelectable> enumClass = (Class<? extends EnumSelectable>) clazz;
+                EnumSelectRegistry.register(value, enumClass, desc);
             }
         }
 
@@ -102,7 +104,10 @@ public class EnumSelectScanner implements SmartInitializingSingleton {
                 Class<?> clazz = Class.forName(className);
                 if (clazz.isEnum()) {
                     //noinspection unchecked
-                    result.add((Class<? extends Enum<?>>) clazz);
+
+                    @SuppressWarnings("unchecked")
+                    Class<? extends Enum<?>> enumClass = (Class<? extends Enum<?>>) clazz;
+                    result.add(enumClass);
                 }
             } catch (ClassNotFoundException e) {
                 LOGGER.warn("无法加载类: {}", className, e);

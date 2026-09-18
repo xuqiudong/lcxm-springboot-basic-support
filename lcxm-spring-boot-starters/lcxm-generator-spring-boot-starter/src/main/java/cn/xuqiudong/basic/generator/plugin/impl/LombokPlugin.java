@@ -19,7 +19,6 @@ import lombok.EqualsAndHashCode;
  * @author Vic.xu
  * @since 2025-09-11 10:40
  */
-@EqualsAndHashCode
 public class LombokPlugin extends BaseGeneratorPlugin {
 
 

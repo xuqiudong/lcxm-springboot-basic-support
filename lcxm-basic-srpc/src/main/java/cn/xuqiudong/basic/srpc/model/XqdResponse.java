@@ -23,20 +23,20 @@ public class XqdResponse<T> implements Serializable {
     private T data;
 
 
-    public static XqdResponse error(String msg) {
+    public static <T> XqdResponse<T> error(String msg) {
         return error(DEFAULT_ERROR_CODE, msg);
     }
 
-    public static XqdResponse error(int code, String msg) {
-        return new XqdResponse(code, msg, null);
+    public static <T> XqdResponse<T> error(int code, String msg) {
+        return new XqdResponse<>(code, msg, null);
     }
 
-    public static XqdResponse success() {
+    public static <T> XqdResponse<T> success() {
         return success(null);
     }
 
-    public static <T> XqdResponse success(T data) {
-        return new XqdResponse(0, null, data);
+    public static <T> XqdResponse<T> success(T data) {
+        return new XqdResponse<>(0, null, data);
     }
 
 
