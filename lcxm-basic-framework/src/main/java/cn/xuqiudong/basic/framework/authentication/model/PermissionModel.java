@@ -5,6 +5,7 @@ import java.util.Set;
 
 /**
  * 描述: 权限对象：  所拥有权限code列表和权限url列表
+ *
  * @author Vic.xu
  * @since 2022-12-13 11:24
  */

@@ -15,36 +15,34 @@ public class CookieUtil {
     /**
      * 默认缓存时间,单位/秒, 2H
      */
-    private static int COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+    private static int cookieMaxAge = 60 * 60 * 24 * 7;
     /**
      * 保存路径,根路径
-      */
-    private static String COOKIE_PATH = "/";
+     */
+    private static String cookiePath = "/";
 
     /**
      * 设置cookie的缓存时间和 路径
      *
-     * @param cookieAge
-     *            缓存时间,单位/秒 默认7天
-     * @param cookiePath
-     *            保存路径 默认 /
+     * @param cookieAge  缓存时间,单位/秒 默认7天
+     * @param cookiePath 保存路径 默认 /
      */
     public static void init(int cookieAge, String cookiePath) {
-        COOKIE_MAX_AGE = cookieAge;
-        COOKIE_PATH = cookiePath;
+        CookieUtil.cookieMaxAge = cookieAge;
+        CookieUtil.cookiePath = cookiePath;
     }
 
     /**
      * 保存到cookie
      *
      * @param response
-     * @param key  key
-     * @param value value
-     * @param ifRemember 是否记住：是则记住COOKIE_MAX_AGE秒，否则 -1  即一次回话
+     * @param key        key
+     * @param value      value
+     * @param ifRemember 是否记住：是则使用配置的缓存秒数，否则为 -1，即一次会话
      */
     public static void set(HttpServletResponse response, String key, String value, boolean ifRemember) {
-        int age = ifRemember ? COOKIE_MAX_AGE : -1;
-        set(response, key, value, null, COOKIE_PATH, age, true);
+        int age = ifRemember ? cookieMaxAge : -1;
+        set(response, key, value, null, cookiePath, age, true);
     }
 
     /**
@@ -53,8 +51,8 @@ public class CookieUtil {
      * @param response
      * @param key
      * @param value
-     * @param domain 域
-     * @param maxAge 生命周期
+     * @param domain   域
+     * @param maxAge   生命周期
      */
     public static void set(HttpServletResponse response, String key, String value, String domain, String path,
                            int maxAge, boolean isHttpOnly) {
@@ -111,7 +109,7 @@ public class CookieUtil {
     public static void remove(HttpServletRequest request, HttpServletResponse response, String key) {
         Cookie cookie = get(request, key);
         if (cookie != null) {
-            set(response, key, "", null, COOKIE_PATH, 0, true);
+            set(response, key, "", null, cookiePath, 0, true);
         }
     }
 

@@ -7,9 +7,9 @@ import cn.xuqiudong.basic.secureid.util.IdUtil;
 import cn.xuqiudong.basic.secureid.web.SecurePathVariableArgumentResolver;
 import cn.xuqiudong.basic.secureid.web.SecurePathVariableArgumentResolverPostProcessor;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartResolver;
 
@@ -75,7 +75,8 @@ public abstract class AbstractSecureIdConfig {
      */
     @Bean
     @ConditionalOnMissingBean
-    public FilterRegistrationBean<ParamDecryptFilter> paramDecryptFilterRegistration(ParamDecryptFilter paramDecryptFilter) {
+    public FilterRegistrationBean<ParamDecryptFilter> paramDecryptFilterRegistration(
+            ParamDecryptFilter paramDecryptFilter) {
         FilterRegistrationBean<ParamDecryptFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(paramDecryptFilter);
         registrationBean.setName("paramDecryptFilter");
@@ -105,7 +106,8 @@ public abstract class AbstractSecureIdConfig {
      */
     @Bean
     @ConditionalOnMissingBean(name = "securePathVariableArgumentResolverPostProcessor")
-    public BeanPostProcessor securePathVariableArgumentResolverPostProcessor(SecurePathVariableArgumentResolver resolver) {
+    public BeanPostProcessor securePathVariableArgumentResolverPostProcessor(
+            SecurePathVariableArgumentResolver resolver) {
         return new SecurePathVariableArgumentResolverPostProcessor(resolver, this::pathVariableDecryptEnabled);
     }
 

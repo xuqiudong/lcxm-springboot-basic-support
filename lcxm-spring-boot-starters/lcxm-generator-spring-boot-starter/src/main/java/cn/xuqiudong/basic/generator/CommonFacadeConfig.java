@@ -136,10 +136,13 @@ public class CommonFacadeConfig {
      * 基于 mysql 数据库 的配置
      *
      */
-    public static CommonFacadeConfig mysql(String host, String port, String database, String username, String password) {
+    public static CommonFacadeConfig mysql(String host, String port, String database, String username,
+                                           String password) {
         CommonFacadeConfig config = new CommonFacadeConfig();
         config.setDatabaseType(DatabaseType.mysql);
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true";
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + database +
+                "?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true" +
+                "&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true";
         config.setUrl(url);
         config.setUsername(username);
         config.setPassword(password);

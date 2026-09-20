@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * 描述: 串行化请求注解
+ *
  * @author Vic.xu
  * @since 2024-02-02 10:53
  */
@@ -26,9 +27,9 @@ public @interface SerialRequest {
     /**
      * 锁住的参数：对应方法中的参数,通过spel表达式取值
      * 如:
-     *    获取参数id:   #id
-     *    获取对象参数user中的id： #user.id
-     *    获取map参数userMap中的id： #userMap['id']
+     * 获取参数id:   #id
+     * 获取对象参数user中的id： #user.id
+     * 获取map参数userMap中的id： #userMap['id']
      * ★ 不写此参数会锁住整个方法
      */
     String lockParameter() default "";

@@ -11,8 +11,9 @@ import java.util.Set;
 
 /**
  * 描述:自定义的权限方言 , 只需把当前bean注入springBoot即可
- *    权限标签使用方式：<tagName vic:auth="xxCode" ></tageName>   如<div vic:auth="update">xxx</div>
- *   参见：StandardDialect
+ * 权限标签使用方式：<tagName vic:auth="xxCode" ></tageName>   如<div vic:auth="update">xxx</div>
+ * 参见：StandardDialect
+ *
  * @author Vic.xu
  * @since 2022-02-11 9:26
  */

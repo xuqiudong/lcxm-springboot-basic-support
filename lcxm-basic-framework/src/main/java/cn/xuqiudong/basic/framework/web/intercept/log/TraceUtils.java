@@ -9,10 +9,11 @@ import org.slf4j.MDC;
 /**
  * 描述:slf4j日志加入TraceId
  * <p>
- *  比如：logback 中：   <pattern>[%X{traceId}].....</pattern>
+ * 比如：logback 中：   <pattern>[%X{traceId}].....</pattern>
  * </p>
- * @see  <a href="https://blog.csdn.net/weixin_36380516/article/details/128179968"></a>
+ *
  * @author Vic.xu
+ * @see <a href="https://blog.csdn.net/weixin_36380516/article/details/128179968"></a>
  * @since 2022-12-12 11:08
  */
 public class TraceUtils {

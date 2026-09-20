@@ -12,9 +12,10 @@ import java.lang.annotation.Target;
 
 /**
  * 描述:
- *    标记方法需要启用数据权限（固定组合场景）
- * @see RowDataHelper#start(RowDataHandlerType, String)
+ * 标记方法需要启用数据权限（固定组合场景）
+ *
  * @author Vic.xu
+ * @see RowDataHelper#start(RowDataHandlerType, String)
  * @since 2025-09-23 15:41
  */
 @Target(ElementType.METHOD)
@@ -29,8 +30,9 @@ public @interface RowDataPermission {
 
     /**
      * 单个数据权限规则（字段 + 权限类型）
+     * Target 仅作为注解参数使用
      */
-    @Target({}) // 仅作为注解参数使用
+    @Target({})
     @Retention(RetentionPolicy.RUNTIME)
     @interface Item {
         /**

@@ -8,12 +8,14 @@ import java.io.IOException;
 
 /**
  * 描述: 通过json方式序列化数据
+ *
  * @author Vic.xu
  * @date 2022-02-21 11:07
  */
 public class JsonSerializer implements XqdSerializer {
 
     ObjectMapper mapper = new ObjectMapper();
+
     @Override
     public <T> byte[] serialize(T obj) throws JsonProcessingException {
         return mapper.writeValueAsBytes(obj);
@@ -24,6 +26,7 @@ public class JsonSerializer implements XqdSerializer {
         return mapper.readValue(data, clazz);
 
     }
+
     @Override
     public boolean selfDescribed() {
         return false;

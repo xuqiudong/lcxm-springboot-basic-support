@@ -72,7 +72,8 @@ public class SerialRequestAdvisor extends AbstractPointcutAdvisor {
      * 如果没有自定义切入点，则只需要 SerialRequest注解
      */
     public void initPointcut() {
-        AnnotationMatchingPointcut annotationMethodMatcher = AnnotationMatchingPointcut.forMethodAnnotation(SerialRequest.class);
+        AnnotationMatchingPointcut annotationMethodMatcher =
+                AnnotationMatchingPointcut.forMethodAnnotation(SerialRequest.class);
         if (!StringUtils.hasText(pointcutExpression)) {
             this.serialRequestPointcut = annotationMethodMatcher;
             return;

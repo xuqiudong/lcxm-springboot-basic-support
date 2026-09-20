@@ -6,7 +6,11 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.WritableTypeId;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -18,9 +22,10 @@ import java.util.Objects;
 
 /**
  * 追加JSON字段的序列化方法
- *
+ * <p>
  * {@link AppendJsonField}
  * use for field like: @AppendJsonField(key="idDesc",keyValyeDesc= {"1:ZHANGSAN", "2:LISI"})
+ *
  * @author VIC
  *
  */
@@ -98,7 +103,8 @@ public class AppendJsonFieldSerialize extends JsonSerializer<Object> implements 
     }
 
     @Override
-    public void serializeWithType(Object value, JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) throws IOException {
+    public void serializeWithType(Object value, JsonGenerator gen, SerializerProvider serializers,
+                                  TypeSerializer typeSer) throws IOException {
         super.serializeWithType(value, gen, serializers, typeSer);
         // NOTE: need not really be string; just indicates "scalar of some kind"
         WritableTypeId typeIdDef = typeSer.writeTypePrefix(gen,
@@ -134,8 +140,7 @@ class Test {
     }
 
     /**
-     * @param type
-     *            the type to set
+     * @param type the type to set
      */
     public void setType(int type) {
         this.type = type;
@@ -149,8 +154,7 @@ class Test {
     }
 
     /**
-     * @param name
-     *            the name to set
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;

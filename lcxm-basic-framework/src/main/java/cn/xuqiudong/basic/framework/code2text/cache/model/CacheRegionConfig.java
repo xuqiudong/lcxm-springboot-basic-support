@@ -19,7 +19,7 @@ public class CacheRegionConfig {
     private Duration localTtl = Duration.ofMinutes(10);
     /**
      * Redis TTL
-      */
+     */
     private Duration redisTtl = Duration.ofHours(2);
 
     /**

@@ -9,9 +9,10 @@ import java.lang.annotation.Target;
 
 /**
  * 描述:
- *   支持方法级别的控制
- * @see SrpcReference#methods()
+ * 支持方法级别的控制
+ *
  * @author Vic.xu
+ * @see SrpcReference#methods()
  * @since 2025-08-27 9:10
  */
 @Documented

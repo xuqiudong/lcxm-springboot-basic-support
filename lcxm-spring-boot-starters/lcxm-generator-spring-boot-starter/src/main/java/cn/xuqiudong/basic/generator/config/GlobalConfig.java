@@ -32,7 +32,8 @@ public class GlobalConfig {
     /**
      * 输出目录
      */
-    String outputDir = System.getProperty("os.name").toLowerCase().contains("windows") ? "D:\\generator" : "/tmp/generator";
+    String outputDir =
+            System.getProperty("os.name").toLowerCase().contains("windows") ? "D:\\generator" : "/tmp/generator";
 
 
     /**

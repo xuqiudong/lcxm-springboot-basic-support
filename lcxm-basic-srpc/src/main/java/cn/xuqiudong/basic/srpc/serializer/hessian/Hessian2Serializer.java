@@ -20,14 +20,14 @@ import java.io.IOException;
  */
 public class Hessian2Serializer implements XqdSerializer {
 
-    public static final SerializerFactory serializerFactory = SerializerFactory.createDefault();
+    public static final SerializerFactory SERIALIZER_FACTORY = SerializerFactory.createDefault();
 
     static {
 
         //新增一些数据类型的支持
 //        serializerFactory.addFactory(new LocalDateTimeSerializerFactory());
 //        serializerFactory.addFactory(new LocalDateSerializerFactory());
-        serializerFactory.addFactory(JavaTimeSerializerFactory.getInstance());
+        SERIALIZER_FACTORY.addFactory(JavaTimeSerializerFactory.getInstance());
     }
 
 
@@ -38,7 +38,7 @@ public class Hessian2Serializer implements XqdSerializer {
         // try with  resource
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             hessianOutput = new Hessian2Output(os);
-            hessianOutput.setSerializerFactory(serializerFactory);
+            hessianOutput.setSerializerFactory(SERIALIZER_FACTORY);
             hessianOutput.writeObject(obj);
             hessianOutput.flush();
             byte[] serialize = os.toByteArray();
@@ -65,7 +65,7 @@ public class Hessian2Serializer implements XqdSerializer {
         //try with  resource
         try (ByteArrayInputStream is = new ByteArrayInputStream(data)) {
             hessianInput = new Hessian2Input(is);
-            hessianInput.setSerializerFactory(serializerFactory);
+            hessianInput.setSerializerFactory(SERIALIZER_FACTORY);
             return (T) hessianInput.readObject(clazz);
         } catch (Exception e) {
             throw new CommonException("Hessian2 反序列化失败", e);

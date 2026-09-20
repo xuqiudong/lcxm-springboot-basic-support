@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * 描述: Thymeleaf 转换工具对象抽象类
+ *
  * @author Vic.xu
  * @since 2022-04-08 9:24
  */
@@ -21,6 +22,7 @@ public abstract class BaseThymeleafConversionHandler {
     public interface ConversionType {
         /**
          * 类型名
+         *
          * @return 类型
          */
         String type();
@@ -35,12 +37,14 @@ public abstract class BaseThymeleafConversionHandler {
 
     /**
      * 处理的类型
+     *
      * @return 类型名
      */
     protected abstract ConversionType type();
 
     /**
      * 转换的数据，如把useId转为userName
+     *
      * @param content 待转换的数据
      * @return 转换
      */
@@ -49,8 +53,9 @@ public abstract class BaseThymeleafConversionHandler {
 
     /**
      * 转换某个类型的数据
+     *
      * @param content 原数据
-     * @param type 类型
+     * @param type    类型
      * @return 转换后
      */
     public static String convert(String content, String type) {
@@ -77,7 +82,8 @@ public abstract class BaseThymeleafConversionHandler {
             logger.info("无法从ApplicationContextHolder中获取ApplicationContext");
             return CONVERSION_HANDLER_HASH_MAP;
         }
-        Map<String, BaseThymeleafConversionHandler> beansOfType = applicationContext.getBeansOfType(BaseThymeleafConversionHandler.class);
+        Map<String, BaseThymeleafConversionHandler> beansOfType =
+                applicationContext.getBeansOfType(BaseThymeleafConversionHandler.class);
         if (beansOfType != null) {
             beansOfType.forEach((k, v) -> {
                 CONVERSION_HANDLER_HASH_MAP.put(v.type().type(), v);

@@ -10,11 +10,12 @@ import cn.xuqiudong.basic.framework.select.EnumSelectable;
 
 /**
  * 描述:
- *   枚举类 转文本
- *   适配所有实现EnumSelectable接口的枚举
- *   无注解时框架也会自动转换，加注解可自定义文本字段名/兜底策略
- * @see EnumSelectAutoConfiguration#enumSelectJacksonCustomizer()
+ * 枚举类 转文本
+ * 适配所有实现EnumSelectable接口的枚举
+ * 无注解时框架也会自动转换，加注解可自定义文本字段名/兜底策略
+ *
  * @author Vic.xu
+ * @see EnumSelectAutoConfiguration#enumSelectJacksonCustomizer()
  * @since 2026-01-09 17:03
  */
 public class EnumCode2TextResolver implements Code2TextResolver, PlaceholderCode2TextResolver {

@@ -33,7 +33,8 @@ public class EnumSelectableSerializer extends JsonSerializer<EnumSelectable> imp
      * 上下文初始化：获取枚举字段的名称
      */
     @Override
-    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) throws JsonMappingException {
+    public JsonSerializer<?> createContextual(SerializerProvider prov,
+                                              BeanProperty property) throws JsonMappingException {
 
         if (property != null) {
             // 获取实体中枚举字段的名称
@@ -47,7 +48,8 @@ public class EnumSelectableSerializer extends JsonSerializer<EnumSelectable> imp
      * 核心序列化逻辑
      */
     @Override
-    @SneakyThrows // 简化IOException捕获
+    // 简化 IOException 捕获
+    @SneakyThrows
     public void serialize(EnumSelectable value, JsonGenerator gen, SerializerProvider serializers) {
         // 处理null值
         if (value == null) {

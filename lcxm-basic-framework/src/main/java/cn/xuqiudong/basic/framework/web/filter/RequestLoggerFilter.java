@@ -9,10 +9,11 @@ import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 /**
  * 描述:
- *  记录请求时长的Filter
- *   spring已内置了类似的filter:CommonsRequestLoggingFilter
- * @see org.springframework.web.filter.CommonsRequestLoggingFilter;
+ * 记录请求时长的Filter
+ * spring已内置了类似的filter:CommonsRequestLoggingFilter
+ *
  * @author Vic.xu
+ * @see org.springframework.web.filter.CommonsRequestLoggingFilter;
  * @since 2025-01-14 13:42
  */
 public class RequestLoggerFilter extends AbstractRequestLoggingFilter {
@@ -20,7 +21,8 @@ public class RequestLoggerFilter extends AbstractRequestLoggingFilter {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(RequestLoggerFilter.class);
 
-    public static final String[] DEFAULT_IGNORE_PATH = {"/static", "/js", "css", "images", "fonts", "favicon.ico", "assets"};
+    public static final String[] DEFAULT_IGNORE_PATH =
+            {"/static", "/js", "css", "images", "fonts", "favicon.ico", "assets"};
 
     private static final String START_WATCH = "_startWatch";
 
@@ -68,7 +70,8 @@ public class RequestLoggerFilter extends AbstractRequestLoggingFilter {
         long millis = nano / 1000_000L;
         LOGGER.debug("{} took {} ms", message, millis);
         if (millis > slowRequestThreshold) {
-            LOGGER.warn("{} cost {} ms, is more than {} ms, please caution about!", message, millis, slowRequestThreshold);
+            LOGGER.warn("{} cost {} ms, is more than {} ms, please caution about!", message, millis,
+                    slowRequestThreshold);
         }
     }
 

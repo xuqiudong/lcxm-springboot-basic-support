@@ -3,8 +3,8 @@ package cn.xuqiudong.basic.mybatisplus.controller;
 import cn.xuqiudong.basic.core.model.BaseGenericEntity;
 import cn.xuqiudong.basic.core.model.BaseResponse;
 import cn.xuqiudong.basic.core.model.PageInfo;
-import cn.xuqiudong.basic.mybatisplus.service.BaseGenericService;
 import cn.xuqiudong.basic.core.util.HibernateValidatorUtils;
+import cn.xuqiudong.basic.mybatisplus.service.BaseGenericService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,8 @@ import java.io.Serializable;
  * @author Vic.xu
  * @since 2025-03-12
  */
-public abstract class BaseGenericController<S extends BaseGenericService<?, T, K>, T extends BaseGenericEntity<K>, K extends Serializable> {
+public abstract class BaseGenericController<S extends BaseGenericService<?, T, K>, T extends BaseGenericEntity<K>,
+        K extends Serializable> {
     @Autowired
     protected S service;
 

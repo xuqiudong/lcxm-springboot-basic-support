@@ -20,13 +20,14 @@ import java.util.stream.Stream;
 
 /**
  * 描述: 通过ConfigurableEnvironment读取springboot 配置文件中的值
- *    比一般的Bean初始化时机更早，但是在EnvironmentPostProcessor之后
+ * 比一般的Bean初始化时机更早，但是在EnvironmentPostProcessor之后
  * <p>
- *     通过SpringApplicationRunListener
- *    在spring上下文准备好之前，为SpringBootApplicationPropertiesUtil 工具类设置 ConfigurableEnvironment
- *    在resources/META-INFO/spring.factories中配置此监听器：
- *    org.springframework.boot.SpringApplicationRunListener=cn.xuqiudong.common.util.SpringBootApplicationPropertiesUtil
+ * 通过SpringApplicationRunListener
+ * 在spring上下文准备好之前，为SpringBootApplicationPropertiesUtil 工具类设置 ConfigurableEnvironment
+ * 在resources/META-INFO/spring.factories中配置此监听器：
+ * org.springframework.boot.SpringApplicationRunListener=cn.xuqiudong.common.util.SpringBootApplicationPropertiesUtil
  * </p>
+ *
  * @author Vic.xu
  * @since 2024-04-18 10:33
  */
@@ -40,7 +41,8 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
 
     /**
      * 初始化：should declare a public constructor that accepts a {@link SpringApplication}
-     *  * instance and a {@code String[]} of arguments.
+     * * instance and a {@code String[]} of arguments.
+     *
      * @see SpringApplicationRunListener
      */
     public SpringBootApplicationPropertiesUtil(SpringApplication application, String[] args) {
@@ -51,7 +53,8 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
      * 在spring上下文准备好之前，为本工具类设置 ConfigurableEnvironment
      */
     @Override
-    public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
+    public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext,
+                                    ConfigurableEnvironment environment) {
         setEnvironment(environment);
     }
 
@@ -60,7 +63,8 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取 String
+     * 获取 String
+     *
      * @param key key
      */
     public static String getString(String key) {
@@ -69,8 +73,9 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
 
 
     /**
-     *  获取 String
-     * @param key key
+     * 获取 String
+     *
+     * @param key          key
      * @param defaultValue the default value to return if no value is found
      */
     public static String getString(String key, String defaultValue) {
@@ -78,7 +83,8 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取 Boolean
+     * 获取 Boolean
+     *
      * @param key key
      */
     public static Boolean getBoolean(String key) {
@@ -86,8 +92,9 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取 Boolean
-     * @param key key
+     * 获取 Boolean
+     *
+     * @param key          key
      * @param defaultValue the default value to return if no value is found
      */
     public static Boolean getBoolean(String key, Boolean defaultValue) {
@@ -95,7 +102,8 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取 Integer
+     * 获取 Integer
+     *
      * @param key key
      */
     public static Integer getInteger(String key) {
@@ -103,8 +111,9 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取 Integer
-     * @param key key
+     * 获取 Integer
+     *
+     * @param key          key
      * @param defaultValue the default value to return if no value is found
      */
     public static Integer getInteger(String key, Integer defaultValue) {
@@ -112,7 +121,8 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取 BigDecimal
+     * 获取 BigDecimal
+     *
      * @param key key
      */
     public static BigDecimal getBigDecimal(String key) {
@@ -120,8 +130,9 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取 BigDecimal
-     * @param key key
+     * 获取 BigDecimal
+     *
+     * @param key          key
      * @param defaultValue the default value to return if no value is found
      */
     public static BigDecimal getBigDecimal(String key, BigDecimal defaultValue) {
@@ -129,7 +140,8 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取 Double
+     * 获取 Double
+     *
      * @param key key
      */
     public static Double getDouble(String key) {
@@ -137,8 +149,9 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取 Double
-     * @param key key
+     * 获取 Double
+     *
+     * @param key          key
      * @param defaultValue the default value to return if no value is found
      */
     public static Double getDouble(String key, Double defaultValue) {
@@ -146,8 +159,9 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取long
-     * @param key key
+     * 获取long
+     *
+     * @param key          key
      * @param defaultValue the default value to return if no value is found
      */
     public static Long getLong(String key, Long defaultValue) {
@@ -155,7 +169,8 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     }
 
     /**
-     *  获取long
+     * 获取long
+     *
      * @param key key
      */
     public static Long getLong(String key) {
@@ -164,6 +179,7 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
 
     /**
      * 获取逗号分隔的字符串为List
+     *
      * @param key key
      */
     public static List<String> getStringAsList(String key) {
@@ -177,6 +193,7 @@ public class SpringBootApplicationPropertiesUtil implements SpringApplicationRun
     /**
      * 获取 Map
      * (此处不缓存， 兼容以后动态刷新环境变量的情境)
+     *
      * @param prefix key prefix
      */
     public static Map<String, Object> getMapConfig(String prefix) {

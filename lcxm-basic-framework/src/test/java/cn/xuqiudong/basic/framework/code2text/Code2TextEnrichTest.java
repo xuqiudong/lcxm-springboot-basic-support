@@ -27,7 +27,7 @@ public class Code2TextEnrichTest extends BaseTest {
 
     @Test
     @DisplayName("测试单个dto enricher")
-    public void enrichObject(){
+    public void enrichObject() {
         Code2TextDemoModel model = new Code2TextDemoModel();
         model.setDemoCode("code1");
         model.setDemoCode2("code2");
@@ -38,7 +38,7 @@ public class Code2TextEnrichTest extends BaseTest {
 
     @Test
     @DisplayName("测试多个 dto enricher")
-    public void enrichList(){
+    public void enrichList() {
         List<Code2TextDemoModel> list = new ArrayList<>();
         list.add(new Code2TextDemoModel("c1", "c2", "c3"));
         list.add(new Code2TextDemoModel("a1", "a2", "a3"));

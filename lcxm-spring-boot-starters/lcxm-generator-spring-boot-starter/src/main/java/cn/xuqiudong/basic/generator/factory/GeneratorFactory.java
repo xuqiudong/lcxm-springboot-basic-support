@@ -48,7 +48,8 @@ public class GeneratorFactory {
                             BaseTemplateEngine templateEngine, List<IGeneratorPlugin> customizedPlugins,
                             List<CustomizeTemplateConfig> customizedTemplates) {
         Set<IGeneratorPlugin> plugins = initPlugins(customizedPlugins);
-        bundle = new ConfigBundle(dataSourceConfig, globalConfig, strategyConfig, templateEngine, plugins, customizedTemplates);
+        bundle = new ConfigBundle(dataSourceConfig, globalConfig, strategyConfig, templateEngine, plugins,
+                customizedTemplates);
         dataAssemblyFactory = new DataAssemblyFactory(bundle);
         // init template engine
         bundle.getTemplateEngine().init(bundle);
@@ -317,7 +318,8 @@ public class GeneratorFactory {
         }
         // 如果不存在覆盖文件, 则不需要手动确认
         if (!bundle.getStrategyConfig().isFileOverride()) {
-            LOGGER.info("当前配置为不覆盖已经存在的文件! 可删除已经存在的文件生成或配置为覆盖文件[ fileOverride = true ]");
+            LOGGER.info(
+                    "当前配置为不覆盖已经存在的文件! 可删除已经存在的文件生成或配置为覆盖文件[ fileOverride = true ]");
             return;
         }
         // 非交互式环境

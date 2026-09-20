@@ -24,7 +24,7 @@ public class AuthorityElementTagProcessor extends AbstractAttributeTagProcessor 
 
     public static final String ATTRIBUTE_NAME = "auth";
 
-    static int PRECEDENCE = 1000;
+    static final int PRECEDENCE = 1000;
 
     public AuthorityElementTagProcessor(String dialectPrefix) {
         super(
@@ -62,7 +62,7 @@ public class AuthorityElementTagProcessor extends AbstractAttributeTagProcessor 
         final IStandardExpression expression = parser.parseExpression(context, attributeValue);
 
 //        String permissionCode = String.valueOf(expression.execute(context));
-		/*
+        /*
         SessionUserVo userVo = SystemSessionHelper.currentUserInfo();
         if (userVo == null) {
             structureHandler.removeElement();
@@ -73,7 +73,7 @@ public class AuthorityElementTagProcessor extends AbstractAttributeTagProcessor 
             structureHandler.removeElement();
         }
 
-		 */
+         */
 
     }
 

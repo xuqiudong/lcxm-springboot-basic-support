@@ -12,7 +12,8 @@ import java.lang.annotation.Target;
 
 /**
  * 描述:
- *  在标注为spring的bean的同时，会被追加到注册中心，但是由于是simpleRpc,所以暂不处理
+ * 在标注为spring的bean的同时，会被追加到注册中心，但是由于是simpleRpc,所以暂不处理
+ *
  * @author Vic.xu
  * @since 2024-06-25 10:07
  */

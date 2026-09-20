@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * deprecated:  不支持日期类型为泛型, 请使用JavaTimeSerializerFactory
+ *
  * @see JavaTimeSerializerFactory
  */
 @Deprecated
@@ -25,19 +26,22 @@ public class LocalDateSerializerFactory extends AbstractSerializerFactory {
 
     @Override
     public Serializer getSerializer(Class cl) throws HessianProtocolException {
-        if (cl == LocalDate.class)
+        if (cl == LocalDate.class) {
             return new LocalDateSerializer();
+        }
         return null;
     }
 
     @Override
     public Deserializer getDeserializer(Class cl) throws HessianProtocolException {
-        if (cl == LocalDate.class)
+        if (cl == LocalDate.class) {
             return new LocalDateDeserializer();
+        }
         return null;
     }
 
     private static class LocalDateSerializer extends AbstractSerializer {
+        @Override
         public void writeObject(Object obj, AbstractHessianOutput out) throws IOException {
             LocalDate localDate = (LocalDate) obj;
             out.writeString(localDate.format(FORMATTER));
@@ -46,6 +50,7 @@ public class LocalDateSerializerFactory extends AbstractSerializerFactory {
     }
 
     private static class LocalDateDeserializer extends AbstractDeserializer {
+        @Override
         public Object readObject(AbstractHessianInput in) throws IOException {
             String str = in.readString();
             return LocalDate.parse(str, FORMATTER);

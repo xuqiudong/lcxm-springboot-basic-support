@@ -7,8 +7,9 @@ import java.io.IOException;
 
 /**
  * 描述:
- *      用于获取 重定向地址： 即 response.sendRedirect(url)中的url
- *      其中url为原始值，可能是相对地址，也可能是绝对地址
+ * 用于获取 重定向地址： 即 response.sendRedirect(url)中的url
+ * 其中url为原始值，可能是相对地址，也可能是绝对地址
+ *
  * @author Vic.xu
  * @since 2025-02-08 9:34
  */
@@ -18,6 +19,7 @@ public class RedirectResponseWrapper extends HttpServletResponseWrapper {
      * 重定向的地址
      */
     private String redirectUrl;
+
     /**
      * Constructs a response adaptor wrapping the given response.
      *

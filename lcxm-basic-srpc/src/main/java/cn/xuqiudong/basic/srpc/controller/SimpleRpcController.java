@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 描述:
- *      simple rpc  消费端和服务端的交互controller
+ * simple rpc  消费端和服务端的交互controller
+ *
  * @author Vic.xu
  * @since 2024-06-25 9:56
  */

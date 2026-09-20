@@ -45,14 +45,18 @@ public class Slf4jOutboundExchangeLogger implements OutboundExchangeLogger {
             return;
         }
         if (OutboundExchangeStatus.FAILED.equals(log.getStatus())) {
-            LOGGER.warn("[third-outbound] third={}, operation={}, method={}, url={}, httpStatus={}, status={}, elapsed={}ms, requestBody={}, responseBody={}, error={}",
+            LOGGER.warn(
+                    "[third-outbound] third={}, operation={}, method={}, url={}, httpStatus={}, status={}, " +
+                            "elapsed={}ms, requestBody={}, responseBody={}, error={}",
                     log.getThirdCode(), log.getOperation(), log.getMethod(), log.getUrl(),
                     log.getHttpStatus(), log.getStatus(), log.getElapsedMillis(),
                     abbreviate(log.getRequestBody()), abbreviate(log.getResponseBody()),
                     abbreviate(log.getErrorMessage()));
             return;
         }
-        LOGGER.info("[third-outbound] third={}, operation={}, method={}, url={}, httpStatus={}, status={}, elapsed={}ms, requestBody={}, responseBody={}",
+        LOGGER.info(
+                "[third-outbound] third={}, operation={}, method={}, url={}, httpStatus={}, status={}, elapsed={}ms, " +
+                        "requestBody={}, responseBody={}",
                 log.getThirdCode(), log.getOperation(), log.getMethod(), log.getUrl(),
                 log.getHttpStatus(), log.getStatus(), log.getElapsedMillis(),
                 abbreviate(log.getRequestBody()), abbreviate(log.getResponseBody()));

@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * @author Vic.xu
  * @Bean public ConfigurationCustomizer mybatisConfigurationCustomizer() {
  * return configuration ->
- *  configuration.addInterceptor(new CommonFieldInterceptor((obj) -> {...}, (obj) -> {...}));
+ * configuration.addInterceptor(new CommonFieldInterceptor((obj) -> {...}, (obj) -> {...}));
  * }
  * </code>
  * </p>

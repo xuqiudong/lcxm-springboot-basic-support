@@ -1,22 +1,22 @@
 package cn.xuqiudong.basic.srpc.serializer.hessian.test;
 
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.basic.srpc.model.Invoker;
 import cn.xuqiudong.basic.srpc.model.XqdRequest;
 import cn.xuqiudong.basic.srpc.model.XqdResponse;
 import cn.xuqiudong.basic.srpc.serializer.XqdSerializer;
 import cn.xuqiudong.basic.srpc.serializer.hessian.Hessian2Serializer;
-import cn.xuqiudong.basic.core.util.JsonUtil;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
  * 描述:基于jdk动态代理的调用远程服务的过程
+ *
  * @author Vic.xu
- * @@since  2024-06-25
+ * @@since 2024-06-25
  */
 public class TestProxyInvocation implements InvocationHandler {
-
 
 
     private XqdSerializer serializer = new Hessian2Serializer();
@@ -45,13 +45,14 @@ public class TestProxyInvocation implements InvocationHandler {
 
         XqdRequest deserialize = serializer.deserialize(serialize, XqdRequest.class);
         JsonUtil.printJson(deserialize);
-        Object invoke = TestHessianMethodImpl.class.getMethod(methodName, parameterTypes).invoke(testHessianMethodImpl, args);
+        Object invoke =
+                TestHessianMethodImpl.class.getMethod(methodName, parameterTypes).invoke(testHessianMethodImpl, args);
         XqdResponse response = new XqdResponse();
         response.setData(invoke);
         byte[] serialize1 = serializer.serialize(response);
         XqdResponse xqdResponse = serializer.deserialize(serialize1, XqdResponse.class);
         return xqdResponse.getData();
-   }
+    }
 }
 
 

@@ -11,9 +11,10 @@ import java.util.Map;
 
 /**
  * 描述:
- *    执行远程调用的时候一些元信息
- * @see JdkProxyInvocation
+ * 执行远程调用的时候一些元信息
+ *
  * @author Vic.xu
+ * @see JdkProxyInvocation
  * @since 2025-08-27 9:21
  */
 public class SrpcInvocation implements Serializable {
@@ -52,7 +53,7 @@ public class SrpcInvocation implements Serializable {
     /**
      * 初始化 指定方法 的元信息
      */
-    private void initMethodMetaMap(){
+    private void initMethodMetaMap() {
         SrpcMethod[] methods = referenceAnnotation.methods();
         for (SrpcMethod method : methods) {
             SrpcInvocationMeta invocationMeta = new SrpcInvocationMeta(method, referenceAnnotation);
@@ -62,17 +63,17 @@ public class SrpcInvocation implements Serializable {
 
     /**
      * 获取指定方法 的元信息 (此处暂不支持方法重载)
+     *
      * @param methodName 方法名
      * @return InvocationMeta
      */
-    public SrpcInvocationMeta getInvocationMeta(String methodName){
+    public SrpcInvocationMeta getInvocationMeta(String methodName) {
         SrpcInvocationMeta invocationMeta = methodMetaMap.get(methodName);
-        if(invocationMeta == null){
+        if (invocationMeta == null) {
             return defaultInvocationMeta;
         }
         return invocationMeta;
     }
-
 
 
 }

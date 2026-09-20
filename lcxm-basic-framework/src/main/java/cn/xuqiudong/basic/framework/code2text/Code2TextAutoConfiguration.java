@@ -41,7 +41,8 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
  */
 @Configuration
 @ConditionalOnClass(ObjectMapper.class)
-@ConditionalOnProperty(prefix = "lcxm.framework.code2text", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "lcxm.framework.code2text", name = "enabled", havingValue = "true",
+        matchIfMissing = true)
 public class Code2TextAutoConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Code2TextAutoConfiguration.class);
@@ -113,7 +114,9 @@ public class Code2TextAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public DefaultUserCode2TextResolver defaultUserCode2TextResolver() {
-        LOGGER.warn("code2text: DefaultUserCode2TextResolver init. Please define an implementation class for UserCode2Text by yourself");
+        LOGGER.warn(
+                "code2text: DefaultUserCode2TextResolver init. Please define an implementation class for " +
+                        "UserCode2Text by yourself");
         return new DefaultUserCode2TextResolver();
     }
 
@@ -136,7 +139,9 @@ public class Code2TextAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public Code2TextSpringEvictListener code2TextEvictSpringListener(ObjectProvider<Code2TextCacheManager> cacheManager, RedisCacheEvictPublisher redisCacheEvictPublisher) {
+    public Code2TextSpringEvictListener code2TextEvictSpringListener(
+            ObjectProvider<Code2TextCacheManager> cacheManager,
+            RedisCacheEvictPublisher redisCacheEvictPublisher) {
         LOGGER.info("code2text: 本地缓存失效监听器 init...");
         return new Code2TextSpringEvictListener(cacheManager.getIfAvailable(), redisCacheEvictPublisher);
     }

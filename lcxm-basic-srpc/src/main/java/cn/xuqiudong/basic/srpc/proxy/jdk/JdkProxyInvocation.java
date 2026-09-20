@@ -15,11 +15,11 @@ import java.lang.reflect.Method;
 
 /**
  * 描述:基于jdk动态代理的调用远程服务的过程
+ *
  * @author Vic.xu
- * @@since  2024-06-25
+ * @@since 2024-06-25
  */
 public class JdkProxyInvocation implements InvocationHandler {
-
 
 
     private XqdSerializer serializer = new Hessian2Serializer();
@@ -66,7 +66,7 @@ public class JdkProxyInvocation implements InvocationHandler {
             result = serializer.deserialize(bytes, method.getReturnType());
         }
         return result;
-   }
+    }
 }
 
 

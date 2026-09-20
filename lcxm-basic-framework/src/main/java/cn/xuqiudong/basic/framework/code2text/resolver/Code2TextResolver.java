@@ -2,8 +2,8 @@ package cn.xuqiudong.basic.framework.code2text.resolver;
 
 import cn.xuqiudong.basic.framework.code2text.cache.Code2TextPreloadable;
 import cn.xuqiudong.basic.framework.code2text.cache.proxy.CachedResolverProxy;
-import cn.xuqiudong.basic.framework.code2text.type.Code2TextType;
 import cn.xuqiudong.basic.framework.code2text.model.ResolverMeta;
+import cn.xuqiudong.basic.framework.code2text.type.Code2TextType;
 
 /**
  * 描述:
@@ -18,9 +18,8 @@ import cn.xuqiudong.basic.framework.code2text.model.ResolverMeta;
 public interface Code2TextResolver {
 
 
-
     /**
-     *  解析器类型
+     * 解析器类型
      */
     Class<? extends Code2TextType> type();
 
@@ -30,6 +29,7 @@ public interface Code2TextResolver {
 
     /**
      * 是否需要缓存，默认开启缓存, 开启的话，则会将Resolver包装为CachedResolverProxy
+     *
      * @see CachedResolverProxy
      */
     default boolean needCache() {
@@ -63,7 +63,7 @@ public interface Code2TextResolver {
      * 解析器的一些元数据
      *
      */
-    default   ResolverMeta meta() {
+    default ResolverMeta meta() {
         return new ResolverMeta(getClass().getSimpleName(), getClass());
     }
 }

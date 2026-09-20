@@ -35,13 +35,17 @@ public class Slf4jInboundInvokeLogger implements InboundInvokeLogger {
             return;
         }
         if (InboundInvokeLogStatus.FAILED.equals(log.getStatus())) {
-            LOGGER.warn("[third-inbound] requestId={}, third={}, operation={}, status={}, elapsed={}ms, context={}, request={}, response={}, exception={}, stack={}",
+            LOGGER.warn(
+                    "[third-inbound] requestId={}, third={}, operation={}, status={}, elapsed={}ms, context={}, " +
+                            "request={}, response={}, exception={}, stack={}",
                     log.getRequestId(), log.getThirdCode(), log.getOperation(), log.getStatus(), log.getElapsedMillis(),
                     log.getContext(), abbreviate(log.getRequestParams()), abbreviate(log.getResponseParams()),
                     abbreviate(log.getExceptionMessage()), abbreviate(log.getExceptionStack()));
             return;
         }
-        LOGGER.info("[third-inbound] requestId={}, third={}, operation={}, status={}, elapsed={}ms, context={}, request={}, response={}",
+        LOGGER.info(
+                "[third-inbound] requestId={}, third={}, operation={}, status={}, elapsed={}ms, context={}, " +
+                        "request={}, response={}",
                 log.getRequestId(), log.getThirdCode(), log.getOperation(), log.getStatus(), log.getElapsedMillis(),
                 log.getContext(), abbreviate(log.getRequestParams()), abbreviate(log.getResponseParams()));
     }

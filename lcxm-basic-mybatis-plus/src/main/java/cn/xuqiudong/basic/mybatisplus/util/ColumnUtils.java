@@ -70,7 +70,7 @@ public class ColumnUtils {
      * "user"."group"
      * [user].[group]
      * </pre>
-
+     *
      *
      */
     public static String safeColumn(String column) {

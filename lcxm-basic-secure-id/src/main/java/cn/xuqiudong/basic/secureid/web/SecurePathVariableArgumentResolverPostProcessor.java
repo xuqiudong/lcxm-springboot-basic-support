@@ -37,8 +37,9 @@ public class SecurePathVariableArgumentResolverPostProcessor implements BeanPost
      */
     private final Supplier<Boolean> enabledSupplier;
 
-    public SecurePathVariableArgumentResolverPostProcessor(SecurePathVariableArgumentResolver securePathVariableArgumentResolver,
-                                                           Supplier<Boolean> enabledSupplier) {
+    public SecurePathVariableArgumentResolverPostProcessor(
+            SecurePathVariableArgumentResolver securePathVariableArgumentResolver,
+            Supplier<Boolean> enabledSupplier) {
         this.securePathVariableArgumentResolver = securePathVariableArgumentResolver;
         this.enabledSupplier = enabledSupplier;
     }

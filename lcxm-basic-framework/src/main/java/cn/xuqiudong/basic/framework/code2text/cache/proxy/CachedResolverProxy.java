@@ -15,7 +15,7 @@ import java.util.StringJoiner;
  * @author Vic.xu
  * @since 2026-01-14 14:09
  */
-public class CachedResolverProxy implements Code2TextResolver{
+public class CachedResolverProxy implements Code2TextResolver {
 
 
     private final Code2TextResolver delegate;

@@ -34,6 +34,6 @@ public class DemoThirdInboundConfiguration extends AbstractThirdInboundConfigura
      */
     @Override
     protected String[] inboundInterceptPathPatterns() {
-        return new String[] {"/demo/third/inbound/**"};
+        return new String[]{"/demo/third/inbound/**"};
     }
 }

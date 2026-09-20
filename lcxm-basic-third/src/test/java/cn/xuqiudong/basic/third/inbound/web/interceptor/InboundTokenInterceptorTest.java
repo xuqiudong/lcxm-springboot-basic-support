@@ -1,9 +1,5 @@
 package cn.xuqiudong.basic.third.inbound.web.interceptor;
 
-import java.lang.reflect.Proxy;
-import java.util.Collections;
-import java.util.Date;
-
 import cn.xuqiudong.basic.third.inbound.config.InboundAppConfig;
 import cn.xuqiudong.basic.third.inbound.context.InboundTokenContextHolder;
 import cn.xuqiudong.basic.third.inbound.model.TokenValue;
@@ -13,6 +9,10 @@ import cn.xuqiudong.basic.third.inbound.store.CaffeineTokenStore;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.After;
 import org.junit.Test;
+
+import java.lang.reflect.Proxy;
+import java.util.Collections;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;

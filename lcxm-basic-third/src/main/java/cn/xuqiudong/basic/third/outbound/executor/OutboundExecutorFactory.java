@@ -23,7 +23,7 @@ public class OutboundExecutorFactory {
     private final OutboundExchangeLogger customLogger;
 
     public OutboundExecutorFactory(ObjectMapper objectMapper, boolean printSlf4jLog, int slf4jTextMaxLength,
-            OutboundExchangeLogger customLogger) {
+                                   OutboundExchangeLogger customLogger) {
         this.objectMapper = objectMapper;
         this.printSlf4jLog = printSlf4jLog;
         this.slf4jTextMaxLength = slf4jTextMaxLength;

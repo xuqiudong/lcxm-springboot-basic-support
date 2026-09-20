@@ -161,7 +161,6 @@ public class WrapperBuilder<T> {
         }
 
 
-
         @Override
         public <T> void build(QueryWrapper<T> queryWrapper) {
             queryWrapper.and(w -> {
@@ -185,7 +184,6 @@ public class WrapperBuilder<T> {
         }
         return new Object[]{value};
     }
-
 
 
 }

@@ -24,7 +24,7 @@ public interface ProcessorEnabled extends Ordered {
      * 内部 Logger 类，模拟 SLF4J 的常用方法
      * EnvironmentPostProcessor runs before logging is initialized, so you cannot rely on logging in this phase
      */
-     class Logger {
+    class Logger {
         void info(String msg, Object... args) {
             System.out.println(format("[INFO] " + msg, args));
         }

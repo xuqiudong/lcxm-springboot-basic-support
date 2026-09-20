@@ -61,7 +61,8 @@ public class QueryConditionUtils {
     public static <T> WrapperBuilder<T> builder(MpQuery query) {
         Class<?> queryClass = query.getClass();
         String key = queryClass.getName();
-        List<QueryFieldModel> queryFields = QUERY_FIELD_MODEL_CACHE.computeIfAbsent(key, (k) -> getQueryFields(queryClass));
+        List<QueryFieldModel> queryFields =
+                QUERY_FIELD_MODEL_CACHE.computeIfAbsent(key, (k) -> getQueryFields(queryClass));
 
         WrapperBuilder<T> wrapperBuilder = WrapperBuilder.create();
         for (QueryFieldModel queryField : queryFields) {

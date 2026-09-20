@@ -27,31 +27,37 @@ public class Base64CaptchaModel {
     private String src;
 
 
-
     public Base64CaptchaModel() {
         super();
     }
+
     public Base64CaptchaModel(String token, String code, String src) {
         super();
         this.token = token;
         this.code = code;
         this.src = src;
     }
+
     public String getToken() {
         return token;
     }
+
     public String getCode() {
         return code;
     }
+
     public String getSrc() {
         return src;
     }
+
     public void setToken(String token) {
         this.token = token;
     }
+
     public void setCode(String code) {
         this.code = code;
     }
+
     public void setSrc(String src) {
         this.src = src;
     }

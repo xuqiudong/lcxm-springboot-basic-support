@@ -64,7 +64,8 @@ public class SecureIdAdvisor extends AbstractPointcutAdvisor {
      * 如果存在自定义切入点，则和注解切入点取并集。
      */
     public Pointcut initPointcut() {
-        AnnotationMatchingPointcut annotationMethodMatcher = AnnotationMatchingPointcut.forMethodAnnotation(EnableSecureId.class);
+        AnnotationMatchingPointcut annotationMethodMatcher =
+                AnnotationMatchingPointcut.forMethodAnnotation(EnableSecureId.class);
         if (!StringUtils.hasText(pointcutExpression)) {
             return annotationMethodMatcher;
         }

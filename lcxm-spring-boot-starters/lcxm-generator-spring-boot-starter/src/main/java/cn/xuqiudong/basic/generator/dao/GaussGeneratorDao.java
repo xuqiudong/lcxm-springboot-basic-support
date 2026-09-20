@@ -45,7 +45,8 @@ public class GaussGeneratorDao extends BaseGeneratorDao {
     @Override
     public List<TableMeta> queryList(TableLookup lookup) {
 
-        StringBuffer sql = new StringBuffer("SELECT a.relname AS tableName, c.description AS comments,d.created AS createTime ");
+        StringBuffer sql =
+                new StringBuffer("SELECT a.relname AS tableName, c.description AS comments,d.created AS createTime ");
         sql.append(from);
 
         List<Object> params = new ArrayList<>();
@@ -98,13 +99,15 @@ public class GaussGeneratorDao extends BaseGeneratorDao {
 
     @Override
     public List<ColumnMeta> queryColumns(String tableName) {
-        String sql = "SELECT  a.attname AS columnName, t.typname AS dataType, col_description(a.attrelid, a.attnum) AS \"comments\",  c.contype AS constraint_type " +
-                "FROM   pg_attribute a JOIN     pg_type t ON a.atttypid = t.oid " +
-                "LEFT JOIN  pg_constraint c ON a.attrelid = c.conrelid AND a.attnum = ANY (c.conkey) " +
-                "WHERE a.attrelid = " +
-                " (SELECT cls.oid FROM pg_class cls join  pg_namespace ns on cls.relnamespace = ns.oid  " +
-                "    where  ns.nspname = current_schema and  cls.relname = ?) " +
-                "AND a.attnum > 0";
+        String sql =
+                "SELECT  a.attname AS columnName, t.typname AS dataType, col_description(a.attrelid, a.attnum) AS " +
+                        "\"comments\",  c.contype AS constraint_type " +
+                        "FROM   pg_attribute a JOIN     pg_type t ON a.atttypid = t.oid " +
+                        "LEFT JOIN  pg_constraint c ON a.attrelid = c.conrelid AND a.attnum = ANY (c.conkey) " +
+                        "WHERE a.attrelid = " +
+                        " (SELECT cls.oid FROM pg_class cls join  pg_namespace ns on cls.relnamespace = ns.oid  " +
+                        "    where  ns.nspname = current_schema and  cls.relname = ?) " +
+                        "AND a.attnum > 0";
         return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(ColumnMeta.class), tableName);
     }
 

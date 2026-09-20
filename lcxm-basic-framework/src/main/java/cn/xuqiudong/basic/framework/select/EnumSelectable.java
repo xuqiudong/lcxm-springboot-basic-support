@@ -5,10 +5,11 @@ import cn.xuqiudong.basic.framework.select.annotation.RegisterSelectEnum;
 
 /**
  * 描述:
- *   标记枚举可转为下拉选项的接口
+ * 标记枚举可转为下拉选项的接口
+ *
+ * @author Vic.xu
  * @see RegisterSelectEnum
  * @see SelectOption
- * @author Vic.xu
  * @since 2025-11-13 17:03
  */
 public interface EnumSelectable {

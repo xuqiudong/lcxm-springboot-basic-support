@@ -10,10 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 描述:项目的一些基本信息统计
+ *
  * @author Vic.xu
  * @since 2022-12-15 10:16
  */
@@ -22,6 +28,7 @@ public class ProjectInfoStatistics {
 
     /**
      * controller 以及请求统计
+     *
      * @param applicationContext ApplicationContext
      */
     public static void controller(ApplicationContext applicationContext) {
@@ -80,13 +87,16 @@ public class ProjectInfoStatistics {
         ControllerRequest request = new ControllerRequest(clazz.getName());
         for (Method publicMethod : publicMethods) {
             if (publicMethod.isAnnotationPresent(RequestMapping.class)) {
-                request.requestMappingMap.add(parentUrl + String.join(",", publicMethod.getAnnotation(RequestMapping.class).value()));
+                request.requestMappingMap.add(
+                        parentUrl + String.join(",", publicMethod.getAnnotation(RequestMapping.class).value()));
             }
             if (publicMethod.isAnnotationPresent(GetMapping.class)) {
-                request.getRequestMappingMap.add(parentUrl + String.join(",", publicMethod.getAnnotation(GetMapping.class).value()));
+                request.getRequestMappingMap.add(
+                        parentUrl + String.join(",", publicMethod.getAnnotation(GetMapping.class).value()));
             }
             if (publicMethod.isAnnotationPresent(PostMapping.class)) {
-                request.getRequestMappingMap.add(parentUrl + String.join(",", publicMethod.getAnnotation(PostMapping.class).value()));
+                request.getRequestMappingMap.add(
+                        parentUrl + String.join(",", publicMethod.getAnnotation(PostMapping.class).value()));
             }
         }
         return request;
@@ -112,9 +122,12 @@ public class ProjectInfoStatistics {
         public String urlList() {
             StringBuilder stringBuilder = new StringBuilder("");
             stringBuilder.append(className).append("(").append(urlNumber()).append(") ");
-            stringBuilder.append("\n\tAll[" + requestMappingMap.size() + "]:").append("\n\t\t ").append(String.join("\n\t\t", requestMappingMap));
-            stringBuilder.append("\n\tGet[" + getRequestMappingMap.size() + "]:").append("\n\t\t").append(String.join("\n\t\t", getRequestMappingMap));
-            stringBuilder.append("\n\tPost[" + postRequestMappingMap.size() + "]:").append("\n\t\t").append(String.join("\n\t\t", postRequestMappingMap));
+            stringBuilder.append("\n\tAll[" + requestMappingMap.size() + "]:").append("\n\t\t ")
+                    .append(String.join("\n\t\t", requestMappingMap));
+            stringBuilder.append("\n\tGet[" + getRequestMappingMap.size() + "]:").append("\n\t\t")
+                    .append(String.join("\n\t\t", getRequestMappingMap));
+            stringBuilder.append("\n\tPost[" + postRequestMappingMap.size() + "]:").append("\n\t\t")
+                    .append(String.join("\n\t\t", postRequestMappingMap));
             return stringBuilder.toString();
         }
 

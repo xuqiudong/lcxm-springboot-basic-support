@@ -10,6 +10,7 @@ import java.util.Locale;
 
 /**
  * 描述:thymeleaf 输入到页面的时候进行xss转义  ,${{variable}}  双括号
+ *
  * @author Vic.xu
  * @since 2022-03-21 10:46
  */
@@ -25,6 +26,7 @@ public class XssStringFormatter implements Formatter<String> {
 
     /**
      * 输入到页面的时候进行xss转义
+     *
      * @param object
      * @param locale
      * @return

@@ -44,10 +44,11 @@ public class Code2TextEnrichHelper {
         }
         return result;
     }
+
     /**
      * 填充 page DTO字段
      */
-    public static <S, T>PageInfo<T> enrichPage(PageInfo<S> pageInfo, Class<T> dtoClass) {
+    public static <S, T> PageInfo<T> enrichPage(PageInfo<S> pageInfo, Class<T> dtoClass) {
         if (pageInfo == null) {
             return null;
         }

@@ -1,10 +1,10 @@
 package cn.xuqiudong.basic.third.outbound.builder;
 
+import cn.hutool.core.util.StrUtil;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import cn.hutool.core.util.StrUtil;
 
 /**
  * 出站普通参数构建器。

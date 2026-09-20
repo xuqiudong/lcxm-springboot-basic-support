@@ -36,7 +36,8 @@ public class CommonGeneratorFacade {
      * @see Generator#generate()
      */
     public static Generator build(CommonFacadeConfig config) {
-        Generator generator = Generator.create(config.getDatabaseType(), config.getUrl(), config.getUsername(), config.getPassword());
+        Generator generator =
+                Generator.create(config.getDatabaseType(), config.getUrl(), config.getUsername(), config.getPassword());
         // 全局配置
         generator.globalConfigBuilder(builder ->
                 builder.author(config.getAuthor())

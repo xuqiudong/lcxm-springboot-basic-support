@@ -18,7 +18,7 @@ import java.util.function.Function;
 
 /**
  * 描述:
- *  重定向之前对重定向地址进行白名单过滤， 注意把此Filter的顺序设置在前面
+ * 重定向之前对重定向地址进行白名单过滤， 注意把此Filter的顺序设置在前面
  * <p>
  * 1. 内部系统 应直接放行
  * 2. 外部地址 进行白名单过滤
@@ -63,7 +63,8 @@ public class SafelyRedirectFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         // 使用自定义的HttpServletResponseWrapper来拦截sendRedirect调用
         RedirectResponseWrapper responseWrapper = new RedirectResponseWrapper(response);
         try {
@@ -121,7 +122,7 @@ public class SafelyRedirectFilter extends OncePerRequestFilter {
     }
 
     /**
-     *  是否内部地址
+     * 是否内部地址
      */
     private boolean isInternalRedirect(String url) {
         // 判断是否是内部 URL（不带 http/https，或是相对路径）

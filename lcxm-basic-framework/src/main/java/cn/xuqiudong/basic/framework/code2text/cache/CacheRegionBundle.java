@@ -84,7 +84,8 @@ public class CacheRegionBundle {
             return;
         }
         if (reverse != null) {
-            Map<String, String> reverseData = data.entrySet().stream().collect(Collectors.toMap(entry -> entry.getValue(), entry -> entry.getKey(), (k1, k2) -> k1));
+            Map<String, String> reverseData = data.entrySet().stream()
+                    .collect(Collectors.toMap(entry -> entry.getValue(), entry -> entry.getKey(), (k1, k2) -> k1));
             reverse.invalidateAll();
             reverse.putAll(reverseData);
         }

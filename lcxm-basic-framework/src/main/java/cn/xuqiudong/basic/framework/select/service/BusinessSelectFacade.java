@@ -96,7 +96,8 @@ public class BusinessSelectFacade {
     public List<SelectOption> getSelectOptions(String type) {
         if (StringUtils.isBlank(type)) {
             LOGGER.warn("【业务下拉框】入参type为空，返回空列表");
-            return Collections.emptyList(); // 返回空列表，避免创建新ArrayList
+            // 返回空列表，避免创建新 ArrayList
+            return Collections.emptyList();
         }
         BusinessSelectProvider service = serviceMap.get(type.trim());
         if (service == null) {
@@ -111,7 +112,7 @@ public class BusinessSelectFacade {
     /**
      * 获取所有已注册的业务下拉框type
      */
-    public List<String> types(){
+    public List<String> types() {
         return Collections.unmodifiableList(serviceMap.keySet().stream().toList());
     }
 

@@ -1,8 +1,8 @@
 package cn.xuqiudong.basic.third.inbound.context;
 
-import java.util.Date;
-
 import cn.xuqiudong.basic.third.inbound.model.TokenValue;
+
+import java.util.Date;
 
 /**
  * 当前入站请求的 token 身份上下文。

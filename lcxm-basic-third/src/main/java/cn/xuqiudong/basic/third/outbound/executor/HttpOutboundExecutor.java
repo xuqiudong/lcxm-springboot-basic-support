@@ -60,12 +60,12 @@ public class HttpOutboundExecutor implements OutboundExecutor {
     /**
      * 创建 Hutool 出站执行器。
      *
-     * @param options 出站通用 HTTP 配置
+     * @param options      出站通用 HTTP 配置
      * @param objectMapper JSON 序列化配置；为空时使用默认配置
      * @param customLogger 项目自定义日志处理器；为空时只按默认 slf4j 策略打印
      */
     public HttpOutboundExecutor(ThirdClientOptions options, ObjectMapper objectMapper,
-            OutboundExchangeLogger customLogger) {
+                                OutboundExchangeLogger customLogger) {
         this(options, objectMapper, true, Slf4jOutboundExchangeLogger.DEFAULT_TEXT_MAX_LENGTH, customLogger);
     }
 
@@ -73,7 +73,7 @@ public class HttpOutboundExecutor implements OutboundExecutor {
      * 创建 Hutool 出站执行器，并明确控制 slf4j 打印和自定义日志处理。
      */
     public HttpOutboundExecutor(ThirdClientOptions options, ObjectMapper objectMapper, boolean printSlf4jLog,
-            int slf4jTextMaxLength, OutboundExchangeLogger customLogger) {
+                                int slf4jTextMaxLength, OutboundExchangeLogger customLogger) {
         this.options = options == null ? new ThirdClientOptions() : options;
         this.objectMapper = objectMapper == null ? defaultObjectMapper() : objectMapper;
         this.slf4jLogger = printSlf4jLog ? new Slf4jOutboundExchangeLogger(slf4jTextMaxLength) : null;
@@ -255,7 +255,8 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         if (request.getBody() == null) {
             return null;
         }
-        return OutboundRequestType.JSON == requestType ? resolveJsonBody(request.getBody()) : String.valueOf(request.getBody());
+        return OutboundRequestType.JSON == requestType ? resolveJsonBody(request.getBody()) : String.valueOf(
+                request.getBody());
     }
 
     private String resolveJsonBody(Object body) throws Exception {
@@ -282,7 +283,8 @@ public class HttpOutboundExecutor implements OutboundExecutor {
                     }
                     break;
                 case STREAM:
-                    httpRequest.form(part.getName(), new InputStreamResource(part.getInputStream(), part.getFileName()));
+                    httpRequest.form(part.getName(),
+                            new InputStreamResource(part.getInputStream(), part.getFileName()));
                     break;
                 default:
                     break;
@@ -341,7 +343,7 @@ public class HttpOutboundExecutor implements OutboundExecutor {
     }
 
     private void log(OutboundRequestInfo<?> request, Integer httpStatus, long elapsedMillis, String requestBody,
-            String responseBody, Exception exception) {
+                     String responseBody, Exception exception) {
         if (!options.isExchangeLogEnabled()) {
             return;
         }

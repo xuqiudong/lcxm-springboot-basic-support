@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Description:
- *   空解解析器： 返回code本身
+ * 空解解析器： 返回code本身
+ *
  * @author Vic.xu
  * @since 2026-06-22 8:59
  */

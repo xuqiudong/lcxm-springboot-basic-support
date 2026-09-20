@@ -1,11 +1,11 @@
 package cn.xuqiudong.basic.third.inbound.log.model;
 
-import java.util.Date;
-import java.util.Map;
-
 import cn.hutool.core.date.DateUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 第三方入站业务方法调用日志。

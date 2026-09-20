@@ -25,7 +25,7 @@ public class EnrichFieldModel {
     private PropDesc propDesc;
 
     /**
-     *  from 字段的描述
+     * from 字段的描述
      */
     private PropDesc fromPropDesc;
 

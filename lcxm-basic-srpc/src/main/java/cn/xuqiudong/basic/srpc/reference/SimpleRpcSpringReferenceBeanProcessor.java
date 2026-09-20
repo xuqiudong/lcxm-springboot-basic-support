@@ -30,7 +30,8 @@ import java.util.Map;
  * @author Vic.xu
  * @since 2024-06-25 10:13
  */
-public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostProcessor, BeanClassLoaderAware, ApplicationContextAware, DisposableBean {
+public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostProcessor, BeanClassLoaderAware,
+        ApplicationContextAware, DisposableBean {
 
     private static Logger logger = LoggerFactory.getLogger(SimpleRpcSpringReferenceBeanProcessor.class);
     /**
@@ -46,7 +47,7 @@ public class SimpleRpcSpringReferenceBeanProcessor implements BeanFactoryPostPro
     /**
      * 保存引用的bean
      */
-    private final Map<String, BeanDefinition> XQD_REFERENCE_BEAN_MAP = new HashMap<>();
+    private static final Map<String, BeanDefinition> XQD_REFERENCE_BEAN_MAP = new HashMap<>();
 
     /**
      * 此时bean尚未初始化

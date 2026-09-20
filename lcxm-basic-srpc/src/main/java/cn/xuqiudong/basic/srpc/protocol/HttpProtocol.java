@@ -2,7 +2,7 @@ package cn.xuqiudong.basic.srpc.protocol;
 
 
 import cn.xuqiudong.basic.core.exception.CommonException;
-import cn.xuqiudong.basic.srpc.SrpcrAutoConfiguration;
+import cn.xuqiudong.basic.srpc.AbstractSrpcAutoConfiguration;
 import cn.xuqiudong.basic.srpc.model.Invoker;
 import cn.xuqiudong.basic.srpc.model.SrpcInvocationMeta;
 import cn.xuqiudong.basic.srpc.model.SrpcRequestUrl;
@@ -40,7 +40,7 @@ public class HttpProtocol implements Protocol {
 
     @Override
     public Object send(Invoker invoker) throws Exception {
-        SrpcRequestUrl url = SrpcrAutoConfiguration.srpcRequestUrl;
+        SrpcRequestUrl url = AbstractSrpcAutoConfiguration.srpcRequestUrl;
         if (url == null) {
             throw new CommonException("Srpc provider address not configured");
         }
@@ -69,7 +69,8 @@ public class HttpProtocol implements Protocol {
             // 处理响应
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != HttpStatus.SC_OK) {
-                throw new CommonException("HTTP 请求失败，状态码: " + statusCode + ", " + response.getStatusLine().getReasonPhrase());
+                throw new CommonException(
+                        "HTTP 请求失败，状态码: " + statusCode + ", " + response.getStatusLine().getReasonPhrase());
             }
             // 如果需要获取响应内容
             HttpEntity responseEntity = response.getEntity();
@@ -114,7 +115,7 @@ public class HttpProtocol implements Protocol {
      * @throws IOException
      */
     public static byte[] toByteArray(InputStream input) throws IOException {
-        try (ByteArrayOutputStream output = new ByteArrayOutputStream();) {
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[4096];
             int n = 0;
             while (-1 != (n = input.read(buffer))) {

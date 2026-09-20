@@ -67,7 +67,8 @@ public class EntityContext extends BaseContext {
 
 
     @Override
-    public List<String> genericClassNameList(TableInfo tableInfo, ConfigBundle bundle, TemplateContext templateContext) {
+    public List<String> genericClassNameList(TableInfo tableInfo, ConfigBundle bundle,
+                                             TemplateContext templateContext) {
         initPrimaryType(tableInfo, bundle);
         return List.of(pkType.getSimpleName());
     }

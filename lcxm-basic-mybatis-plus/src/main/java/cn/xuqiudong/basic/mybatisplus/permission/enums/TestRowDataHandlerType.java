@@ -2,7 +2,8 @@ package cn.xuqiudong.basic.mybatisplus.permission.enums;
 
 /**
  * 描述:
- *   用于测试的权限类型
+ * 用于测试的权限类型
+ *
  * @author Vic.xu
  * @since 2025-09-23 14:54
  */
@@ -30,7 +31,7 @@ public enum TestRowDataHandlerType implements RowDataHandlerType {
     /**
      * [id] > 2
      */
-    ID_GT_2{
+    ID_GT_2 {
         @Override
         public String handlerSql(String column) {
             return column + " > 2";

@@ -10,8 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 描述: 服务端持有spring中的bean引用， 即标注为@XqdService的spring中的bean； XqdServiceHolder  是一个单例bean
+ *
  * @author Vic.xu
- * @since  2024-06-25
+ * @since 2024-06-25
  */
 public class XqdServiceHolder {
     private static XqdServiceHolder instance = new XqdServiceHolder();
@@ -36,6 +37,7 @@ public class XqdServiceHolder {
 
     /**
      * 根据XqdRequest  查找到服务端对应的service，然后执行对应的method方法
+     *
      * @param body XqdRequest
      * @return Object
      */

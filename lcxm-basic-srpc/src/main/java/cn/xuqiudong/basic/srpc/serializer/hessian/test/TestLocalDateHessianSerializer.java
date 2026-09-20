@@ -23,10 +23,10 @@ public class TestLocalDateHessianSerializer {
     private static Hessian2Serializer serializer = new Hessian2Serializer();
 
     public static void main(String[] args) {
-            testXqdResponse2(LocalDateTime.now());
-            testXqdResponse2(ZonedDateTime.now());
-            testXqdResponse2(YearMonth.now());
-            testXqdResponse2(LocalTime.now());
+        testXqdResponse2(LocalDateTime.now());
+        testXqdResponse2(ZonedDateTime.now());
+        testXqdResponse2(YearMonth.now());
+        testXqdResponse2(LocalTime.now());
 //        testSingle();
         System.out.println("");
 //        testObject();
@@ -105,7 +105,7 @@ public class TestLocalDateHessianSerializer {
         System.out.println(" origin XqdResponse:" + JsonUtil.toJson(xqdResponse));
         byte[] serialize = serializer.serialize(xqdResponse);
         XqdResponse<Temporal> deserialize = serializer.deserialize(serialize, XqdResponse.class);
-        System.out.println(" class:  " +deserialize.getResultData().getClass());
+        System.out.println(" class:  " + deserialize.getResultData().getClass());
         System.out.println(" deserialize XqdResponse:" + JsonUtil.toJson(deserialize));
         System.out.println();
     }

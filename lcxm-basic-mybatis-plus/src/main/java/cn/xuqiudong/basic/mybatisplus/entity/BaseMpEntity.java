@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BaseMpEntity<ID  extends Serializable> extends IdEntity<ID> {
+public class BaseMpEntity<ID extends Serializable> extends IdEntity<ID> {
 
     /**
      * 创建人账号

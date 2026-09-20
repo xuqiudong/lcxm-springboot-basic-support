@@ -9,17 +9,20 @@ import java.util.List;
 
 /**
  * 描述:
- *      对 BaseMapper 进行改造，支持主键泛型:
- *       子接口：UserMapper extends BaseGenericMapper<User, Integer>
+ * 对 BaseMapper 进行改造，支持主键泛型:
+ * 子接口：UserMapper extends BaseGenericMapper<User, Integer>
+ *
  * @author Vic.xu
  * @since 2025-03-12 10:28
  */
 public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Serializable> {
 
-    int commonUpdateEnable(@Param("tableName")String tableName, @Param("id")Integer id, @Param("enable")Boolean enable);
+    int commonUpdateEnable(@Param("tableName") String tableName, @Param("id") Integer id,
+                           @Param("enable") Boolean enable);
 
     /**
      * 查询列表
+     *
      * @param lookup query condition
      * @return list
      */
@@ -27,6 +30,7 @@ public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Ser
 
     /**
      * 根据主键id查询对象
+     *
      * @param id identity
      * @return object
      */
@@ -34,6 +38,7 @@ public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Ser
 
     /**
      * 插入对象
+     *
      * @param entity entity
      * @return number of record
      */
@@ -41,6 +46,7 @@ public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Ser
 
     /**
      * 批量新增，可在service层限制每次插入的数量
+     *
      * @param list list of entity
      * @return number of record
      */
@@ -48,6 +54,7 @@ public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Ser
 
     /**
      * 更新数据
+     *
      * @param entity entity
      * @return number of record
      */
@@ -55,6 +62,7 @@ public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Ser
 
     /**
      * 批量删除
+     *
      * @param ids id array
      * @return number of record
      */
@@ -62,6 +70,7 @@ public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Ser
 
     /**
      * 批量获取
+     *
      * @param ids id array
      * @return list
      */
@@ -69,8 +78,9 @@ public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Ser
 
     /**
      * 查询列字段是否没有重复:
-     * @param id: 如果不传 则判断表里的全部项,如果传了id,则排除当前id所对应的列
-     * @param value 需要判断是否重复的列
+     *
+     * @param id:    如果不传 则判断表里的全部项,如果传了id,则排除当前id所对应的列
+     * @param value  需要判断是否重复的列
      * @param column 列名称
      * @return if repeat
      */
@@ -80,8 +90,9 @@ public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Ser
 
     /**
      * 查询列指定字段的记录数
-     * @param id: 如果不传 则判断表里的全部项,如果传了id,则排除当前id所对应的列
-     * @param value 需要判断是否重复的列
+     *
+     * @param id:    如果不传 则判断表里的全部项,如果传了id,则排除当前id所对应的列
+     * @param value  需要判断是否重复的列
      * @param column 列名称
      * @return count
      */
@@ -91,7 +102,7 @@ public interface BaseGenericMapper<T extends BaseGenericEntity<K>, K extends Ser
     /**
      * 修改enable状态
      */
-    default int updateEnable(@Param("id")K id, @Param("enable")Boolean enable){
+    default int updateEnable(@Param("id") K id, @Param("enable") Boolean enable) {
         throw new UnsupportedOperationException("当前 Mapper.xml 未实现 updateEnable 方法");
     }
 }

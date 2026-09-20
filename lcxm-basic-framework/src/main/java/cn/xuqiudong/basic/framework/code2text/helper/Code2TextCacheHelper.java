@@ -11,11 +11,12 @@ import org.springframework.util.Assert;
 
 /**
  * 描述:
- *   清除缓存，通过发布spring事件触发
- *   1. spring监听事件： 删除本地和redis
- *   2. 发布redis监听事件， 其他节点监听 到后删除本地缓存
- * @see
+ * 清除缓存，通过发布spring事件触发
+ * 1. spring监听事件： 删除本地和redis
+ * 2. 发布redis监听事件， 其他节点监听 到后删除本地缓存
+ *
  * @author Vic.xu
+ * @see
  * @since 2026-01-15 19:05
  */
 public class Code2TextCacheHelper {
@@ -40,13 +41,15 @@ public class Code2TextCacheHelper {
     }
 
     /**
-     *  清除缓存
+     * 清除缓存
+     *
+     * @param code 为null 表示清除所有
      * @see Code2TextSpringEvictListener
      * @see Code2TextRedisEvictListener
-     * @param code 为null 表示清除所有
      */
     private static void publish(Class<? extends Code2TextType> typeClass, String code) {
-        Assert.isTrue(Code2TextType.class.isAssignableFrom(typeClass), typeClass.getName() + " is not a Code2TextType class");
+        Assert.isTrue(Code2TextType.class.isAssignableFrom(typeClass),
+                typeClass.getName() + " is not a Code2TextType class");
         if (publisher == null) {
             LOGGER.error("Code2Text not initialized");
             return;

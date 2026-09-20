@@ -18,7 +18,8 @@ import java.util.Map;
 
 /**
  * 描述: 所有mapper的通用操作汇总：可以根据model class 获取对应的mapper，然后调用BaseMapper的通用数据库操作
- *  在需要的地方手动注册此bean到spring，比如@Bean
+ * 在需要的地方手动注册此bean到spring，比如@Bean
+ *
  * @author Vic.xu
  * @since 2023-10-16 14:55
  */
@@ -49,10 +50,11 @@ public class CommonBaseMapperService implements InitializingBean {
     }
 
     /**
-     *  通过Mapper获取mapper上的model泛型
+     * 通过Mapper获取mapper上的model泛型
+     *
      * @param mapper spring里注入的mapper，实际上为 MapperProxy,需要通过它获取到真实的mapper接口类，然后获取mapper上的泛型
-     * @see MapperProxy
      * @return model  generic
+     * @see MapperProxy
      */
     private Class<?> getModelGenericFromMapper(BaseMapper<?> mapper) {
         Type[] genericInterfaces = mapper.getClass().getGenericInterfaces();
@@ -76,6 +78,7 @@ public class CommonBaseMapperService implements InitializingBean {
 
     /**
      * 查询列表
+     *
      * @param lookup query condition
      * @return list
      */
@@ -85,6 +88,7 @@ public class CommonBaseMapperService implements InitializingBean {
 
     /**
      * 根据主键id查询对象
+     *
      * @param id identity
      * @return object
      */
@@ -94,7 +98,8 @@ public class CommonBaseMapperService implements InitializingBean {
 
     /**
      * 插入对象
-     * @param entity  entity
+     *
+     * @param entity entity
      * @return number of record
      */
     public <T> int insert(T entity, Class<T> modelClass) {
@@ -103,6 +108,7 @@ public class CommonBaseMapperService implements InitializingBean {
 
     /**
      * 批量新增，可在service层限制每次插入的数量
+     *
      * @param list list of entity
      * @return number of record
      */
@@ -112,7 +118,8 @@ public class CommonBaseMapperService implements InitializingBean {
 
     /**
      * 更新数据
-     * @param entity  entity
+     *
+     * @param entity entity
      * @return number of record
      */
     public <T> int update(T entity, Class<T> modelClass) {
@@ -121,6 +128,7 @@ public class CommonBaseMapperService implements InitializingBean {
 
     /**
      * 批量删除
+     *
      * @param ids id array
      * @return number of record
      */
@@ -130,6 +138,7 @@ public class CommonBaseMapperService implements InitializingBean {
 
     /**
      * 批量获取
+     *
      * @param ids id array
      * @return list
      */
@@ -139,12 +148,14 @@ public class CommonBaseMapperService implements InitializingBean {
 
     /**
      * 查询列字段是否没有重复:
-     * @param id: 如果不传 则判断表里的全部项,如果传了id,则排除当前id所对应的列
-     * @param value 需要判断是否重复的列
+     *
+     * @param id:    如果不传 则判断表里的全部项,如果传了id,则排除当前id所对应的列
+     * @param value  需要判断是否重复的列
      * @param column 列名称
      * @return if repeat
      */
-    public <T> boolean checkNotRepeat(Integer id, @Param("value") String value, @Param("column") String column, Class<T> modelClass) {
+    public <T> boolean checkNotRepeat(Integer id, @Param("value") String value, @Param("column") String column,
+                                      Class<T> modelClass) {
         return getMapper(modelClass).checkNotRepeat(id, value, column);
     }
 

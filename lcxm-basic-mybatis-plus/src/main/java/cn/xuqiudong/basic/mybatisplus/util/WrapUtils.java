@@ -96,7 +96,7 @@ public class WrapUtils {
     /**
      * 创建in查询条件
      */
-    public static <T, R> QueryWrapper<T> columnIn(Column<T, R> column, Collection<R> values){
+    public static <T, R> QueryWrapper<T> columnIn(Column<T, R> column, Collection<R> values) {
         QueryWrapper<T> queryWrapper = Wrappers.query();
         queryWrapper.in(ColumnUtils.safeColumn(column), values);
         return queryWrapper;

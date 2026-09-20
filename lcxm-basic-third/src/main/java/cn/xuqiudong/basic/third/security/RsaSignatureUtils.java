@@ -1,7 +1,5 @@
 package cn.xuqiudong.basic.third.security;
 
-import java.nio.charset.StandardCharsets;
-
 import cn.hutool.core.codec.Base64;
 import cn.hutool.crypto.SignUtil;
 import cn.hutool.crypto.asymmetric.RSA;
@@ -9,6 +7,8 @@ import cn.hutool.crypto.asymmetric.Sign;
 import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * RSA signature helper based on Hutool.

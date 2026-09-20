@@ -76,7 +76,8 @@ public abstract class BaseContext {
      * @param tableInfo 表信息
      * @param bundle    配置信息
      */
-    public BaseContext(TableInfo tableInfo, ConfigBundle bundle, BaseTemplateConfig templateConfig, TemplateContext templateContext) {
+    public BaseContext(TableInfo tableInfo, ConfigBundle bundle, BaseTemplateConfig templateConfig,
+                       TemplateContext templateContext) {
         this.className = tableInfo.getClassName() + classNameSuffix();
         this.className4Field = StringUtils.uncapitalize(className);
         this.parentPackage = bundle.getGlobalConfig().getPackageName();
@@ -89,7 +90,8 @@ public abstract class BaseContext {
     /**
      * 处理类上的泛型
      */
-    public void handleGeneric(TableInfo tableInfo, ConfigBundle bundle, BaseTemplateConfig templateConfig, TemplateContext templateContext) {
+    public void handleGeneric(TableInfo tableInfo, ConfigBundle bundle, BaseTemplateConfig templateConfig,
+                              TemplateContext templateContext) {
         Class<?> supperClass = templateConfig.getSupperClass();
         if (supperClass != null) {
             this.hasSuperClass = true;
@@ -112,7 +114,8 @@ public abstract class BaseContext {
     /**
      * 获取泛型类 列表
      */
-    public abstract List<String> genericClassNameList(TableInfo tableInfo, ConfigBundle bundle, TemplateContext templateContext);
+    public abstract List<String> genericClassNameList(TableInfo tableInfo, ConfigBundle bundle,
+                                                      TemplateContext templateContext);
 
     /**
      * 获取全类名: 包名 + . + 类名

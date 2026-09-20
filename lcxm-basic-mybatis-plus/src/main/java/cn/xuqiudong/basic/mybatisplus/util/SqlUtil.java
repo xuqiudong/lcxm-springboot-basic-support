@@ -27,14 +27,14 @@ public class SqlUtil {
      * 把oracle对应的SQL语句包装为分页语句
      *
      * @param prefixSql 原来的完整的sql
-     * @param page 页码
-     * @param size  每页数据量
+     * @param page      页码
+     * @param size      每页数据量
      */
     public static String oracleLimit(String prefixSql, int page, int size) {
         int start = (page - 1) * size;
         int end = page * size;
         String pattern =
-            "select * from( select rownum as rowno, t.*  from ( %s ) t where rownum < %d) tt where tt.rowno > %d";
+                "select * from( select rownum as rowno, t.*  from ( %s ) t where rownum < %d) tt where tt.rowno > %d";
 
         return String.format(pattern, prefixSql, end, start);
     }
@@ -42,14 +42,15 @@ public class SqlUtil {
     /**
      *
      * 说明： 追加in的where条件
-     * @author Vic.xu
-     * @since 2020年3月3日 下午10:31:20
+     *
      * @param sql
      * @param column
      * @param conditions
      * @param needParenthesis
      * @return
      * @throws JSQLParserException e
+     * @author Vic.xu
+     * @since 2020年3月3日 下午10:31:20
      */
     public static String appendWhereIn(String sql, String column, List<String> conditions, boolean needParenthesis)
             throws JSQLParserException {
@@ -61,14 +62,15 @@ public class SqlUtil {
     /**
      *
      * 说明： 追加Equals的where条件
-     * @author Vic.xu
-     * @since 2020年3月3日 下午10:31:34
+     *
      * @param sql
      * @param column
      * @param value
      * @param needParenthesis
      * @return
      * @throws JSQLParserException
+     * @author Vic.xu
+     * @since 2020年3月3日 下午10:31:34
      */
     public static String appendWhereEquals(String sql, String column, Object value, boolean needParenthesis)
             throws JSQLParserException {
@@ -80,13 +82,14 @@ public class SqlUtil {
     /**
      *
      * 说明： 追加where 条件
-     * @author Vic.xu
-     * @since 2020年3月3日 下午10:08:11
+     *
      * @param sql             原SQL
      * @param append          需要追加的条件
      * @param needParenthesis 追加的条件是否需要括弧
      * @return
      * @throws JSQLParserException e
+     * @author Vic.xu
+     * @since 2020年3月3日 下午10:08:11
      */
     public static String appendWhere(String sql, String append, boolean needParenthesis) throws JSQLParserException {
         Select select = (Select) CCJSqlParserUtil.parse(sql);
@@ -106,11 +109,12 @@ public class SqlUtil {
 
     /**
      * 说明： 拼接in 条件： column in ('','')
-     * @author Vic.xu
-     * @since 2020年3月3日 下午10:11:43
+     *
      * @param column
      * @param conditions
      * @return
+     * @author Vic.xu
+     * @since 2020年3月3日 下午10:11:43
      */
     public static String findIn(String column, List<String> conditions) {
         return column + " in (" + CommonUtils.list2DatabaseIn(conditions) + ")";
@@ -118,11 +122,12 @@ public class SqlUtil {
 
     /**
      * 说明： 拼接等于条件： column ='value'
-     * @author Vic.xu
-     * @since 2020年3月3日 下午10:11:43
+     *
      * @param column
      * @param value
      * @return
+     * @author Vic.xu
+     * @since 2020年3月3日 下午10:11:43
      */
     public static String findEquals(String column, Object value) {
         if (value instanceof Number) {
@@ -130,8 +135,6 @@ public class SqlUtil {
         }
         return column + " = '" + value + "' ";
     }
-
-
 
 
     public static void main(String[] args) {

@@ -28,6 +28,7 @@ public enum QuartzStatusEnum implements EnumSelectable {
         return name();
     }
 
+    @Override
     public String getText() {
         return text;
     }

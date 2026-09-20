@@ -24,14 +24,12 @@ import java.util.Map;
  * 使用方式：
  * 在自定义注解上使用 @Conditional(OnMissingGenericBeanCondition.class) 并提供接口类型和泛型类型：
  *
- * @see ConditionalOnMissingGenericBean {
- *  * * Class<?> beanInterface();  // 要检查的接口类型
- *  * * Class<?> genericType();    // 接口泛型
- *  * * }
- * </p>
- *
  * @author Vic.xu
- *
+ * @see ConditionalOnMissingGenericBean {
+ * * * Class<?> beanInterface();  // 要检查的接口类型
+ * * * Class<?> genericType();    // 接口泛型
+ * * * }
+ * </p>
  * @since 2026-03-27 10:50
  */
 public class OnMissingGenericBeanCondition implements Condition {

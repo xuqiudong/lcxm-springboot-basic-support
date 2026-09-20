@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * 描述: 资源定位符：可以是请求地址
+ *
  * @author Vic.xu
  * @date 2022-02-15 11:25
  */
@@ -38,16 +39,14 @@ public class XqdUrl implements Serializable {
     }
 
 
-
     /**
      * 当前节点
+     *
      * @return
      */
-    public String getNode(){
+    public String getNode() {
         return address + ":" + port;
     }
-
-
 
 
     public String getInterfaceName() {
@@ -86,10 +85,21 @@ public class XqdUrl implements Serializable {
 
     /**
      * 通过HashCodeBuilder重写hashCode方法
+     *
      * @return
      */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(address).append(port).append(interfaceName).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof XqdUrl) {
+            XqdUrl other = (XqdUrl) obj;
+            return this.address.equals(other.address) && this.port.equals(other.port) &&
+                    this.interfaceName.equals(other.interfaceName);
+        }
+        return false;
     }
 }

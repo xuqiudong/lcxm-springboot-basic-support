@@ -103,7 +103,8 @@ public class AbstractSecureIdAdviceTest {
         assertTrue(hasFieldMetadata(first, "name", false));
     }
 
-    private static boolean hasFieldMetadata(List<SecureIdFieldMetadata> metadataList, String fieldName, boolean encryptField) {
+    private static boolean hasFieldMetadata(List<SecureIdFieldMetadata> metadataList, String fieldName,
+                                            boolean encryptField) {
         for (SecureIdFieldMetadata metadata : metadataList) {
             if (metadata.field().getName().equals(fieldName) && metadata.encryptField() == encryptField) {
                 return true;

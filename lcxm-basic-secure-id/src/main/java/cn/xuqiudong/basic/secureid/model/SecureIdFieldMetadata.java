@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
  * 响应对象字段处理元数据。
  * <p>
  * 构建一次后缓存，后续同 Class 对象直接使用，减少反射字段扫描和注解判断成本。
+ *
  * @author Vic.xu
  */
 public class SecureIdFieldMetadata {

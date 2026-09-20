@@ -58,7 +58,8 @@ public class EnumSelectRegistry {
      * 获取所有已注册的枚举标识
      */
     public static Map<String, String> getRegisteredEnums() {
-        return new HashMap<>(DESC_MAP); // 返回副本，避免外部修改
+        // 返回副本，避免外部修改
+        return new HashMap<>(DESC_MAP);
     }
 
     public static Map<String, List<SelectOption>> getMultipleOptions(List<String> enumKeys) {

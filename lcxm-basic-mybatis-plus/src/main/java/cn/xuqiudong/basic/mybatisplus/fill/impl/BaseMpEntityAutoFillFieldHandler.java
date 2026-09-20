@@ -68,7 +68,7 @@ public class BaseMpEntityAutoFillFieldHandler implements AutoFillFieldHandler {
 
     private void tips(String opt) {
         if (CurrentUserInfoContext.isAnonymous()) {
-            LOGGER.warn(TIPS,  opt);
+            LOGGER.warn(TIPS, opt);
         }
     }
 }

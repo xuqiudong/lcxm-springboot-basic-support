@@ -1,10 +1,10 @@
 package cn.xuqiudong.basic.third.outbound.util;
 
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 出站响应 JavaType 构建工具。

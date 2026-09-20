@@ -10,6 +10,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
 import javax.net.ssl.SSLException;
+
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.UnknownHostException;
@@ -25,10 +26,10 @@ import java.util.concurrent.TimeUnit;
  * @since 2024-12-04 9:52
  */
 public class HttpClientProvider {
-    private static final CloseableHttpClient httpClient;
-    private static final ScheduledExecutorService scheduler;
+    private static final CloseableHttpClient HTTP_CLIENT;
+    private static final ScheduledExecutorService SCHEDULER;
 
-    private static RequestConfig DEFAULT_REQUEST_CONFIG = RequestConfig.custom()
+    private static final RequestConfig DEFAULT_REQUEST_CONFIG = RequestConfig.custom()
             // 从连接池获取连接的超时时间
             .setConnectionRequestTimeout(20000)
             // 建立连接的超时时间
@@ -45,15 +46,15 @@ public class HttpClientProvider {
         // 设置每个路由的最大连接数
         connManager.setDefaultMaxPerRoute(50);
 
-        // 2. 设置 Keep-Alive 策略
-        ConnectionKeepAliveStrategy keepAliveStrategy = (response, context) -> 30 * 1000; // 30 秒
+        // 2. 设置 Keep-Alive 策略    30 秒
+        ConnectionKeepAliveStrategy keepAliveStrategy = (response, context) -> 30 * 1000;
 
         // 3. 设置请求超时配置
         RequestConfig requestConfig = RequestConfig.copy(DEFAULT_REQUEST_CONFIG).build();
 
         // 4. 定期清理空闲和过期连接
-        scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(() -> {
+        SCHEDULER = Executors.newScheduledThreadPool(1);
+        SCHEDULER.scheduleAtFixedRate(() -> {
             // 关闭空闲超过 30 秒的连接
             connManager.closeExpiredConnections();
             connManager.closeIdleConnections(30, TimeUnit.SECONDS);
@@ -61,8 +62,9 @@ public class HttpClientProvider {
 
         // 5. 设置重试策略
         HttpRequestRetryHandler retryHandler = (exception, executionCount, context) -> {
+            // 最大重试次数为 3
             if (executionCount >= 3) {
-                return false;                  // 最大重试次数为 3
+                return false;
             }
             if (exception instanceof InterruptedIOException ||
                     exception instanceof UnknownHostException ||
@@ -75,7 +77,7 @@ public class HttpClientProvider {
         };
 
         // 整合所有配置
-        httpClient = HttpClients.custom()
+        HTTP_CLIENT = HttpClients.custom()
                 .setConnectionManager(connManager)
                 .setDefaultRequestConfig(requestConfig)
                 .setKeepAliveStrategy(keepAliveStrategy)
@@ -100,14 +102,14 @@ public class HttpClientProvider {
 
     // 获取 HttpClient 实例
     public static CloseableHttpClient getHttpClient() {
-        return httpClient;
+        return HTTP_CLIENT;
     }
 
     // 关闭资源
     public static void shutdown() {
-        scheduler.shutdown();
+        SCHEDULER.shutdown();
         try {
-            httpClient.close();
+            HTTP_CLIENT.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

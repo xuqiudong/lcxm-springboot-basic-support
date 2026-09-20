@@ -57,8 +57,9 @@ public class ControllerContext extends BaseContext {
     /**
      * 构建请求路径
      */
-    private void buildRequestMapping(TableInfo tableInfo, ConfigBundle bundle){
-        Map<String, String> requestMappingMap = bundle.getStrategyConfig().getControllerTemplateConfig().getRequestMappingMap();
+    private void buildRequestMapping(TableInfo tableInfo, ConfigBundle bundle) {
+        Map<String, String> requestMappingMap =
+                bundle.getStrategyConfig().getControllerTemplateConfig().getRequestMappingMap();
 
         String customizedRequestMapping = requestMappingMap.get(tableInfo.getTableName());
         if (StringUtils.isNotBlank(customizedRequestMapping)) {
@@ -74,7 +75,8 @@ public class ControllerContext extends BaseContext {
      * 获取泛型: 默认支持<Service, Entity>
      */
     @Override
-    public List<String> genericClassNameList(TableInfo tableInfo, ConfigBundle bundle, TemplateContext templateContext) {
+    public List<String> genericClassNameList(TableInfo tableInfo, ConfigBundle bundle,
+                                             TemplateContext templateContext) {
         return List.of(templateContext.getService().getClassName());
     }
 

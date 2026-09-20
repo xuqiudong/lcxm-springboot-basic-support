@@ -14,8 +14,8 @@ public interface TokenStore {
     /**
      * 保存 token。
      *
-     * @param token token 字符串
-     * @param value token 对应的业务信息
+     * @param token      token 字符串
+     * @param value      token 对应的业务信息
      * @param ttlSeconds token 有效期，单位秒
      */
     void put(String token, TokenValue value, long ttlSeconds);

@@ -10,7 +10,8 @@ import java.util.function.Supplier;
 
 /**
  * 描述:
- *  基于 Caffeine 实现 Region
+ * 基于 Caffeine 实现 Region
+ *
  * @author Vic.xu
  * @since 2026-01-14 16:49
  */

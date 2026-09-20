@@ -26,10 +26,10 @@ import java.util.function.Function;
  */
 public class JavaTimeSerializerFactory extends AbstractSerializerFactory {
 
-    private static final JavaTimeSerializerFactory instance = new JavaTimeSerializerFactory();
+    private static final JavaTimeSerializerFactory INSTANCE = new JavaTimeSerializerFactory();
 
     public static JavaTimeSerializerFactory getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**

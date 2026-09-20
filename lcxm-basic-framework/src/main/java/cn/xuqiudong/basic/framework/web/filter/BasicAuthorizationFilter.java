@@ -21,7 +21,8 @@ import java.util.function.Function;
 /**
  * 描述:
  * 基于 HTTP Basic 认证 过滤器, 并把认证结果 BasicToken 放进当前请求上下文 BasicTokenHolder
- *若项目已引入 Spring Security，建议基于 BasicAuthenticationFilter 扩展；若未引入，则可以使用此过滤器
+ * 若项目已引入 Spring Security，建议基于 BasicAuthenticationFilter 扩展；若未引入，则可以使用此过滤器
+ *
  * @author Vic.xu
  * @since 2024-09-02 17:38
  */
@@ -42,7 +43,8 @@ public class BasicAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         String authorization = extractAuthorization(request);
         BasicToken token = null;

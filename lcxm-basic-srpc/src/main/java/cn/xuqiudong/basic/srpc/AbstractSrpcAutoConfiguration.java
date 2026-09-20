@@ -10,13 +10,14 @@ import org.springframework.context.annotation.Bean;
 
 /**
  * 描述:
- *    srpc 的入口类，
- *    在需要使用的项目继承此类，标注为@Configuration,并重写相关方法
+ * srpc 的入口类，
+ * 在需要使用的项目继承此类，标注为@Configuration,并重写相关方法
+ *
  * @author Vic.xu
  * @since 2024-06-25 15:00
  */
 
-public abstract class SrpcrAutoConfiguration {
+public abstract class AbstractSrpcAutoConfiguration {
 
 
     public static SrpcRequestUrl srpcRequestUrl;
@@ -43,7 +44,7 @@ public abstract class SrpcrAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public SimpleRpcController simpleRpcController(){
+    public SimpleRpcController simpleRpcController() {
         return new SimpleRpcController();
     }
 

@@ -50,11 +50,13 @@ public class BasicToken {
      * @return matches
      */
     public static boolean isBasicToken(String authorization) {
-        return StringUtils.isNotBlank(authorization) && authorization.startsWith(BASIC) && REGEX_BASIC.matcher(authorization).matches();
+        return StringUtils.isNotBlank(authorization) && authorization.startsWith(BASIC) &&
+                REGEX_BASIC.matcher(authorization).matches();
     }
 
     /**
      * 解析 BasicToken
+     *
      * @param authorization authorization
      * @return BasicToken
      */
@@ -63,7 +65,7 @@ public class BasicToken {
             return null;
         }
         String encodedCredentials = authorization.substring(BASIC.length());
-        String decodedCredentials = new String( Base64.decodeBase64(encodedCredentials), StandardCharsets.UTF_8);
+        String decodedCredentials = new String(Base64.decodeBase64(encodedCredentials), StandardCharsets.UTF_8);
         StringTokenizer tokenizer = new StringTokenizer(decodedCredentials, COLON);
         String username = tokenizer.nextToken();
         String password = tokenizer.nextToken();

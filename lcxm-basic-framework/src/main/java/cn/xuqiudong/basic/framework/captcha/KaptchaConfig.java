@@ -20,7 +20,7 @@ public class KaptchaConfig {
     /**
      * 验证码长度
      */
-    private int codeLength  = 4;
+    private int codeLength = 4;
 
     /**
      * 使用哪些字符生成验证码 kaptcha.textproducer.char.string
@@ -51,15 +51,22 @@ public class KaptchaConfig {
     public DefaultKaptcha getKaptchaBean() {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
         Properties properties = new Properties();
-        properties.setProperty("kaptcha.border", "no");// 图片边框
-        properties.setProperty("kaptcha.border.color", "105,179,90");// 边框颜色
-        properties.setProperty("kaptcha.textproducer.font.color", "black");// 字体颜色
-        properties.setProperty("kaptcha.image.width", "120");// 宽
-        properties.setProperty("kaptcha.image.height", "38");// 高
+        // 图片边框
+        properties.setProperty("kaptcha.border", "no");
+        // 边框颜色
+        properties.setProperty("kaptcha.border.color", "105,179,90");
+        // 字体颜色
+        properties.setProperty("kaptcha.textproducer.font.color", "black");
+        // 图片宽度
+        properties.setProperty("kaptcha.image.width", "120");
+        // 图片高度
+        properties.setProperty("kaptcha.image.height", "38");
         properties.setProperty("kaptcha.session.key", "code");
-        properties.setProperty("kaptcha.textproducer.char.length", String.valueOf(codeLength));// 验证码长度
+        // 验证码长度
+        properties.setProperty("kaptcha.textproducer.char.length", String.valueOf(codeLength));
         properties.setProperty("kaptcha.textproducer.char.string", charString);
-        properties.setProperty("kaptcha.textproducer.font.size", "25");//字体大小
+        // 字体大小
+        properties.setProperty("kaptcha.textproducer.font.size", "25");
         properties.setProperty("kaptcha.textproducer.char.space", "12");
         properties.setProperty("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");
         //干扰实现类
@@ -73,8 +80,8 @@ public class KaptchaConfig {
     }
 
     @Bean
-    public KaptchaGenerate kaptchaGenerate(DefaultKaptcha defaultKaptcha){
-        return  new KaptchaGenerate(defaultKaptcha);
+    public KaptchaGenerate kaptchaGenerate(DefaultKaptcha defaultKaptcha) {
+        return new KaptchaGenerate(defaultKaptcha);
     }
 
     /*

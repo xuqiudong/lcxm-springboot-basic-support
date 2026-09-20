@@ -78,7 +78,7 @@ public class LicenseIssuer {
         return this;
     }
 
-    public void validate(){
+    public void validate() {
         // 原始待签名字符串
         LcPayload payload = JSONUtil.toBean(Base62.decodeStr(licenseString), LcPayload.class);
         String origin = SignaturePayloadBuilder.buildIssuerPayload(payload);

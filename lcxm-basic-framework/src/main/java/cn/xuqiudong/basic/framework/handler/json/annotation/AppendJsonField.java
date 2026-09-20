@@ -10,6 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * 追加JSON字段的的注解 基于JACKSON
+ *
  * @author VIC
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -23,10 +24,14 @@ public @interface AppendJsonField {
     //转JSON时候的key:value; 形如{"1:描述1","2:描述2"}
     String[] keyValueDesc() default {};
 
-    /**类型*/
+    /**
+     * 类型
+     */
     String appendType() default "direct";
 
-    /**其他信息*/
+    /**
+     * 其他信息
+     */
     String otherInfo() default "";
 
 
@@ -35,7 +40,6 @@ public @interface AppendJsonField {
          * 直接的，根据keyValueDesc直接进行转换
          */
         direct,
-        ;
 
 
     }

@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Description:
  * 对于id的加解密操作, 具体应用可按需设置盐值    #setSaltSupplier
+ *
  * @author Vic.xu
  * @since 2026-08-20 15:00
  */
@@ -27,9 +28,11 @@ public class IdUtil {
     //匹配加密id的正则表达式
     private static final String ENCRYPTED_REGEX = ID_PREFIX + "(.*?)" + ID_SUFFIX;
 
-    private static final Pattern ENCRYPTED_PATTERN = Pattern.compile(ENCRYPTED_REGEX, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+    private static final Pattern ENCRYPTED_PATTERN =
+            Pattern.compile(ENCRYPTED_REGEX, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
-    private static final Pattern EXACT_ENCRYPTED_PATTERN = Pattern.compile("^" + ENCRYPTED_REGEX + "$", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+    private static final Pattern EXACT_ENCRYPTED_PATTERN =
+            Pattern.compile("^" + ENCRYPTED_REGEX + "$", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 
     //默认加密盐值
@@ -39,13 +42,13 @@ public class IdUtil {
     /**
      * Salt Supplier : 项目自行处理
      */
-    private static Supplier<String> SALT_SUPPLIER = () -> DEFAULT_SALT;
+    private static Supplier<String> saltSupplier = () -> DEFAULT_SALT;
 
     /**
      * 设置加密盐值
      */
     public static void setSaltSupplier(Supplier<String> saltSupplier) {
-        SALT_SUPPLIER = saltSupplier;
+        IdUtil.saltSupplier = saltSupplier;
     }
 
     /**
@@ -103,13 +106,12 @@ public class IdUtil {
     private static String getSalt() {
         String salt;
         try {
-            salt = SALT_SUPPLIER.get();
+            salt = saltSupplier.get();
         } catch (Exception e) {
             salt = DEFAULT_SALT;
         }
         return salt;
     }
-
 
 
     /**

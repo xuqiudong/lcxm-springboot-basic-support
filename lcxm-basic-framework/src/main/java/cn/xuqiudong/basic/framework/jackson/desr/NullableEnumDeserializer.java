@@ -16,7 +16,8 @@ import java.io.IOException;
 
 /**
  * 描述:
- *    反序列化枚举的时候支持空字符串
+ * 反序列化枚举的时候支持空字符串
+ *
  * @author Vic.xu
  * @since 2026-01-08 15:48
  */
@@ -50,7 +51,8 @@ public class NullableEnumDeserializer extends StdDeserializer<Enum<?>> implement
     }
 
     @Override
-    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
+    public JsonDeserializer<?> createContextual(DeserializationContext ctxt,
+                                                BeanProperty property) throws JsonMappingException {
         JavaType type = property.getType();
         @SuppressWarnings("unchecked")
         Class<Enum<?>> enumClass = (Class<Enum<?>>) type.getRawClass();

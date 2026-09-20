@@ -1,8 +1,8 @@
 package cn.xuqiudong.basic.framework.aspect;
 
-import cn.xuqiudong.basic.framework.aspect.annotation.RepeatCommitVersion;
 import cn.xuqiudong.basic.core.enums.CommonMsgEnum;
 import cn.xuqiudong.basic.core.exception.CommonException;
+import cn.xuqiudong.basic.framework.aspect.annotation.RepeatCommitVersion;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
@@ -17,7 +17,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 /**
  * 描述:form重复提交版本检测，    依赖于数据库字段 ;
  * 用于：{@link org.springframework.web.bind.annotation.RequestMapping } &&
- *     {@link  RepeatCommitVersion }
+ * {@link  RepeatCommitVersion }
+ *
  * @author Vic.xu
  * @since 2022-03-16 10:27
  */
@@ -77,8 +78,9 @@ public class RepeatCommitVersionAspect {
 
     /**
      * 查询数据库原来的version值
+     *
      * @param version 注解
-     * @param id id值
+     * @param id      id值
      * @return old version value
      */
     private int findOldVersion(RepeatCommitVersion version, Object id) {

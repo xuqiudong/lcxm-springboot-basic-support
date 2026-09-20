@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
  * @author Vic.xu
  * @since 2024-12-10 16:35
  */
-public class TestHessianMethodImpl implements TestHessianMethod{
+public class TestHessianMethodImpl implements TestHessianMethod {
 
 
     @Override
     public int add(int a, int b) {
-        return a+b;
+        return a + b;
     }
 
     @Override

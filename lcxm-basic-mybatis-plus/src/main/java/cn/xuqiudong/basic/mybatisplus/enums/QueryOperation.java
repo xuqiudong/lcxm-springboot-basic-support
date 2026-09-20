@@ -44,12 +44,11 @@ public enum QueryOperation {
     GE(false, AbstractWrapper::ge),
     /**
      * 暂时先支持单占位符的sql片段：
+     *
      * @see QueryCondition
      * 多占位符的场景较多， 是否有实现的必要?
      */
     APPLY(false, AbstractWrapper::apply);
-
-
 
 
     /**

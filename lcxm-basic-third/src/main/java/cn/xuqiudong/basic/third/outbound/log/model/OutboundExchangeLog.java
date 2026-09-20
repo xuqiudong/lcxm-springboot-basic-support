@@ -1,10 +1,10 @@
 package cn.xuqiudong.basic.third.outbound.log.model;
 
-import java.util.Date;
-
 import cn.hutool.core.date.DateUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * 第三方出站请求交换日志模型。

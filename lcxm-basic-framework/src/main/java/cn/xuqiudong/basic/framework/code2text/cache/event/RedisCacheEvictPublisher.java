@@ -4,9 +4,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * 描述:
- *    发布 Redis:  本机删缓存 → Spring Event → Redis 广播
- * @see Code2TextRedisEvictListener
+ * 发布 Redis:  本机删缓存 → Spring Event → Redis 广播
+ *
  * @author Vic.xu
+ * @see Code2TextRedisEvictListener
  * @since 2026-01-15 16:43
  */
 public class RedisCacheEvictPublisher {

@@ -10,9 +10,10 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 /**
  * 描述:   对于提供者service注册到spring之后的其他处理：如持有service 或添加到注册中心等
  * <p>
- *     BeanPostProcessor，然后对所有的bean进行一个初始化之前/之后的代理
+ * BeanPostProcessor，然后对所有的bean进行一个初始化之前/之后的代理
  *
  * </p>
+ *
  * @author Vic.xu
  * @date 2022-02-24 17:05
  */
@@ -23,7 +24,8 @@ public class XqdSpringProviderBeanProcessor implements BeanPostProcessor {
 
     /**
      * 在bean初始化完成之后的后置处理器， 若被标志为 {@link SrpcService}  则向注册中心开始注册
-     * @param bean bean
+     *
+     * @param bean     bean
      * @param beanName beanName
      * @return bean
      * @throws BeansException
@@ -37,7 +39,7 @@ public class XqdSpringProviderBeanProcessor implements BeanPostProcessor {
         }
         //暂未处理多接口的问题 FIXME
         Class[] interfaces = beanClass.getInterfaces();
-        if(interfaces.length == 0){
+        if (interfaces.length == 0) {
             logger.error("被标注为@SrpcService的bean: {}，未实现相关接口, 故不注册到XqdServiceHolder", beanName);
             return bean;
         }

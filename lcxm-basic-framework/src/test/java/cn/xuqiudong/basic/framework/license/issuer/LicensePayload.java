@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  * @since 2026-07-27 16:28
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class LicensePayload extends LcPayload {
 
     /**

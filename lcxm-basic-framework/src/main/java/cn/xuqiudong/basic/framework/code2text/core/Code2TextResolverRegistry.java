@@ -42,7 +42,8 @@ public class Code2TextResolverRegistry implements InitializingBean {
      * 占位符 解析器注册表
      * Code2TextType class -> proxy resolver
      */
-    private static final Map<Class<? extends Code2TextType>, Code2TextResolver> PLACEHOLDER_REGISTRY = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends Code2TextType>, Code2TextResolver> PLACEHOLDER_REGISTRY =
+            new ConcurrentHashMap<>();
 
     /**
      * 空解析器

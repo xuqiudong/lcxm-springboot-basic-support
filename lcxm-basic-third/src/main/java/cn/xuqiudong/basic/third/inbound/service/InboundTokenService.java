@@ -1,11 +1,5 @@
 package cn.xuqiudong.basic.third.inbound.service;
 
-import java.time.Duration;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
@@ -22,6 +16,12 @@ import cn.xuqiudong.basic.third.security.SignaturePayloadBuilder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.time.Duration;
+import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 第三方入站 token 服务。
@@ -54,21 +54,21 @@ public class InboundTokenService {
      */
     @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required service collaborators.")
     public InboundTokenService(Collection<InboundAppConfigRegistry> registries, TokenStore tokenStore,
-            NonceStore nonceStore) {
+                               NonceStore nonceStore) {
         this(registries, tokenStore, nonceStore, DEFAULT_CONFIG_CACHE_TTL);
     }
 
     /**
      * 创建入站 token 服务。
      *
-     * @param registries 第三方入站配置注册点，一个第三方通常一个 registry
-     * @param tokenStore token 存储实现
-     * @param nonceStore nonce 防重存储
+     * @param registries     第三方入站配置注册点，一个第三方通常一个 registry
+     * @param tokenStore     token 存储实现
+     * @param nonceStore     nonce 防重存储
      * @param configCacheTtl app 配置短缓存时间；小于等于 0 表示不缓存
      */
     @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for required service collaborators.")
     public InboundTokenService(Collection<InboundAppConfigRegistry> registries, TokenStore tokenStore,
-            NonceStore nonceStore, Duration configCacheTtl) {
+                               NonceStore nonceStore, Duration configCacheTtl) {
         if (CollUtil.isEmpty(registries)) {
             throw new IllegalArgumentException("registries can not be empty");
         }
@@ -109,7 +109,8 @@ public class InboundTokenService {
         }
         String token = IdUtil.simpleUUID();
         Duration ttl = config.getTokenTtl();
-        TokenValue value = new TokenValue(config.getAppId(), config.getThirdCode(), request.getUsername(), expireAt(ttl));
+        TokenValue value =
+                new TokenValue(config.getAppId(), config.getThirdCode(), request.getUsername(), expireAt(ttl));
         tokenStore.put(token, value, toSeconds(ttl));
         return token;
     }

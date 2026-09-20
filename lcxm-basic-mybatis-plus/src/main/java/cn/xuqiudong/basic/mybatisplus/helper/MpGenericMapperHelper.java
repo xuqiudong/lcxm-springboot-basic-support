@@ -48,7 +48,7 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MpGenericMapperHelper.class);
 
 
-    private static final int DEFAULT__BATCH_SIZE = 500;
+    private static final int DEFAULT_BATCH_SIZE = 500;
     /**
      * 缓存 每个MpGenericMapper  对应一个 MpGenericMapperHelper
      */
@@ -83,7 +83,8 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
         this.sqlSessionFactory = MybatisUtils.getSqlSessionFactory(mybatisMapperProxy);
     }
 
-    public static <ID extends Serializable, T> MpGenericMapperHelper<ID, T> getHelper(MpGenericMapper<ID, T> mpGenericMapper) {
+    public static <ID extends Serializable, T> MpGenericMapperHelper<ID, T> getHelper(
+            MpGenericMapper<ID, T> mpGenericMapper) {
         @SuppressWarnings("unchecked")
         MpGenericMapperHelper<ID, T> helper = HELPER_MAP.get(mpGenericMapper);
         if (helper == null) {
@@ -129,7 +130,7 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
             return 0;
         }
         String sql = getSqlStatement(SqlMethod.INSERT_ONE);
-        SqlHelper.executeBatch(sqlSessionFactory, log, entityList, DEFAULT__BATCH_SIZE,
+        SqlHelper.executeBatch(sqlSessionFactory, log, entityList, DEFAULT_BATCH_SIZE,
                 (sqlSession, entity) -> {
                     // 此处返回 -2147482646
                     sqlSession.insert(sql, entity);
@@ -146,7 +147,7 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
             return 0;
         }
         String sql = getSqlStatement(SqlMethod.UPDATE_BY_ID);
-        SqlHelper.executeBatch(sqlSessionFactory, log, entityList, DEFAULT__BATCH_SIZE,
+        SqlHelper.executeBatch(sqlSessionFactory, log, entityList, DEFAULT_BATCH_SIZE,
                 (sqlSession, entity) -> updateSql(sqlSession, sql, entity));
         return entityList.size();
     }
@@ -165,8 +166,8 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
             Object id = findId(entity);
             return StringUtils.checkValNull(id);
         };
-        SqlHelper.saveOrUpdateBatch(sqlSessionFactory, mapperClass, log, entityList, DEFAULT__BATCH_SIZE
-                , predicate,
+        SqlHelper.saveOrUpdateBatch(sqlSessionFactory, mapperClass, log, entityList,
+                DEFAULT_BATCH_SIZE, predicate,
                 (sqlSession, entity) -> updateSql(sqlSession, sql, entity)
         );
 
@@ -221,7 +222,7 @@ public class MpGenericMapperHelper<ID extends Serializable, T> {
     /**
      * 根据查询条件查询第一条记录
      */
-    public T selectFirst(Page< T> page, Wrapper<T> queryWrapper) {
+    public T selectFirst(Page<T> page, Wrapper<T> queryWrapper) {
         List<T> ts = mapper.selectList(page, queryWrapper);
         if (CollectionUtils.isEmpty(ts)) {
             return null;

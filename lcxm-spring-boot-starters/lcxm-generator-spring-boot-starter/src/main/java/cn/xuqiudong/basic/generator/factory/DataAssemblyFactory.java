@@ -104,7 +104,8 @@ public class DataAssemblyFactory {
         TableInfo tableInfo = new TableInfo();
         tableInfo.setTableMeta(tableMeta);
         // 表转化为java的name: 比如 sys_user -> User
-        String className = NameConvertUtils.tableToJava(tableInfo.getTableName(), bundle.getStrategyConfig().getTablePrefix());
+        String className =
+                NameConvertUtils.tableToJava(tableInfo.getTableName(), bundle.getStrategyConfig().getTablePrefix());
         tableInfo.setClassName(className);
         return tableInfo;
     }

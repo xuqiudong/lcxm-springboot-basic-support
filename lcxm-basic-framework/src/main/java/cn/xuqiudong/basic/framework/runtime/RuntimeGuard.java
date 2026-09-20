@@ -38,8 +38,7 @@ public class RuntimeGuard {
             if (unlucky()) {
                 try {
                     response.sendError(500, TextBundle.getTip(2));
-                } catch (Exception e) {
-
+                } catch (Exception ignore) {
                 }
             }
         }

@@ -40,7 +40,7 @@ public enum TemplateType {
      * @see cn.xuqiudong.basic.generator.model.context.TemplateContext
      *
      */
-    CUSTOMIZE;
+    CUSTOMIZE
 
 
 }

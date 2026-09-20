@@ -7,9 +7,10 @@ import org.springframework.context.ApplicationListener;
 
 /**
  * 描述:
- *  本地失效监听器: 删除本地和redis,  发布redis监听事件， 其他节点监听 到后删除本地缓存
- * @see Code2TextRedisEvictListener
+ * 本地失效监听器: 删除本地和redis,  发布redis监听事件， 其他节点监听 到后删除本地缓存
+ *
  * @author Vic.xu
+ * @see Code2TextRedisEvictListener
  * @since 2026-01-15 14:21
  */
 public class Code2TextSpringEvictListener implements ApplicationListener<Code2TextCacheEvictEvent> {
@@ -21,18 +22,21 @@ public class Code2TextSpringEvictListener implements ApplicationListener<Code2Te
 
     private final RedisCacheEvictPublisher redisCacheEvictPublisher;
 
-    public Code2TextSpringEvictListener(Code2TextCacheManager cacheManager, RedisCacheEvictPublisher redisCacheEvictPublisher) {
+    public Code2TextSpringEvictListener(Code2TextCacheManager cacheManager,
+                                        RedisCacheEvictPublisher redisCacheEvictPublisher) {
         this.cacheManager = cacheManager;
         this.redisCacheEvictPublisher = redisCacheEvictPublisher;
     }
 
     /**
      * 清除缓存, 并发布redis事件
+     *
      * @see Code2TextRedisEvictListener
      */
     @Override
     public void onApplicationEvent(Code2TextCacheEvictEvent event) {
-        LOGGER.debug("监听到spring的Code2TextCacheEvictEvent事件， 将要清除{}下的{}缓存", event.getRegion(), event.isAll() ? "所有" : event.getKey());
+        LOGGER.debug("监听到spring的Code2TextCacheEvictEvent事件， 将要清除{}下的{}缓存", event.getRegion(),
+                event.isAll() ? "所有" : event.getKey());
 
         if (event.isAll()) {
             cacheManager.invalidateAll(event.getRegion());

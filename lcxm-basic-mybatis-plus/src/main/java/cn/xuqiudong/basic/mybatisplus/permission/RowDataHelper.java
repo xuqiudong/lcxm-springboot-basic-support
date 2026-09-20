@@ -62,11 +62,12 @@ public class RowDataHelper {
 
     /**
      * 业务代码设置过滤条件
-     *   最终形成的WHERE条件为：(前置条件 [and | or] 权限条件)
-     * @param type          数据行权限过滤类型
-     * @param column        SQL 中需要过滤的字段 如a.dept_id
-     * @param jointLogic    拼接逻辑
-     * @param precondition  前置判断条件（如"a.xx_id is not null"）
+     * 最终形成的WHERE条件为：(前置条件 [and | or] 权限条件)
+     *
+     * @param type         数据行权限过滤类型
+     * @param column       SQL 中需要过滤的字段 如a.dept_id
+     * @param jointLogic   拼接逻辑
+     * @param precondition 前置判断条件（如"a.xx_id is not null"）
      */
     public static void start(RowDataHandlerType type, String column, JointLogic jointLogic, String precondition) {
         DataRowAuthModel data = getLocalAuthorityData();

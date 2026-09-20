@@ -13,7 +13,8 @@ import java.io.IOException;
 
 /**
  * 描述:
- *    服务端处理器
+ * 服务端处理器
+ *
  * @author Vic.xu
  * @since 2024-07-01 9:51
  */
@@ -21,7 +22,7 @@ public class HttpServerHandler {
 
     private static XqdSerializer serializer = new Hessian2Serializer();
 
-    public static void  handle(ServletRequest req, ServletResponse res){
+    public static void handle(ServletRequest req, ServletResponse res) {
         XqdResponse response;
         try {
             byte[] bytes = HttpProtocol.toByteArray(req.getInputStream());

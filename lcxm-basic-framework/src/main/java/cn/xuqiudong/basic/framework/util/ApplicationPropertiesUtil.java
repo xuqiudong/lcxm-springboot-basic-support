@@ -36,18 +36,18 @@ public class ApplicationPropertiesUtil {
 
     private static final Configurations CONFIGS = new Configurations();
 
-    public static final CompositeConfiguration reader = new CompositeConfiguration();
+    public static final CompositeConfiguration READER = new CompositeConfiguration();
 
     static {
         try {
             PropertiesConfiguration properties = CONFIGS.properties(FILE_NAME);
-            reader.addConfiguration(properties, true);
+            READER.addConfiguration(properties, true);
             // 装载其他配置文件
-            List<Object> list = reader.getList(OTHER_CONFIG_FILES_KEY, new ArrayList<Object>());
+            List<Object> list = READER.getList(OTHER_CONFIG_FILES_KEY, new ArrayList<Object>());
 
             for (Object file : list) {
                 logger.info("装载其他配置文件:{}", file);
-                reader.addConfiguration(CONFIGS.properties((String) file), true);
+                READER.addConfiguration(CONFIGS.properties((String) file), true);
             }
         } catch (ConfigurationException e) {
             logger.error("读取第三方配置文件错误 {}", ExceptionUtils.getStackTrace(e));
@@ -58,14 +58,14 @@ public class ApplicationPropertiesUtil {
      * 读String
      */
     public static String getString(String key) {
-        return reader.getString(key);
+        return READER.getString(key);
     }
 
     /**
      * 读String
      */
     public static String getString(String key, String defaultValue) {
-        String value = reader.getString(key);
+        String value = READER.getString(key);
         return value == null ? defaultValue : value;
     }
 
@@ -74,35 +74,35 @@ public class ApplicationPropertiesUtil {
      * 读int
      */
     public static int getInt(String key) {
-        return reader.getInt(key);
+        return READER.getInt(key);
     }
 
     /**
      * 读boolean
      */
     public static boolean getBoolean(String key) {
-        return reader.getBoolean(key);
+        return READER.getBoolean(key);
     }
 
     /**
      * 读List
      */
     public static List<?> getList(String key) {
-        return reader.getList(key);
+        return READER.getList(key);
     }
 
     /**
      * 读数组
      */
     public static String[] getStringArray(String key) {
-        return reader.getStringArray(key);
+        return READER.getStringArray(key);
     }
 
     /**
      * long
      */
     public static long getLong(String key) {
-        return reader.getLong(key);
+        return READER.getLong(key);
     }
 
     public static void main(String[] args) {

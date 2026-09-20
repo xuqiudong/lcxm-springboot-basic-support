@@ -2,7 +2,6 @@ package cn.xuqiudong.basic.secureid.filter;
 
 import cn.xuqiudong.basic.secureid.util.IdUtil;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -62,7 +61,8 @@ public class ParamDecryptFilterTest {
         request.setRequestURI("/api/upload");
         request.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
         request.addParameter("id", IdUtil.encrypt("500"));
-        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "file-content".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain",
+                "file-content".getBytes(StandardCharsets.UTF_8));
         request.addFile(file);
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -71,7 +71,8 @@ public class ParamDecryptFilterTest {
             public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse) {
                 HttpServletRequest wrappedRequest = (HttpServletRequest) servletRequest;
                 assertEquals("500", wrappedRequest.getParameter("id"));
-                MultipartHttpServletRequest multipartRequest = WebUtils.getNativeRequest(wrappedRequest, MultipartHttpServletRequest.class);
+                MultipartHttpServletRequest multipartRequest =
+                        WebUtils.getNativeRequest(wrappedRequest, MultipartHttpServletRequest.class);
                 assertNotNull(multipartRequest);
                 assertSame(file, multipartRequest.getFile("file"));
             }

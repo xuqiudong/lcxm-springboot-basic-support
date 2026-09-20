@@ -19,7 +19,7 @@
 - 公共规则内嵌在父 POM 的 `checkstyleRules` 中，不依赖父仓库中的外部 XML 文件。
 - 子项目不重新定义整套规则；确有必要时，只使用 suppression 声明局部例外。
 - 规则以《阿里巴巴 Java 开发手册》为主要参考，结合项目实际情况整理，不宣称是阿里官方完整实现。
-- 代码格式化由 `.editorconfig` 和 IDEA Code Style 负责，Checkstyle 负责构建阶段的最终检查。
+- 代码格式化由 `.editorconfig` 和 `config/idea/lcxm-idea-style.xml` 负责，Checkstyle 负责构建阶段的最终检查。
 - 规则发现的问题应优先修改代码；排除规则必须限定范围并说明原因。
 
 ## 工具职责
@@ -130,7 +130,14 @@ IDEA中应将以下设置设为较大值，例如 `999`：
 
 ## EditorConfig 与 IDEA
 
-仓库根目录的 `.editorconfig` 统一：
+仓库提供两份彼此配套的格式配置：
+
+- `.editorconfig`：放入仓库即可生效，负责跨编辑器和文件级基础格式。
+- `config/idea/lcxm-idea-style.xml`：可导入 IDEA，负责本机所有项目的完整 Java Code Style。
+
+两份配置中重复的 Java 规则必须保持一致。项目存在 `.editorconfig` 时，其中已声明的选项优先于 IDEA Scheme 的对应选项。
+
+根目录的 `.editorconfig` 统一：
 
 - UTF-8。
 - LF 换行。
@@ -143,7 +150,28 @@ IDEA中应将以下设置设为较大值，例如 `999`：
 - IDEA 不自动生成星号 import。
 - import 按第三方、`javax`、`java`、静态 import 分组。
 
-`.editorconfig` 只能在文件目录层级生效，不能通过 Maven Parent 继承。新的独立仓库需要在根目录复制这份文件。
+`.editorconfig` 只能在文件目录层级生效，不能通过 Maven Parent 继承。正式团队仓库建议复制该文件，以保证换电脑、换 IDE 或其他开发者检出后仍有一致的基础格式。
+
+个人在 IDEA 中开发多个独立项目时，可以导入：
+
+```text
+config/idea/lcxm-idea-style.xml
+```
+
+IDEA 2025.3.4 的导入入口：
+
+```text
+Settings
+→ Editor
+→ Code Style
+→ 齿轮图标
+→ Import Scheme
+→ IntelliJ IDEA code style XML
+```
+
+导入后选择 `LCXM` Scheme。这样，没有 `.editorconfig` 的独立项目也会使用 LCXM 的 Java 格式和 import 规则。特殊项目可以添加自己的 `.editorconfig`，只覆盖确实不同的选项。
+
+IDEA Scheme 不负责完整约束 UTF-8、LF、文件末尾换行和删除行尾空格，因此它不能完全替代 `.editorconfig`。无论采用哪种格式配置，Maven Checkstyle 都是最终检查标准。
 
 IDEA 2025.3 默认支持 EditorConfig。确认项目启用了 EditorConfig 后，执行 `Reformat Code` 可按 120 字符右边界拆分常见的 Java 代码结构，执行 `Optimize Imports` 可整理 import。长字符串、注释以及无法安全拆分的表达式仍需人工处理，因此 IDEA 格式化不能替代 Checkstyle。
 

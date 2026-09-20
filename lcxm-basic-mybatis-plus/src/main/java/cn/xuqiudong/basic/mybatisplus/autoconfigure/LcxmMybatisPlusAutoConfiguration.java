@@ -47,10 +47,11 @@ public class LcxmMybatisPlusAutoConfiguration {
 
     /**
      * BaseMpEntity 属性填充
-     *
+     * <p>
      * 依赖于设置 CurrentUserInfoContext 的 方法
-     * @see CurrentUserInfoContext#setUserIdSupplier(Supplier) 
-     * @see CurrentUserInfoContext#setUsernameSupplier(Supplier) 
+     *
+     * @see CurrentUserInfoContext#setUserIdSupplier(Supplier)
+     * @see CurrentUserInfoContext#setUsernameSupplier(Supplier)
      * @see #compositeMetaFieldHandler(ObjectProvider)
      */
     @Bean
@@ -63,7 +64,8 @@ public class LcxmMybatisPlusAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public CompositeAutoFillFieldHandler compositeMetaFieldHandler(ObjectProvider<AutoFillFieldHandler> metaFieldHandlers) {
+    public CompositeAutoFillFieldHandler compositeMetaFieldHandler(
+            ObjectProvider<AutoFillFieldHandler> metaFieldHandlers) {
         List<AutoFillFieldHandler> handles = new ArrayList<>();
         for (AutoFillFieldHandler metaFieldHandler : metaFieldHandlers) {
             LOGGER.info("启用mybatis-plus实体自动填充字段: {}", metaFieldHandler.getClass().getSimpleName());
@@ -124,7 +126,7 @@ public class LcxmMybatisPlusAutoConfiguration {
     }
 
     /**
-     *  扩展 mybatis-plus 的 方法注入
+     * 扩展 mybatis-plus 的 方法注入
      * link <a href="https://baomidou.com/guides/sql-injector/">sql-injector</a>
      */
     @Bean

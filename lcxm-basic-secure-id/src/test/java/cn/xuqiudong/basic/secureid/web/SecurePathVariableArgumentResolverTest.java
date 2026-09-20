@@ -35,7 +35,8 @@ public class SecurePathVariableArgumentResolverTest {
         MethodParameter parameter = methodParameter("stringId", 0);
         NativeWebRequest request = webRequest(Collections.singletonMap("userId", IdUtil.encrypt("100")));
 
-        Object value = resolver.resolveArgument(parameter, new ModelAndViewContainer(), request, new DefaultDataBinderFactory(null));
+        Object value = resolver.resolveArgument(parameter, new ModelAndViewContainer(), request,
+                new DefaultDataBinderFactory(null));
 
         System.out.printf("path-variable decrypt: encrypted=%s, decrypted=%s%n",
                 IdUtil.encrypt("100"), value);
@@ -47,7 +48,8 @@ public class SecurePathVariableArgumentResolverTest {
         MethodParameter parameter = methodParameter("longId", 0);
         NativeWebRequest request = webRequest(Collections.singletonMap("userId", IdUtil.encrypt("200")));
 
-        Object value = resolver.resolveArgument(parameter, new ModelAndViewContainer(), request, new DefaultDataBinderFactory(null));
+        Object value = resolver.resolveArgument(parameter, new ModelAndViewContainer(), request,
+                new DefaultDataBinderFactory(null));
 
         assertEquals(200L, value);
     }
@@ -57,7 +59,8 @@ public class SecurePathVariableArgumentResolverTest {
         MethodParameter parameter = methodParameter("stringId", 0);
         NativeWebRequest request = webRequest(Collections.singletonMap("userId", "plain-code"));
 
-        Object value = resolver.resolveArgument(parameter, new ModelAndViewContainer(), request, new DefaultDataBinderFactory(null));
+        Object value = resolver.resolveArgument(parameter, new ModelAndViewContainer(), request,
+                new DefaultDataBinderFactory(null));
 
         assertEquals("plain-code", value);
     }
@@ -81,7 +84,8 @@ public class SecurePathVariableArgumentResolverTest {
         postProcessor.postProcessAfterInitialization(adapter, "requestMappingHandlerAdapter");
 
         int secureResolverIndex = findResolverIndex(adapter, SecurePathVariableArgumentResolver.class);
-        int defaultPathVariableResolverIndex = findExactResolverIndex(adapter, PathVariableMethodArgumentResolver.class);
+        int defaultPathVariableResolverIndex =
+                findExactResolverIndex(adapter, PathVariableMethodArgumentResolver.class);
 
         assertNotEquals(-1, secureResolverIndex);
         assertEquals(-1, defaultPathVariableResolverIndex);
@@ -119,7 +123,8 @@ public class SecurePathVariableArgumentResolverTest {
 
     private static NativeWebRequest webRequest(Map<String, String> uriVariables) {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/users/" + uriVariables.get("userId"));
-        request.setAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE, new HashMap<String, String>(uriVariables));
+        request.setAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE,
+                new HashMap<String, String>(uriVariables));
         return new ServletWebRequest(request);
     }
 

@@ -82,7 +82,8 @@ public abstract class AbstractSecureIdAdvice implements AfterReturningAdvice {
      * 4. 单个字段或对象处理失败时只记录日志，不中断接口返回。
      */
     @Override
-    public void afterReturning(@Nullable Object returnValue, Method method, Object[] args, @Nullable Object target) throws Throwable {
+    public void afterReturning(@Nullable Object returnValue, Method method, Object[] args,
+                               @Nullable Object target) throws Throwable {
         if (returnValue == null || shouldSkip(method, args, target)) {
             return;
         }
@@ -296,6 +297,7 @@ public abstract class AbstractSecureIdAdvice implements AfterReturningAdvice {
     /**
      * 获取某个 Class 的字段处理元数据。
      * <p>
+     *
      * @param type 正在处理的响应对象类型，不是字段类型。
      * @return 该类型及其父类中可处理字段的元数据。
      * <p>
@@ -308,6 +310,7 @@ public abstract class AbstractSecureIdAdvice implements AfterReturningAdvice {
     /**
      * 构建某个 Class 的字段处理元数据。
      * <p>
+     *
      * @param type 正在处理的响应对象类型。
      * @return 已经提取好的字段处理元数据。
      * <p>
@@ -358,7 +361,8 @@ public abstract class AbstractSecureIdAdvice implements AfterReturningAdvice {
     /**
      * 判断字段是否按 ID 字段处理。
      * <p>
-     *  @SecureId 是显式规则；commonIdFieldNames 是项目约定规则。
+     *
+     * @SecureId 是显式规则；commonIdFieldNames 是项目约定规则。
      */
     protected boolean shouldEncryptField(Field field) {
         SecureId secureId = field.getAnnotation(SecureId.class);
@@ -373,7 +377,8 @@ public abstract class AbstractSecureIdAdvice implements AfterReturningAdvice {
      * <p>
      * 其他类型先保留原值并记录日志，避免隐式类型转换破坏业务对象。
      */
-    protected void encryptIdField(Object target, Field field, @Nullable Object fieldValue) throws IllegalAccessException {
+    protected void encryptIdField(Object target, Field field,
+                                  @Nullable Object fieldValue) throws IllegalAccessException {
         if (fieldValue == null) {
             return;
         }

@@ -49,8 +49,10 @@ public class OrderBy {
         }
         return joiner.toString();
     }
+
     /**
      * 转为另一种排序字符串: column1,desc;column2,asc;...
+     *
      * @see PageQuery#getOrders()
      */
     public String toOrderSqlWithSemicolon() {

@@ -37,27 +37,27 @@ public class EnumElementTagProcessor extends AbstractAttributeTagProcessor {
 
     public static final String ATTRIBUTE_NAME = "enum";
 
-    static int PRECEDENCE = 1000;
+    static final int PRECEDENCE = 1000;
 
     private static final String SELECT_TAG = "select";
 
     /**
      * data-value-method属性
      */
-    private static String DATA_VALUE_METHOD_ATTRIBUTE = "data-value-method";
+    private static final String DATA_VALUE_METHOD_ATTRIBUTE = "data-value-method";
     /**
      * 枚举获取option value值的默认方法为name()
      */
-    private static String VALUE_METHOD_DEFAULT = "name";
+    private static final String VALUE_METHOD_DEFAULT = "name";
 
     /**
      * data-text-method属性
      */
-    private static String DATA_TEXT_METHOD_ATTRIBUTE = "data-text-method";
+    private static final String DATA_TEXT_METHOD_ATTRIBUTE = "data-text-method";
     /**
      * 枚举获取option展示值的默认方法为getText()
      */
-    private static String TEXT_METHOD_DEFAULT = "getText";
+    private static final String TEXT_METHOD_DEFAULT = "getText";
 
     public EnumElementTagProcessor(String dialectPrefix) {
         super(

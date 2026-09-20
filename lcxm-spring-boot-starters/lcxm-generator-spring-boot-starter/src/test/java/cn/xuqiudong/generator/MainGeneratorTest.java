@@ -28,7 +28,7 @@ public class MainGeneratorTest {
     /**
      * 使用 facade 模式 生成代码
      */
-    public static void useFacade(){
+    public static void useFacade() {
         CommonFacadeConfig config = CommonFacadeConfig
                 .mysql("127.0.0.1", "3306", "qiudong", "qiudong", "qiudong12345678");
         config
@@ -40,7 +40,7 @@ public class MainGeneratorTest {
         config.addControllerRequestMapping("test_generate", "/demo/generate");
         String outputDir = config.getOutputDir();
         System.out.println(outputDir);
-        config.setFileOverride( true);
+        config.setFileOverride(true);
         // 禁用所有 的默认
 //        config.disableAll();
 
@@ -52,11 +52,15 @@ public class MainGeneratorTest {
         Generator generator = CommonGeneratorFacade.build(config);
         generator.generate();
     }
+
     /**
      * 手动构建Generator 生成代码
      */
     public static void test() {
-        String url = "jdbc:mysql://127.0.0.1:3306/qiudong?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true";
+        String url =
+                "jdbc:mysql://127.0.0.1:3306/qiudong?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior" +
+                        "=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true&useSSL=false" +
+                        "&allowPublicKeyRetrieval=true";
         String username = "qiudong";
         String password = "qiudong12345678";
         // 创建 生成类入口 :  支持链式调用
@@ -67,7 +71,9 @@ public class MainGeneratorTest {
                                 builder.author("Vic.xu")
                                         // 输出目录: 可以指定为项目内 Paths.get(System.getProperty("user.dir")) + "/src/main/java"
 //                                .outputDir("D:/desk/generator")
-                                        .outputDir(Paths.get(System.getProperty("user.dir")) +"/lcxm-spring-boot-starters/lcxm-generator-spring-boot-starter"+ "/src/test/java")
+                                        .outputDir(Paths.get(System.getProperty("user.dir")) +
+                                                "/lcxm-spring-boot-starters/lcxm-generator-spring-boot-starter" +
+                                                "/src/test/java")
                                         // 基础包路径
                                         .basePackage("cn.xuqiudong.generator")
                                         // 模块名称: 基础包路径的子包, 以及controller 请求路径

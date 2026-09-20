@@ -24,7 +24,8 @@ import java.util.Map;
  * <p>
  * 1、 注册方式
  * 在 META-INF/spring.factories 内注册（Spring Boot 3.x 仍然使用此方式）
- * org.springframework.boot.env.EnvironmentPostProcessor=cn.xuqiudong.basic.framework.env.processor.ExternalConfigProcessor
+ * org.springframework.boot.env.EnvironmentPostProcessor=cn.xuqiudong.basic.framework.env.processor
+ * .ExternalConfigProcessor
  * 2、 配置项
  * lcxm.env.external.enable=true                          # 是否启用（默认false）
  * lcxm.env.external.location=/data/config/config.properties  # 外部配置文件路径
@@ -106,7 +107,8 @@ public class ExternalConfigProcessor implements EnvironmentPostProcessor, Proces
     /**
      * 打印外部配置项（简化版）
      */
-    private void printExternalConfigItems(PropertySource<?> externalPropertySource, ConfigurableEnvironment environment) {
+    private void printExternalConfigItems(PropertySource<?> externalPropertySource,
+                                          ConfigurableEnvironment environment) {
         if (!(externalPropertySource instanceof MapPropertySource)) {
             LOGGER.warn("不支持的配置源类型，无法打印：{}", externalPropertySource.getClass().getName());
             return;

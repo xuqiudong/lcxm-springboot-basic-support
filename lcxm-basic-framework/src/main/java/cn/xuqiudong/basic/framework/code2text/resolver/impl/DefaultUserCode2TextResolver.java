@@ -11,8 +11,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Description:
- *  因为 BaseMpEntity 中 使用了 UserCode2Text 类型，所以这里需要实现一个默认的占位符解析器(但是不做真的解析)
- *  具体实现 由各自的项目自行实现 Code2TextResolver 或Code2TextPreloadable
+ * 因为 BaseMpEntity 中 使用了 UserCode2Text 类型，所以这里需要实现一个默认的占位符解析器(但是不做真的解析)
+ * 具体实现 由各自的项目自行实现 Code2TextResolver 或Code2TextPreloadable
+ *
  * @author Vic.xu
  * @since 2026-03-27 9:36
  */
@@ -30,6 +31,7 @@ public class DefaultUserCode2TextResolver implements Code2TextResolver, Placehol
     public ResolverMeta meta() {
         return new ResolverMeta("default user resolver", DefaultUserCode2TextResolver.class);
     }
+
     @Override
     public String codeToText(Object code) {
         LOGGER.warn("DefaultUserCode2TextResolver.codeToText() is called, cause no implementation found.");

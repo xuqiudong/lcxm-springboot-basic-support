@@ -59,7 +59,9 @@ class LicenseRuntimeTest {
         String tamperedSignData = SignaturePayloadBuilder.buildIssuerPayload(payload);
 
         Assertions.assertFalse(
-                RsaSignatureUtils.publicVerify(payload.getSign(), tamperedSignData, LcRuntimeHelper.de(TextBundle.get("p1")))
+                RsaSignatureUtils.publicVerify(
+                        payload.getSign(), tamperedSignData, LcRuntimeHelper.de(TextBundle.get("p1"))
+                )
         );
     }
 

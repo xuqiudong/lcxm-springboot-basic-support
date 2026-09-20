@@ -9,6 +9,7 @@ import java.util.function.Supplier;
  * - Proxy 调用 getOrLoad
  * - 事件监听调用 invalidate
  * - 启动期注册 Region
+ *
  * @author Vic.xu
  * @since 2026-01-14 14:04
  */
@@ -25,8 +26,9 @@ public interface Code2TextCacheManager {
      * 获取text对应的code
      */
     String getOrLoadReverse(String region,
-                             String text,
-                             Supplier<String> loader);
+                            String text,
+                            Supplier<String> loader);
+
     /**
      * 单个清除
      */

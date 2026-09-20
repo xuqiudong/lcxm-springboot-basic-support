@@ -20,14 +20,16 @@ import org.springframework.context.annotation.Configuration;
  * 枚举包配置: lcxm.framework.enum.scan-base-packages=cn.xuqiudong.test,cn.xuqiudong.demo
  *
  * <p>
- *     META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports下：
- *     cn.xuqiudong.basic.framework.FrameworkAutoConfiguration
+ * META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports下：
+ * cn.xuqiudong.basic.framework.FrameworkAutoConfiguration
  * </p>
+ *
  * @author Vic.xu
  * @since 2025-11-13 17:59
  */
 @Configuration
-@ConditionalOnProperty(prefix = "lcxm.framework.enum.select", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "lcxm.framework.enum.select", name = "enabled", havingValue = "true",
+        matchIfMissing = true)
 public class EnumSelectAutoConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EnumSelectAutoConfiguration.class);
@@ -58,9 +60,9 @@ public class EnumSelectAutoConfiguration {
     }
 
     /**
-     *  Jackson序列化配置：全局注册枚举序列化器 EnumSelectableSerializer
-     *  使得每个EnumSelectable字段转json的时候追加一个xxxText字段
-     *  不用在每个EnumSelectable 字段上加@JsonSerialize(using = EnumSelectableSerializer.class)
+     * Jackson序列化配置：全局注册枚举序列化器 EnumSelectableSerializer
+     * 使得每个EnumSelectable字段转json的时候追加一个xxxText字段
+     * 不用在每个EnumSelectable 字段上加@JsonSerialize(using = EnumSelectableSerializer.class)
      */
     @Bean("enumSelectJacksonCustomizer")
     @ConditionalOnMissingBean(name = "enumSelectJacksonCustomizer")

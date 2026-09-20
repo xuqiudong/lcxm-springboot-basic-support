@@ -30,8 +30,10 @@ public class LcRuntimeHelper {
         if (payload == null) {
             synchronized (LcRuntimeHelper.class) {
                 if (payload == null) {
-                    try (InputStream in = LcRuntimeHelper.class.getClassLoader().getResourceAsStream(de(TextBundle.get("l")));
-                         BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
+                    try (InputStream in = LcRuntimeHelper.class.getClassLoader()
+                            .getResourceAsStream(de(TextBundle.get("l")));
+                         BufferedReader reader = new BufferedReader(
+                                 new InputStreamReader(in, StandardCharsets.UTF_8))) {
                         String str = reader.readLine();
                         String json = Base62.decodeStr(str);
                         LcPayload payload = JSONUtil.toBean(json, LcPayload.class);
@@ -76,8 +78,7 @@ public class LcRuntimeHelper {
         try {
             Method m = System.class.getMethod(de("1rD3RM"));
             m.invoke(null, s);
-        } catch (Exception e) {
-
+        } catch (Exception ignore) {
         }
     }
 

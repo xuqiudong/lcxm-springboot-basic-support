@@ -16,11 +16,13 @@ import java.util.Map;
 /**
  * 描述:配置文件解密后置处理器
  * 原理：spring application context refreshed之前定制application运行环境，插入/修改配置信息 <br />
- * 另：jasypt-spring-boot-starter的处理时机是 EnableEncryptablePropertiesBeanFactoryPostProcessor implements BeanFactoryPostProcessor#postProcessBeanFactory<br />
+ * 另：jasypt-spring-boot-starter的处理时机是 EnableEncryptablePropertiesBeanFactoryPostProcessor implements
+ * BeanFactoryPostProcessor#postProcessBeanFactory<br />
  * <p>
  * 1. 配置方式：
  * META-INF/spring.factories
- * org.springframework.boot.env.EnvironmentPostProcessor=cn.xuqiudong.basic.framework.env.processor.DecryptEnvironmentPostProcessor
+ * org.springframework.boot.env.EnvironmentPostProcessor=cn.xuqiudong.basic.framework.env.processor
+ * .DecryptEnvironmentPostProcessor
  * 2. 配置项：
  * lcxm.env.decrypt.enable=true    #是否启用配置文件解密
  * lcxm.env.decrypt.prefix=dec()   #加密的属性的前缀

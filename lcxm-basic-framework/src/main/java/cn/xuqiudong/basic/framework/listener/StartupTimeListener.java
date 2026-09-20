@@ -16,7 +16,8 @@ import java.time.Duration;
 
 /**
  * 描述:
- *    打印系统启动时间已经自定义banner等信息
+ * 打印系统启动时间已经自定义banner等信息
+ *
  * @author Vic.xu
  * @since 2024-06-28 10:37
  */
@@ -32,10 +33,9 @@ public class StartupTimeListener implements SpringApplicationRunListener {
     public StartupTimeListener(SpringApplication application, String[] args) {
         this.application = application;
         this.args = args;
-        this.stopWatch= new StopWatch();
+        this.stopWatch = new StopWatch();
         stopWatch.start();
     }
-
 
 
     @Override

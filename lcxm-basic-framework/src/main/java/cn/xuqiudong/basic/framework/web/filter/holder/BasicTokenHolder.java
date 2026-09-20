@@ -4,7 +4,8 @@ import cn.xuqiudong.basic.framework.web.filter.model.BasicToken;
 
 /**
  * 描述:
- *   BasicToken 线程持有者
+ * BasicToken 线程持有者
+ *
  * @author Vic.xu
  * @since 2024-09-03 14:23
  */

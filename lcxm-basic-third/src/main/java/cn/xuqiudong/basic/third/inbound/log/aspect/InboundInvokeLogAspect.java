@@ -1,7 +1,5 @@
 package cn.xuqiudong.basic.third.inbound.log.aspect;
 
-import java.util.Map;
-
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xuqiudong.basic.third.inbound.log.annotation.InboundLog;
@@ -17,6 +15,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * 第三方入站业务方法出入参和异常日志切面，是入站调用日志的核心入口。
@@ -39,9 +39,9 @@ public class InboundInvokeLogAspect {
     /**
      * 创建入站日志切面。
      *
-     * @param printSlf4jLog 是否打印默认 slf4j 日志
+     * @param printSlf4jLog      是否打印默认 slf4j 日志
      * @param slf4jTextMaxLength slf4j 打印文本最大长度，小于等于 0 表示不裁剪
-     * @param customLogger 项目自定义处理器，可为 null；通常用于入库、MQ、审计
+     * @param customLogger       项目自定义处理器，可为 null；通常用于入库、MQ、审计
      */
     public InboundInvokeLogAspect(boolean printSlf4jLog, int slf4jTextMaxLength, InboundInvokeLogger customLogger) {
         this(printSlf4jLog, slf4jTextMaxLength, customLogger, new Class<?>[0]);
@@ -51,7 +51,7 @@ public class InboundInvokeLogAspect {
      * 创建入站日志切面，并补充当前项目不适合序列化记录的参数类型。
      */
     public InboundInvokeLogAspect(boolean printSlf4jLog, int slf4jTextMaxLength, InboundInvokeLogger customLogger,
-            Class<?>... extraIgnoreTypes) {
+                                  Class<?>... extraIgnoreTypes) {
         this.slf4jLogger = printSlf4jLog ? new Slf4jInboundInvokeLogger(slf4jTextMaxLength) : null;
         this.customLogger = customLogger;
         this.extraIgnoreTypes = extraIgnoreTypes == null ? new Class<?>[0] : extraIgnoreTypes;

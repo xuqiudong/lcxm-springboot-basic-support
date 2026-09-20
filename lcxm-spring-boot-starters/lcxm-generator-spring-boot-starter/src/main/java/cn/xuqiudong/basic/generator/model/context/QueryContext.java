@@ -59,7 +59,8 @@ public class QueryContext extends BaseContext {
     }
 
     @Override
-    public List<String> genericClassNameList(TableInfo tableInfo, ConfigBundle bundle, TemplateContext templateContext) {
+    public List<String> genericClassNameList(TableInfo tableInfo, ConfigBundle bundle,
+                                             TemplateContext templateContext) {
         return List.of();
     }
 

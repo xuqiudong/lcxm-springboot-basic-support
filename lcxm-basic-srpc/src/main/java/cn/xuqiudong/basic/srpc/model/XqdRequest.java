@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 描述:rpc请求参数
+ *
  * @author Vic.xu
  * @date 2022-02-22 9:12
  */

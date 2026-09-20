@@ -61,17 +61,17 @@ public class JedisUtil {
         }
 
         /*
-         *  
+         *
             spring.redis.host=127.0.0.1
-        	spring.redis.password=123456!@#$%^
-        	spring.redis.database=6
-        	spring.redis.port=6379
-        	spring.redis.timeout=5000
-        	#  springboot2 默认推荐使用lettuce连接池
-        	spring.redis.lettuce.pool.max-active=20
-        	spring.redis.lettuce.pool.max-idle=20
-        	spring.redis.lettuce.pool.min-idle=10
-        	spring.redis.lettuce.pool.max-wait=-1
+        spring.redis.password=123456!@#$%^
+        spring.redis.database=6
+        spring.redis.port=6379
+        spring.redis.timeout=5000
+        # springboot2 默认推荐使用lettuce连接池
+        spring.redis.lettuce.pool.max-active=20
+        spring.redis.lettuce.pool.max-idle=20
+        spring.redis.lettuce.pool.min-idle=10
+        spring.redis.lettuce.pool.max-wait=-1
          */
         int maxIdle = ApplicationPropertiesUtil.getInt("spring.redis.lettuce.pool.max-idle");
         long maxWaitMillis = ApplicationPropertiesUtil.getLong("spring.redis.lettuce.pool.max-wait");
@@ -81,7 +81,8 @@ public class JedisUtil {
         String password = ApplicationPropertiesUtil.getString("spring.redis.password");
         int database = ApplicationPropertiesUtil.getInt("spring.redis.database");
         logger.info(
-                "jedisUtil   config:\n  maxIdle={}, maxWaitMillis={}, maxTotal={},redisIp={},port={},password={},database={}",
+                "jedisUtil   config:\n  maxIdle={}, maxWaitMillis={}, maxTotal={},redisIp={},port={},password={}," +
+                        "database={}",
                 new Object[]{maxIdle, maxWaitMillis, maxTotal, redisIp, port, password, database});
 
         JedisPoolConfig config = new JedisPoolConfig();
@@ -105,8 +106,7 @@ public class JedisUtil {
     /**
      * 获取缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return 值
      */
     public static String get(String key) {
@@ -130,8 +130,7 @@ public class JedisUtil {
     /**
      * 获取缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return 值
      */
     public static Object getObject(String key) {
@@ -154,12 +153,9 @@ public class JedisUtil {
     /**
      * 设置缓存
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
-     * @param cacheSeconds
-     *            超时时间，0为不超时
+     * @param key          键
+     * @param value        值
+     * @param cacheSeconds 超时时间，0为不超时
      * @return
      */
     public static String set(String key, String value, int cacheSeconds) {
@@ -221,12 +217,9 @@ public class JedisUtil {
     /**
      * 设置缓存
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
-     * @param cacheSeconds
-     *            超时时间，0为不超时
+     * @param key          键
+     * @param value        值
+     * @param cacheSeconds 超时时间，0为不超时
      * @return
      */
     public static String setObject(String key, Object value, int cacheSeconds) {
@@ -270,8 +263,7 @@ public class JedisUtil {
     /**
      * 获取List缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return 值
      */
     public static List<String> getList(String key) {
@@ -311,8 +303,7 @@ public class JedisUtil {
     /**
      * 获取List缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return 值
      */
     public static List<Object> getObjectList(String key) {
@@ -339,10 +330,11 @@ public class JedisUtil {
 
     /**
      * 描述:根据key前缀模糊查询缓存对象
+     *
      * @param keyPrefix
      * @return List<Object>
-     * @since 2016年9月5日
      * @author zhuliyun
+     * @since 2016年9月5日
      */
     public static List<Object> getObjectListByKeyPrefix(String keyPrefix) {
         List<Object> value = new ArrayList<>();
@@ -370,12 +362,9 @@ public class JedisUtil {
     /**
      * 设置List缓存
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
-     * @param cacheSeconds
-     *            超时时间，0为不超时
+     * @param key          键
+     * @param value        值
+     * @param cacheSeconds 超时时间，0为不超时
      * @return
      */
     public static long setList(String key, List<String> value, int cacheSeconds) {
@@ -402,12 +391,9 @@ public class JedisUtil {
     /**
      * 设置List缓存
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
-     * @param cacheSeconds
-     *            超时时间，0为不超时
+     * @param key          键
+     * @param value        值
+     * @param cacheSeconds 超时时间，0为不超时
      * @return
      */
     public static long setObjectList(String key, List<Object> value, int cacheSeconds) {
@@ -437,10 +423,8 @@ public class JedisUtil {
     /**
      * 向List缓存中添加值
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
+     * @param key   键
+     * @param value 值
      * @return
      */
     public static long listAdd(String key, String... value) {
@@ -460,10 +444,8 @@ public class JedisUtil {
     /**
      * 向List缓存中添加值
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
+     * @param key   键
+     * @param value 值
      * @return
      */
     public static long listObjectAdd(String key, Object... value) {
@@ -488,8 +470,7 @@ public class JedisUtil {
     /**
      * 获取缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return 值
      */
     public static Set<String> getSet(String key) {
@@ -511,10 +492,11 @@ public class JedisUtil {
 
     /**
      * 描述:获取以指定开头前缀的所有Key
+     *
      * @param keyPrefix
      * @return Set<String>
-     * @since 2016年9月5日
      * @author zhuliyun
+     * @since 2016年9月5日
      */
     public static Set<String> getKeysByPrefix(String keyPrefix) {
         Set<String> value = null;
@@ -534,8 +516,7 @@ public class JedisUtil {
     /**
      * 获取缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return 值
      */
     public static Set<Object> getObjectSet(String key) {
@@ -562,12 +543,9 @@ public class JedisUtil {
     /**
      * 设置Set缓存
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
-     * @param cacheSeconds
-     *            超时时间，0为不超时
+     * @param key          键
+     * @param value        值
+     * @param cacheSeconds 超时时间，0为不超时
      * @return
      */
     public static long setSet(String key, Set<String> value, int cacheSeconds) {
@@ -594,12 +572,9 @@ public class JedisUtil {
     /**
      * 设置Set缓存
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
-     * @param cacheSeconds
-     *            超时时间，0为不超时
+     * @param key          键
+     * @param value        值
+     * @param cacheSeconds 超时时间，0为不超时
      * @return
      */
     public static long setObjectSet(String key, Set<Object> value, int cacheSeconds) {
@@ -629,10 +604,8 @@ public class JedisUtil {
     /**
      * 向Set缓存中添加值
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
+     * @param key   键
+     * @param value 值
      * @return
      */
     public static long setSetAdd(String key, String... value) {
@@ -653,10 +626,8 @@ public class JedisUtil {
     /**
      * 向Set缓存中添加值
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
+     * @param key   键
+     * @param value 值
      * @return
      */
     public static long setSetObjectAdd(String key, Object... value) {
@@ -681,8 +652,7 @@ public class JedisUtil {
     /**
      * 获取Map缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return 值
      */
     public static Map<String, String> getMap(String key) {
@@ -705,8 +675,7 @@ public class JedisUtil {
     /**
      * 获取Map缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return 值
      */
     public static Map<String, Object> getObjectMap(String key) {
@@ -733,12 +702,9 @@ public class JedisUtil {
     /**
      * 设置Map缓存
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
-     * @param cacheSeconds
-     *            超时时间，0为不超时
+     * @param key          键
+     * @param value        值
+     * @param cacheSeconds 超时时间，0为不超时
      * @return
      */
     public static String setMap(String key, Map<String, String> value, int cacheSeconds) {
@@ -765,12 +731,9 @@ public class JedisUtil {
     /**
      * 设置Map缓存
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
-     * @param cacheSeconds
-     *            超时时间，0为不超时
+     * @param key          键
+     * @param value        值
+     * @param cacheSeconds 超时时间，0为不超时
      * @return
      */
     public static String setObjectMap(String key, Map<String, Object> value, int cacheSeconds) {
@@ -801,10 +764,8 @@ public class JedisUtil {
     /**
      * 向Map缓存中添加值
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
+     * @param key   键
+     * @param value 值
      * @return
      */
     public static String mapPut(String key, Map<String, String> value) {
@@ -825,10 +786,8 @@ public class JedisUtil {
     /**
      * 向Map缓存中添加值
      *
-     * @param key
-     *            键
-     * @param value
-     *            值
+     * @param key   键
+     * @param value 值
      * @return
      */
     public static String mapObjectPut(String key, Map<String, Object> value) {
@@ -853,10 +812,8 @@ public class JedisUtil {
     /**
      * 移除Map缓存中的值
      *
-     * @param key
-     *            键
-     * @param mapKey
-     *            值
+     * @param key    键
+     * @param mapKey 值
      * @return
      */
     public static long mapRemove(String key, String mapKey) {
@@ -877,10 +834,8 @@ public class JedisUtil {
     /**
      * 移除Map缓存中的值
      *
-     * @param key
-     *            键
-     * @param mapKey
-     *            值
+     * @param key    键
+     * @param mapKey 值
      * @return
      */
     public static long mapObjectRemove(String key, String mapKey) {
@@ -901,10 +856,8 @@ public class JedisUtil {
     /**
      * 判断Map缓存中的Key是否存在
      *
-     * @param key
-     *            键
-     * @param mapKey
-     *            值
+     * @param key    键
+     * @param mapKey 值
      * @return
      */
     public static boolean mapExists(String key, String mapKey) {
@@ -925,10 +878,8 @@ public class JedisUtil {
     /**
      * 判断Map缓存中的Key是否存在
      *
-     * @param key
-     *            键
-     * @param mapKey
-     *            值
+     * @param key    键
+     * @param mapKey 值
      * @return
      */
     public static boolean mapObjectExists(String key, String mapKey) {
@@ -949,8 +900,7 @@ public class JedisUtil {
     /**
      * 删除缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return
      */
     public static long del(String key) {
@@ -975,8 +925,7 @@ public class JedisUtil {
     /**
      * 删除缓存
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return
      */
     public static long delObject(String key) {
@@ -1001,8 +950,7 @@ public class JedisUtil {
     /**
      * 缓存是否存在
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return
      */
     public static boolean exists(String key) {
@@ -1023,8 +971,7 @@ public class JedisUtil {
     /**
      * 缓存是否存在
      *
-     * @param key
-     *            键
+     * @param key 键
      * @return
      */
     public static boolean existsObject(String key) {
@@ -1113,8 +1060,8 @@ public class JedisUtil {
         } catch (UnsupportedOperationException uoe) {
             try {
                 return JedisUtil.toObject(key);
-            } catch (UnsupportedOperationException uoe2) {
-                uoe2.printStackTrace();
+            } catch (UnsupportedOperationException nestedException) {
+                nestedException.printStackTrace();
             }
         }
         return null;

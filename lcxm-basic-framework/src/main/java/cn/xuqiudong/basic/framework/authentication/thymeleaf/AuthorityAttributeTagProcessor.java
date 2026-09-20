@@ -13,7 +13,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 
 /**
  * 描述:权限属性处理器 依赖于当前session中的用户的权限列表信息 SessionUserVo#getResourceSet。
- *
+ * <p>
  * 将权限属性列表转为换 boolean 值列表，标识对应位置的权限是否具备，如： r1, r2 => true,false：标识具备 r1 权限，不具备
  * r2 权限
  *
@@ -26,7 +26,7 @@ public class AuthorityAttributeTagProcessor extends AbstractAttributeTagProcesso
 
     public static final String ATTRIBUTE_NAME = "resources-required";
 
-    static int PRECEDENCE = 1000;
+    static final int PRECEDENCE = 1000;
 
     @Override
     public int hashCode() {
@@ -85,13 +85,13 @@ public class AuthorityAttributeTagProcessor extends AbstractAttributeTagProcesso
         /*
          * 如果用户信息未获取到，无任何权限，不允许任何操作
          */
-		/*
+        /*
         SessionUserVo userVo = SystemSessionHelper.currentUserInfo();
         if (userVo == null) {
             structureHandler.setAttribute(DATA_ATTRIBUTE_NAME, String.valueOf(Boolean.FALSE));
             return;
         }
-	*/
+        */
         /*
          * 如果用户权限未获取到，无任何权限，不允许任何操作
          */

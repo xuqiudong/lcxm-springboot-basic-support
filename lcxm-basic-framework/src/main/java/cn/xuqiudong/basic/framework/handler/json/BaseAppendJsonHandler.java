@@ -30,17 +30,15 @@ public abstract class BaseAppendJsonHandler {
     /**
      * 序列化
      *
-     * @param appendJsonField
-     *            追加的field 信息
-     * @param value
-     *            原字段值
-     * @param gen
-     *            JsonGenerator
+     * @param appendJsonField 追加的field 信息
+     * @param value           原字段值
+     * @param gen             JsonGenerator
      */
     protected abstract void serialize(AppendJsonField appendJsonField, Object value, JsonGenerator gen);
 
     /**
      * 标注自己的type
+     *
      * @return type
      */
     protected abstract String type();
@@ -48,10 +46,9 @@ public abstract class BaseAppendJsonHandler {
     /**
      * 根据类型找到抽象类的实例，并将结果拼装出来
      *
-     * @param appendJsonField
-     *            字段信息
-     * @param value origin value
-     * @param gen JsonGenerator
+     * @param appendJsonField 字段信息
+     * @param value           origin value
+     * @param gen             JsonGenerator
      */
 
     public static void write(AppendJsonField appendJsonField, Object value, JsonGenerator gen) {

@@ -10,7 +10,8 @@ import java.lang.annotation.Target;
 
 /**
  * 描述:
- *    sql条件注解， 加在查询对象的字段上
+ * sql条件注解， 加在查询对象的字段上
+ *
  * @author Vic.xu
  * @since 2025-10-29 15:15
  */
@@ -56,9 +57,10 @@ public @interface QueryCondition {
 
     /**
      * apply 操作的sql片段, 当 operation 为 APPLY 时， 必填项
-     *  支持 {0} 单占位符，参数来自当前字段值
-     *  EG: "date_format(create_time, '%Y-%m-%d') = {0}"
-     *  EG: "FIND_IN_SET({0}, tags)"
+     * 支持 {0} 单占位符，参数来自当前字段值
+     * EG: "date_format(create_time, '%Y-%m-%d') = {0}"
+     * EG: "FIND_IN_SET({0}, tags)"
+     *
      * @see QueryOperation#APPLY
      */
     String applySql() default "";

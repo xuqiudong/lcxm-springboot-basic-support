@@ -62,6 +62,7 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
 
     /**
      * 旧版 HTTP 配置扩展点。
+     *
      * @deprecated 请将配置放入 {@link OutboundPartnerConfig#getClientOptions()}，并通过 {@link #loadConfig()} 返回。
      */
     @Deprecated
@@ -248,7 +249,7 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
      * 如果请求在写入前失败，调用方仍应自行兜底关闭。</p>
      */
     protected <R> R requestMultipart(A api, String fieldName, String fileName, InputStream inputStream,
-            Class<R> responseType) {
+                                     Class<R> responseType) {
         OutboundRequestInfo<R> request = builder(api, responseType)
                 .method(resolveMethod(api))
                 .multipartFile(fieldName, fileName, inputStream)

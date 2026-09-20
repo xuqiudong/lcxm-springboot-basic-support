@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 描述: 通过分布式锁串行化请求切面，根据请求中的业务标识添加锁
  * 如操作用户时候，针对同一个用户id，同一时刻只能被一个请求操作
+ *
  * @author Vic.xu
  * @since 2024-02-02 10:28
  */

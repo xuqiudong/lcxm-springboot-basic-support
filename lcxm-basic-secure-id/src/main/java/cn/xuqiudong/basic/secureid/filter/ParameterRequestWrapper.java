@@ -24,6 +24,7 @@ import java.util.Vector;
 /**
  * Description:
  * id 解密参数包装
+ *
  * @author Vic.xu
  * @since 2026-08-21 9:02
  */
@@ -47,8 +48,8 @@ public class ParameterRequestWrapper extends HttpServletRequestWrapper {
 
     /**
      *
-     * @param request HttpServletRequest
-     * @param json json请求的时候的body  允许为null
+     * @param request   HttpServletRequest
+     * @param json      json请求的时候的body  允许为null
      * @param newParams 请求参数键值对  允许为null
      */
     public ParameterRequestWrapper(@NotNull HttpServletRequest request, @Nullable String json,

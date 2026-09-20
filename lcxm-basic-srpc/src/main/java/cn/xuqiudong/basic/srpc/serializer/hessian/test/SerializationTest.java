@@ -22,11 +22,10 @@ public class SerializationTest {
     }
 
 
-    public static  <T> T getProxy(Class<T> clazz){
-        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{clazz}, new TestProxyInvocation(clazz));
+    public static <T> T getProxy(Class<T> clazz) {
+        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{clazz},
+                new TestProxyInvocation(clazz));
     }
-
-
 
 
 }

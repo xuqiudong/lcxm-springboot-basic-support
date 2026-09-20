@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 描述: 携带PRC调用的核心数据：url，request，interfaceName
+ *
  * @author Vic.xu
  * @since 2024-06-25
  */

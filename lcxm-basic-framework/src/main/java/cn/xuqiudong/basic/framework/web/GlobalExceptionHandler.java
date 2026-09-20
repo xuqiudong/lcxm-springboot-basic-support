@@ -17,6 +17,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**
  * 描述:全局异常捕捉，兼容json和view
+ *
  * @author Vic.xu
  * @since 2022-03-01 9:13
  */
@@ -31,8 +32,9 @@ public class GlobalExceptionHandler {
 
     /**
      * 无权限访问异常
+     *
      * @param request r
-     * @param e  UnauthorizedException
+     * @param e       UnauthorizedException
      * @return mv
      */
     @ExceptionHandler(value = {UnauthorizedException.class})
@@ -44,8 +46,9 @@ public class GlobalExceptionHandler {
 
     /**
      * 通用异常捕捉
+     *
      * @param request rq
-     * @param e CommonException
+     * @param e       CommonException
      * @return mv
      */
     @ExceptionHandler(value = {CommonException.class})
@@ -57,8 +60,9 @@ public class GlobalExceptionHandler {
 
     /**
      * 参数异常捕捉
+     *
      * @param request rq
-     * @param e BadParamException
+     * @param e       BadParamException
      * @return mv
      */
     @ExceptionHandler(value = {BadParamException.class})
@@ -73,8 +77,9 @@ public class GlobalExceptionHandler {
 
     /**
      * 可能是没有定义的异常
+     *
      * @param request r
-     * @param e Exception
+     * @param e       Exception
      * @return mv
      */
     @ExceptionHandler(value = {Exception.class})
@@ -86,7 +91,8 @@ public class GlobalExceptionHandler {
 
     /**
      * 根据是否ajax请求返回json错误或者500页面
-     * @param request r
+     *
+     * @param request      r
      * @param baseResponse rs
      * @return mv
      */

@@ -30,7 +30,8 @@ public class MapperXmlTemplateConfig extends BaseTemplateConfig {
     /**
      * Mapper XML 模板配置 构建器
      */
-    public static class Builder extends BaseTemplateConfig.BaseConfigBuilder<MapperXmlTemplateConfig.Builder, MapperXmlTemplateConfig> {
+    public static class Builder extends BaseTemplateConfig.BaseConfigBuilder<MapperXmlTemplateConfig.Builder,
+            MapperXmlTemplateConfig> {
 
         public Builder() {
             super(new MapperXmlTemplateConfig());

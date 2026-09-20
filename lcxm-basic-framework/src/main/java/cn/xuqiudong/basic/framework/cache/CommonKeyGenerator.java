@@ -15,9 +15,10 @@ import java.util.Date;
  * 描述:这是一个简单的缓存key生成器,满足key为简单参数的缓存处理器: 一般只作用在方法级别的注解上;
  * 之所以在生成的key上没有加上方法名，是因为对于一个资源既可能是缓存，也可能是驱逐，二者的需要能一致；
  * <p>
- *     1.使用方法，把此方法注入spring， bean的name设置为 CommonKeyGenerator.GENERATOR_NAME
- *     2. 缓存方法的Cacheable/CacheEvict/CachePut注解的keyGenerator属性设置为CommonKeyGenerator.GENERATOR_NAME
+ * 1.使用方法，把此方法注入spring， bean的name设置为 CommonKeyGenerator.GENERATOR_NAME
+ * 2. 缓存方法的Cacheable/CacheEvict/CachePut注解的keyGenerator属性设置为CommonKeyGenerator.GENERATOR_NAME
  * </p>
+ *
  * @author Vic.xu
  * @since 2021-12-07 9:24
  */
@@ -92,6 +93,7 @@ public class CommonKeyGenerator implements KeyGenerator {
 
     /**
      * 是否是简单的数据类型:此处只做部分简单的判断8中基本数据类型及包装类和string /Number /date / Enum
+     *
      * @return
      */
     public static boolean isSimpleType(Class<?> clazz) {
@@ -101,6 +103,7 @@ public class CommonKeyGenerator implements KeyGenerator {
 
     /**
      * 获取方法去上的缓存方法, 并新增前缀
+     *
      * @param method
      * @return
      */
@@ -123,6 +126,7 @@ public class CommonKeyGenerator implements KeyGenerator {
 
     /**
      * 增加前缀
+     *
      * @param cacheName
      * @return
      */

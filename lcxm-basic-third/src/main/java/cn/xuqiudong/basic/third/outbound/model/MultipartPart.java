@@ -1,11 +1,11 @@
 package cn.xuqiudong.basic.third.outbound.model;
 
-import java.io.File;
-import java.io.InputStream;
-
 import cn.hutool.core.util.StrUtil;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Getter;
+
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * multipart/form-data 中的一个字段。
@@ -49,7 +49,7 @@ public class MultipartPart {
 
     @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Fail fast for invalid multipart part input.")
     private MultipartPart(Type type, String name, String value, File file, String fileName,
-            InputStream inputStream) {
+                          InputStream inputStream) {
         if (type == null) {
             throw new IllegalArgumentException("multipart part type can not be null");
         }

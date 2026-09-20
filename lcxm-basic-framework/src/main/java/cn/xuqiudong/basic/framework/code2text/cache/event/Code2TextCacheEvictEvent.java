@@ -1,12 +1,12 @@
 package cn.xuqiudong.basic.framework.code2text.cache.event;
 
-import lombok.Data;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 /**
  * 描述:
  * 失效事件模型
+ *
  * @author Vic.xu
  * @since 2026-01-15 14:20
  */

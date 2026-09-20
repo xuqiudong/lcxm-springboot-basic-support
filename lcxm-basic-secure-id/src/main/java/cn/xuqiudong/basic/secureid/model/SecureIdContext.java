@@ -6,6 +6,7 @@ import java.util.IdentityHashMap;
  * 单次响应 ID 加密的递归上下文。
  * <p>
  * 只表达一次响应处理过程中的状态，不跨请求复用。
+ *
  * @author Vic.xu
  */
 public class SecureIdContext {

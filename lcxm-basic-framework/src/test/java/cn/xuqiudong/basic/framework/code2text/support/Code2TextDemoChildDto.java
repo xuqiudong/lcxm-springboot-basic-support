@@ -24,7 +24,8 @@ public class Code2TextDemoChildDto extends Code2TextDemoDto {
 
 
     public static void main(String[] args) {
-        List<EnrichFieldModel> enricherFieldModels = EnrichFieldMetaBuilder.getEnricherFieldModels(Code2TextDemoChildDto.class);
+        List<EnrichFieldModel> enricherFieldModels =
+                EnrichFieldMetaBuilder.getEnricherFieldModels(Code2TextDemoChildDto.class);
         for (EnrichFieldModel model : enricherFieldModels) {
             PropDesc propDesc = model.getPropDesc();
             String name = propDesc.getField().getName();

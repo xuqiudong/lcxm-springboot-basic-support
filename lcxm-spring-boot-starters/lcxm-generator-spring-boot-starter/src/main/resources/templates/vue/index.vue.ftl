@@ -7,15 +7,11 @@
 <script lang="ts" setup>
     import type { TableInstance, FormInstance, FormRules } from "element-plus"
     import type { ${entity.className}Data } from "./apis/type"
-    import { validateUniqueField } from "@@/composables/useFormValidate"
-    import { useFullscreen } from "@@/composables/useFullscreen"
-    import { usePagination } from "@@/composables/usePagination"
-    import { useTableSort } from "@@/composables/useTableSort"
-    import { checkPermission } from "@@/utils/permission"
-    // import { validateUniqueField } from "@@/composables/useFormValidate"
-    import { CirclePlus, Close, Refresh, RefreshRight, Search } from "@element-plus/icons-vue"
-    import { cloneDeep } from "lodash-es"
-    import * as ${entity.className}Api from "./apis"
+    import {useFullscreen} from "@@/composables/useFullscreen"
+    import {usePagination} from "@@/composables/usePagination"
+    import {useTableSort} from "@@/composables/useTableSort"
+                                                                // import { validateUniqueField } from "@@/composables/useFormValidate"
+import {cloneDeep} from "lodash-es"import * as ${entity.className}Api from "./apis"
 
     defineOptions({
         // 命名当前组件:  ${table.comments!}

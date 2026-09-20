@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.annotation.DbType;
 
 /**
  * 描述:
- *    获取 mybatis plus 数据库类型
+ * 获取 mybatis plus 数据库类型
+ *
  * @author Vic.xu
  * @since 2025-10-27 11:12
  */
@@ -28,7 +29,7 @@ public class MpDbTypeUtil {
     /**
      * 处理名称不直接匹配的特殊数据库类型
      */
-    public static  DbType mapSpecialDbType(String driverName) {
+    public static DbType mapSpecialDbType(String driverName) {
         // 可选：抛出异常提示不支持，或返回 null 让插件自动推断
         return switch (driverName) {
             case "POSTGRESQL" -> DbType.POSTGRE_SQL;

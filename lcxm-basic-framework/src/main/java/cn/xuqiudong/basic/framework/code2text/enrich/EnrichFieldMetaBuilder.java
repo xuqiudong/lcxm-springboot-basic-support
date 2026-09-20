@@ -17,7 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Description:
- *  构建转换结果dto 的包含 Code2TextEnrich 注解的情况， 并缓存
+ * 构建转换结果dto 的包含 Code2TextEnrich 注解的情况， 并缓存
+ *
  * @author Vic.xu
  * @since 2026-06-23 9:21
  */
@@ -25,8 +26,6 @@ public class EnrichFieldMetaBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(EnrichFieldMetaBuilder.class);
 
     private static final Map<Class<?>, List<EnrichFieldModel>> ENRICHER_FIELD_MODEL_CACHE = new ConcurrentHashMap<>();
-
-
 
 
     /**

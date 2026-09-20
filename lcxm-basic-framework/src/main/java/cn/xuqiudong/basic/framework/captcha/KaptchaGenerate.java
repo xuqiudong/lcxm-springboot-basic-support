@@ -2,14 +2,14 @@ package cn.xuqiudong.basic.framework.captcha;
 
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
-
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,8 +43,9 @@ public class KaptchaGenerate {
     }
 
     /**
-     *  生成验证码对象
-     * @return  Base64CaptchaModel
+     * 生成验证码对象
+     *
+     * @return Base64CaptchaModel
      * @throws IOException
      */
     public Base64CaptchaModel generateWithoutToken() throws IOException {
@@ -56,6 +57,7 @@ public class KaptchaGenerate {
     /**
      *
      * 生成验证码对象
+     *
      * @param token 验证码凭证
      * @return Base64CaptchaModel
      * @throws IOException IOException
@@ -74,10 +76,11 @@ public class KaptchaGenerate {
 
     /**
      * 输出到页面并缓存
+     *
      * @param request  HttpServletRequest
      * @param response HttpServletResponse
      */
-    public void printAndStorage(HttpServletRequest request, HttpServletResponse response){
+    public void printAndStorage(HttpServletRequest request, HttpServletResponse response) {
         String text = defaultKaptcha.createText();
         BufferedImage image = defaultKaptcha.createImage(text);
         //存入session
@@ -86,7 +89,7 @@ public class KaptchaGenerate {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         response.setDateHeader("Expires", 0);
 
-        try(ServletOutputStream os = response.getOutputStream()){
+        try (ServletOutputStream os = response.getOutputStream()) {
             //输出到页面
             ImageIO.write(image, "jpge", os);
         } catch (IOException e) {
@@ -95,12 +98,13 @@ public class KaptchaGenerate {
     }
 
     /**
-     *  校验验证码，并删除
-      * @param kaptcha 验证码
+     * 校验验证码，并删除
+     *
+     * @param kaptcha 验证码
      * @param request HttpServletRequest
      * @return true or false
      */
-    public boolean checkKaptcha(String kaptcha, HttpServletRequest request){
+    public boolean checkKaptcha(String kaptcha, HttpServletRequest request) {
         if (StringUtils.isBlank(kaptcha) || request == null) {
             return false;
         }

@@ -42,9 +42,11 @@ public class VueCustomizeConfig {
     /**
      * 抽取重复的构建逻辑，只保留变化的参数
      */
-    private static CustomizeTemplateConfig buildVueConfig(String subPath, String templateName, String fileSuffix, String fileNameSuffix) {
+    private static CustomizeTemplateConfig buildVueConfig(String subPath, String templateName, String fileSuffix,
+                                                          String fileNameSuffix) {
         return CustomizeTemplateConfig
-                .build(name -> "vue/" + StringUtils.uncapitalize( name) + (subPath.isEmpty() ? "" : "/" + subPath), templateName)
+                .build(name -> "vue/" + StringUtils.uncapitalize(name) + (subPath.isEmpty() ? "" : "/" + subPath),
+                        templateName)
                 .setFileSuffix(fileSuffix)
                 .setFileNameFunction(name -> fileNameSuffix);
     }

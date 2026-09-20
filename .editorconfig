@@ -1,3 +1,6 @@
+# LCXM 的跨编辑器基础格式配置。
+# IntelliJ IDEA 用户也可导入 config/idea/lcxm-idea-style.xml；两份配置中的 Java 规则应保持一致。
+# 本文件存在时，其中已声明的选项优先于 IDEA Code Style Scheme 的对应选项。
 root = true
 
 [*]

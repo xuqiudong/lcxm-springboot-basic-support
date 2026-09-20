@@ -2,7 +2,8 @@ package cn.xuqiudong.basic.framework.select;
 
 /**
  * 描述:
- *  开启业务下拉框功能
+ * 开启业务下拉框功能
+ *
  * @author Vic.xu
  * @since 2026-01-08 10:31
  */
@@ -19,7 +20,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty(prefix = "lcxm.framework.business.select", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "lcxm.framework.business.select", name = "enabled", havingValue = "true",
+        matchIfMissing = true)
 public class BusinessSelectAutoConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BusinessSelectAutoConfiguration.class);
@@ -30,7 +32,7 @@ public class BusinessSelectAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public BusinessSelectFacade businessSelectFacade(ObjectProvider<BusinessSelectProvider>  provider) {
+    public BusinessSelectFacade businessSelectFacade(ObjectProvider<BusinessSelectProvider> provider) {
         return new BusinessSelectFacade(provider);
     }
 

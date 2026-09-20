@@ -11,12 +11,12 @@ import java.lang.annotation.Target;
 /**
  * Description:
  * 注解：条件注册泛型 Bean
- *
+ * <p>
  * 使用此注解时，需要指定接口类型和泛型类型。
  * 示例：
  *
- * @ConditionalOnMissingGenericBean(beanInterface = Code2TextResolver.class, genericType = UserCode2Text.class)
  * @author Vic.xu
+ * @ConditionalOnMissingGenericBean(beanInterface = Code2TextResolver.class, genericType = UserCode2Text.class)
  * @since 2026-03-27 10:49
  */
 @Target({ElementType.METHOD, ElementType.TYPE})

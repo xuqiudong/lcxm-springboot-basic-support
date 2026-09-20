@@ -5,9 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 
 /**
  * 描述:
- *   处理查询条件的函数式接口
- * @see QueryOperation
+ * 处理查询条件的函数式接口
+ *
  * @author Vic.xu
+ * @see QueryOperation
  * @since 2025-10-31 15:56
  */
 @FunctionalInterface

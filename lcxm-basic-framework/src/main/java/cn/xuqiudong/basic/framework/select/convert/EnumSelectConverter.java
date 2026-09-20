@@ -11,7 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 描述:
- *  枚举转下拉选项的工具类（带缓存）
+ * 枚举转下拉选项的工具类（带缓存）
+ *
  * @author Vic.xu
  * @since 2025-11-13 17:05
  */
@@ -24,6 +25,7 @@ public class EnumSelectConverter {
 
     /**
      * 将枚举类转换为下拉选项列表
+     *
      * @param enumClass 实现EnumSelectable的枚举类
      * @return 排序后的下拉选项列表
      */

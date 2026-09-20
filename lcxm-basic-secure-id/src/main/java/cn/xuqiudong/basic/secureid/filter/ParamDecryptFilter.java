@@ -27,8 +27,9 @@ import java.util.Map;
  * Description:
  * 对id数据进行解密过滤器，
  * 注意 加解密的SALT的来源，如果是来自某个Filter, 则应该放在此Filter之前
- *
+ * <p>
  * 要不要使用：OncePerRequestFilter  内部转发的时候要不要再次解密
+ *
  * @author Vic.xu
  * @since 2026-08-21 9:05
  */
@@ -157,7 +158,7 @@ public class ParamDecryptFilter extends OncePerRequestFilter {
      * 描述:获取 post 请求内容
      */
     private static String getRequestPostStr(HttpServletRequest request) throws IOException {
-        byte buffer[] = getRequestPostBytes(request);
+        byte[] buffer = getRequestPostBytes(request);
         String charEncoding = request.getCharacterEncoding();
         if (charEncoding == null) {
             charEncoding = StandardCharsets.UTF_8.name();

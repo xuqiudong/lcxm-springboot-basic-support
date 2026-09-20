@@ -1,8 +1,5 @@
 package cn.xuqiudong.basic.third.inbound.web.interceptor;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import cn.xuqiudong.basic.core.model.BaseResponse;
@@ -15,6 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Spring MVC inbound token 拦截器。
@@ -49,7 +49,8 @@ public class InboundTokenInterceptor implements AsyncHandlerInterceptor {
      * 设置 token parameter 名称；为空时使用默认值 {@code token}。
      */
     public void setTokenParameterName(String tokenParameterName) {
-        this.tokenParameterName = StrUtil.blankToDefault(tokenParameterName, InboundTokenConstants.TOKEN_PARAMETER_NAME);
+        this.tokenParameterName =
+                StrUtil.blankToDefault(tokenParameterName, InboundTokenConstants.TOKEN_PARAMETER_NAME);
     }
 
     /**
@@ -77,7 +78,7 @@ public class InboundTokenInterceptor implements AsyncHandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
-            Exception ex) {
+                                Exception ex) {
         InboundTokenContextHolder.clear();
     }
 
@@ -86,7 +87,7 @@ public class InboundTokenInterceptor implements AsyncHandlerInterceptor {
      */
     @Override
     public void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response,
-            Object handler) {
+                                               Object handler) {
         InboundTokenContextHolder.clear();
     }
 

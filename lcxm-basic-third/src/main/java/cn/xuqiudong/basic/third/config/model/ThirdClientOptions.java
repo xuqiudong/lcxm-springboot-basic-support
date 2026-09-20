@@ -1,13 +1,13 @@
 package cn.xuqiudong.basic.third.config.model;
 
+import cn.hutool.core.util.StrUtil;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 import java.net.Proxy;
 import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import cn.hutool.core.util.StrUtil;
-import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * 第三方出站运行参数。

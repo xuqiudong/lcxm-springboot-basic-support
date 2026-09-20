@@ -1,17 +1,17 @@
 package cn.xuqiudong.basic.framework.authentication.interceptor;
 
+import cn.xuqiudong.basic.core.exception.CommonException;
+import cn.xuqiudong.basic.core.model.BaseResponse;
 import cn.xuqiudong.basic.framework.authentication.annotation.Logical;
 import cn.xuqiudong.basic.framework.authentication.annotation.Permission;
 import cn.xuqiudong.basic.framework.authentication.model.PermissionModel;
-import cn.xuqiudong.basic.core.exception.CommonException;
-import cn.xuqiudong.basic.core.model.BaseResponse;
 import cn.xuqiudong.basic.framework.tool.Tools;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -19,10 +19,11 @@ import java.util.stream.Stream;
 
 /**
  * 授权code拦截器
- * 如果没有配置权限注解Permission，依然判断当前用户是否具有当前url, 
+ * 如果没有配置权限注解Permission，依然判断当前用户是否具有当前url,
  * 如果配置了权限注解Permission， 在配置了权限标识的时候，只判断权限标示，
- * @see Permission
+ *
  * @author VIC.xu
+ * @see Permission
  *
  */
 public class PermissionCodeInterceptor implements HandlerInterceptor {
@@ -46,7 +47,9 @@ public class PermissionCodeInterceptor implements HandlerInterceptor {
      */
     private final Consumer<HttpServletResponse> redirectTo500Handler;
 
-    public PermissionCodeInterceptor(Supplier<PermissionModel> permissionModelSupplier, Consumer<HttpServletResponse> redirectTo500Handler, boolean willInterceptUrlDefaults) {
+    public PermissionCodeInterceptor(Supplier<PermissionModel> permissionModelSupplier,
+                                     Consumer<HttpServletResponse> redirectTo500Handler,
+                                     boolean willInterceptUrlDefaults) {
         this.permissionModelSupplier = permissionModelSupplier;
         this.redirectTo500Handler = redirectTo500Handler;
         this.willInterceptUrlDefaults = willInterceptUrlDefaults;
@@ -110,6 +113,7 @@ public class PermissionCodeInterceptor implements HandlerInterceptor {
 
     /**
      * 是否具有此权限标示
+     *
      * @param permissions
      * @param logical
      * @param permissionModel PermissionModel
@@ -137,6 +141,7 @@ public class PermissionCodeInterceptor implements HandlerInterceptor {
 
     /**
      * 是否具有此菜单,
+     *
      * @param url
      * @param permissionModel PermissionModel
      * @return boolean

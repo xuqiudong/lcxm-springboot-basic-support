@@ -51,7 +51,8 @@ public class RequestLogPrintAspect {
     /**
      * 日志记录的切面 LogPrint && RequestMapping
      * (execution(* pers.vic.api.*.controller.*.*(..))
-     * "(@annotation(pers.vic.boot.base.aspect.annotation.LogPrint)) && (@annotation(org.springframework.web.bind.annotation.RequestMapping))"
+     * "(@annotation(pers.vic.boot.base.aspect.annotation.LogPrint)) && (@annotation(org.springframework.web.bind
+     * .annotation.RequestMapping))"
      */
     @Pointcut("@annotation(cn.xuqiudong.basic.framework.aspect.annotation.LogPrint)")
     public void log() {
