@@ -37,7 +37,8 @@ public class QueryTemplateConfig extends BaseTemplateConfig {
     }
 
 
-    public static class Builder extends BaseConfigBuilder<QueryTemplateConfig.Builder, QueryTemplateConfig> implements IConfigBuilder<QueryTemplateConfig> {
+    public static class Builder extends BaseConfigBuilder<QueryTemplateConfig.Builder, QueryTemplateConfig>
+            implements IConfigBuilder<QueryTemplateConfig> {
         public Builder() {
             super(new QueryTemplateConfig());
         }

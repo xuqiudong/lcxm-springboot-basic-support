@@ -70,11 +70,11 @@ public class NameConvertUtils {
     /**
      * 下划线
      */
-    static String UNDERLINE = "_";
+    private static final String UNDERLINE = "_";
     /**
      * 字段属性转java属性忽略的前缀
      */
-    static String IGNORE_COLUMN_PREFIX = "is_";
+    private static final String IGNORE_COLUMN_PREFIX = "is_";
 
     /**
      * 下划线转驼峰 但是不小写

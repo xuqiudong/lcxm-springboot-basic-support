@@ -109,7 +109,8 @@ public class EntityTemplateConfig extends BaseTemplateConfig {
     /**
      * Entity  模板配置  构建器
      */
-    public static class Builder extends BaseConfigBuilder<Builder, EntityTemplateConfig> implements IConfigBuilder<EntityTemplateConfig> {
+    public static class Builder extends BaseConfigBuilder<Builder, EntityTemplateConfig>
+            implements IConfigBuilder<EntityTemplateConfig> {
 
         public Builder() {
             super(new EntityTemplateConfig());

@@ -28,7 +28,8 @@ public class MysqlGeneratorDao extends BaseGeneratorDao {
     @Override
     public int countList(TableLookup lookup) {
         StringBuffer sql = new StringBuffer(
-                "SELECT count(*) FROM information_schema.tables " + "		WHERE table_schema = (select database())");
+                "SELECT count(*) FROM information_schema.tables "
+                        + "WHERE table_schema = (select database())");
         List<Object> params = new ArrayList<Object>();
         sql.append(buildListWhere(lookup, params));
 
@@ -64,8 +65,8 @@ public class MysqlGeneratorDao extends BaseGeneratorDao {
     public List<TableMeta> queryList(TableLookup lookup) {
         StringBuffer sql =
                 new StringBuffer("SELECT table_name tableName, engine, table_comment comments, create_time createTime "
-                        + "		FROM information_schema.tables " +
-                        "		WHERE table_schema = (select database())");
+                        + "FROM information_schema.tables "
+                        + "WHERE table_schema = (select database())");
         List<Object> params = new ArrayList<Object>();
 
         sql.append(buildListWhere(lookup, params));
@@ -88,9 +89,9 @@ public class MysqlGeneratorDao extends BaseGeneratorDao {
         String sql =
                 "SELECT column_name columnName, data_type dataType, column_comment comments, column_key columnKey, " +
                         "extra \n"
-                        + "		FROM information_schema.columns\n"
-                        +
-                        " 		WHERE table_name = ? and table_schema = (select database()) order by ordinal_position";
+                        + "FROM information_schema.columns\n"
+                        + "WHERE table_name = ? and table_schema = (select database()) "
+                        + "order by ordinal_position";
         return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(ColumnMeta.class),
                 tableName);
     }
@@ -101,7 +102,7 @@ public class MysqlGeneratorDao extends BaseGeneratorDao {
             String sql =
                     "select table_name tableName, engine, table_comment comments, create_time createTime from " +
                             "information_schema.tables \n"
-                            + "			where table_schema = (select database()) and table_name = ?";
+                            + "where table_schema = (select database()) and table_name = ?";
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(TableMeta.class), tableName);
         } catch (EmptyResultDataAccessException e) {
             return null;

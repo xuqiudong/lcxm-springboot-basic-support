@@ -43,6 +43,7 @@ public class FreemarkerTemplateEngine extends BaseTemplateEngine {
         Template template = configuration.getTemplate(templatePath);
         // 直接将渲染结果写入目标Writer
         template.process(model, writer);
-        writer.flush(); // 确保数据刷入输出流
+        // 确保数据刷入输出流
+        writer.flush();
     }
 }

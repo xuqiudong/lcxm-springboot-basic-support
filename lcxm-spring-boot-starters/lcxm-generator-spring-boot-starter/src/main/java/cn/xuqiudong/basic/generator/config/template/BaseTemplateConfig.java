@@ -72,7 +72,8 @@ public abstract class BaseTemplateConfig {
      * @param <T> 具体的子类 建造器
      * @param <C> 模板配置
      */
-    public static abstract class BaseConfigBuilder<T extends BaseConfigBuilder<T, C>, C extends BaseTemplateConfig> implements IConfigBuilder<C> {
+    public abstract static class BaseConfigBuilder<T extends BaseConfigBuilder<T, C>, C extends BaseTemplateConfig>
+            implements IConfigBuilder<C> {
 
         protected final C config;
 
