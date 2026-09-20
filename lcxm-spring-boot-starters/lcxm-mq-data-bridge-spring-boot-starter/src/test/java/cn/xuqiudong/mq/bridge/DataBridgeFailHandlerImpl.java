@@ -16,7 +16,7 @@ public class DataBridgeFailHandlerImpl implements DataBridgeFailHandler {
 
     @Override
     public void onFail(FailContext failContext) {
-        System.out.println("DataBridgeFailHandlerImpl onFail" );
+        System.out.println("DataBridgeFailHandlerImpl onFail");
         JsonUtil.printJson(failContext);
     }
 }

@@ -4,7 +4,8 @@ import cn.xuqiudong.mq.bridge.vo.AbstractDataBridgeVo;
 
 /**
  * 描述:
- *      因为发送到mq的消息需要包含一些元数据，所以这里对原始消息内容进行包装
+ * 因为发送到mq的消息需要包含一些元数据，所以这里对原始消息内容进行包装
+ *
  * @author Vic.xu
  * @since 2025-03-04 16:01
  */

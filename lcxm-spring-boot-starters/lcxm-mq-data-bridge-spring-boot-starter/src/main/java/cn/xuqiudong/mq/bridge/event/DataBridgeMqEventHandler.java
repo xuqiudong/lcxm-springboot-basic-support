@@ -25,7 +25,8 @@ public class DataBridgeMqEventHandler {
 
     private final DataBridgeGlobalConfigHelper dataBridgeGlobalConfigHelper;
 
-    public DataBridgeMqEventHandler(SimpleMessageListenerContainer simpleMessageListenerContainer, DataBridgeGlobalConfigHelper dataBridgeGlobalConfigHelper) {
+    public DataBridgeMqEventHandler(SimpleMessageListenerContainer simpleMessageListenerContainer,
+                                    DataBridgeGlobalConfigHelper dataBridgeGlobalConfigHelper) {
         this.messageListenerContainer = simpleMessageListenerContainer;
         this.dataBridgeGlobalConfigHelper = dataBridgeGlobalConfigHelper;
     }

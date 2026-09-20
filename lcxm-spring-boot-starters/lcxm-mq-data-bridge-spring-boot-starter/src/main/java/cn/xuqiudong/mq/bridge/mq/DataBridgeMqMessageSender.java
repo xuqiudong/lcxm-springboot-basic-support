@@ -39,7 +39,8 @@ public class DataBridgeMqMessageSender {
     private final DataBridgeGlobalConfigHelper mqStatusSwitchHelper;
     private final DataBridgeProperties properties;
 
-    public DataBridgeMqMessageSender(RabbitTemplate rabbitTemplate, DataBridgeGlobalConfigHelper mqStatusSwitchHelper, DataBridgeProperties properties) {
+    public DataBridgeMqMessageSender(RabbitTemplate rabbitTemplate, DataBridgeGlobalConfigHelper mqStatusSwitchHelper,
+                                     DataBridgeProperties properties) {
         this.rabbitTemplate = rabbitTemplate;
         this.mqStatusSwitchHelper = mqStatusSwitchHelper;
         this.properties = properties;

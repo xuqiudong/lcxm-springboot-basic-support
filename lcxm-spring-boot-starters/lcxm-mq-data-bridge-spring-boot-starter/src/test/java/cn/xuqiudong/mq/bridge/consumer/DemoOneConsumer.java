@@ -1,7 +1,7 @@
 package cn.xuqiudong.mq.bridge.consumer;
 
-import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.basic.core.util.JsonUtil;
+import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.mq.bridge.annotation.ActionHandler;
 import cn.xuqiudong.mq.bridge.consumer.model.DemoConsumerModel;
 import cn.xuqiudong.mq.bridge.core.AbstractDataBridgeMessageConsumer;
@@ -19,18 +19,21 @@ public class DemoOneConsumer extends AbstractDataBridgeMessageConsumer {
     public String module() {
         return "demo";
     }
-    public static final String aa = "save";
+
+    public static final String AA = "save";
+
     public DemoOneConsumer() {
         System.out.println("DemoOneConsumer init");
 
 
     }
-    @ActionHandler(action = aa, messageType = DemoConsumerModel.class)
-    public BooleanWithMsg save(DemoConsumerModel demoConsumerModel){
+
+    @ActionHandler(action = AA, messageType = DemoConsumerModel.class)
+    public BooleanWithMsg save(DemoConsumerModel demoConsumerModel) {
         if (demoConsumerModel.getAge() == 20) {
             return BooleanWithMsg.fail("年龄不能为20");
         }
-        System.out.println("save DemoOneConsumer demoConsumerModel : age = " + demoConsumerModel.getAge() );
+        System.out.println("save DemoOneConsumer demoConsumerModel : age = " + demoConsumerModel.getAge());
         JsonUtil.printJson(demoConsumerModel);
         return BooleanWithMsg.success();
     }

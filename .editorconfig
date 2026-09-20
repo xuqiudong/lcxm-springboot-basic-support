@@ -24,6 +24,9 @@ ij_java_binary_operation_wrap = normal
 ij_java_assignment_wrap = normal
 ij_java_for_statement_wrap = normal
 ij_java_annotation_parameter_wrap = normal
+# 类的 extends/implements 列表和方法的 throws 列表超过右边界时按需换行。
+ij_java_extends_list_wrap = normal
+ij_java_throws_list_wrap = normal
 
 # IDEA 不自动生成星号 import，与 Checkstyle 的 AvoidStarImport 保持一致。
 ij_java_class_count_to_use_import_on_demand = 999

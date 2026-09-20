@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 /**
  * 描述:
- *      data bridge 相关mq开关状态
+ * data bridge 相关mq开关状态
+ *
  * @author Vic.xu
  * @since 2025-02-27 11:41
  */

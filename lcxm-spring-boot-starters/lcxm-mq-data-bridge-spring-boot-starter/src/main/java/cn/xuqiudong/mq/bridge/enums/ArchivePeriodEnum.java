@@ -23,7 +23,7 @@ public enum ArchivePeriodEnum {
         return format;
     }
 
-    public String format(LocalDate localDate){
+    public String format(LocalDate localDate) {
         return localDate.format(java.time.format.DateTimeFormatter.ofPattern(format));
     }
 

@@ -8,7 +8,10 @@
 
     <!-- 列表数据列 -->
     <sql id="base_list">
-        a.id AS `id` ,
+        a
+        .
+        id
+        AS `id` ,
         a.message_id AS `messageId` ,
         a.queue_name AS `queueName` ,
         a.module AS `module` ,
@@ -28,7 +31,10 @@
 
     <!-- 详情数据列 -->
     <sql id="detail_list">
-        a.id AS `id` ,
+        a
+        .
+        id
+        AS `id` ,
         a.message_id AS `messageId` ,
         a.queue_name AS `queueName` ,
         a.module AS `module` ,

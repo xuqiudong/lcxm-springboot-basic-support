@@ -45,9 +45,9 @@ public class AfterStartup implements CommandLineRunner {
     public void sendMsg(String msg) throws InterruptedException {
         String queue = mqDataBridgeProperties.getReceiveQueue();
         String routingKey = mqDataBridgeProperties.getReceiveRoutingKey();
-            TimeUnit.SECONDS.sleep(5);
-            logger.info("ready to send message to queue: {}!!!", queue);
-            messageSenderService.sendMessage(Tools.randomUuid(), msg + " " + LocalTime.now(), routingKey);
+        TimeUnit.SECONDS.sleep(5);
+        logger.info("ready to send message to queue: {}!!!", queue);
+        messageSenderService.sendMessage(Tools.randomUuid(), msg + " " + LocalTime.now(), routingKey);
 
 
     }
@@ -65,7 +65,7 @@ public class AfterStartup implements CommandLineRunner {
         }
     }
 
-    private void sendDemo(int i){
+    private void sendDemo(int i) {
         DemoConsumerModel demoConsumerModel = new DemoConsumerModel();
         demoConsumerModel.setId(Tools.randomUuid());
         demoConsumerModel.setName("Vic" + LocalTime.now());

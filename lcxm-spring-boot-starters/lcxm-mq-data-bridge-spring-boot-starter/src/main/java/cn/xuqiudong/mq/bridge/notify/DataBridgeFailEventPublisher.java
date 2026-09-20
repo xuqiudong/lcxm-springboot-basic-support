@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * 描述:
- *   消息通知入口
+ * 消息通知入口
+ *
  * @author Vic.xu
  * @since 2026-02-05 14:46
  */
@@ -33,7 +34,7 @@ public class DataBridgeFailEventPublisher {
      * 发送消息处理失败通知
      */
     public void publish(OperationEnum operation, Integer messageId, String errorMsg) {
-        publish(new FailContext(operation, messageId,  errorMsg));
+        publish(new FailContext(operation, messageId, errorMsg));
     }
 
     /**

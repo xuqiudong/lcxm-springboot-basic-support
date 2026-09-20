@@ -17,7 +17,8 @@ import java.util.List;
  * @since 2025-03-03 11:11
  */
 @Service
-public class DataBridgeSendMessageService extends BaseGenericService<DataBridgeSendMessageMapper, DataBridgeSendMessage, Integer> {
+public class DataBridgeSendMessageService extends BaseGenericService<DataBridgeSendMessageMapper,
+        DataBridgeSendMessage, Integer> {
 
 
     @Resource

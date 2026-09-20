@@ -107,7 +107,7 @@ public class DataBridgeAutoConfiguration {
     }
 
     @Bean
-    public Queue receiveQueue() {  // ✅ 修正拼写
+    public Queue receiveQueue() {  
         return new Queue(dataBridgeProperties.getReceiveQueue(), true);
     }
 

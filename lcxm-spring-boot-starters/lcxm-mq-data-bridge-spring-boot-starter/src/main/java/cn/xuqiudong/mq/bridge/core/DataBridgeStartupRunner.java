@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * 描述:
- *      项目启动后 触发 异步发送和异步消费动作
+ * 项目启动后 触发 异步发送和异步消费动作
+ *
  * @author Vic.xu
  * @since 2025-03-07 15:09
  */

@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * 描述:
- *  消费消息的基类，继承该类
+ * 消费消息的基类，继承该类
  *
  * @author Vic.xu
  * @since 2025-03-07 10:58
@@ -25,6 +25,7 @@ public abstract class AbstractDataBridgeMessageConsumer {
 
     /**
      * 注册各个action
+     *
      * @param selfBean 当前类，被spring管理的bean
      */
     public Map<String, ActionHandlerModel> registerHandlers(AbstractDataBridgeMessageConsumer selfBean) {

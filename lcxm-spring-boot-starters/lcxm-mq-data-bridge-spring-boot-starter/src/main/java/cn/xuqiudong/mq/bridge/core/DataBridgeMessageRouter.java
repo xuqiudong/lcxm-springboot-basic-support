@@ -1,7 +1,7 @@
 package cn.xuqiudong.mq.bridge.core;
 
-import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.basic.core.util.JsonUtil;
+import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.mq.bridge.model.ActionHandlerModel;
 import cn.xuqiudong.mq.bridge.model.DataBridgeReceiveMessage;
 import cn.xuqiudong.mq.bridge.vo.AbstractDataBridgeVo;
@@ -77,7 +77,8 @@ public class DataBridgeMessageRouter {
         }
         try {
             long start = System.currentTimeMillis();
-            AbstractDataBridgeVo abstractDataBridgeVo = JsonUtil.jsonToObject(message.getMessage(), actionHandler.getFlag().messageType());
+            AbstractDataBridgeVo abstractDataBridgeVo =
+                    JsonUtil.jsonToObject(message.getMessage(), actionHandler.getFlag().messageType());
             BooleanWithMsg result = actionHandler.invoke(abstractDataBridgeVo);
             long end = System.currentTimeMillis();
             LOGGER.info("消费[{}]消息[{}]用时[{}]ms", message.getModule() + "-" + message.getAction(),
@@ -100,7 +101,7 @@ public class DataBridgeMessageRouter {
     private ActionHandlerModel findActionHandler(String module, String action) {
         Map<String, ActionHandlerModel> moduleMap = consumerMap.get(module);
         if (moduleMap == null) {
-            throw new RuntimeException("没有找到模块[" + module + "." + action+"]对应的消息处理器");
+            throw new RuntimeException("没有找到模块[" + module + "." + action + "]对应的消息处理器");
         }
         return moduleMap.get(action);
     }

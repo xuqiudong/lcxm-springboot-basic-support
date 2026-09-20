@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * 描述:
- *   失败通知上下文
+ * 失败通知上下文
+ *
  * @author Vic.xu
  * @since 2026-02-05 14:49
  */

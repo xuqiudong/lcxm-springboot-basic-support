@@ -59,7 +59,8 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
                                          DataBridgeFailEventPublisher dataBridgeFailEventPublisher,
                                          DataBridgeMqMessageSender dataMessageSender,
                                          DataBridgeProperties dataBridgeProperties,
-                                         ClusterOperationStateManagerHelper clusterOperationStateManagerHelper, SendMessageArchiveService sendMessageArchiveService) {
+                                         ClusterOperationStateManagerHelper clusterOperationStateManagerHelper,
+                                         SendMessageArchiveService sendMessageArchiveService) {
         super(dataBridgeGlobalSwitchHelper, clusterOperationStateManagerHelper, dataBridgeFailEventPublisher);
         this.dataBridgeSendMessageService = dataBridgeSendMessageService;
         this.dataBridgeSender = dataMessageSender;
@@ -213,7 +214,8 @@ public class DataBridgeMessageSenderFacade extends AbstractDataBridgeMessageFaca
             return BooleanWithMsg.fail("消息[" + id + "]状态为[" + entity.getStatus().getDesc() + "]，不能发送");
         }
         // 发送消息并进行指数退避重试
-        BooleanWithMsg result = dataBridgeSender.sendWithRetry(entity.getMessageId(), entity.getMessage(), dataBridgeProperties.getSendRoutingKey());
+        BooleanWithMsg result = dataBridgeSender.sendWithRetry(entity.getMessageId(), entity.getMessage(),
+                dataBridgeProperties.getSendRoutingKey());
         afterSend(entity, result);
         return result;
     }

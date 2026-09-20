@@ -22,7 +22,7 @@ public final class DataBridgeConstant {
     /**
      * 是否启用接收： 关闭的时候不接收消息
      */
-    public static final boolean DEFAULT_RECEIVE_ENABLE= true;
+    public static final boolean DEFAULT_RECEIVE_ENABLE = true;
 
     /**
      * 是否启用本地消费： 关闭的时候不消费消息
@@ -55,7 +55,7 @@ public final class DataBridgeConstant {
     public static final String DEFAULT_RECEIVE_QUEUE = "data_bridge_receive_queue";
 
     /**
-     *  默认接受消息的路由键: 理应配置
+     * 默认接受消息的路由键: 理应配置
      */
     public static final String DEFAULT_RECEIVE_ROUTING_KEY = "data_bridge_receive_routing_key";
 
@@ -85,22 +85,22 @@ public final class DataBridgeConstant {
     /**
      * 发送是否正在运行的 redis key
      */
-    public static final String REDIS_KEY_SEND_RUNNING = REDIS_KEY_PREFIX+"send:running";
+    public static final String REDIS_KEY_SEND_RUNNING = REDIS_KEY_PREFIX + "send:running";
 
     /**
      * 消费消息是否正在运行的 redis key
      */
-    public static final String REDIS_KEY_CONSUMER_RUNNING = REDIS_KEY_PREFIX+"receive:running";
+    public static final String REDIS_KEY_CONSUMER_RUNNING = REDIS_KEY_PREFIX + "receive:running";
 
     /**
      * 重试初始延迟时间 毫秒
      */
-    public  static final long INITIAL_RETRY_DELAY = 2000;
+    public static final long INITIAL_RETRY_DELAY = 2000;
 
     /**
      * 重试最大延迟时间 毫秒
      */
-    public  static final long MAX_RETRY_DELAY = 32000;
+    public static final long MAX_RETRY_DELAY = 32000;
 
     /**
      * 每次提取多少消息发送

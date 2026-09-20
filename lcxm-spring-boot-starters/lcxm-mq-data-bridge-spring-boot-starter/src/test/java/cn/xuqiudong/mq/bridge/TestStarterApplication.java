@@ -8,7 +8,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * 描述:  在test中启动项目 做测试，单元测试的时候 ：@SpringBootTest(classes = TestStarterApplication.class)
- *   默认情况下，Spring Boot 会根据 AutoConfiguration.imports 加载指定的自动配置类
+ * 默认情况下，Spring Boot 会根据 AutoConfiguration.imports 加载指定的自动配置类
+ *
  * @author Vic.xu
  * @since 2025-02-26 14:16
  */
@@ -21,8 +22,6 @@ public class TestStarterApplication {
     public static void main(String[] args) {
         SpringApplication.run(TestStarterApplication.class, args);
     }
-
-
 
 
 }

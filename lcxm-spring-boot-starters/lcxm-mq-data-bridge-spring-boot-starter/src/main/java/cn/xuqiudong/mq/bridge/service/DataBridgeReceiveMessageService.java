@@ -19,7 +19,8 @@ import java.util.List;
  * @since 2025-03-03 11:11
  */
 @Service
-public class DataBridgeReceiveMessageService extends BaseGenericService<DataBridgeReceiveMessageMapper, DataBridgeReceiveMessage, Integer> {
+public class DataBridgeReceiveMessageService extends BaseGenericService<DataBridgeReceiveMessageMapper,
+        DataBridgeReceiveMessage, Integer> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataBridgeReceiveMessageService.class);
 

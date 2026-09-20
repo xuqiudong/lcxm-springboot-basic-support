@@ -1,7 +1,7 @@
 package cn.xuqiudong.mq.bridge.facade;
 
-import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.basic.core.util.JsonUtil;
+import cn.xuqiudong.basic.core.vo.BooleanWithMsg;
 import cn.xuqiudong.mq.bridge.archive.ReceiveMessageArchiveService;
 import cn.xuqiudong.mq.bridge.constant.DataBridgeConstant;
 import cn.xuqiudong.mq.bridge.core.DataBridgeMessageRouter;
@@ -47,7 +47,8 @@ import java.util.concurrent.TimeUnit;
  * @since 2025-03-07 9:13
  */
 @Component
-public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFacade implements ApplicationContextAware {
+public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFacade implements
+        ApplicationContextAware {
 
     private final DataBridgeReceiveMessageService dataBridgeReceiveMessageService;
 
@@ -63,7 +64,8 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
                                            DataBridgeGlobalConfigHelper dataBridgeGlobalSwitchHelper,
                                            DataBridgeFailEventPublisher dataBridgeFailEventPublisher,
                                            DataBridgeMessageRouter dataBridgeMessageDispatcher,
-                                           ClusterOperationStateManagerHelper clusterOperationStateManagerHelper, ReceiveMessageArchiveService receiveMessageArchiveService) {
+                                           ClusterOperationStateManagerHelper clusterOperationStateManagerHelper,
+                                           ReceiveMessageArchiveService receiveMessageArchiveService) {
         super(dataBridgeGlobalSwitchHelper, clusterOperationStateManagerHelper, dataBridgeFailEventPublisher);
         this.dataBridgeReceiveMessageService = dataBridgeReceiveMessageService;
         this.dataBridgeMessageDispatcher = dataBridgeMessageDispatcher;
@@ -99,13 +101,14 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
             String messageJson = messageNode != null ? messageNode.toString() : null;
 
             // 解析 MessageContentWrapper（不包含 message 字段的具体类型）
-            MessageContentWrapper<?> messageContentWrapper = objectMapper.treeToValue(rootNode, MessageContentWrapper.class);
+            MessageContentWrapper<?> messageContentWrapper =
+                    objectMapper.treeToValue(rootNode, MessageContentWrapper.class);
 
             // 将 message 字段的 JSON 数据设置到 receiveMessage
             receiveMessage = new DataBridgeReceiveMessage(messageContentWrapper, messageJson);
         } catch (Exception e) {
             //解析失败，原样入库,其他字段不设置
-            LOGGER.error("handle message error, messageBody: {}", messageBody, e);
+            logger.error("handle message error, messageBody: {}", messageBody, e);
             receiveMessage = new DataBridgeReceiveMessage();
             receiveMessage.setMessageId(msgId);
             receiveMessage.setStatus(ReceiveStatusEnum.PARSE_ERROR);
@@ -144,7 +147,7 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
      */
     @Async
     public void startConsumerAsync() {
-        LOGGER.info("异步触发消息消费...");
+        logger.info("异步触发消息消费...");
         startConsumer();
     }
 
@@ -171,7 +174,7 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
                 List<DataBridgeReceiveMessage> dataBridgeReceiveMessages =
                         dataBridgeReceiveMessageService.fetchMessageToConsumer(lastTimeId);
 
-                LOGGER.info("进入本地消息消费, size = {}", dataBridgeReceiveMessages.size());
+                logger.info("进入本地消息消费, size = {}", dataBridgeReceiveMessages.size());
 
                 if (CollectionUtils.isEmpty(dataBridgeReceiveMessages)) {
                     // 没有消息可处理，退出循环
@@ -191,12 +194,12 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
                         result = BooleanWithMsg.fail("消息消费失败:" + e.getMessage());
                     }
                     if (!result.isSuccess()) {
-                        LOGGER.error("消息消费失败:{}, 关闭消息消费", result.getMessage());
+                        logger.error("消息消费失败:{}, 关闭消息消费", result.getMessage());
                         return;
                     }
                 }
                 long cost = System.currentTimeMillis() - internalStart;
-                LOGGER.info("本次消费消息[{}]条, cost = {}ms", dataBridgeReceiveMessages.size(), cost);
+                logger.info("本次消费消息[{}]条, cost = {}ms", dataBridgeReceiveMessages.size(), cost);
                 try {
                     // 休眠1s后继续下一轮发送
                     TimeUnit.SECONDS.sleep(1);
@@ -208,7 +211,7 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
         } finally {
             // 打印总耗时 和 总条数
             long cost = System.currentTimeMillis() - start;
-            LOGGER.info("本次消费消息结束,总条数[{}]条, cost = {}ms", size, cost);
+            logger.info("本次消费消息结束,总条数[{}]条, cost = {}ms", size, cost);
             // 重置状态
             afterOperation(operation, lock);
         }
@@ -223,22 +226,24 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
         // 判断状态：只有未发送和 已修正的数据才能发送 （其实数据库层面已经处理过）
         ReceiveStatusEnum status = entity.getStatus();
         if (status == ReceiveStatusEnum.PARSE_ERROR) {
-            String msg = MessageFormat.format("消息[{}]状态为[{}]，无法消费", entity.getId(), entity.getStatus().getText());
-            LOGGER.warn(msg);
+            String msg =
+                    MessageFormat.format("消息[{}]状态为[{}]，无法消费", entity.getId(), entity.getStatus().getText());
+            logger.warn(msg);
             dataBridgeGlobalSwitchHelper.setConsumerEnable(false);
             dataBridgeFailEventPublisher.publish(OperationEnum.CONSUME, entity.getId(), msg);
             return BooleanWithMsg.fail(msg);
         }
         // 查询的时候已经过滤 可忽略掉
         if (ReceiveStatusEnum.INITIAL != status && ReceiveStatusEnum.AMENDED != status) {
-            return BooleanWithMsg.fail("消息[" + entity.getId() + "]状态为[" + entity.getStatus().getText() + "]，不能消费");
+            return BooleanWithMsg.fail(
+                    "消息[" + entity.getId() + "]状态为[" + entity.getStatus().getText() + "]，不能消费");
         }
         BooleanWithMsg result;
         try {
             result = dataBridgeMessageDispatcher.dispatchMessage(entity);
         } catch (Throwable e) {
             result = BooleanWithMsg.fail("消息消费失败:" + e.getMessage());
-            LOGGER.error("消息消费失败", e);
+            logger.error("消息消费失败", e);
         }
         //保证在新的事务中运行
         getSelf().afterConsumer(entity, result);
@@ -258,7 +263,7 @@ public class DataBridgeMessageReceiverFacade extends AbstractDataBridgeMessageFa
             entity.setStatus(ReceiveStatusEnum.FAILED);
             entity.setNote(StringUtils.abbreviate(result.getMessage(), 512));
             //阻塞发送
-            LOGGER.warn("消息[{}]消费失败，将要阻塞全局消息消费!!!!!!!", entity.getId());
+            logger.warn("消息[{}]消费失败，将要阻塞全局消息消费!!!!!!!", entity.getId());
             dataBridgeGlobalSwitchHelper.setConsumerEnable(false);
             dataBridgeFailEventPublisher.publish(OperationEnum.CONSUME, entity.getId(), result.getMessage());
         }

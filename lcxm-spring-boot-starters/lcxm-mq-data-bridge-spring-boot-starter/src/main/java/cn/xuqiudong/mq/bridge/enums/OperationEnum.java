@@ -20,8 +20,7 @@ import cn.xuqiudong.mq.bridge.constant.DataBridgeConstant;
 public enum OperationEnum {
 
     CONSUME("consume", "消费"),
-    SEND("send", "发送"),
-    ;
+    SEND("send", "发送"),;
     // 操作键（用于 Redis 键）
     private final String operationKey;
     // 操作描述

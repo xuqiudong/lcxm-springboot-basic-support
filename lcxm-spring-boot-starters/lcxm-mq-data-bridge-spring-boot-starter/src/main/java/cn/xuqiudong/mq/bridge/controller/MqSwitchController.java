@@ -73,7 +73,7 @@ public class MqSwitchController {
         return BaseResponse.success();
     }
 
-    public void trigger(){
+    public void trigger() {
         DataBridgeEnableVO dataBridgeEnableVO = mqStatusSwitchHelper.allStatus();
         // 触发监听开关
         dataBridgeMqListenerSwitchHelper.switchListener(dataBridgeEnableVO.isReceiveEnable());

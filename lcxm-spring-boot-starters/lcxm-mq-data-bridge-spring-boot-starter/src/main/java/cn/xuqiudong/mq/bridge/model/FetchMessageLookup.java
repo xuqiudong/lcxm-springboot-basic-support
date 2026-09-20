@@ -6,7 +6,8 @@ import java.io.Serializable;
 
 /**
  * 描述:
- *    消费或者发送消息时的查询条件
+ * 消费或者发送消息时的查询条件
+ *
  * @author Vic.xu
  * @since 2025-05-19 11:12
  */

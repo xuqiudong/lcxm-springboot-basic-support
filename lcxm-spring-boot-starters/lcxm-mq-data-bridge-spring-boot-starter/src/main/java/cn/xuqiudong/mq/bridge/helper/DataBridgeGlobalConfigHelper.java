@@ -15,13 +15,13 @@ import static cn.xuqiudong.mq.bridge.constant.DataBridgeConstant.REDIS_KEY_SEND_
 
 /**
  * 描述: data bridge
- *  mq开关 状态工具类： 先初始化相关开关状态到redis中，并在后续设置和获取
- *   <ul>
- *    <li>1.1 启用/禁用 mq</li>
- *    <li>1.2 启用/禁用 消息发送</li>
- *    <li>1.3 启用/禁用 消息接收</li>
- *    <li>1.4 启用/禁用 消息消费</li>
- *  </ul>
+ * mq开关 状态工具类： 先初始化相关开关状态到redis中，并在后续设置和获取
+ *  <ul>
+ *   <li>1.1 启用/禁用 mq</li>
+ *   <li>1.2 启用/禁用 消息发送</li>
+ *   <li>1.3 启用/禁用 消息接收</li>
+ *   <li>1.4 启用/禁用 消息消费</li>
+ * </ul>
  *
  * @author Vic.xu
  * @since 2025-02-27 10:43
@@ -46,8 +46,11 @@ public class DataBridgeGlobalConfigHelper {
      */
     @PostConstruct
     public void init() {
-        LOGGER.info("init data bridge global switch: mq enable={}, send enable = {}, receive enable = {}, consumer enbale = {}",
-                properties.isMqEnabled(), properties.isSendEnabled(), properties.isReceiveEnabled(), properties.isConsumeEnabled());
+        LOGGER.info(
+                "init data bridge global switch: mq enable={}, send enable = {}, receive enable = {}, consumer enbale" +
+                        " = {}",
+                properties.isMqEnabled(), properties.isSendEnabled(), properties.isReceiveEnabled(),
+                properties.isConsumeEnabled());
         redisTemplate.opsForValue().set(REDIS_KEY_MQ_ENABLE, String.valueOf(properties.isMqEnabled()));
         redisTemplate.opsForValue().set(REDIS_KEY_RECEIVE_ENABLE, String.valueOf(properties.isReceiveEnabled()));
         redisTemplate.opsForValue().set(REDIS_KEY_SEND_ENABLE, String.valueOf(properties.isSendEnabled()));
@@ -134,7 +137,7 @@ public class DataBridgeGlobalConfigHelper {
     }
 
     /**
-     *  是否可以发送： mq开关 && 发送开关
+     * 是否可以发送： mq开关 && 发送开关
      */
     public boolean couldSend() {
         boolean enabled = isMqEnable() && isSendEnable();
@@ -143,8 +146,9 @@ public class DataBridgeGlobalConfigHelper {
         }
         return enabled;
     }
+
     /**
-     *  是否可以接收： mq开关 && 接收开关
+     * 是否可以接收： mq开关 && 接收开关
      */
     public boolean couldReceive() {
         boolean enabled = isMqEnable() && isReceiveEnable();

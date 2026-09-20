@@ -9,7 +9,8 @@ import java.lang.reflect.Method;
 
 /**
  * 描述:
- *      标注 消息消费的的实例和其对应的method
+ * 标注 消息消费的的实例和其对应的method
+ *
  * @author Vic.xu
  * @since 2025-03-07 11:26
  */

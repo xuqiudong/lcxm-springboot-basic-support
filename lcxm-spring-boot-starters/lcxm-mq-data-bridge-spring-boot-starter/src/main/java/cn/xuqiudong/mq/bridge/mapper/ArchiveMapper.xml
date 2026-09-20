@@ -18,7 +18,9 @@
 
     <!-- 归档数据 -->
     <insert id="archive">
-        INSERT IGNORE INTO ${archiveTable}
+        INSERT
+        IGNORE INTO
+        ${archiveTable}
         SELECT *
         FROM ${bizTable}
         WHERE id = #{id}
@@ -28,7 +30,6 @@
     <delete id="delete">
         DELETE
         FROM ${bizTable}
-        WHERE id = #{id}
-        LIMIT 1
+        WHERE id = #{id} LIMIT 1
     </delete>
 </mapper>

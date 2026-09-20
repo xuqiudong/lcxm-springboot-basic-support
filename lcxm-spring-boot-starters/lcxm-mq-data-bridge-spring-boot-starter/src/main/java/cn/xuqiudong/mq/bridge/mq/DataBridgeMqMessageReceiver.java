@@ -15,7 +15,8 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * 描述:
- *      直接和mq对接的消息消费的处理类
+ * 直接和mq对接的消息消费的处理类
+ *
  * @author Vic.xu
  * @since 2025-02-26 13:52
  */
@@ -29,7 +30,9 @@ public class DataBridgeMqMessageReceiver implements ChannelAwareMessageListener 
 
     private final DataBridgeMessageReceiverFacade receiverDataBridgeFacade;
 
-    public DataBridgeMqMessageReceiver(DataBridgeGlobalConfigHelper mqSwitchHelper, DataBridgeMqListenerSwitchHelper dataBridgeCustomerListenerSwitchHelper, DataBridgeMessageReceiverFacade receiverDataBridgeFacade) {
+    public DataBridgeMqMessageReceiver(DataBridgeGlobalConfigHelper mqSwitchHelper,
+                                       DataBridgeMqListenerSwitchHelper dataBridgeCustomerListenerSwitchHelper,
+                                       DataBridgeMessageReceiverFacade receiverDataBridgeFacade) {
         this.dataBridgeGlobalSwitchHelper = mqSwitchHelper;
         this.dataBridgeCustomerListenerSwitchHelper = dataBridgeCustomerListenerSwitchHelper;
         this.receiverDataBridgeFacade = receiverDataBridgeFacade;
@@ -37,12 +40,12 @@ public class DataBridgeMqMessageReceiver implements ChannelAwareMessageListener 
 
 
     @Override
-    public void onMessage(Message message, Channel channel) throws Exception{
+    public void onMessage(Message message, Channel channel) throws Exception {
         String msgId = message.getMessageProperties().getMessageId();
         String messageBody = new String(message.getBody(), StandardCharsets.UTF_8);
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
 
-        if (!dataBridgeGlobalSwitchHelper.isMqEnable()|| !dataBridgeGlobalSwitchHelper.isReceiveEnable()) {
+        if (!dataBridgeGlobalSwitchHelper.isMqEnable() || !dataBridgeGlobalSwitchHelper.isReceiveEnable()) {
             // 正常走不到这个逻辑，如果走到 则拒绝消息   且关闭mq 消费的监听
             LOGGER.info("MQ未启用或全局阻塞，跳过处理逻辑");
             dataBridgeCustomerListenerSwitchHelper.stopListener();
