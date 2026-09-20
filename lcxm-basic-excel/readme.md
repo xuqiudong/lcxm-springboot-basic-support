@@ -14,7 +14,6 @@ cn.xuqiudong.basic.core.util
 |   `-- FastExcelUtil                    # FastExcel 工具入口
 `-- poi
     |-- LargeExcelImportFacade           # 基于 POI SAX 的大文件读取门面
-    |-- LargeExcelImportFacade_back      # 历史备份实现，不建议新代码使用
     |-- export
     |   `-- ExportExcel                  # 旧版注解式导出工具
     `-- excel
@@ -76,6 +75,5 @@ cn.xuqiudong.basic.core.util
 ## 注意点
 
 - 当前包名保留历史结构，后续如迁移到 `cn.xuqiudong.basic.excel`，需要作为兼容性变更处理。
-- `LargeExcelImportFacade_back` 是备份类，新代码优先使用 `LargeExcelImportFacade`。
 - 大文件导出优先使用 `SXSSFWorkbook` 或 FastExcel，避免一次性加载过多数据。
 - 导入导出的业务校验建议放在业务项目，不放在本模块。

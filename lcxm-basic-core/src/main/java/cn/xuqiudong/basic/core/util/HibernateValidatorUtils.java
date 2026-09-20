@@ -9,9 +9,10 @@ import jakarta.validation.Validator;
 import java.util.Set;
 
 /**
- *  说明 :  基于hibernate Validator 的参数校验
- *  @author Vic.xu
- * @since  2022年3月1日 09:47:41
+ * 说明 :  基于hibernate Validator 的参数校验
+ *
+ * @author Vic.xu
+ * @since 2022年3月1日 09:47:41
  */
 public class HibernateValidatorUtils {
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();

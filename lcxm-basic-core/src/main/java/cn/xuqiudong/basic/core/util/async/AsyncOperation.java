@@ -11,6 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * 使用方法：
  * 1. 注入AsyncOperation 到spring， 或者new 一个AsyncOperation
  * 2. AsyncOperation.put(Runnable)
+ *
  * @author Vic.xu
  *
  */

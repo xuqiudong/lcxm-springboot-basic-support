@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 /**
  * 正则工具类
+ *
  * @author VIC
  */
 @SuppressWarnings("PMD")
@@ -25,10 +26,10 @@ public class RegexUtil {
      *
      * 1 返回字符串中匹配正则的字符串并根据分隔符拼接
      *
-     * @param srcStr    源字符串
+     * @param srcStr   源字符串
      * @param regexStr 正则表达式
-     * @param splitStr  分隔符
-     * @param n 所在正则的位置
+     * @param splitStr 分隔符
+     * @param n        所在正则的位置
      * @return string
      *
      */
@@ -55,9 +56,10 @@ public class RegexUtil {
     /**
      *
      * 2 返回字符串中匹配正则的字符串拼接
+     *
      * @param srcStr
      * @param regexStr
-     * @param n 所在正则的位置
+     * @param n        所在正则的位置
      * @return
      *
      */
@@ -68,9 +70,10 @@ public class RegexUtil {
     /**
      *
      * 3 返回第一条匹配的结果
+     *
      * @param srcStr
      * @param regexStr
-     * @param n 所在正则的位置
+     * @param n        所在正则的位置
      * @return string
      *
      */
@@ -89,9 +92,10 @@ public class RegexUtil {
     /**
      *
      * 4 回字符串中匹配正则的字符串 放入list集合
+     *
      * @param srcStr
      * @param regexStr
-     * @param n  所在正则的位置
+     * @param n        所在正则的位置
      * @return List<String>
      */
     public static List<String> getList(String srcStr, String regexStr, int n) {
@@ -110,9 +114,10 @@ public class RegexUtil {
     /**
      *
      * 5 获取字符中匹配正则的全部数据String集合 放入list集合
+     *
      * @param srcStr
      * @param regexStr
-     * @param arr  正则位置数组
+     * @param arr      正则位置数组
      * @return List<String [ ]>
      */
     public static List<String[]> getList(String srcStr, String regexStr, int[] arr) {
@@ -146,7 +151,7 @@ public class RegexUtil {
      *
      * @param srcStr
      * @param regexStr
-     * @param arr 正则位置数组
+     * @param arr      正则位置数组
      * @return List<String>
      */
     public static List<String> getStringList(String srcStr, String regexStr, int[] arr) {
@@ -184,8 +189,7 @@ public class RegexUtil {
      *
      * @param srcStr
      * @param regexStr
-     * @param arr
-     *            正则位置数组
+     * @param arr      正则位置数组
      * @return
      *
      */
@@ -265,12 +269,9 @@ public class RegexUtil {
     /**
      * 10 把字符串中符合正则表达式的字串 处理后 替换回去
      *
-     * @param srcStr
-     *            原字符串
-     * @param regexStr
-     *            正则 必须包含一个组(即小括号)
-     * @param hander
-     *            提取的字符串的处理方式
+     * @param srcStr   原字符串
+     * @param regexStr 正则 必须包含一个组(即小括号)
+     * @param hander   提取的字符串的处理方式
      * @return
      */
     public static String replacementAllhanderString(String srcStr, String regexStr, Function<String, String> hander) {
@@ -330,7 +331,7 @@ public class RegexUtil {
         // 正则表达式，两个捕获组
         String regex = " ===~ (.*?) ~---: (.*)";
         String firstString = getFirstString(seq, regex, 2);
-        System.out.println("firstString:" +  firstString);
+        System.out.println("firstString:" + firstString);
 
         // 创建 Pattern 和 Matcher
         Pattern pattern = Pattern.compile(regex);
@@ -356,7 +357,6 @@ public class RegexUtil {
         System.out.println("Matcher find result: " + matcher.find());
 
 
-
         String xml = "aaaa img src=&quot;../img/a.png&quot;&gt;bbbaaaa img src=&quot;../img/b.png&quot;&gt;bbb";
         List<String> paths = getList(xml, "src=&quot;(.*?)&quot;&gt;", 1);
         System.out.println(String.join("   ", paths));
@@ -367,15 +367,18 @@ public class RegexUtil {
         System.out.println(list2);
 
         String tieba = "<div class=\"threadlist_title pull_left j_th_tit \">\r\n" + "    \r\n" + "    \r\n"
-                + "    <a rel=\"noreferrer\" href=\"/p/7441036648\" title=\"【活动现场】强吧防暑小贴士活动\" target=\"_blank\" class=\"j_th_tit \">【活动现场】强吧防暑小贴士活动</a>\r\n"
+                + "    <a rel=\"noreferrer\" href=\"/p/7441036648\" title=\"【活动现场】强吧防暑小贴士活动\""
+                + " target=\"_blank\" class=\"j_th_tit \">【活动现场】强吧防暑小贴士活动</a>\r\n"
                 + "</div><div class=\"threadlist_author pull_right\">";
 
         String keyworlds2 = "【活动现场】强吧防暑小贴士活动";
         /*
-         <a rel="noreferrer" href="/p/7435368062" title="【活动现场】强吧欢庆活动" target="_blank" class="j_th_tit ">【活动现场】强吧欢庆活动</a>
+         <a rel="noreferrer" href="/p/7435368062" title="【活动现场】强吧欢庆活动"
+         target="_blank" class="j_th_tit ">【活动现场】强吧欢庆活动</a>
          */
         String reg2 =
-                "<a rel=\"noreferrer\" href=\"(.*?)\" title=\"" + keyworlds2 + "\" target=\"_blank\" class=\"j_th_tit \">";
+                "<a rel=\"noreferrer\" href=\"(.*?)\" title=\"" + keyworlds2
+                        + "\" target=\"_blank\" class=\"j_th_tit \">";
         System.out.println(RegexUtil.getFirstString(tieba, reg2, 1));
         boolean flag = 1 + 1 > 1;
         if (flag) {
@@ -400,7 +403,9 @@ public class RegexUtil {
         System.out.println("***********  " + getFirstString(s, "asd\\[(.*?)\\]", 1));
 
         String content =
-                "<p>爱的阿萨德阿萨德<br/></p><p><img src=\"http://localhost:80//wroot-blog/console/ajax/visit/7\" title=\"mao.jpg\" alt=\"mao.jpg\"/><br/></p><p><br/></p><p></p><p>爱上大声地<br/></p><img src=\"http://localhost:80//wroot-blog/console/ajax/visit/8\"";
+                "<p>爱的阿萨德阿萨德<br/></p><p><img src=\"http://localhost:80//wroot-blog/console/ajax/visit/7\" title=\"mao" +
+                        ".jpg\" alt=\"mao.jpg\"/><br/></p><p><br/></p><p></p><p>爱上大声地<br/></p><img " +
+                        "src=\"http://localhost:80//wroot-blog/console/ajax/visit/8\"";
         List<String> list = getList(content, "/console/ajax/visit/(\\d+)\"", 1);
         System.out.println(list.size());
         for (String d : list) {

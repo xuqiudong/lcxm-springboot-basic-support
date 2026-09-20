@@ -4,6 +4,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
 import javax.crypto.Cipher;
+
 import java.io.ByteArrayOutputStream;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -18,6 +19,7 @@ import java.security.spec.X509EncodedKeySpec;
 
 /**
  * RSA 非对称加密
+ *
  * @author Vic.xu
  */
 public class RsaUtils {
@@ -27,6 +29,7 @@ public class RsaUtils {
 
     /**
      * 生成秘钥对
+     *
      * @param keySize 秘钥长度
      * @return RsaKeyPair
      */
@@ -56,8 +59,9 @@ public class RsaUtils {
 
     /**
      * 公钥加密，返回的base64 编码后的密文
-     * @param data 原文
-     * @param publicKey  publicKey
+     *
+     * @param data      原文
+     * @param publicKey publicKey
      * @return 密文
      */
     public static String publicEncrypt(String data, String publicKey) {
@@ -65,7 +69,8 @@ public class RsaUtils {
             RSAPublicKey pk = getPublicKey(publicKey);
             Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, pk);
-            byte[] bytes = rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), pk.getModulus().bitLength());
+            byte[] bytes = rsaSplitCodec(
+                    cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), pk.getModulus().bitLength());
             return Base64.encodeBase64String(bytes);
 //            return Base64.encodeBase64URLSafeString(bytes);
         } catch (Exception e) {
@@ -76,7 +81,8 @@ public class RsaUtils {
 
     /**
      * 私钥解密
-     * @param data  密文
+     *
+     * @param data       密文
      * @param privateKey privateKey
      * @return 原文
      */
@@ -86,7 +92,10 @@ public class RsaUtils {
             RSAPrivateKey pk = getPrivateKey(privateKey);
             Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, pk);
-            return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), pk.getModulus().bitLength()), CHARSET);
+            return new String(
+                    rsaSplitCodec(
+                            cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), pk.getModulus().bitLength()),
+                    CHARSET);
         } catch (Exception e) {
             throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
         }
@@ -94,7 +103,8 @@ public class RsaUtils {
 
     /**
      * 私钥加密
-     * @param data origin string
+     *
+     * @param data       origin string
      * @param privateKey privateKey
      * @return 密文
      */
@@ -103,7 +113,9 @@ public class RsaUtils {
             RSAPrivateKey pk = getPrivateKey(privateKey);
             Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, pk);
-            return Base64.encodeBase64URLSafeString(rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), pk.getModulus().bitLength()));
+            return Base64.encodeBase64URLSafeString(
+                    rsaSplitCodec(
+                            cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), pk.getModulus().bitLength()));
         } catch (Exception e) {
             throw new RuntimeException("加密字符串[" + data + "]时遇到异常", e);
         }
@@ -111,7 +123,8 @@ public class RsaUtils {
 
     /**
      * 公钥解密
-     * @param data 密文
+     *
+     * @param data      密文
      * @param publicKey publicKey
      * @return 原文
      */
@@ -120,7 +133,10 @@ public class RsaUtils {
             RSAPublicKey pk = getPublicKey(publicKey);
             Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, pk);
-            return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), pk.getModulus().bitLength()), CHARSET);
+            return new String(
+                    rsaSplitCodec(
+                            cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), pk.getModulus().bitLength()),
+                    CHARSET);
         } catch (Exception e) {
             throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
         }
@@ -130,9 +146,11 @@ public class RsaUtils {
 
     /**
      * 通过公钥字符串得到公钥对应
+     *
      * @param publicKey 密钥字符串（经过base64编码）
      */
-    private static RSAPublicKey getPublicKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static RSAPublicKey getPublicKey(String publicKey)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
         //通过X509编码的Key指令获得公钥对象
         KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
         X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(Base64.decodeBase64(publicKey));
@@ -142,10 +160,12 @@ public class RsaUtils {
 
     /**
      * 通过私钥字符串得到私钥
+     *
      * @param privateKey 密钥字符串（经过base64编码）
      * @throws Exception ex
      */
-    private static RSAPrivateKey getPrivateKey(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static RSAPrivateKey getPrivateKey(String privateKey)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
         //通过PKCS#8编码的Key指令获得私钥对象
         KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(privateKey));
@@ -185,14 +205,16 @@ public class RsaUtils {
 
 
     /**
-     *RSA 秘钥对
+     * RSA 秘钥对
      */
     public static class RsaKeyPair {
 
         /***公钥*/
         private String publicKey;
 
-        /**私钥*/
+        /**
+         * 私钥
+         */
         private String privateKey;
 
         public RsaKeyPair(String publicKey, String privateKey) {

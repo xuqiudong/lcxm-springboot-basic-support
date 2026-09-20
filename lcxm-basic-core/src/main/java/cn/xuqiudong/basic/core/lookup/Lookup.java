@@ -70,6 +70,7 @@ public class Lookup implements Serializable {
 
     /**
      * 当前数据索引.
+     *
      * @return 数据索引
      */
     @JsonIgnore
@@ -110,7 +111,7 @@ public class Lookup implements Serializable {
     }
 
     public enum LookupSortOrder {
-        asc, desc;
+        asc, desc
     }
 
 }

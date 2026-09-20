@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 
 /**
  * 描述: 需要导出的字段的描述
+ *
  * @author Vic.xu
  * @since 2021-12-20 10:04
  */
@@ -117,10 +118,14 @@ public class ExportFieldModel implements Comparable<ExportFieldModel> {
      * 通过method还是field获导出字段的取值
      */
     static enum ValueType {
-        /**method*/
+        /**
+         * method
+         */
         method,
-        /**field*/
-        field;
+        /**
+         * field
+         */
+        field
     }
 
 }

@@ -211,13 +211,15 @@ public class CompareClassUtil {
         // 整个对象都是新增的，则一直到它的子属性 都是新增的  则只处理targetMap中的新增的对象标记位ADD
         List<String> addIds = diff.getOnlyInNew();
         for (String id : addIds) {
-            List<SameAnnotionField> addGroup = findByAnnotation(targetMap.get(id), actualTypeArgument, deep, field.getName(), config.value());
+            List<SameAnnotionField> addGroup = findByAnnotation(
+                    targetMap.get(id), actualTypeArgument, deep, field.getName(), config.value());
             addSameGroupResult(result, addGroup, CompareResultEnum.ADD);
         }
         // 整个对象都是删除的,则一直到它的子属性 都是删除的  则只处理sourceMap中的新增的对象标记位DELETE
         List<String> delIds = diff.getOnlyInOld();
         for (String id : delIds) {
-            List<SameAnnotionField> addGroup = findByAnnotation(sourceMap.get(id), actualTypeArgument, deep, field.getName(), config.value());
+            List<SameAnnotionField> addGroup = findByAnnotation(
+                    sourceMap.get(id), actualTypeArgument, deep, field.getName(), config.value());
             addSameGroupResult(result, addGroup, CompareResultEnum.DELETE);
         }
         // 交集中可能有变化的
@@ -318,7 +320,8 @@ public class CompareClassUtil {
      * @param group      相同组的属性集
      * @param resultEnum 组类别 只应为新增 或者删除
      */
-    private static void addSameGroupResult(List<CompareClassResultModel> result, List<SameAnnotionField> group, CompareResultEnum resultEnum) {
+    private static void addSameGroupResult(
+            List<CompareClassResultModel> result, List<SameAnnotionField> group, CompareResultEnum resultEnum) {
         if (CollectionUtils.isEmpty(group)) {
             return;
         }
@@ -338,7 +341,8 @@ public class CompareClassUtil {
      * @return
      * @throws Exception
      */
-    private static List<SameAnnotionField> findByAnnotation(Object obj, Class<?> clazz, int deep, String parentFieldNames, String parentFieldDescs) throws Exception {
+    private static List<SameAnnotionField> findByAnnotation(
+            Object obj, Class<?> clazz, int deep, String parentFieldNames, String parentFieldDescs) throws Exception {
         List<SameAnnotionField> result = new ArrayList<SameAnnotionField>();
         findByAnnotation(result, obj, clazz, deep, parentFieldNames, parentFieldDescs);
         return result;
@@ -355,7 +359,9 @@ public class CompareClassUtil {
      * @param parentFieldDescs
      * @throws Exception
      */
-    private static void findByAnnotation(List<SameAnnotionField> result, Object obj, Class<?> clazz, int deep, String parentFieldNames, String parentFieldDescs) throws Exception {
+    private static void findByAnnotation(
+            List<SameAnnotionField> result, Object obj, Class<?> clazz, int deep, String parentFieldNames,
+            String parentFieldDescs) throws Exception {
         if (deep > MAX_DEEP) {
             return;
         }
@@ -388,14 +394,16 @@ public class CompareClassUtil {
                 switch (innerType) {
                     // 不展开比较
                     case NONE:
-                        result.add(new SameAnnotionField(deep, fieldName, config.value(), parentFieldNames, parentFieldDescs, value));
+                        result.add(new SameAnnotionField(
+                                deep, fieldName, config.value(), parentFieldNames, parentFieldDescs, value));
                         break;
                     // 比较单个对象 只比较'id', 记录'name'变化, 不在深入展开
                     case CASCADE_SINGLE:
                         Class<?> subClazz = value.getClass();
                         Method readMethod = getReadMethod(subClazz, config.innerIdentifyField());
                         Object name = readMethod.invoke(value);
-                        result.add(new SameAnnotionField(deep, fieldName, config.value(), parentFieldNames, parentFieldDescs, name));
+                        result.add(new SameAnnotionField(
+                                deep, fieldName, config.value(), parentFieldNames, parentFieldDescs, name));
                         break;
                     // list对象 只循环 记录'name'变化 ,不再深入展开
                     case CASCADE_LIST:
@@ -410,12 +418,15 @@ public class CompareClassUtil {
                         for (Object item : listValue) {
                             Method readMethod1 = getReadMethod(genericType, config.innerIdentifyField());
                             Object nameValue = readMethod1.invoke(item);
-                            result.add(new SameAnnotionField(deep, fieldName, config.value(), parentFieldNames, parentFieldDescs, nameValue));
+                            result.add(new SameAnnotionField(
+                                    deep, fieldName, config.value(), parentFieldNames, parentFieldDescs, nameValue));
                         }
                         break;
                     // 单个对象, 需要展开对象内部进行比较
                     case SINGLE:
-                        findByAnnotation(result, value, value.getClass(), deep, parentFieldNames + "," + field.getName(), parentFieldDescs + "," + config.value());
+                        findByAnnotation(
+                                result, value, value.getClass(), deep, parentFieldNames + "," + field.getName(),
+                                parentFieldDescs + "," + config.value());
                         break;
                     // list对象, 需要展开对象内部进行比较
                     case LIST:
@@ -427,7 +438,9 @@ public class CompareClassUtil {
                             break;
                         }
                         List<?> listValue2 = (List<?>) value;
-                        findByAnnotation(result, listValue2, genericType2, deep, parentFieldNames + "," + field.getName(), parentFieldDescs + "," + config.value());
+                        findByAnnotation(
+                                result, listValue2, genericType2, deep,
+                                parentFieldNames + "," + field.getName(), parentFieldDescs + "," + config.value());
                         break;
                     default:
                         break;
@@ -448,7 +461,9 @@ public class CompareClassUtil {
      * @param parentFieldDescs
      * @throws Exception
      */
-    private static void findByAnnotation(List<SameAnnotionField> result, List<?> list, Class<?> clazz, int deep, String parentFieldNames, String parentFieldDescs) throws Exception {
+    private static void findByAnnotation(
+            List<SameAnnotionField> result, List<?> list, Class<?> clazz, int deep, String parentFieldNames,
+            String parentFieldDescs) throws Exception {
         for (Object obj : list) {
             findByAnnotation(result, obj, clazz, deep, parentFieldNames, parentFieldDescs);
         }
@@ -779,7 +794,9 @@ class TypeTest {
     }
 
 
-    @CompareClassConfig(value = "不展开列表项", compareInner = InnerType.CASCADE_LIST, innerIdentifyField = "id", innerRecordShowField = "name")
+    @CompareClassConfig(
+            value = "不展开列表项", compareInner = InnerType.CASCADE_LIST,
+            innerIdentifyField = "id", innerRecordShowField = "name")
     List<Sub> list;
 
     @CompareClassConfig(value = "展开列表项", compareInner = InnerType.LIST)

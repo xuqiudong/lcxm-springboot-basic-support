@@ -13,12 +13,13 @@ import java.util.stream.Collectors;
 
 /**
  * 描述:多线程批量处理 ☆☆☆
- *                      如果要用集合收集处理结果，切记使用线程安全的集合，如CopyOnWriteArrayList，ConcurrentHashMap等☆☆☆
- *                      使用方法：BatchExecteOperation.init([int
- *                      partitionSize]).execute(List batchList,
- *                      BatchExecteOperationCallback callback).shutdown();
- * @author  Vic.xu
- * @since  2020年3月11日 上午10:32:25
+ * 如果要用集合收集处理结果，切记使用线程安全的集合，如CopyOnWriteArrayList，ConcurrentHashMap等☆☆☆
+ * 使用方法：BatchExecteOperation.init([int
+ * partitionSize]).execute(List batchList,
+ * BatchExecteOperationCallback callback).shutdown();
+ *
+ * @author Vic.xu
+ * @since 2020年3月11日 上午10:32:25
  */
 @SuppressWarnings("PMD")
 public class BatchExecuteOperation {
@@ -44,9 +45,10 @@ public class BatchExecuteOperation {
     /**
      *
      * 说明 :  初始化批量执行操作， 使用默认的分片size
-     * @author  Vic.xu
-     * @since  2020年3月11日 下午1:00:59
+     *
      * @return
+     * @author Vic.xu
+     * @since 2020年3月11日 下午1:00:59
      */
     public static BatchExecuteOperation init() {
 
@@ -56,30 +58,33 @@ public class BatchExecuteOperation {
     /**
      *
      * 说明 :  初始化批量执行操作
-     * @author  Vic.xu
-     * @since  2020年3月11日 上午11:23:47
+     *
      * @param partitionSize list数据需要分割的默认大小(每个部分的数据大小)
      * @return
+     * @author Vic.xu
+     * @since 2020年3月11日 上午11:23:47
      */
     public static BatchExecuteOperation init(int partitionSize) {
         BatchExecuteOperation operation = new BatchExecuteOperation();
         operation.partitionSize = partitionSize;
         operation.threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, KEEP_ALIVE_TIME,
-                TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(200), new CustomThreadFactory("BatchExecteOperation"));
+                TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(200),
+                new CustomThreadFactory("BatchExecteOperation"));
         return operation;
     }
 
     /**
      *
      * 说明 :  执行批量操作，多线程执行完毕会自动关闭；
-     * @author  Vic.xu
-     * @since  2020年3月11日 下午12:42:46
+     *
      * @param batchList 需要批量操作的对象list，会根据partitionSize切分成n个list， 然后启动n个线程同步执行
      * @param callback  ☆☆☆对切片后的list进行处理，如果要用集合收集处理结果，切记使用线程安全的集合，如CopyOnWriteArrayList，ConcurrentHashMap等
      * @return
+     * @author Vic.xu
+     * @since 2020年3月11日 下午12:42:46
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public  <T> BatchExecuteOperation execute(List<T> batchList, Consumer<List<T>> callback) {
+    public <T> BatchExecuteOperation execute(List<T> batchList, Consumer<List<T>> callback) {
         // 切片成lists.size()个 并启动size 个线程
         List<List<T>> lists = ListUtils.partition(batchList, partitionSize);
         lists.forEach(partition -> {
@@ -113,10 +118,11 @@ public class BatchExecuteOperation {
     /**
      *
      * 说明 :  阻塞，等待线程池中的线程全部执行完毕
-     * @author  Vic.xu
-     * @since  2020年3月11日 下午12:43:15
+     *
      * @return
      * @throws InterruptedException
+     * @author Vic.xu
+     * @since 2020年3月11日 下午12:43:15
      */
     public boolean shutdown() throws Exception {
 
@@ -147,21 +153,21 @@ public class BatchExecuteOperation {
         System.out.println(t1);
         try {
 
-            BatchExecuteOperation.init(3).execute(list, partions->{
+            BatchExecuteOperation.init(3).execute(list, partions -> {
                 partions.forEach(a -> {
-                        try {
-                            TimeUnit.SECONDS.sleep(1);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if (a == 5) {
-                            System.out.println("a=" + a);
-                            throw new RuntimeException("5555555555555555");
-                        }
-                        System.out.println("add to result-->" + a);
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (a == 5) {
+                        System.out.println("a=" + a);
+                        throw new RuntimeException("5555555555555555");
+                    }
+                    System.out.println("add to result-->" + a);
 
-                        result.add(a * 2);
-                    });
+                    result.add(a * 2);
+                });
             }).shutdown();
 
         } catch (Exception e) {
@@ -183,9 +189,9 @@ public class BatchExecuteOperation {
     private static int maximumPoolSize = 4;
 
     /**
-     *  单位秒
+     * 单位秒
      */
-    private static int KEEP_ALIVE_TIME = 30;
+    private static final int KEEP_ALIVE_TIME = 30;
 
     /**
      * list分割的默认大小

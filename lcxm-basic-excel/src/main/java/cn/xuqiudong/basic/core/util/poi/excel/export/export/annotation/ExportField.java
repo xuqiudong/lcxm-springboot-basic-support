@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * 导出的列的注解
+ *
  * @author Vic.xu
  */
 @Target({ElementType.METHOD, ElementType.FIELD})
@@ -23,7 +24,7 @@ public @interface ExportField {
     String title();
 
     /**
-     * 父标题, 相同的父标题  用于合并表头 
+     * 父标题, 相同的父标题  用于合并表头
      */
     String ptitle() default "";
 

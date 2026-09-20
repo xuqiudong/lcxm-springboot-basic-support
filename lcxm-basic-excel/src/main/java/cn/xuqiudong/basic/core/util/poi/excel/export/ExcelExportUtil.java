@@ -31,6 +31,7 @@ import java.util.List;
 
 /**
  * 描述: 导出 Excel工具类  入口
+ *
  * @author Vic.xu
  * @since 2021-12-20 9:27
  */
@@ -83,14 +84,16 @@ public class ExcelExportUtil {
 
 
     /**
-     *   向sheet插入数据
+     * 向sheet插入数据
+     *
      * @param workbook
      * @param sheet
      * @param param
      * @param datas
      * @param <T>
      */
-    private static <T> void insertDataToSheet(Workbook workbook, Sheet sheet, ExportParam<T> param, Collection<T> datas) {
+    private static <T> void insertDataToSheet(Workbook workbook, Sheet sheet, ExportParam<T> param,
+                                              Collection<T> datas) {
         int rows = createTitle(workbook, sheet, param);
         rows = createHead(workbook, sheet, param, rows);
         exportDatas(workbook, sheet, param, rows);
@@ -119,6 +122,7 @@ public class ExcelExportUtil {
 
     /**
      * 创建 抬头
+     *
      * @param workbook
      * @param sheet
      * @param param
@@ -137,6 +141,7 @@ public class ExcelExportUtil {
 
     /**
      * 创建行
+     *
      * @param workbook
      * @param sheet
      * @param param
@@ -212,6 +217,7 @@ public class ExcelExportUtil {
 
     /**
      * 创建标题
+     *
      * @param workbook
      * @param sheet
      * @param param
@@ -238,6 +244,7 @@ public class ExcelExportUtil {
 
     /**
      * 查找实体对象中包含ExportField 注解的field 和get方法
+     *
      * @return
      */
     public static <T> List<ExportFieldModel> buildExportFields(ExportParam<T> param) {

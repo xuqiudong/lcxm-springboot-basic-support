@@ -124,7 +124,8 @@ public class DateTimeUtils {
         calendar.setTimeInMillis(sourceTime);
 
         int targetZoneOffset = calendar.get(Calendar.ZONE_OFFSET);
-        int targetDaylightOffset = calendar.get(Calendar.DST_OFFSET); // 夏令时
+        // 夏令时。
+        int targetDaylightOffset = calendar.get(Calendar.DST_OFFSET);
 
         long targetTime = sourceTime + (targetZoneOffset + targetDaylightOffset) - sourceZoneOffset;
 
@@ -133,12 +134,17 @@ public class DateTimeUtils {
     }
 
     /* ***********************************************************************/
-    public static final String US_EST = "-5"; // 东部标准时区
-    public static final String US_CST = "-6";// 中部标准时区
-    public static final String US_MST = "-7";// 山地标准时区
-    public static final String US_PST = "America/Los_Angeles"; // 也可以使用"-8" 太平洋标准时区
+    // 东部标准时区。
+    public static final String US_EST = "-5";
+    // 中部标准时区。
+    public static final String US_CST = "-6";
+    // 山地标准时区。
+    public static final String US_MST = "-7";
+    // 也可以使用 "-8" 表示太平洋标准时区。
+    public static final String US_PST = "America/Los_Angeles";
 
-    public static final String JST = "Asia/Tokyo";// 日本东京
+    // 日本东京。
+    public static final String JST = "Asia/Tokyo";
 
     static String pattern = "yyyy-MM-DD HH:mm:ss";
 

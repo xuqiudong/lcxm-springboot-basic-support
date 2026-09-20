@@ -7,15 +7,20 @@ import java.util.List;
 
 /**
  * 描述: 二级表头
+ *
  * @author Vic.xu
  * @since 2021-12-20 11:57
  */
 public class MultiHeader implements Comparable<MultiHeader> {
 
-    /**所属父表头*/
+    /**
+     * 所属父表头
+     */
     private String ptitle;
 
-    /**父表头的长度*/
+    /**
+     * 父表头的长度
+     */
     private int plength;
 
     /**
@@ -23,12 +28,16 @@ public class MultiHeader implements Comparable<MultiHeader> {
      */
     private boolean singleHeader;
 
-    /**不存在父表头时候的 表头名*/
+    /**
+     * 不存在父表头时候的 表头名
+     */
     private String singleTitle;
 
     private int sort;
 
-    /**子表头列表*/
+    /**
+     * 子表头列表
+     */
     private List<String> titleList = new ArrayList<>();
 
     public MultiHeader() {

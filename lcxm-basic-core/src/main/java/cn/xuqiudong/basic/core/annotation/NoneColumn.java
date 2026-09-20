@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 描述:标注一个字段非数据库字段
+ *
  * @author Vic.xu
  * @since 2024-03-04 14:48
  */

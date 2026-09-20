@@ -47,14 +47,15 @@ public class BaseSelectModel implements Serializable {
         return code;
     }
 
-    /**给前端多返回一个id*/
+    /**
+     * 给前端多返回一个id
+     */
     public Object getId() {
         return code;
     }
 
     /**
-     * @param code
-     *            the code to set
+     * @param code the code to set
      */
     public void setCode(Object code) {
         this.code = code;
@@ -68,8 +69,7 @@ public class BaseSelectModel implements Serializable {
     }
 
     /**
-     * @param text
-     *            the text to set
+     * @param text the text to set
      */
     public void setText(String text) {
         this.text = text;
@@ -83,8 +83,7 @@ public class BaseSelectModel implements Serializable {
     }
 
     /**
-     * @param selected
-     *            the selected to set
+     * @param selected the selected to set
      */
     public void setSelected(boolean selected) {
         this.selected = selected;

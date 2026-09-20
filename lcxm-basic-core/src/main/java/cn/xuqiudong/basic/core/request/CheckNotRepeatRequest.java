@@ -5,13 +5,14 @@ import lombok.Setter;
 
 /**
  * 描述:
- *    判断字段值在数据库是否重复 的请求参数
+ * 判断字段值在数据库是否重复 的请求参数
+ *
  * @author Vic.xu
  * @since 2025-10-31 17:44
  */
 @Getter
 @Setter
-public class CheckNotRepeatRequest<T> implements BaseApiRequest{
+public class CheckNotRepeatRequest<T> implements BaseApiRequest {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,7 +28,6 @@ public class CheckNotRepeatRequest<T> implements BaseApiRequest{
      * value 需要判断是否重复的列的值
      */
     private String value;
-
 
 
 }

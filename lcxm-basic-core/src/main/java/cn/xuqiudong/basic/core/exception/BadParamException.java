@@ -6,6 +6,7 @@ import java.util.Set;
 
 /**
  * 描述:参数绑定异常 其实这是个400异常@ResponseStatus(HttpStatus.BAD_REQUEST)  但是这里不抛出 而是捕捉 并返回说明
+ *
  * @author Vic.xu
  * @since 2022-03-01 8:50
  */
@@ -13,14 +14,18 @@ public class BadParamException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    /**是否是HIBERNATE验证*/
+    /**
+     * 是否是HIBERNATE验证
+     */
     private boolean validated = false;
 
     public BadParamException() {
         super();
     }
 
-    /**build  hibernate verify exception*/
+    /**
+     * build  hibernate verify exception
+     */
     public static <T> BadParamException instanceHibernateVerity(Set<ConstraintViolation<T>> errors) {
         StringBuilder verifyError = new StringBuilder();
         for (ConstraintViolation<?> c : errors) {

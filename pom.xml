@@ -74,6 +74,17 @@
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <!-- Checkstyle 插件及规则引擎版本。 -->
+        <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+        <checkstyle.version>12.1.2</checkstyle.version>
+        <!-- 子项目可在自己的根目录提供该文件，用于声明有明确理由的局部规则例外。 -->
+        <lcxm.checkstyle.suppressions.file>${project.basedir}/checkstyle-suppressions.xml</lcxm.checkstyle.suppressions.file>
+        <!-- 初期只报告存量问题，不因历史告警阻断构建。 -->
+        <checkstyle.failOnViolation>false</checkstyle.failOnViolation>
+        <!-- Checkstyle 配置或执行异常时也不阻断初期构建；规则稳定后再改为 true。 -->
+        <checkstyle.failsOnError>false</checkstyle.failsOnError>
+        <!-- 设置为 true 可临时跳过 Checkstyle。 -->
+        <skip.checkstyle>false</skip.checkstyle>
         <spotbugs-maven-plugin.version>4.10.3.0</spotbugs-maven-plugin.version>
         <spotbugs.version>4.9.8</spotbugs.version>
         <!-- skip.spotbugs=true 可在子项目或命令行中跳过 SpotBugs 检查。 -->
@@ -276,8 +287,9 @@
         1. maven-compiler-plugin 使用 Java 21、-parameters、-Xlint:unchecked 和 -Xlint:deprecation。
         2. maven-surefire-plugin 参与构建，默认执行测试；可通过 skip.test=true 临时跳过。
         3. maven-source-plugin 在 verify 阶段生成源码 JAR。
-        4. spotbugs-maven-plugin 在 compile 阶段执行检查；Medium 及以上问题报告，High 问题使构建失败。
-        5. spring-boot-maven-plugin 和 maven-javadoc-plugin 只在子项目显式引入或激活时执行。
+        4. maven-checkstyle-plugin 在 validate 阶段检查 Java 源码；初期只报告问题，不阻断构建。
+        5. spotbugs-maven-plugin 在 compile 阶段执行检查；Medium 及以上问题报告，High 问题使构建失败。
+        6. spring-boot-maven-plugin 和 maven-javadoc-plugin 只在子项目显式引入或激活时执行。
     -->
     <build>
         <pluginManagement>
@@ -409,6 +421,152 @@
                     </configuration>
                 </plugin>
 
+                <!-- Java 源码规范检查。 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${maven-checkstyle-plugin.version}</version>
+                    <dependencies>
+                        <!-- 使用独立版本的 Checkstyle 引擎。 -->
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${checkstyle.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <!--
+                            公共规则内置在父 POM 中，所有继承项目使用同一套检查标准。
+                            规则参考《阿里巴巴 Java 开发手册》，并结合 Checkstyle 的稳定检测能力整理。
+                        -->
+                        <checkstyleRules>
+                            <module name="Checker">
+                                <property name="charset" value="UTF-8"/>
+                                <!-- 检查结果使用简体中文。 -->
+                                <property name="localeLanguage" value="zh"/>
+                                <property name="localeCountry" value="CN"/>
+
+                                <!-- 子项目的排除文件是可选的；不存在时继续使用全部公共规则。 -->
+                                <module name="SuppressionFilter">
+                                    <property name="file" value="${lcxm.checkstyle.suppressions.file}"/>
+                                    <property name="optional" value="true"/>
+                                </module>
+
+                                <!-- Java 源码不允许包含 Tab，文件末尾必须保留换行。 -->
+                                <module name="FileTabCharacter">
+                                    <property name="fileExtensions" value="java"/>
+                                </module>
+                                <module name="NewlineAtEndOfFile"/>
+
+                                <!-- 单行不超过 120 个字符，包声明、导入和 URL 除外。 -->
+                                <module name="LineLength">
+                                    <property name="fileExtensions" value="java"/>
+                                    <property name="max" value="120"/>
+                                    <property name="ignorePattern" value="^package.*|^import.*|https?://.*"/>
+                                </module>
+
+                                <module name="TreeWalker">
+                                    <!-- 类、方法、变量和参数遵循统一命名方式。 -->
+                                    <module name="LocalFinalVariableName"/>
+                                    <module name="LocalVariableName"/>
+                                    <module name="MemberName"/>
+                                    <module name="MethodName"/>
+                                    <module name="ParameterName"/>
+                                    <module name="StaticVariableName"/>
+                                    <module name="TypeName"/>
+                                    <!-- 常量使用大写加下划线；日志字段允许使用 logger。 -->
+                                    <module name="ConstantName">
+                                        <property name="format" value="^(logger|[A-Z][A-Z0-9]*(_[A-Z0-9]+)*)$"/>
+                                    </module>
+                                    <!-- 包名只使用小写字母、数字和点。 -->
+                                    <module name="PackageName">
+                                        <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+                                    </module>
+                                    <!-- 抽象类使用 Abstract 或 Base 前缀。 -->
+                                    <module name="AbstractClassName">
+                                        <property name="format" value="^(Abstract|Base).+$"/>
+                                        <property name="ignoreModifier" value="true"/>
+                                    </module>
+                                    <module name="CatchParameterName"/>
+                                    <module name="LambdaParameterName"/>
+
+                                    <!-- 类型声明和基础结构检查。 -->
+                                    <module name="ArrayTypeStyle"/>
+                                    <module name="ModifierOrder"/>
+                                    <module name="MissingOverride"/>
+                                    <module name="EqualsHashCode"/>
+
+                                    <!-- 大括号、圆括号、运算符和类型转换使用统一格式。 -->
+                                    <module name="LeftCurly"/>
+                                    <module name="RightCurly"/>
+                                    <module name="NeedBraces"/>
+                                    <module name="ParenPad"/>
+                                    <module name="MethodParamPad"/>
+                                    <module name="NoWhitespaceAfter"/>
+                                    <module name="NoWhitespaceBefore"/>
+                                    <module name="WhitespaceAfter"/>
+                                    <module name="WhitespaceAround">
+                                        <property name="allowEmptyConstructors" value="true"/>
+                                        <property name="allowEmptyMethods" value="true"/>
+                                        <property name="allowEmptyTypes" value="true"/>
+                                        <property name="allowEmptyLoops" value="true"/>
+                                        <property name="allowEmptyLambdas" value="true"/>
+                                        <property name="allowEmptyCatches" value="true"/>
+                                    </module>
+                                    <module name="TypecastParenPad"/>
+
+                                    <!-- 注释必须独占一行，禁止在代码行末尾追加 // 注释。 -->
+                                    <module name="TrailingComment"/>
+
+                                    <!-- import 不使用星号，并禁止非法、重复和未使用的导入。 -->
+                                    <module name="AvoidStarImport"/>
+                                    <module name="IllegalImport"/>
+                                    <module name="RedundantImport"/>
+                                    <module name="UnusedImports"/>
+                                    <!-- import 按第三方、javax、java、静态 import 分组并排序。 -->
+                                    <module name="CustomImportOrder">
+                                        <property name="customImportOrderRules"
+                                                  value="THIRD_PARTY_PACKAGE###SPECIAL_IMPORTS###STANDARD_JAVA_PACKAGE###STATIC"/>
+                                        <property name="standardPackageRegExp" value="^java\."/>
+                                        <property name="specialImportsRegExp" value="^javax\."/>
+                                        <!-- 除 java 和 javax 外的普通导入统一归入第三方组。 -->
+                                        <property name="thirdPartyPackageRegExp"
+                                                  value="^(?!java(?:x)?\.).+\."/>
+                                        <property name="separateLineBetweenGroups" value="true"/>
+                                        <property name="sortImportsInGroupAlphabetically" value="true"/>
+                                    </module>
+
+                                    <!-- 基础编码规范。 -->
+                                    <module name="UpperEll"/>
+                                    <!-- 空 catch 只允许用 expected 或 ignore 明确表达忽略意图。 -->
+                                    <module name="EmptyCatchBlock">
+                                        <property name="exceptionVariableName" value="expected|ignore"/>
+                                    </module>
+                                    <!-- 字符串值比较必须使用 equals，而不是 == 或 !=。 -->
+                                    <module name="StringLiteralEquality"/>
+                                </module>
+                            </module>
+                        </checkstyleRules>
+                        <!-- 同时检查 main 和 test 源码。 -->
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        <consoleOutput>true</consoleOutput>
+                        <!-- 初期只报告历史问题，后续稳定后改为 true。 -->
+                        <failOnViolation>${checkstyle.failOnViolation}</failOnViolation>
+                        <failsOnError>${checkstyle.failsOnError}</failsOnError>
+                        <!-- 子项目或命令行可临时跳过检查。 -->
+                        <skip>${skip.checkstyle}</skip>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>checkstyle-validate</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
@@ -460,6 +618,10 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

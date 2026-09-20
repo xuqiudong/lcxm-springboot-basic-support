@@ -7,14 +7,14 @@ import java.net.Proxy;
 
 /**
  * 爬虫基类
- * 
+ *
  * @author VIC
  *
  */
 public abstract class BaseCrawl {
     /**
      * 连接网页
-     * 
+     *
      * @param url
      * @return
      */
@@ -28,14 +28,14 @@ public abstract class BaseCrawl {
 
     /**
      * 连接超时时间
-     * 
+     *
      * @return
      */
     protected abstract int getTimeout();
 
     /**
      * 是否开启代理 子类根据需要复写
-     * 
+     *
      * @return
      */
     protected boolean isOpenProxy() {
@@ -44,7 +44,7 @@ public abstract class BaseCrawl {
 
     /**
      * 代理配置 子类根据需要复写
-     * 
+     *
      * @return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(ip, port));
      */
     protected Proxy getProxy() {

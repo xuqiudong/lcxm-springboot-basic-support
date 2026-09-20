@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * 对base62做增强加密处理（多加一个salt异或处理）
- * 
+ *
  * @author Vic.xu
  * @since 2021/07/21
  */
@@ -16,13 +16,13 @@ public class Base62Enhance {
 
     private byte[] xorArray;
 
-    private Base62Enhance() {}
+    private Base62Enhance() {
+    }
 
     /**
      * 构造Base62Enhance
-     * 
-     * @param salt
-     *            盐
+     *
+     * @param salt 盐
      * @return
      */
     public static Base62Enhance createInstance(String salt) {
@@ -34,9 +34,8 @@ public class Base62Enhance {
 
     /**
      * 加密
-     * 
-     * @param src
-     *            需要加密的字符串
+     *
+     * @param src 需要加密的字符串
      * @return
      */
     public String encode(String src) {
@@ -52,9 +51,8 @@ public class Base62Enhance {
 
     /**
      * 解密
-     * 
-     * @param dir
-     *            需要解密的字符串
+     *
+     * @param dir 需要解密的字符串
      * @return
      */
     public String decode(String dir) {
@@ -66,14 +64,13 @@ public class Base62Enhance {
 
     /**
      * 对source的每一位和salt进行异或操作，
-     * 
-     * @param source
-     *            源
+     *
+     * @param source 源
      */
     private void xor(byte[] source) {
         for (int i = 0; i < source.length; i++) {
             for (int j = 0; j < xorArray.length; j++) {
-                source[i] = (byte)(source[i] ^ xorArray[j]);
+                source[i] = (byte) (source[i] ^ xorArray[j]);
             }
         }
 
@@ -81,7 +78,7 @@ public class Base62Enhance {
 
     /**
      * test
-     * 
+     *
      */
     public static void main(String[] args) {
         String salt = "hahaha";

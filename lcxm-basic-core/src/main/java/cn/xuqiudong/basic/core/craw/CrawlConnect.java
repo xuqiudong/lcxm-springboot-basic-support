@@ -13,6 +13,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -73,20 +74,22 @@ public class CrawlConnect {
     }
 
     private SSLSocketFactory socketFactory() {
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
 
-            @Override
-            public void checkClientTrusted(X509Certificate[] certs, String authType) {
-            }
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                    }
 
-            @Override
-            public void checkServerTrusted(X509Certificate[] certs, String authType) {
-            }
-        }};
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                    }
+                }
+        };
 
         try {
             SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -274,7 +277,7 @@ public class CrawlConnect {
     public void downFile(String path, String fileName) throws IOException {
         logger.info("下载文件 到本地{}{}", path, fileName);
         File file = getFileByPathAndName(path, fileName);
-        try (FileOutputStream out = new FileOutputStream(file);) {
+        try (FileOutputStream out = new FileOutputStream(file)) {
             Response response = this.execute();
             out.write(response.bodyAsBytes());
         }
@@ -301,8 +304,9 @@ public class CrawlConnect {
         } catch (HttpStatusException e) {
             // 仅这一处捕获HttpStatusException，所有方法复用
             throw new IOException(
-                    String.format("HTTP request failed [URL: %s, httpCode: %d,  msg: %s]",
-                            e.getUrl(), e.getStatusCode(), e.getMessage()), e);
+                    String.format("HTTP request failed [URL: %s, httpCode: %d,  msg: %s]", e.getUrl(),
+                            e.getStatusCode(), e.getMessage()),
+                    e);
         }
     }
 

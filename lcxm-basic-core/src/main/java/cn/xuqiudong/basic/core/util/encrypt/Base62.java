@@ -3,10 +3,11 @@ package cn.xuqiudong.basic.core.util.encrypt;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 
-/** 
+/**
  * 说明 :  Base62 util
- * @author  Vic.xu
- * @since  2019年12月24日 下午12:59:42
+ *
+ * @author Vic.xu
+ * @since 2019年12月24日 下午12:59:42
  */
 
 /**
@@ -195,16 +196,16 @@ public class Base62 {
         };
 
     }
-    
-    public static void main(String[] args) {
-    	String a = "Hello World---++++//";
-    	Base62 base62 = Base62.createInstance();
-    	final byte[] encoded = base62.encode(a.getBytes(StandardCharsets.UTF_8));
-    	String a1 = new String(encoded, StandardCharsets.UTF_8);
-    	final byte[] decoded = base62.decode(a1.getBytes(StandardCharsets.UTF_8));
 
-    	String a2 = new String(decoded, StandardCharsets.UTF_8);
-    	System.out.println(a + "\n"+ a1 + "\n" + a2);
-	}
+    public static void main(String[] args) {
+        String a = "Hello World---++++//";
+        Base62 base62 = Base62.createInstance();
+        final byte[] encoded = base62.encode(a.getBytes(StandardCharsets.UTF_8));
+        String a1 = new String(encoded, StandardCharsets.UTF_8);
+        final byte[] decoded = base62.decode(a1.getBytes(StandardCharsets.UTF_8));
+
+        String a2 = new String(decoded, StandardCharsets.UTF_8);
+        System.out.println(a + "\n" + a1 + "\n" + a2);
+    }
 
 }

@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 /**
  * 描述: 集合工具类
+ *
  * @author Vic.xu
  * @since 2022-05-12 13:20
  */
@@ -17,9 +18,10 @@ public class ListUtils {
 
     /**
      * 切割list
+     *
      * @param list 原list
      * @param size 切割后的每个list的size
-     * @param <T> 泛型
+     * @param <T>  泛型
      * @return List<List < T>>
      */
 

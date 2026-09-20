@@ -202,7 +202,8 @@ public class CommonUtils {
             for (T t : list) {
                 Class<? extends Object> clazz = t.getClass();
                 PropertyDescriptor idPd = new PropertyDescriptor(idField, clazz);
-                Method getIdMethod = idPd.getReadMethod();//获得get方法
+                // 获得 get 方法。
+                Method getIdMethod = idPd.getReadMethod();
                 Object id = getIdMethod.invoke(t);
                 map.put(id, t);
             }

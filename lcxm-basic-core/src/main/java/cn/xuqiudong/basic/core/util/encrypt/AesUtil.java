@@ -6,18 +6,20 @@ import org.apache.commons.lang3.StringUtils;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 
 /**
- *AES 加密, 每次产生随机因子，保证相同内容每次产生的密文不一致
+ * AES 加密, 每次产生随机因子，保证相同内容每次产生的密文不一致
  * <p>
- *     加密：  随机产生长度为 16 的byte数组作为随机因子， AES加密后，把随机因子和密文合并后转为Base64字符串
- *     解密： 把base64的密文转byte数组后拆分为随机因子和密文，然后进行ASE解密
+ * 加密：  随机产生长度为 16 的byte数组作为随机因子， AES加密后，把随机因子和密文合并后转为Base64字符串
+ * 解密： 把base64的密文转byte数组后拆分为随机因子和密文，然后进行ASE解密
  * </p>
  *
  * <a href="https://www.liaoxuefeng.com/wiki/1252599548343744/1304227762667553:>aes</a>
  * 在CBC模式下，需要一个随机生成的16字节IV参数，必须使用SecureRandom生成。因为多了一个IvParameterSpec实例，因此，初始化方法需要调用Cipher的一个重载方法并传入IvParameterSpec。
+ *
  * @author Vic.xu
  */
 public final class AesUtil {
@@ -41,9 +43,10 @@ public final class AesUtil {
     private static final int KEY_SIZE = 16;
 
     /**
-     *  加密：随机产生长度为 16 的byte数组作为随机因子， AES加密后，把随机因子和密文合并后转为Base64字符串
+     * 加密：随机产生长度为 16 的byte数组作为随机因子， AES加密后，把随机因子和密文合并后转为Base64字符串
+     *
      * @param content 原文
-     * @param key  密码
+     * @param key     密码
      * @return Base64格式的字符串
      * @throws Exception ex
      */
@@ -68,8 +71,9 @@ public final class AesUtil {
 
     /**
      * 解密： 把base64的密文转byte数组后拆分为随机因子和密文，然后进行ASE解密
+     *
      * @param ciphertext base64 密文
-     * @param key 密码
+     * @param key        密码
      * @return 原文
      * @throws Exception ex
      */
@@ -97,6 +101,7 @@ public final class AesUtil {
 
     /**
      * 把密文和随机数串合在一起
+     *
      * @param bs1 随机数
      * @param bs2 密文
      * @return merger byte array
@@ -110,6 +115,7 @@ public final class AesUtil {
 
     /**
      * 修改key的长度，保证key为16位置=
+     *
      * @param key 加密key
      * @return key 16位key
      */

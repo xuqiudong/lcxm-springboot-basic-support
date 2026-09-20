@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.core.exception;
 
 /**
  * 描述: 没有权限访问的异常
+ *
  * @author Vic.xu
  * @since 2022-03-01 9:10
  */

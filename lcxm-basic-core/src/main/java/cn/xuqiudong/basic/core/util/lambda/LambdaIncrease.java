@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.core.util.lambda;
 
 /**
  * 描述:Lambda 中的自增
+ *
  * @author Vic.xu
  * @since 2022-04-18 11:34
  */
@@ -31,6 +32,7 @@ public class LambdaIncrease {
 
     /**
      * 自增，减的话 传负数
+     *
      * @param num step
      * @return result
      */

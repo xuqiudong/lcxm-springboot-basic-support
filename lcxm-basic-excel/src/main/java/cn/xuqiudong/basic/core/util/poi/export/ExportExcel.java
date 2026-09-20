@@ -590,7 +590,7 @@ public class ExportExcel {
                     }
                     // If is dict, get dict label
                     /*if (StringUtils.isNotBlank(ef.dictType())){
-                    	val = DictUtils.getDictLabel(val==null?"":val.toString(), ef.dictType(), "");
+                        val = DictUtils.getDictLabel(val==null?"":val.toString(), ef.dictType(), "");
                     }*/
 
                     if (ef.keys().length > 0) {
@@ -671,7 +671,7 @@ public class ExportExcel {
                     }
                     // If is dict, get dict label
                     /*if (StringUtils.isNotBlank(ef.dictType())){
-                    	val = DictUtils.getDictLabel(val==null?"":val.toString(), ef.dictType(), "");
+                    val = DictUtils.getDictLabel(val==null?"":val.toString(), ef.dictType(), "");
                     }*/
 
                     if (ef.keys().length > 0) {
@@ -812,9 +812,12 @@ public class ExportExcel {
             ZipOutputStream zos = new ZipOutputStream(fos);
             // 循环读取文件路径集合，获取每一个文件的路径
             for (String fp : filePath) {
-                File f = new File(fp); // 根据文件路径创建文件
-                zipFile(f, zos); // 将每一个文件写入zip文件包内，即进行打包
-                f.delete();// 删除临时文件
+                // 根据文件路径创建文件
+                File f = new File(fp);
+                // 将每一个文件写入zip文件包内，即进行打包
+                zipFile(f, zos);
+                // 删除临时文件
+                f.delete();
             }
             zos.close();
             fos.close();
@@ -839,7 +842,8 @@ public class ExportExcel {
             }
             fis.close();
             fileInput.close();
-            zip.delete();// 删除压缩包
+            // 删除压缩包
+            zip.delete();
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }
@@ -848,13 +852,16 @@ public class ExportExcel {
     // 封装压缩文件的方法
     public static void zipFile(File inputFile, ZipOutputStream zipoutputStream) {
         try {
-            if (inputFile.exists()) { // 判断文件是否存在
-                if (inputFile.isFile()) { // 判断是否属于文件，还是文件夹
+            // 判断文件是否存在
+            if (inputFile.exists()) {
+                // 判断是否属于文件，还是文件夹
+                if (inputFile.isFile()) {
                     // 创建输入流读取文件
                     FileInputStream fis = new FileInputStream(inputFile);
                     BufferedInputStream bis = new BufferedInputStream(fis);
                     // 将文件写入zip内，即将文件进行打包
-                    ZipEntry ze = new ZipEntry(inputFile.getName()); // 获取文件名
+                    // 获取文件名
+                    ZipEntry ze = new ZipEntry(inputFile.getName());
                     zipoutputStream.putNextEntry(ze);
                     // 写入文件的方法，同上
                     byte[] b = new byte[1024];
@@ -867,7 +874,8 @@ public class ExportExcel {
                     // 关闭输入输出流
                     fis.close();
                     bis.close();
-                } else { // 如果是文件夹，则使用穷举的方法获取文件，写入zip
+                } else {
+                    // 如果是文件夹，则使用穷举的方法获取文件，写入zip
                     try {
                         File[] files = inputFile.listFiles();
                         if (files != null) {

@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * 导出的列的注解
+ *
  * @author Vic.xu
  */
 @Target({ElementType.METHOD, ElementType.FIELD})
@@ -23,7 +24,7 @@ public @interface ExportField {
     String title();
 
     /**
-     * 父标题, 相同的父标题  用于合并表头 
+     * 父标题, 相同的父标题  用于合并表头
      */
     String ptitle() default "";
 
@@ -37,6 +38,6 @@ public @interface ExportField {
      * eg. name 字段属于组{0,1,2},  则在导出 第0或1或2组的情况下name字段都会被导出
      */
     int[] groups() default {0};
-    
+
 }
 

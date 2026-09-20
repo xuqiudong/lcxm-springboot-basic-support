@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 带备注的boolean类型
+ *
  * @author Vic.xu
  */
 public class BooleanWithMsg implements Serializable {
@@ -31,7 +32,7 @@ public class BooleanWithMsg implements Serializable {
     }
 
     /**
-     *  成功
+     * 成功
      */
     public static BooleanWithMsg success(String message) {
         return new BooleanWithMsg(Boolean.TRUE, message);

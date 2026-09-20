@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 /**
  * 描述:
- *  API请求的基类
+ * API请求的基类
+ *
  * @author Vic.xu
  * @since 2025-10-31 17:43
  */

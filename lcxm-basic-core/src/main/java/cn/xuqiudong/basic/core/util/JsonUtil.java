@@ -16,8 +16,9 @@ import java.util.Optional;
 
 /**
  * 说明 :
- * @author  Vic.xu
- * @since  2019年11月15日 下午5:40:53
+ *
+ * @author Vic.xu
+ * @since 2019年11月15日 下午5:40:53
  */
 public class JsonUtil {
 
@@ -43,6 +44,7 @@ public class JsonUtil {
 
     /**
      * 将json转换成对象Class
+     *
      * @param src
      * @param clazz
      * @param <T>
@@ -62,11 +64,11 @@ public class JsonUtil {
 
     /**
      * 将JSON转换成对象 TypeReference方式
+     *
      * @param src
-     * @param typeReference
-     * EG: 转单个对象的时候  类似new TypeReference<User>(){}
-     * EG: 转list对象的时候 类似 new TypeReference<List<User>>() {}
-     * EG: 转map对象jsonToObject(json, new TypeReference<Map<String,User>>() {});
+     * @param typeReference EG: 转单个对象的时候  类似new TypeReference<User>(){}
+     *                      EG: 转list对象的时候 类似 new TypeReference<List<User>>() {}
+     *                      EG: 转map对象jsonToObject(json, new TypeReference<Map<String,User>>() {});
      * @param <T>
      * @return
      */
@@ -84,12 +86,12 @@ public class JsonUtil {
 
     /**
      * 将json转换成对象
+     *
      * @param src
      * @param collectionClass
      * @param elementClasses
-     * @param <T>
-     * EG:  转list对象  jsonToObject(json, List.class,User.class)
-     * EG:  转map对象    jsonToObject(json, Map.class,String.class,User.class);
+     * @param <T>             EG:  转list对象  jsonToObject(json, List.class,User.class)
+     *                        EG:  转map对象    jsonToObject(json, Map.class,String.class,User.class);
      * @return
      */
     public static <T> T jsonToObject(String src, Class<?> collectionClass, Class<?>... elementClasses) {
@@ -104,6 +106,7 @@ public class JsonUtil {
 
     /**
      * 对象转JSON String
+     *
      * @param object
      * @return
      */
@@ -118,6 +121,7 @@ public class JsonUtil {
             return null;
         }
     }
+
     /**
      * 对象转JSON String, 保留null值的属性
      */
@@ -135,6 +139,7 @@ public class JsonUtil {
 
     /**
      * 对象转JSON String 格式化的
+     *
      * @param object
      * @return
      */

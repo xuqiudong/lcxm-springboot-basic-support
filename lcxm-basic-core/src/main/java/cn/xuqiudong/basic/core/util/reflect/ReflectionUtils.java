@@ -169,14 +169,18 @@ public class ReflectionUtils {
     public static Field getAccessibleField(final Object obj, final String fieldName) {
         Validate.notNull(obj, "object can't be null");
         Validate.notBlank(fieldName, "fieldName can't be blank");
-        for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = obj.getClass();
+             superClass != Object.class;
+             superClass = superClass.getSuperclass()) {
+            // NOSONAR：字段可能定义在父类中。
             try {
                 Field field = superClass.getDeclaredField(fieldName);
                 makeAccessible(field);
                 return field;
-            } catch (NoSuchFieldException e) {//NOSONAR
+            } catch (NoSuchFieldException e) {
                 // Field不在当前类定义,继续向上转型
-                continue;// new add
+                // new add。
+                continue;
             }
         }
         return null;
@@ -194,14 +198,17 @@ public class ReflectionUtils {
         Validate.notNull(obj, "object can't be null");
         Validate.notBlank(methodName, "methodName can't be blank");
 
-        for (Class<?> searchType = obj.getClass(); searchType != Object.class; searchType = searchType.getSuperclass()) {
+        for (Class<?> searchType = obj.getClass();
+             searchType != Object.class;
+             searchType = searchType.getSuperclass()) {
             try {
                 Method method = searchType.getDeclaredMethod(methodName, parameterTypes);
                 makeAccessible(method);
                 return method;
             } catch (NoSuchMethodException e) {
                 // Method不在当前类定义,继续向上转型
-                continue;// new add
+                // new add。
+                continue;
             }
         }
         return null;
@@ -218,7 +225,9 @@ public class ReflectionUtils {
         Validate.notNull(obj, "object can't be null");
         Validate.notBlank(methodName, "methodName can't be blank");
 
-        for (Class<?> searchType = obj.getClass(); searchType != Object.class; searchType = searchType.getSuperclass()) {
+        for (Class<?> searchType = obj.getClass();
+             searchType != Object.class;
+             searchType = searchType.getSuperclass()) {
             Method[] methods = searchType.getDeclaredMethods();
             for (Method method : methods) {
                 if (method.getName().equals(methodName)) {
@@ -244,8 +253,10 @@ public class ReflectionUtils {
      * 改变private/protected的成员变量为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱怨。
      */
     public static void makeAccessible(Field field) {
-        if ((!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers()) || Modifier
-                .isFinal(field.getModifiers())) && !field.canAccess(null)) {
+        if ((!Modifier.isPublic(field.getModifiers())
+                || !Modifier.isPublic(field.getDeclaringClass().getModifiers())
+                || Modifier.isFinal(field.getModifiers()))
+                && !field.canAccess(null)) {
             field.setAccessible(true);
         }
     }

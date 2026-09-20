@@ -42,12 +42,16 @@ public final class BaseResponse<T> implements Serializable {
         return judge ? success() : error();
     }
 
-    /** 构建操作成功的对象 */
+    /**
+     * 构建操作成功的对象
+     */
     public static <T> BaseResponse<T> success(T data) {
         return new BaseResponse<T>(0, "", data);
     }
 
-    /** 构建操作成功的对象 */
+    /**
+     * 构建操作成功的对象
+     */
     public static <T> BaseResponse<T> success() {
         return new BaseResponse<T>(0, "");
     }
@@ -56,12 +60,16 @@ public final class BaseResponse<T> implements Serializable {
         return error(999, "");
     }
 
-    /** 构建操作失败的对象 */
+    /**
+     * 构建操作失败的对象
+     */
     public static <T> BaseResponse<T> error(String msg) {
         return error(999, msg);
     }
 
-    /** 构建操作失败的对象 */
+    /**
+     * 构建操作失败的对象
+     */
     public static <T> BaseResponse<T> error(int code, String msg) {
         return new BaseResponse<T>(code, msg);
     }

@@ -7,8 +7,9 @@ import cn.xuqiudong.basic.core.enums.ResultMsg;
 
 /**
  * 说明 :  通用的基本的异常 包含code和MSG 对应 @see BaseResponse
+ *
  * @author Vic.xu
- * @since  2020年7月22日上午11:27:28
+ * @since 2020年7月22日上午11:27:28
  */
 public class CommonException extends RuntimeException {
     private static final long serialVersionUID = 1L;

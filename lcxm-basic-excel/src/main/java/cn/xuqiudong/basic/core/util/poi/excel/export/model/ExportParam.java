@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 /**
  * 描述: excel导出的相关参数
+ *
  * @author Vic.xu
  * @since 2021-12-17 11:22
  */
@@ -161,7 +162,8 @@ public class ExportParam<T> {
      */
     private void nultipleHeadProcess() {
         //根据ptitle 分组
-        Map<String, List<ExportFieldModel>> map = exportFieldModelList.stream().collect(Collectors.groupingBy(e -> e.getPtitle() == null ? "" : e.getPtitle()));
+        Map<String, List<ExportFieldModel>> map = exportFieldModelList.stream()
+                .collect(Collectors.groupingBy(e -> e.getPtitle() == null ? "" : e.getPtitle()));
         //只有一组  说明没有二级表头
         if (map.size() == 1) {
             return;
@@ -180,7 +182,8 @@ public class ExportParam<T> {
         Collections.sort(multiHeaderList);
 
         //同时需要修改 二级表头的顺序：从一级表头中提取出来
-        Map<String, ExportFieldModel> exportFieldModelMap = exportFieldModelList.stream().collect(Collectors.toMap(ExportFieldModel::getTitle, e -> e));
+        Map<String, ExportFieldModel> exportFieldModelMap =
+                exportFieldModelList.stream().collect(Collectors.toMap(ExportFieldModel::getTitle, e -> e));
         List<ExportFieldModel> newExportFieldModelList = new ArrayList<>();
         multiHeaderList.forEach(heads -> {
             heads.getTitleList().forEach(title -> {

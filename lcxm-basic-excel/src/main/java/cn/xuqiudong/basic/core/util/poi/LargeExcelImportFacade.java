@@ -17,6 +17,7 @@ import org.xml.sax.XMLReader;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -41,9 +42,10 @@ import java.util.function.Consumer;
  */
 public class LargeExcelImportFacade {
 
-    private final static Logger logger = LoggerFactory.getLogger(LargeExcelImportFacade.class);
+    private static final Logger logger = LoggerFactory.getLogger(LargeExcelImportFacade.class);
 
-    public static Executor executor = ExecutorPoolUtils.createExecutor(200, LargeExcelImportFacade.class.getSimpleName());
+    public static Executor executor =
+            ExecutorPoolUtils.createExecutor(200, LargeExcelImportFacade.class.getSimpleName());
 
     /**
      * 标题行号 表头行号 数据行号 = 表头行号 + 1 支持读取多sheet 或者单sheet Map<sheetIndex, sheetData>
@@ -106,7 +108,8 @@ public class LargeExcelImportFacade {
 
         public static LargeExcelImport init(InputStream sourceStream) throws Exception {
             LargeExcelImport dataImport = new LargeExcelImport();
-            OPCPackage opcPackage = OPCPackage.open(sourceStream);// 以压缩包形式打开
+            // 以压缩包形式打开
+            OPCPackage opcPackage = OPCPackage.open(sourceStream);
             // 2. 创建XSSFReader
             XSSFReader reader = new XSSFReader(opcPackage);
             dataImport.reader = reader;
@@ -148,7 +151,8 @@ public class LargeExcelImportFacade {
                     InputStream inputStream = iterator.next();
                     InputSource source = new InputSource(inputStream);
                     xmlReader.parse(source);
-                    TimeUnit.SECONDS.sleep(1);// 虽然不知道为什么,但是就想睡眠一秒 :)
+                    // 虽然不知道为什么，但是需要睡眠一秒
+                    TimeUnit.SECONDS.sleep(1);
                     sheetData.finishRead();
                     break;
                 }
@@ -158,7 +162,8 @@ public class LargeExcelImportFacade {
             long end = System.currentTimeMillis();
             logger.info("读取sheet{}耗时{}毫秒, 读取的数据行数为:{}", sheetIndex, (end - start), sheetData.countRows);
             if (!logger.isInfoEnabled()) {
-                logger.info("读取sheet " + sheetIndex + " 耗时" + (end - start) + "毫秒, 读取的数据行数为:" + sheetData.countRows);
+                logger.info("读取sheet " + sheetIndex + " 耗时" + (end - start) + "毫秒, 读取的数据行数为:" +
+                        sheetData.countRows);
             }
 
             return this;
@@ -234,7 +239,8 @@ public class LargeExcelImportFacade {
                                 callback.accept(rowData);
                             }
                         } catch (InterruptedException e) {
-                            logger.debug("中断线程{}异常, 因为存在阻塞的blockingQueue, 重新判断blockingQueue的size,且进行后续处理",
+                            logger.debug(
+                                    "中断线程{}异常, 因为存在阻塞的blockingQueue, 重新判断blockingQueue的size,且进行后续处理",
                                     Thread.currentThread().getName());
                             if (blockingQueue.size() != 0) {
                                 logger.debug("blockingQueue没有被消费完毕,继续消费处理");
@@ -366,10 +372,11 @@ public class LargeExcelImportFacade {
 
     }
 
-//    @SuppressFBWarnings
+    //    @SuppressFBWarnings
     public static void main(String[] args) throws Exception {
 
-        InputStream in;//= LargeExcelImport.class.getClassLoader().getResourceAsStream("abc.xlsx");
+        // in = LargeExcelImport.class.getClassLoader().getResourceAsStream("abc.xlsx");
+        InputStream in;
 
         String file = "D:/desk/期末考试/19电商1班/学生考勤情况统计-19电商1班.xlsx";
         in = new FileInputStream(new File(file));

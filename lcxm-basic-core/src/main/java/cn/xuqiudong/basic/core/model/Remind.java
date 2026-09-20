@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * 操作结束后的提醒.
- * 
+ *
  * @author Vic.xu
  * @since 2021/08/20
  */
@@ -28,7 +28,8 @@ public class Remind implements Serializable {
         return new Remind("danger", "<strong>操作错误！</strong> ");
     }
 
-    public Remind() {}
+    public Remind() {
+    }
 
     public Remind(String level, String message) {
         this.level = level;
@@ -56,8 +57,7 @@ public class Remind implements Serializable {
     /**
      * 等级.
      *
-     * @param level
-     *            the level to set
+     * @param level the level to set
      */
     public Remind setLevel(String level) {
         this.level = level;
@@ -76,8 +76,7 @@ public class Remind implements Serializable {
     /**
      * 消息.
      *
-     * @param message
-     *            the message to set
+     * @param message the message to set
      */
     public Remind setMessage(String message) {
         this.message = message;
@@ -87,8 +86,7 @@ public class Remind implements Serializable {
     /**
      * 追加消息.
      *
-     * @param message
-     *            消息内容
+     * @param message 消息内容
      */
     public Remind appendMessage(String message) {
         this.message += message;

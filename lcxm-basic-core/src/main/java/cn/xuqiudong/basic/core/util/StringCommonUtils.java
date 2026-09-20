@@ -46,7 +46,7 @@ public class StringCommonUtils {
                 //英文
             } else if (c >= 0x0000 && c <= 0x00FF) {
                 length += 1;
-                // 应该很少有else吧	 +3 以预防长度不够
+                // 应该很少有else吧 +3 以预防长度不够
             } else {
                 length += 3;
             }
@@ -85,7 +85,8 @@ public class StringCommonUtils {
      * @return
      */
     @SafeVarargs
-    public static <T> String joinObjectsFields(Collection<T> list, String fieldSeparator, String separator, Function<T, ?>... getMethods) {
+    public static <T> String joinObjectsFields(Collection<T> list, String fieldSeparator, String separator,
+                                               Function<T, ?>... getMethods) {
         if (CollectionUtils.isEmpty(list) || getMethods == null) {
             return "";
         }
@@ -138,7 +139,7 @@ class Test {
     private String name;
 
     public static List<Test> random() {
-        List<Test> list = new ArrayList<Test>();
+        List<Test> list = new ArrayList<>();
         list.add(new Test(1, "zhangsan"));
         list.add(new Test(2, "lisi"));
         list.add(new Test(3, "王五"));

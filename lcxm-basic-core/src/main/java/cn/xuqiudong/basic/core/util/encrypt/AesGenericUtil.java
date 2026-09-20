@@ -11,6 +11,7 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URLDecoder;
@@ -28,6 +29,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * 描述:通用的aes加密(可用于第三方)，不再对密文做额外的处理，
  * 且对加密key和
+ *
  * @author Vic.xu
  * @since 2023-02-09 17:19
  */
@@ -57,19 +59,24 @@ public class AesGenericUtil {
 
     /**
      * 缓存key和 Cipher， 因怀疑此处造成执行缓慢 TODO 需确认
-     * @see  <a href="https://stackoverflow.com/questions/39798728/cipher-encryption-is-noticeably-slow">Cipher Encryption is noticeably slow</a>
+     *
+     * @see
+     * <a href="https://stackoverflow.com/questions/39798728/cipher-encryption-is-noticeably-slow">Cipher Encryption is noticeably slow</a>
      */
     private static final LinkedHashMap<String, CachedCipherPair> KEY_CIPHER_CACHE = new LinkedHashMap<>();
 
     /**
      * AES 加密， 含压缩
+     *
      * @param param 需加密的参数
-     * @param key 加密的key
+     * @param key   加密的key
      * @return ciphertext
      */
     public static String encrypt(String param, String key) {
         try {
-            return new String(encodeBase64(zip(StringUtils.getBytesUtf8(toEncrypt(encode(param), key)))), StandardCharsets.UTF_8);
+            return new String(
+                    encodeBase64(zip(StringUtils.getBytesUtf8(toEncrypt(encode(param), key)))),
+                    StandardCharsets.UTF_8);
         } catch (Exception e) {
             return null;
         }
@@ -158,8 +165,9 @@ public class AesGenericUtil {
 
     /**
      * AES解密，含解压缩
+     *
      * @param param 解密内容
-     * @param key 秘钥
+     * @param key   秘钥
      * @return 解密结果
      */
     public static String decrypt(String param, String key) {
@@ -196,6 +204,7 @@ public class AesGenericUtil {
 
     /**
      * init cipher and cache it if necessary
+     *
      * @param key key
      * @return Cipher
      * @throws Exception ex
@@ -240,6 +249,7 @@ public class AesGenericUtil {
 
     /**
      * 修改key的长度，保证key为16位置=
+     *
      * @param key
      * @return key
      */
@@ -250,7 +260,7 @@ public class AesGenericUtil {
     }
 
     /**
-     *  缓存的Cipher对
+     * 缓存的Cipher对
      */
     static class CachedCipherPair {
         Map<Integer, Cipher> pairs = new HashMap<Integer, Cipher>();
