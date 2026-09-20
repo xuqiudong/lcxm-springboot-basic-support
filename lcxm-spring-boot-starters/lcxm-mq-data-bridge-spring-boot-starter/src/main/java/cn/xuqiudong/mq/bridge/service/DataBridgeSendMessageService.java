@@ -23,11 +23,6 @@ public class DataBridgeSendMessageService extends BaseGenericService<DataBridgeS
     @Resource
     private DataBridgeProperties dataBridgeProperties;
 
-    @Override
-    protected boolean hasAttachment() {
-        return false;
-    }
-
     /**
      * 获取待待送的消息：消息状态 待发送或者发送失败的 最早创建的消息 根据id 正序排列
      *

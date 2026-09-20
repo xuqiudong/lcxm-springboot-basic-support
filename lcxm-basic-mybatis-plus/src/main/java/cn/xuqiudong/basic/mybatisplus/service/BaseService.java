@@ -4,7 +4,6 @@ import cn.xuqiudong.basic.core.lookup.Lookup;
 import cn.xuqiudong.basic.core.model.BaseEntity;
 import cn.xuqiudong.basic.core.model.PageInfo;
 import cn.xuqiudong.basic.core.util.ListUtils;
-import cn.xuqiudong.basic.framework.service.AttachmentStatusOperationServiceI;
 import cn.xuqiudong.basic.mybatisplus.convert.PageConvert;
 import cn.xuqiudong.basic.mybatisplus.mapper.BaseMapper;
 import com.github.pagehelper.PageHelper;
@@ -31,17 +30,6 @@ public abstract class BaseService<M extends BaseMapper<T>, T extends BaseEntity>
 
     @Autowired(required = false)
     protected M mapper;
-
-    @Autowired(required = false)
-    private AttachmentStatusOperationServiceI attachmentStatusOperationService;
-
-
-    /**
-     * 当前实体是否包含附件
-     *
-     * @return
-     */
-    protected abstract boolean hasAttachment();
 
     public void startPage(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -72,24 +60,14 @@ public abstract class BaseService<M extends BaseMapper<T>, T extends BaseEntity>
      * 根据主键id查询对象
      */
     public T findById(int id) {
-        T entity = mapper.findById(id);
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            //查询附件关系 并保存到实体中
-            attachmentStatusOperationService.fillAttachmentInfo(entity);
-        }
-        return entity;
+        return mapper.findById(id);
     }
 
     /**
      * 插入对象
      */
     public int insert(T entity) {
-        //确保先生成id
-        int num = mapper.insert(entity);
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            attachmentStatusOperationService.addAttachmentFromObj(entity);
-        }
-        return num;
+        return mapper.insert(entity);
     }
 
     /**
@@ -114,10 +92,6 @@ public abstract class BaseService<M extends BaseMapper<T>, T extends BaseEntity>
      * 更新数据
      */
     public int update(T entity) {
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            T old = findById(entity.getId());
-            attachmentStatusOperationService.handleOldAndNowAttachment(old, entity);
-        }
         return mapper.update(entity);
     }
 
@@ -136,9 +110,6 @@ public abstract class BaseService<M extends BaseMapper<T>, T extends BaseEntity>
      * 根据id删除记录
      */
     public int delete(int id) {
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            attachmentStatusOperationService.deleteAttachmentFromObj(findById(id));
-        }
         return this.delete(new int[]{id});
     }
 
@@ -146,9 +117,6 @@ public abstract class BaseService<M extends BaseMapper<T>, T extends BaseEntity>
      * 批量删除
      */
     public int delete(int[] ids) {
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            attachmentStatusOperationService.deleteAttachmentFromObj(findByIds(ids));
-        }
         return mapper.delete(ids);
     }
 

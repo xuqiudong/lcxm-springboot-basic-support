@@ -26,11 +26,6 @@ public class DataBridgeReceiveMessageService extends BaseGenericService<DataBrid
     @Resource
     private DataBridgeProperties dataBridgeProperties;
 
-    @Override
-    protected boolean hasAttachment() {
-        return false;
-    }
-
     /**
      * 每次提取消息 消费： 解析失败的/ 初始化的 /失败的  按照时间正序排列（保持顺序）
      *

@@ -3,7 +3,6 @@ package cn.xuqiudong.basic.mybatisplus.service;
 import cn.xuqiudong.basic.core.lookup.Lookup;
 import cn.xuqiudong.basic.core.model.BaseGenericEntity;
 import cn.xuqiudong.basic.core.model.PageInfo;
-import cn.xuqiudong.basic.framework.service.AttachmentStatusOperationGenericServiceI;
 import cn.xuqiudong.basic.mybatisplus.convert.PageConvert;
 import cn.xuqiudong.basic.mybatisplus.mapper.BaseGenericMapper;
 import com.github.pagehelper.PageHelper;
@@ -26,7 +25,8 @@ import java.util.List;
  * @author Vic.xu
  * @since 2025-03-12 11:33
  */
-public abstract class BaseGenericService<M extends BaseGenericMapper<T, K>, T extends BaseGenericEntity<K>, K extends Serializable> {
+public abstract class BaseGenericService<M extends BaseGenericMapper<T, K>, T extends BaseGenericEntity<K>,
+        K extends Serializable> {
     /**
      * 批量插入一次最多插入多少数据
      */
@@ -34,16 +34,6 @@ public abstract class BaseGenericService<M extends BaseGenericMapper<T, K>, T ex
 
     @Autowired(required = false)
     protected M mapper;
-
-    @Autowired(required = false)
-    private AttachmentStatusOperationGenericServiceI attachmentStatusOperationService;
-
-    /**
-     * 当前实体是否包含附件
-     *
-     * @return true if the entity contains attachment, otherwise false
-     */
-    protected abstract boolean hasAttachment();
 
     public void startPage(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -73,24 +63,14 @@ public abstract class BaseGenericService<M extends BaseGenericMapper<T, K>, T ex
      * 根据主键id查询对象
      */
     public T findById(K id) {
-        T entity = mapper.findById(id);
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            //查询附件关系 并保存到实体中
-            attachmentStatusOperationService.fillAttachmentInfo(entity);
-        }
-        return entity;
+        return mapper.findById(id);
     }
 
     /**
      * 插入对象
      */
     public int insert(T entity) {
-        //确保先生成id
-        int num = mapper.insert(entity);
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            attachmentStatusOperationService.addAttachmentFromObj(entity);
-        }
-        return num;
+        return mapper.insert(entity);
     }
 
     /**
@@ -115,10 +95,6 @@ public abstract class BaseGenericService<M extends BaseGenericMapper<T, K>, T ex
      * 更新数据
      */
     public int update(T entity) {
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            T old = findById(entity.getId());
-            attachmentStatusOperationService.handleOldAndNowAttachment(old, entity);
-        }
         return mapper.update(entity);
     }
 
@@ -137,9 +113,6 @@ public abstract class BaseGenericService<M extends BaseGenericMapper<T, K>, T ex
      * 根据id删除记录
      */
     public int delete(K id) {
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            attachmentStatusOperationService.deleteAttachmentFromObj(findById(id));
-        }
         // 安全地创建 K[] 类型的数组并传入 delete 方法
         @SuppressWarnings("unchecked")
         K[] ids = (K[]) Array.newInstance(id.getClass(), 1);
@@ -158,9 +131,6 @@ public abstract class BaseGenericService<M extends BaseGenericMapper<T, K>, T ex
      * 批量删除
      */
     public int delete(K[] ids) {
-        if (hasAttachment() && attachmentStatusOperationService != null) {
-            attachmentStatusOperationService.deleteAttachmentFromObj(findByIds(ids));
-        }
         return mapper.delete(ids);
     }
 
