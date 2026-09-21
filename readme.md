@@ -73,13 +73,17 @@ Starter 子模块：
 mvn clean install
 ```
 
-本地完整代码质量检查使用两个 Maven 构建线程，并跳过可能依赖外部环境的测试：
+本地完整构建和代码质量检查使用两个 Maven 构建线程：
+
+```bash
+mvn -T 2 clean verify
+```
+
+只检查编译结果和代码质量、不执行测试时：
 
 ```bash
 mvn -T 2 clean verify -Dmaven.test.skip=true
 ```
-
-IDEA 右上角也可以直接运行共享配置 `LCXM - Full Quality Check`。
 
 只构建某个模块及其依赖：
 

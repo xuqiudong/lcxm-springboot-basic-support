@@ -56,10 +56,10 @@ Checkstyle 不能可靠替代编译器、SpotBugs 或 P3C 来判断空指针、�
 
 ```powershell
 # 检查全部模块
-mvn validate "-Dskip.spotbugs=true"
+mvn validate
 
 # 检查单个模块
-mvn -pl 模块名 validate "-Dskip.spotbugs=true"
+mvn -pl 模块名 validate
 
 # 临时跳过 Checkstyle
 mvn validate "-Dskip.checkstyle=true"
@@ -73,7 +73,7 @@ mvn validate "-Dskip.checkstyle=true"
 checkstyle-suppressions.xml
 ```
 
-父 POM已经通过可选的 `SuppressionFilter` 引用该文件。没有该文件时，全部公共规则照常执行。
+父 POM 已经通过可选的 `SuppressionFilter` 引用该文件。没有该文件时，全部公共规则照常执行。
 
 示例：
 
@@ -155,7 +155,7 @@ Settings
 
 SpotBugs 分析编译后的字节码，主要发现潜在程序缺陷，不负责排版和命名。
 
-父 POM默认行为：
+父 POM 默认行为：
 
 - 在 `verify` 阶段执行，避免拖慢日常 `compile`。
 - `spotbugs.threshold=Medium`：报告 `Medium` 及以上级别问题。
@@ -164,14 +164,20 @@ SpotBugs 分析编译后的字节码，主要发现潜在程序缺陷，不负�
 - 发布 profile 中通过 `skip.spotbugs=true` 跳过发布阶段检查。
 - `spotbugs-annotations` 以 `provided` 依赖提供给子项目源码使用。
 
-本地完整检查使用两个 Maven 构建线程，并跳过可能依赖外部环境的测试：
+本地完整检查使用两个 Maven 构建线程：
+
+```powershell
+mvn -T 2 clean verify
+```
+
+不执行测试时：
 
 ```powershell
 mvn -T 2 clean verify "-Dmaven.test.skip=true"
 ```
 
-IDEA 可以直接运行仓库共享的 `LCXM - Full Quality Check`。Jenkins 的 `install` 生命周期经过
-`verify` 阶段时同样会执行 SpotBugs。
+Jenkins 使用两个 Maven 构建线程执行 `clean install`。`install` 生命周期经过 `verify` 阶段，
+因此同样会执行 Checkstyle、测试和 SpotBugs。
 
 单个明确误报优先使用：
 
@@ -187,7 +193,7 @@ IDEA 可以直接运行仓库共享的 `LCXM - Full Quality Check`。Jenkins 的
 
 P3C 是 Alibaba Java Coding Guidelines 的配套检查工具，能补充集合、并发、异常、数据库和常见 Java 误用等语义规则。
 
-当前不把 P3C Maven 插件作为父 POM的统一构建门禁。需要时可以在 IDEA 中使用 P3C 插件进行手动检查。Checkstyle 负责稳定、明确、适合统一构建执行的源码规范，P3C负责补充更偏语义的阿里规约。
+当前不把 P3C Maven 插件作为父 POM 的统一构建门禁。需要时可以在 IDEA 中使用 P3C 插件进行手动检查。Checkstyle 负责稳定、明确、适合统一构建执行的源码规范，P3C 负责补充更偏语义的阿里规约。
 
 ## SonarQube
 

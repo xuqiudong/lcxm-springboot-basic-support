@@ -1,28 +1,23 @@
 pipeline {
     agent any
 
-    options { timestamps () }
+    options {
+        timestamps()
+    }
 
     tools {
-            jdk 'jdk21'  // 这里的名称需与Jenkins全局工具配置中的JDK名称一致
+        // 名称需与 Jenkins 全局工具配置中的 JDK 名称一致。
+        jdk 'jdk21'
     }
 
     stages {
-        stage('build lcxm-springboot-basic-support parent') {
+        stage('build and verify') {
             steps {
-                echo "install lcxm-springboot-basic-support parent"
-                sh 'mvn clean install -N -Dmaven.javadoc.skip=false'
-                echo 'install parent success'
+                echo 'build and verify all modules with 2 Maven threads'
+                sh 'mvn -T 2 clean install -Dmaven.javadoc.skip=false'
+                echo 'build success'
             }
         }
-
-        stage('build lcxm-springboot-basic-support all module') {
-                    steps {
-                        echo "build all modules (skip clean to save time)"
-                        sh 'mvn install -Dmaven.javadoc.skip=false'
-                        echo 'build all success'
-                    }
-                }
     }
     post {
         always {
