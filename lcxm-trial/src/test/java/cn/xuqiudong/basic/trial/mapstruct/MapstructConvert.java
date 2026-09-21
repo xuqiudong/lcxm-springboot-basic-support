@@ -21,7 +21,7 @@ public interface MapstructConvert {
 
             @Mapping(source = "priceDto", target = "price", numberFormat = "#.00")
 
-            }
+    }
     )
     MapStructSourceModel toModel(MapStructSourceDto sourceDto);
 

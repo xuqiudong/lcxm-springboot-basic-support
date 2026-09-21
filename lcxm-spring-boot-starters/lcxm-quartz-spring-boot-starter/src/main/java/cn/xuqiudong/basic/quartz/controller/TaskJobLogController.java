@@ -82,7 +82,7 @@ public class TaskJobLogController {
 
     @Operation(summary = "日志明细", description = "根据日志id,查询对应的明细列表")
     @GetMapping(value = "/details/{id}")
-    public BaseResponse<List<TaskJobLogDetail>>  details(@PathVariable String id) {
+    public BaseResponse<List<TaskJobLogDetail>> details(@PathVariable String id) {
         List<TaskJobLogDetail> list = detailService.selectByLogId(id);
         return BaseResponse.success(list);
     }
