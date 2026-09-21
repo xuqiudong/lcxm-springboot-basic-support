@@ -79,14 +79,18 @@
         <checkstyle.version>12.1.2</checkstyle.version>
         <!-- 子项目可在自己的根目录提供该文件，用于声明有明确理由的局部规则例外。 -->
         <lcxm.checkstyle.suppressions.file>${project.basedir}/checkstyle-suppressions.xml</lcxm.checkstyle.suppressions.file>
-        <!-- 初期只报告存量问题，不因历史告警阻断构建。 -->
-        <checkstyle.failOnViolation>false</checkstyle.failOnViolation>
-        <!-- Checkstyle 配置或执行异常时也不阻断初期构建；规则稳定后再改为 true。 -->
+        <!-- 完整输出违规明细后使构建失败，作为统一代码规范门禁。 -->
+        <checkstyle.failOnViolation>true</checkstyle.failOnViolation>
+        <!-- 保持为 false，由 failOnViolation 在输出完整日志后决定是否使构建失败。 -->
         <checkstyle.failsOnError>false</checkstyle.failsOnError>
         <!-- 设置为 true 可临时跳过 Checkstyle。 -->
         <skip.checkstyle>false</skip.checkstyle>
         <spotbugs-maven-plugin.version>4.10.3.0</spotbugs-maven-plugin.version>
         <spotbugs.version>4.9.8</spotbugs.version>
+        <!-- SpotBugs 分析并写入报告的最低优先级，子项目可按需覆盖。 -->
+        <spotbugs.threshold>Medium</spotbugs.threshold>
+        <!-- SpotBugs 使构建失败的最低优先级，子项目可按需覆盖。 -->
+        <spotbugs.failThreshold>Medium</spotbugs.failThreshold>
         <!-- skip.spotbugs=true 可在子项目或命令行中跳过 SpotBugs 检查。 -->
         <skip.spotbugs>false</skip.spotbugs>
         <!-- skip.test=true 可在子项目或命令行中跳过 Surefire 测试。 -->
@@ -287,8 +291,8 @@
         1. maven-compiler-plugin 使用 Java 21、-parameters、-Xlint:unchecked 和 -Xlint:deprecation。
         2. maven-surefire-plugin 参与构建，默认执行测试；可通过 skip.test=true 临时跳过。
         3. maven-source-plugin 在 verify 阶段生成源码 JAR。
-        4. maven-checkstyle-plugin 在 validate 阶段检查 Java 源码；初期只报告问题，不阻断构建。
-        5. spotbugs-maven-plugin 在 compile 阶段执行检查；Medium 及以上问题报告，High 问题使构建失败。
+        4. maven-checkstyle-plugin 在 validate 阶段检查 Java 源码，发现违规时使构建失败。
+        5. spotbugs-maven-plugin 在 compile 阶段执行检查；Medium 及以上问题报告并使构建失败。
         6. spring-boot-maven-plugin 和 maven-javadoc-plugin 只在子项目显式引入或激活时执行。
     -->
     <build>
@@ -550,8 +554,9 @@
                         <!-- 同时检查 main 和 test 源码。 -->
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
                         <consoleOutput>true</consoleOutput>
-                        <!-- 初期只报告历史问题，后续稳定后改为 true。 -->
+                        <!-- 输出违规明细后，根据检查结果决定是否使构建失败。 -->
                         <failOnViolation>${checkstyle.failOnViolation}</failOnViolation>
+                        <!-- 避免在插件汇总违规日志之前立即失败。 -->
                         <failsOnError>${checkstyle.failsOnError}</failsOnError>
                         <!-- 子项目或命令行可临时跳过检查。 -->
                         <skip>${skip.checkstyle}</skip>
@@ -592,10 +597,9 @@
                         <!-- 不运行未读字段和可变引用暴露检测器。 -->
                         <omitVisitors>UnreadFields,FindReturnRef</omitVisitors>
                         <skip>${skip.spotbugs}</skip>
-                        <!-- 报告 Medium 及以上级别的问题。 -->
-                        <threshold>Medium</threshold>
-                        <!-- 只有 High 级别的问题会使构建失败。 -->
-                        <failThreshold>High</failThreshold>
+                        <!-- 报告级别与失败级别均可由子项目属性覆盖。 -->
+                        <threshold>${spotbugs.threshold}</threshold>
+                        <failThreshold>${spotbugs.failThreshold}</failThreshold>
                     </configuration>
                 </plugin>
             </plugins>

@@ -71,7 +71,7 @@ public class ExcelExportUtil {
 
         } catch (Exception e) {
             //指定名称出错则 不指定sheetName 再次创建一次
-            workbook.createSheet(param.getSheetName());
+            sheet = workbook.createSheet();
         }
 
         if (param.isReadOnly()) {

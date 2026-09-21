@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 public class StringCommonUtils {
 
     private StringCommonUtils() {
-        throw new IllegalStateException("Utility class");
     }
 
     /**

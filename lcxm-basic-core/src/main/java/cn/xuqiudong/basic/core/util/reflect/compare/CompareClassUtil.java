@@ -117,10 +117,6 @@ public class CompareClassUtil {
                 //PropertyDescriptor pd = new PropertyDescriptor(field.getName(), clazz);
                 Method getMethod = getReadMethod(clazz, field);
                 String fieldName = field.getName();
-                if (getMethod == null) {
-                    logger.info("找不到{}类的{}字段的get方法", clazz.getSimpleName(), fieldName);
-                    continue loopField;
-                }
                 CompareClassConfig config = field.getAnnotation(CompareClassConfig.class);
                 // 字段描述说明
                 InnerType innerType = config.compareInner();
@@ -378,10 +374,6 @@ public class CompareClassUtil {
                 //PropertyDescriptor pd = new PropertyDescriptor(field.getName(), clazz);
                 Method getMethod = getReadMethod(clazz, field);
                 String fieldName = field.getName();
-                if (getMethod == null) {
-                    logger.info("找不到{}类的{}字段的get方法", clazz.getSimpleName(), fieldName);
-                    continue loopField;
-                }
                 CompareClassConfig config = field.getAnnotation(CompareClassConfig.class);
                 // 字段描述说明
                 InnerType innerType = config.compareInner();

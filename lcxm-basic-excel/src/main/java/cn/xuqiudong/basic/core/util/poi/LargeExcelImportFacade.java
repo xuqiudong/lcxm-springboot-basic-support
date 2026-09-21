@@ -18,8 +18,6 @@ import org.xml.sax.XMLReader;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -370,23 +368,6 @@ public class LargeExcelImportFacade {
             return index;
         }
 
-    }
-
-    //    @SuppressFBWarnings
-    public static void main(String[] args) throws Exception {
-
-        // in = LargeExcelImport.class.getClassLoader().getResourceAsStream("abc.xlsx");
-        InputStream in;
-
-        String file = "D:/desk/期末考试/19电商1班/学生考勤情况统计-19电商1班.xlsx";
-        in = new FileInputStream(new File(file));
-        List<Map<String, String>> list = new ArrayList<>();
-        Consumer<Map<String, String>> consumer = e -> {
-            System.out.println(e);
-            list.add(e);
-        };
-        LargeExcelImportFacade.init(in).readSheet(5, 2, consumer);
-        System.out.println(list.size());
     }
 
 }

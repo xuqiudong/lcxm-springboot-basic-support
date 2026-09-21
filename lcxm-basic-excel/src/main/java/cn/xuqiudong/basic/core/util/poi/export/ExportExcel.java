@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.core.util.poi.export;
 
 import cn.xuqiudong.basic.core.util.encrypt.Encodes;
 import cn.xuqiudong.basic.core.util.reflect.ReflectionUtils;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -91,6 +92,8 @@ public class ExportExcel {
      * @param title 表格标题，传“空值”，表示无标题
      * @param cls   实体对象，通过annotation.ExportField获取标题
      */
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "Invalid export metadata must fail during workbook initialization.")
     public ExportExcel(String title, Class<?> cls) {
         this(title, cls, 1);
     }
@@ -126,6 +129,8 @@ public class ExportExcel {
      * @param type   导出类型（1:导出数据；2：导出模板）
      * @param groups 导入分组
      */
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "Invalid export metadata must fail during workbook initialization.")
     public ExportExcel(String title, Class<?> cls, int type, int... groups) {
         // Get annotation field 包含父类的
 
@@ -288,6 +293,8 @@ public class ExportExcel {
      * @param title   表格标题，传“空值”，表示无标题
      * @param headers 表头数组
      */
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "Invalid export metadata must fail during workbook initialization.")
     public ExportExcel(String title, String[] headers) {
         List<ExcelHeader> excelHeaderList = new ArrayList<ExcelHeader>();
         for (String headerName : headers) {
@@ -303,6 +310,8 @@ public class ExportExcel {
      * @param title      表格标题，传“空值”，表示无标题
      * @param headerList 表头列表
      */
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "Invalid export metadata must fail during workbook initialization.")
     public ExportExcel(String title, List<ExcelHeader> headerList) {
         initialize(title, headerList);
     }
@@ -556,7 +565,7 @@ public class ExportExcel {
                 }
                 cell.setCellStyle(style);
             }
-        } catch (Exception ex) {
+        } catch (ReflectiveOperationException | RuntimeException ex) {
             log.info("Set cell value [" + row.getRowNum() + "," + column + "] error: " + ex.toString());
             cell.setCellValue(val + "");
         }
@@ -572,7 +581,6 @@ public class ExportExcel {
         for (E e : list) {
             int colunm = 0;
             Row row = this.addRow();
-            StringBuilder sb = new StringBuilder();
             for (Object[] os : annotationList) {
                 ExcelField ef = (ExcelField) os[0];
                 Object val = null;
@@ -626,15 +634,13 @@ public class ExportExcel {
                         SimpleDateFormat dateFormat = new SimpleDateFormat(ef.datePattern());
                         val = dateFormat.format(date);
                     }
-                } catch (Exception ex) {
+                } catch (RuntimeException ex) {
                     // Failure to ignore
                     // log.info(ex.toString());
                     val = "";
                 }
                 this.addCell(row, colunm++, val, ef.align(), ef.fieldType());
-                sb.append(val + ", ");
             }
-            // log.debug("Write success: ["+row.getRowNum()+"] "+sb.toString());
         }
         return this;
     }
@@ -744,8 +750,9 @@ public class ExportExcel {
      * @param name 输出文件名
      */
     public ExportExcel writeFile(String name) throws FileNotFoundException, IOException {
-        FileOutputStream os = new FileOutputStream(name);
-        this.write(os);
+        try (FileOutputStream os = new FileOutputStream(name)) {
+            this.write(os);
+        }
         return this;
     }
 
@@ -817,7 +824,9 @@ public class ExportExcel {
                 // 将每一个文件写入zip文件包内，即进行打包
                 zipFile(f, zos);
                 // 删除临时文件
-                f.delete();
+                if (!f.delete()) {
+                    log.warn("临时文件删除失败: {}", f.getAbsolutePath());
+                }
             }
             zos.close();
             fos.close();
@@ -843,7 +852,9 @@ public class ExportExcel {
             fis.close();
             fileInput.close();
             // 删除压缩包
-            zip.delete();
+            if (!zip.delete()) {
+                log.warn("临时压缩包删除失败: {}", zip.getAbsolutePath());
+            }
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }
