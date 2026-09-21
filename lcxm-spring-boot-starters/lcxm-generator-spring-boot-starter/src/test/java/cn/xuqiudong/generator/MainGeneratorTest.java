@@ -29,8 +29,14 @@ public class MainGeneratorTest {
      * 使用 facade 模式 生成代码
      */
     public static void useFacade() {
+        String host = "127.0.0.1";
+        String port = "3306";
+        String database = "qiudong";
+        String username = "qiudong";
+        // 运行前填写本地数据库密码
+        String password = "";
         CommonFacadeConfig config = CommonFacadeConfig
-                .mysql("127.0.0.1", "3306", "qiudong", "qiudong", "qiudong12345678");
+                .mysql(host, port, database, username, password);
         config
                 .setBasePackage("cn.xuqiudong.generator");
         config.setModule("test");
@@ -62,7 +68,8 @@ public class MainGeneratorTest {
                         "=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true&useSSL=false" +
                         "&allowPublicKeyRetrieval=true";
         String username = "qiudong";
-        String password = "qiudong12345678";
+        // 运行前填写本地数据库密码
+        String password = "";
         // 创建 生成类入口 :  支持链式调用
         Generator entrance = Generator.create(DatabaseType.mysql, url, username, password)
                 //全局配置
