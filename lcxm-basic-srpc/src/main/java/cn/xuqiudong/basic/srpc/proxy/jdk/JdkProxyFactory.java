@@ -16,7 +16,8 @@ public class JdkProxyFactory implements ProxyFactory {
 
     @Override
     public <T> T getProxy(Class<T> clazz, SrpcReference referenceAnnotation) {
-        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{clazz},
+        Object proxy = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{clazz},
                 new JdkProxyInvocation(clazz, referenceAnnotation));
+        return clazz.cast(proxy);
     }
 }

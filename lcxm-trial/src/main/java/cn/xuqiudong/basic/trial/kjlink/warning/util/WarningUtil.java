@@ -32,7 +32,8 @@ public class WarningUtil {
         if (StringUtils.isBlank(threshold) || StringUtils.isBlank(text)) {
             return text;
         }
-        return MessageFormat.format(text, threshold.split(","));
+        Object[] arguments = threshold.split(",");
+        return MessageFormat.format(text, arguments);
     }
 
 }

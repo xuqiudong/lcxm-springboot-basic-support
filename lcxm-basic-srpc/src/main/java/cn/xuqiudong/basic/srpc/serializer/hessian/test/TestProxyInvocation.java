@@ -25,7 +25,7 @@ public class TestProxyInvocation implements InvocationHandler {
 
     private Invoker invoker;
 
-    public TestProxyInvocation(Class clazz) {
+    public TestProxyInvocation(Class<?> clazz) {
         this.invoker = new Invoker();
         invoker.setInterfaceName(clazz.getName());
     }
@@ -47,10 +47,10 @@ public class TestProxyInvocation implements InvocationHandler {
         JsonUtil.printJson(deserialize);
         Object invoke =
                 TestHessianMethodImpl.class.getMethod(methodName, parameterTypes).invoke(testHessianMethodImpl, args);
-        XqdResponse response = new XqdResponse();
+        XqdResponse<Object> response = new XqdResponse<>();
         response.setData(invoke);
         byte[] serialize1 = serializer.serialize(response);
-        XqdResponse xqdResponse = serializer.deserialize(serialize1, XqdResponse.class);
+        XqdResponse<?> xqdResponse = serializer.deserialize(serialize1, XqdResponse.class);
         return xqdResponse.getData();
     }
 }

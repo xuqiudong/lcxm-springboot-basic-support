@@ -66,7 +66,7 @@ public class Hessian2Serializer implements XqdSerializer {
         try (ByteArrayInputStream is = new ByteArrayInputStream(data)) {
             hessianInput = new Hessian2Input(is);
             hessianInput.setSerializerFactory(SERIALIZER_FACTORY);
-            return (T) hessianInput.readObject(clazz);
+            return clazz.cast(hessianInput.readObject(clazz));
         } catch (Exception e) {
             throw new CommonException("Hessian2 反序列化失败", e);
         } finally {
