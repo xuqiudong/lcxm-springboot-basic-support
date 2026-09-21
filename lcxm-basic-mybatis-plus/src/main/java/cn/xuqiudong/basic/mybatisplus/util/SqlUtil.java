@@ -20,7 +20,6 @@ import java.util.List;
 public class SqlUtil {
 
     private SqlUtil() {
-        throw new IllegalStateException("Utility class");
     }
 
     /**

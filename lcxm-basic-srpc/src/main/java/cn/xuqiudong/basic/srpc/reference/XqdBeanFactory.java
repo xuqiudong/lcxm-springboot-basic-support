@@ -52,15 +52,11 @@ public class XqdBeanFactory implements FactoryBean<Object> {
 
 
     @Override
-    public Object getObject() throws Exception {
+    public synchronized Object getObject() throws Exception {
         if (this.bean == null) {
-            synchronized (this) {
-                if (this.bean == null) {
-                    // 延迟生成代理对象
-                    this.bean = factory.getProxy(interfaceClass, referenceAnnotation);
-                    LOGGER.debug("Created proxy for interface: {}", interfaceClass.getName());
-                }
-            }
+            // 延迟生成代理对象
+            this.bean = factory.getProxy(interfaceClass, referenceAnnotation);
+            LOGGER.debug("Created proxy for interface: {}", interfaceClass.getName());
         }
         return this.bean;
     }

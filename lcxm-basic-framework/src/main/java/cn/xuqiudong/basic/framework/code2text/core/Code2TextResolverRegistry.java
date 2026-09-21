@@ -108,7 +108,6 @@ public class Code2TextResolverRegistry implements InitializingBean {
             return;
         }
         // 不需要缓存 则直接注册 解析器
-        Class<? extends Code2TextResolver> resolverClass = resolver.getClass();
         if (!resolver.needCache()) {
             register2Map(resolver);
             LOGGER.info("Code2Text resolver registered(need not cache): [{}] ",

@@ -14,8 +14,7 @@ import cn.xuqiudong.basic.framework.select.annotation.RegisterSelectEnum;
 public enum TaskJobLogStatus implements EnumSelectable {
 
     RUNNING,
-    FINISHED,
-    ;
+    FINISHED;
 
     @Override
     public String getValue() {

@@ -71,7 +71,9 @@ public class GeneratorFactory {
      * 生成: 加载配置 → 读取元数据 → 调用前置插件 → 渲染模板 →  调用后置插件 →  输出(文件)
      */
     public void generate() {
-        confirmGenerate();
+        if (!confirmGenerate()) {
+            return;
+        }
         // 连接数据库 查询表的信息, 根据配置构建导出的表的上下文信息
         List<TemplateContext> templateContexts = dataAssemblyFactory.listTemplateContexts();
         for (TemplateContext context : templateContexts) {
@@ -296,7 +298,10 @@ public class GeneratorFactory {
         try {
             LOGGER.info("写入文件: {}", filePath);
             // 确保父目录存在
-            Files.createDirectories(path.getParent());
+            Path parent = path.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
             // 创建文件
             Files.createFile(path);
             // 写入内容
@@ -312,20 +317,20 @@ public class GeneratorFactory {
     /**
      * 手动确认生成
      */
-    private void confirmGenerate() {
+    private boolean confirmGenerate() {
         if (!bundle.getGlobalConfig().isConfirm()) {
-            return;
+            return true;
         }
         // 如果不存在覆盖文件, 则不需要手动确认
         if (!bundle.getStrategyConfig().isFileOverride()) {
             LOGGER.info(
                     "当前配置为不覆盖已经存在的文件! 可删除已经存在的文件生成或配置为覆盖文件[ fileOverride = true ]");
-            return;
+            return true;
         }
         // 非交互式环境
         if (!isRunningFromMainMethod()) {
             LOGGER.warn("非main函数运行的代码生成!");
-            return;
+            return true;
         }
         String tables = String.join(",", bundle.getStrategyConfig().getTables());
         LOGGER.warn(" 将生成[｛｝]表的代码, 该操作可能会覆盖相关文件，请确认是否继续？(yes/no):", tables);
@@ -335,9 +340,10 @@ public class GeneratorFactory {
 
         if (!"yes".equalsIgnoreCase(input)) {
             LOGGER.warn("生成操作已取消!");
-            System.exit(0);
+            return false;
         }
         LOGGER.warn("生成操作已确认，开始执行...");
+        return true;
     }
 
     /**

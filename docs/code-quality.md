@@ -2,17 +2,6 @@
 
 本文只记录当前项目已经确定的代码质量工具、父 POM 默认行为和子项目使用方式。
 
-## 目录
-
-- [统一原则](#统一原则)
-- [工具职责](#工具职责)
-- [Checkstyle](#checkstyle)
-- [子项目例外](#子项目例外)
-- [EditorConfig 与 IDEA](#editorconfig-与-idea)
-- [SpotBugs](#spotbugs)
-- [P3C](#p3c)
-- [SonarQube](#sonarqube)
-
 ## 统一原则
 
 - 所有继承 `lcxm-springboot-parent` 的项目使用同一套 Checkstyle 公共规则。
@@ -43,12 +32,11 @@
 - 使用 `checkstyleRules` 内嵌公共规则。
 - 在 `validate` 阶段执行。
 - 同时检查 `main` 和 `test` 源码。
-- 当前 `checkstyle.failOnViolation=false`，只报告存量问题，不阻断构建。
-- 当前 `checkstyle.failsOnError=false`，规则配置或执行异常暂不阻断初期构建。
+- `checkstyle.failOnViolation=true`：完整输出违规明细后使构建失败。
+- `checkstyle.failsOnError=false`：不在插件汇总违规日志之前立即失败。
 - 使用 `skip.checkstyle=true` 可以临时跳过检查。
-- 规则稳定并完成存量问题治理后，再将失败属性改为 `true`。
 
-父 POM中的规则主要包括：
+公共规则主要包括：
 
 - 类、方法、字段、参数、局部变量、常量和包名命名。
 - 抽象类使用 `Abstract` 或 `Base` 前缀。
@@ -63,6 +51,19 @@
 - 字符串字面量比较禁止使用 `==` 或 `!=`。
 
 Checkstyle 不能可靠替代编译器、SpotBugs 或 P3C 来判断空指针、并发、数据库、事务和业务语义问题。
+
+常用命令：
+
+```powershell
+# 检查全部模块
+mvn validate "-Dskip.spotbugs=true"
+
+# 检查单个模块
+mvn -pl 模块名 validate "-Dskip.spotbugs=true"
+
+# 临时跳过 Checkstyle
+mvn validate "-Dskip.checkstyle=true"
+```
 
 ### 子项目例外
 
@@ -100,34 +101,6 @@ checkstyle-suppressions.xml
 - 必须写注释说明排除原因。
 - 能修改源码时优先修改源码，不新增 suppression。
 
-#### 代码内关闭行长度检查的预留方案
-
-当前尚未启用代码内关闭规则的注释。以后遇到长正则表达式、SQL、JSON、HTML 或固定协议内容，确实不适合拆分时，可以在父 POM 中引入 `SuppressWithPlainTextCommentFilter`，并仅允许使用以下标记关闭 `LineLength`：
-
-```java
-// 内容由外部协议规定，拆分会降低可读性。
-// CHECKSTYLE.LINE_LENGTH: OFF
-String content = "确实不适合拆分的固定内容";
-// CHECKSTYLE.LINE_LENGTH: ON
-```
-
-启用该方案时必须将过滤器的 `checkFormat` 限定为 `LineLength`。标记范围内只忽略行长度，其他 Checkstyle 规则继续执行。
-
-不开放通用的 `CHECKSTYLE: OFF` 和 `CHECKSTYLE: ON`，避免整段代码绕过全部检查。关闭标记必须成对出现，范围应尽可能小，并在标记前说明不能正常换行的原因。
-
-只有确实采用另一套代码规范的项目，才允许通过插件配置完全替换公共规则；这不属于普通项目的差异化方式。
-
-### import 约束
-
-当前不设置“超过多少个类才允许 `*`”的阈值。Checkstyle 直接禁止普通和静态星号 import。
-
-IDEA中应将以下设置设为较大值，例如 `999`：
-
-- `Class count to use import with '*'`
-- `Names count to use static import with '*'`
-
-同时清空 `Packages to Use Import with '*'`，避免 IDEA 自动格式化后生成 Maven 会拒绝的星号 import。
-
 ## EditorConfig 与 IDEA
 
 仓库提供两份彼此配套的格式配置：
@@ -137,19 +110,7 @@ IDEA中应将以下设置设为较大值，例如 `999`：
 
 两份配置中重复的 Java 规则必须保持一致。项目存在 `.editorconfig` 时，其中已声明的选项优先于 IDEA Scheme 的对应选项。
 
-根目录的 `.editorconfig` 统一：
-
-- UTF-8。
-- LF 换行。
-- 文件末尾换行。
-- 删除行尾空格。
-- Java 使用空格缩进，缩进宽度为 4。
-- Java 续行缩进为 8。
-- Java 单行最多 120 个字符。
-- IDEA 格式化时，对超长的参数列表、方法调用、链式调用、表达式、赋值、`for` 语句、注解参数、
-  `extends/implements` 列表和 `throws` 列表按需换行。
-- IDEA 不自动生成星号 import。
-- import 按第三方、`javax`、`java`、静态 import 分组。
+两份配置统一 UTF-8、LF、文件末尾换行、空格缩进、120 字符右边界、常见结构换行和 import 顺序，并禁止 IDEA 自动生成星号 import。
 
 `.editorconfig` 只能在文件目录层级生效，不能通过 Maven Parent 继承。正式团队仓库建议复制该文件，以保证换电脑、换 IDE 或其他开发者检出后仍有一致的基础格式。
 
@@ -172,19 +133,7 @@ Settings
 
 导入后选择 `LCXM` Scheme。这样，没有 `.editorconfig` 的独立项目也会使用 LCXM 的 Java 格式和 import 规则。特殊项目可以添加自己的 `.editorconfig`，只覆盖确实不同的选项。
 
-IDEA Scheme 不负责完整约束 UTF-8、LF、文件末尾换行和删除行尾空格，因此它不能完全替代 `.editorconfig`。无论采用哪种格式配置，Maven Checkstyle 都是最终检查标准。
-
-IDEA 2025.3 默认支持 EditorConfig。确认项目启用了 EditorConfig 后，执行 `Reformat Code` 可按 120 字符右边界拆分常见的 Java 代码结构，执行 `Optimize Imports` 可整理 import。长字符串、注释以及无法安全拆分的表达式仍需人工处理，因此 IDEA 格式化不能替代 Checkstyle。
-
-import 设置可在以下位置核对：
-
-```text
-Settings
-→ Editor
-→ Code Style
-→ Java
-→ Imports
-```
+IDEA Scheme 不能完整替代 `.editorconfig` 的文件级约束。`Reformat Code` 和 `Optimize Imports` 也不能处理所有长字符串或特殊结构，最终结果以 Maven Checkstyle 为准。
 
 Maven 工具窗口执行 `validate` 时，如果中文消息乱码，在 IDEA 的：
 
@@ -208,11 +157,21 @@ SpotBugs 分析编译后的字节码，主要发现潜在程序缺陷，不负�
 
 父 POM默认行为：
 
-- 在 `compile` 阶段执行。
-- 报告 `Medium` 及以上级别问题。
-- `High` 级别问题使构建失败。
+- 在 `verify` 阶段执行，避免拖慢日常 `compile`。
+- `spotbugs.threshold=Medium`：报告 `Medium` 及以上级别问题。
+- `spotbugs.failThreshold=Medium`：`Medium` 及以上问题使构建失败。
+- 子项目可以覆盖上述属性，但降低门禁必须有明确理由。
 - 发布 profile 中通过 `skip.spotbugs=true` 跳过发布阶段检查。
 - `spotbugs-annotations` 以 `provided` 依赖提供给子项目源码使用。
+
+本地完整检查使用两个 Maven 构建线程，并跳过可能依赖外部环境的测试：
+
+```powershell
+mvn -T 2 clean verify "-Dmaven.test.skip=true"
+```
+
+IDEA 可以直接运行仓库共享的 `LCXM - Full Quality Check`。Jenkins 的 `install` 生命周期经过
+`verify` 阶段时同样会执行 SpotBugs。
 
 单个明确误报优先使用：
 

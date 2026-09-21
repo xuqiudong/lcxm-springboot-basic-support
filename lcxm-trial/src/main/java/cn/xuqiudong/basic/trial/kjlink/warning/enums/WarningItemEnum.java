@@ -6,7 +6,8 @@ import lombok.Getter;
 
 /**
  * 描述:
- *   预警事项
+ * 预警事项
+ *
  * @author Vic.xu
  * @since 2025-12-05 9:46
  */
@@ -35,6 +36,7 @@ public enum WarningItemEnum implements EnumSelectable {
         this.name = name;
         this.category = category;
     }
+
     @Override
     public String getValue() {
         return name();

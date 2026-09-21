@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.framework.listener;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -30,6 +31,8 @@ public class StartupTimeListener implements SpringApplicationRunListener {
     StopWatch stopWatch;
 
     // 必须提供这个构造方法
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "Spring requires this constructor and listener initialization must fail fast.")
     public StartupTimeListener(SpringApplication application, String[] args) {
         this.application = application;
         this.args = args;

@@ -7,7 +7,8 @@ import java.text.MessageFormat;
 
 /**
  * 描述:
- *      预警规则相关工具类
+ * 预警规则相关工具类
+ *
  * @author Vic.xu
  * @since 2025-12-05 11:01
  */
@@ -18,7 +19,7 @@ public class WarningUtil {
      */
     public static String getWarningRuleText(WarningRuleEnum rule) {
         if (rule == null) {
-            return  "";
+            return "";
         }
         return getWarningRuleText(rule.getText(), rule.getDefaultThreshold());
     }
@@ -27,11 +28,11 @@ public class WarningUtil {
      * 获取预警规则说明
      */
 
-    public static String getWarningRuleText(String text, String  threshold) {
+    public static String getWarningRuleText(String text, String threshold) {
         if (StringUtils.isBlank(threshold) || StringUtils.isBlank(text)) {
             return text;
         }
-        return MessageFormat.format(text, threshold.split( ","));
+        return MessageFormat.format(text, threshold.split(","));
     }
 
 }

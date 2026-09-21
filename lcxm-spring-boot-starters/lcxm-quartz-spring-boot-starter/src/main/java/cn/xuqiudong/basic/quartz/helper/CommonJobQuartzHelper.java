@@ -57,7 +57,8 @@ public class CommonJobQuartzHelper {
         if (!booleanWithMsg.isSuccess()) {
             return booleanWithMsg;
         }
-        return createJob(taskJob.getTaskCode(), taskJob.getTaskGroup(), COMMON_JOB_CLASS, taskJob.getCron(), taskJob.getStatus(), params);
+        return createJob(taskJob.getTaskCode(), taskJob.getTaskGroup(), COMMON_JOB_CLASS, taskJob.getCron(),
+                taskJob.getStatus(), params);
 
     }
 
@@ -70,7 +71,8 @@ public class CommonJobQuartzHelper {
      * @param status 任务状态，若是暂停，则暂停
      * @param params 任务参数
      */
-    public BooleanWithMsg createJob(String name, String group, String cron, QuartzStatusEnum status, Map<String, Object> params) {
+    public BooleanWithMsg createJob(String name, String group, String cron, QuartzStatusEnum status,
+                                    Map<String, Object> params) {
         BooleanWithMsg booleanWithMsg = beforeCreateCommonJob(name);
         if (!booleanWithMsg.isSuccess()) {
             return booleanWithMsg;
@@ -89,7 +91,8 @@ public class CommonJobQuartzHelper {
      * @param status   任务状态，若是暂停，则暂停
      * @param params   任务参数
      */
-    public BooleanWithMsg createJob(String name, String group, Class<? extends Job> jobClass, String cron, QuartzStatusEnum status, Map<String, Object> params) {
+    public BooleanWithMsg createJob(String name, String group, Class<? extends Job> jobClass, String cron,
+                                    QuartzStatusEnum status, Map<String, Object> params) {
         if (params == null) {
             params = new HashMap<>();
         }
@@ -105,10 +108,9 @@ public class CommonJobQuartzHelper {
             JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(name, group)
                     .usingJobData(new JobDataMap(params)).build();
             //基于表达式构建触发器
-            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cron)
-                    // 跳过所有遗漏触发;
-//                    .withMisfireHandlingInstructionDoNothing()
-                    ;
+            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
+            // 如需跳过所有遗漏触发，可启用以下配置。
+//            cronScheduleBuilder.withMisfireHandlingInstructionDoNothing();
 
             CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity(name, group)
                     .withSchedule(cronScheduleBuilder).build();
@@ -235,7 +237,7 @@ public class CommonJobQuartzHelper {
         }
     }
 
-    public BooleanWithMsg beforeCreateCommonJob(String code){
+    public BooleanWithMsg beforeCreateCommonJob(String code) {
         boolean b = unifyTaskEntry.existTask(code);
         if (!b) {
             return BooleanWithMsg.fail("没有任务编码[" + code + "]对应的处理函数!");

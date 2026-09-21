@@ -41,6 +41,9 @@ public class DataBridgeMqMessageReceiver implements ChannelAwareMessageListener 
 
     @Override
     public void onMessage(Message message, Channel channel) throws Exception {
+        if (channel == null) {
+            throw new IllegalStateException("RabbitMQ channel can not be null");
+        }
         String msgId = message.getMessageProperties().getMessageId();
         String messageBody = new String(message.getBody(), StandardCharsets.UTF_8);
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
@@ -61,7 +64,7 @@ public class DataBridgeMqMessageReceiver implements ChannelAwareMessageListener 
             channel.basicAck(deliveryTag, false);
         } catch (IOException e) {
             //消息处理失败，阻塞消息的消费
-            LOGGER.error("消息[{}]处理失败，阻塞消息的消费: {}", msgId, e);
+            LOGGER.error("消息[{}]处理失败，阻塞消息的消费", msgId, e);
             dataBridgeCustomerListenerSwitchHelper.stopListener();
             rejectMessage(deliveryTag, msgId, channel);
         }
@@ -74,7 +77,7 @@ public class DataBridgeMqMessageReceiver implements ChannelAwareMessageListener 
             LOGGER.warn("消息[{}]处理失败，拒绝消息并重新入队", msgId);
             channel.basicNack(deliveryTag, false, true);
         } catch (IOException e) {
-            LOGGER.error("消息[{}]拒绝失败: {}", msgId, e);
+            LOGGER.error("消息[{}]拒绝失败", msgId, e);
         }
     }
 

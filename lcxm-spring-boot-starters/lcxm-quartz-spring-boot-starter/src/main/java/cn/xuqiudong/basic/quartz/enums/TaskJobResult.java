@@ -9,6 +9,5 @@ package cn.xuqiudong.basic.quartz.enums;
  */
 public enum TaskJobResult {
     SUCCESS,
-    FAILURE,
-    ;
+    FAILURE
 }

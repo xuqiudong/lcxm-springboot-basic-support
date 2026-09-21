@@ -6,7 +6,8 @@ import lombok.Getter;
 
 /**
  * 描述:
- *  预警级别
+ * 预警级别
+ *
  * @author Vic.xu
  * @since 2025-12-05 10:54
  */

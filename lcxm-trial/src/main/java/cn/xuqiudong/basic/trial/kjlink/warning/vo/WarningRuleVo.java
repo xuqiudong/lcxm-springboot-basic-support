@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 
 /**
  * 描述:
- *   预警规则 vo
+ * 预警规则 vo
+ *
  * @author Vic.xu
  * @since 2025-12-05 13:13
  */

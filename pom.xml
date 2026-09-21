@@ -292,7 +292,7 @@
         2. maven-surefire-plugin 参与构建，默认执行测试；可通过 skip.test=true 临时跳过。
         3. maven-source-plugin 在 verify 阶段生成源码 JAR。
         4. maven-checkstyle-plugin 在 validate 阶段检查 Java 源码，发现违规时使构建失败。
-        5. spotbugs-maven-plugin 在 compile 阶段执行检查；Medium 及以上问题报告并使构建失败。
+        5. spotbugs-maven-plugin 在 verify 阶段执行检查；Medium 及以上问题报告并使构建失败。
         6. spring-boot-maven-plugin 和 maven-javadoc-plugin 只在子项目显式引入或激活时执行。
     -->
     <build>
@@ -587,7 +587,7 @@
                     <executions>
                         <execution>
                             <id>check</id>
-                            <phase>compile</phase>
+                            <phase>verify</phase>
                             <goals>
                                 <goal>check</goal>
                             </goals>

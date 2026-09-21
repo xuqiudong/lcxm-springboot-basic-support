@@ -61,5 +61,4 @@ public class TaskJobQuery extends PageQuery {
     private String note;
 
 
-
 }

@@ -72,9 +72,7 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
 
     @Override
     protected ThirdClientOptions resolveOptions() {
-        C config = getConfig();
-        ThirdClientOptions options = config.getClientOptions();
-        return options == null ? new ThirdClientOptions() : options;
+        return getConfig().getClientOptions();
     }
 
     @Override

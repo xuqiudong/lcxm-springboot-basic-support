@@ -1,6 +1,7 @@
 package cn.xuqiudong.mq.bridge.notify;
 
 import cn.xuqiudong.mq.bridge.enums.OperationEnum;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -18,9 +19,11 @@ public class DataBridgeFailEventPublisher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataBridgeFailEventPublisher.class);
 
-    private DataBridgeFailHandler dataBridgeFailNotifier;
+    private final DataBridgeFailHandler dataBridgeFailNotifier;
 
 
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "Spring provider resolution must fail during component initialization.")
     public DataBridgeFailEventPublisher(ObjectProvider<DataBridgeFailHandler> dataBridgeFailNotifier) {
         this.dataBridgeFailNotifier = dataBridgeFailNotifier.getIfAvailable();
         if (this.dataBridgeFailNotifier == null) {

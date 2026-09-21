@@ -1,10 +1,10 @@
 package cn.xuqiudong.basic.trial.kjlink.warning.util;
 
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.basic.trial.kjlink.warning.enums.WarningItemEnum;
 import cn.xuqiudong.basic.trial.kjlink.warning.enums.WarningRuleEnum;
 import cn.xuqiudong.basic.trial.kjlink.warning.vo.WarningItemVo;
 import cn.xuqiudong.basic.trial.kjlink.warning.vo.WarningRuleVo;
-import cn.xuqiudong.basic.core.util.JsonUtil;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Arrays;
@@ -21,17 +21,17 @@ import java.util.stream.Collectors;
  */
 public class WarningVoAssembler {
 
-    private static List<WarningItemVo> CACHE = null;
+    private static List<WarningItemVo> cache = null;
 
     /**
      * 将枚举转换为基础的WarningItemVo列表（仅含枚举默认值，无数据库覆盖）
      */
     public static List<WarningItemVo> assembleFromEnum() {
-        if (CACHE != null) {
-            return CACHE;
+        if (cache != null) {
+            return cache;
         }
         // 1. 第一步：获取所有预警事项枚举，转换为基础事项VO
-        CACHE = Arrays.stream(WarningItemEnum.values())
+        cache = Arrays.stream(WarningItemEnum.values())
                 .map(itemEnum -> {
                     WarningItemVo itemVo = new WarningItemVo();
                     // 事项标识：枚举名
@@ -47,7 +47,7 @@ public class WarningVoAssembler {
                 })
                 .collect(Collectors.toList());
 
-        return CACHE;
+        return cache;
     }
 
     /**

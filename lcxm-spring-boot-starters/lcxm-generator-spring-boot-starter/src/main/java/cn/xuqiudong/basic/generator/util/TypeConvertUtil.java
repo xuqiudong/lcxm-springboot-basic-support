@@ -22,9 +22,6 @@ public class TypeConvertUtil {
             return "any";
         }
         String javaSimpleTypeName = dataType.getJavaType().getSimpleName();
-        if (javaSimpleTypeName == null) {
-            return "any";
-        }
         return switch (javaSimpleTypeName.trim()) {
             // 数字
             case "Byte", "Short", "Integer", "Long", "Float", "Double", "BigDecimal" -> "number";

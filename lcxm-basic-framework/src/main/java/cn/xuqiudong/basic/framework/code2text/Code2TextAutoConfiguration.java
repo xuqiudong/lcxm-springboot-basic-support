@@ -154,7 +154,7 @@ public class Code2TextAutoConfiguration {
 
         RedisMessageListenerContainer c =
                 new RedisMessageListenerContainer();
-        c.setConnectionFactory(factoryProvider.getIfAvailable());
+        c.setConnectionFactory(factoryProvider.getObject());
         c.addMessageListener(listener, new ChannelTopic(CHANNEL));
         return c;
     }

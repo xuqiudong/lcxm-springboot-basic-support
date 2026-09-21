@@ -7,7 +7,8 @@ import java.util.List;
 
 /**
  * 描述:
- *  预警事项 vo
+ * 预警事项 vo
+ *
  * @author Vic.xu
  * @since 2025-12-05 11:05
  */

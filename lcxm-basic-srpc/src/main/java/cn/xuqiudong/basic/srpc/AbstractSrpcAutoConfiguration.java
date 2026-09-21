@@ -20,7 +20,11 @@ import org.springframework.context.annotation.Bean;
 public abstract class AbstractSrpcAutoConfiguration {
 
 
-    public static SrpcRequestUrl srpcRequestUrl;
+    private static volatile SrpcRequestUrl srpcRequestUrl;
+
+    public static SrpcRequestUrl getSrpcRequestUrl() {
+        return srpcRequestUrl;
+    }
 
     /**
      * 为 通过{@link SrpcReference} 引用的类的动态注入 远程调用 代理类

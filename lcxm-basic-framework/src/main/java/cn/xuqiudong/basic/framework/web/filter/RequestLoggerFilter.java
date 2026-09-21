@@ -21,7 +21,7 @@ public class RequestLoggerFilter extends AbstractRequestLoggingFilter {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(RequestLoggerFilter.class);
 
-    public static final String[] DEFAULT_IGNORE_PATH =
+    private static final String[] DEFAULT_IGNORE_PATH =
             {"/static", "/js", "css", "images", "fonts", "favicon.ico", "assets"};
 
     private static final String START_WATCH = "_startWatch";
@@ -41,7 +41,7 @@ public class RequestLoggerFilter extends AbstractRequestLoggingFilter {
     public RequestLoggerFilter() {
         super();
         this.slowRequestThreshold = DEFAULT_SLOW_REQUEST_THRESHOLD;
-        this.ignorePathPrefix = DEFAULT_IGNORE_PATH;
+        this.ignorePathPrefix = DEFAULT_IGNORE_PATH.clone();
     }
 
     public void setIgnorePathPrefix(String[] ignorePathPrefix) {

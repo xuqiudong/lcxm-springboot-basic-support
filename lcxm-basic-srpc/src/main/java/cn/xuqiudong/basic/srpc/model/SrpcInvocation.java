@@ -27,11 +27,6 @@ public class SrpcInvocation implements Serializable {
     private String interfaceName;
 
     /**
-     * SrpcReference 元信息
-     */
-    private SrpcReference referenceAnnotation;
-
-    /**
      * 方法名 和 SrpcMethod 元信息
      */
     private Map<String, SrpcInvocationMeta> methodMetaMap;
@@ -43,17 +38,16 @@ public class SrpcInvocation implements Serializable {
         Assert.notNull(interfaceName, "interfaceName can not be null");
         Assert.notNull(referenceAnnotation, "referenceAnnotation can not be null");
         this.interfaceName = interfaceName;
-        this.referenceAnnotation = referenceAnnotation;
         defaultInvocationMeta = new SrpcInvocationMeta(referenceAnnotation);
         methodMetaMap = new HashMap<>();
-        initMethodMetaMap();
+        initMethodMetaMap(referenceAnnotation);
 
     }
 
     /**
      * 初始化 指定方法 的元信息
      */
-    private void initMethodMetaMap() {
+    private void initMethodMetaMap(SrpcReference referenceAnnotation) {
         SrpcMethod[] methods = referenceAnnotation.methods();
         for (SrpcMethod method : methods) {
             SrpcInvocationMeta invocationMeta = new SrpcInvocationMeta(method, referenceAnnotation);

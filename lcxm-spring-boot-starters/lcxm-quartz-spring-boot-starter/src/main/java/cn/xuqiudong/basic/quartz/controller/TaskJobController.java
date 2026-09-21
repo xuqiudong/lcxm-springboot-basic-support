@@ -100,7 +100,8 @@ public class TaskJobController {
     @Operation(summary = "检测字段是否可用", description = "检测字段是否可用")
     @PostMapping(value = "/check")
     public BaseResponse<?> checkAvailable(@RequestBody CheckNotRepeatRequest<String> repeatRequest) {
-        boolean ok = service.isValueAvailable(repeatRequest.getId(), repeatRequest.getValue(), repeatRequest.getColumn());
+        boolean ok =
+                service.isValueAvailable(repeatRequest.getId(), repeatRequest.getValue(), repeatRequest.getColumn());
         return BaseResponse.success(ok);
     }
 
@@ -150,8 +151,10 @@ public class TaskJobController {
         if (!isStatusValid(taskJob, QuartzStatusEnum.WORKING, QuartzStatusEnum.PAUSE)) {
             return BaseResponse.error("任务状态不合法");
         }
-        JobDataMap jobDataMap = JobUserHolder.buildJobDataMap(CurrentUserInfoContext.getUserId(), CurrentUserInfoContext.getUsername());
-        BooleanWithMsg result = commonJobQuartzHelper.runJobNow(taskJob.getTaskCode(), taskJob.getTaskGroup(), jobDataMap);
+        JobDataMap jobDataMap =
+                JobUserHolder.buildJobDataMap(CurrentUserInfoContext.getUserId(), CurrentUserInfoContext.getUsername());
+        BooleanWithMsg result =
+                commonJobQuartzHelper.runJobNow(taskJob.getTaskCode(), taskJob.getTaskGroup(), jobDataMap);
         return toResponse(result);
 
     }
@@ -226,7 +229,8 @@ public class TaskJobController {
         if (!isStatusValid(taskJob, QuartzStatusEnum.WORKING, QuartzStatusEnum.PAUSE)) {
             return BaseResponse.error("任务状态不合法");
         }
-        BooleanWithMsg result = commonJobQuartzHelper.modifyJobTime(taskJob.getTaskCode(), taskJob.getTaskGroup(), cron);
+        BooleanWithMsg result =
+                commonJobQuartzHelper.modifyJobTime(taskJob.getTaskCode(), taskJob.getTaskGroup(), cron);
         if (result.isSuccess()) {
             taskJob.setCron(cron);
             service.save(taskJob);

@@ -160,8 +160,6 @@ public enum WarningRuleEnum implements EnumSelectable {
             "租赁物发生主责（死、伤）事故，触发严重预警"
     );
 
-    ;
-
 
     /**
      * 关联的预警事项
@@ -209,7 +207,7 @@ public enum WarningRuleEnum implements EnumSelectable {
      */
     @Override
     public String getText() {
-       return text;
+        return text;
     }
 
 

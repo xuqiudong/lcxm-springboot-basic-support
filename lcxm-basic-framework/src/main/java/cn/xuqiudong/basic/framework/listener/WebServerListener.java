@@ -13,9 +13,9 @@ import org.springframework.context.ApplicationListener;
  */
 public class WebServerListener implements ApplicationListener<WebServerInitializedEvent> {
 
-    public static int port;
+    private static volatile int port;
 
-    public static String contextPath;
+    private static volatile String contextPath;
 
     public static int getPort() {
         return port;

@@ -20,7 +20,8 @@ public interface TaskJobLogDetailMapper extends StringCrudMapper<TaskJobLogDetai
         if (jobIds == null || jobIds.length == 0) {
             return 0;
         }
-        return delete(new LambdaQueryWrapper<TaskJobLogDetail>().in(TaskJobLogDetail::getTaskJobLogId, Arrays.asList(jobIds)));
+        return delete(new LambdaQueryWrapper<TaskJobLogDetail>().in(TaskJobLogDetail::getTaskJobLogId,
+                Arrays.asList(jobIds)));
     }
 
 }

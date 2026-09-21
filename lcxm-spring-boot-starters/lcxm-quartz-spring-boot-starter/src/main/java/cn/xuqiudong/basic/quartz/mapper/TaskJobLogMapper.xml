@@ -6,7 +6,10 @@
 
     <!-- 列表数据列 -->
     <sql id="base_list">
-        a.id,
+        a
+        .
+        id
+        ,
         a.create_time,
         a.update_time,
         a.enabled,

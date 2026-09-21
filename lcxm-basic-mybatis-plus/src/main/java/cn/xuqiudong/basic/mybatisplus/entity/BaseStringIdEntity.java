@@ -2,6 +2,7 @@ package cn.xuqiudong.basic.mybatisplus.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,5 +37,8 @@ public abstract class BaseStringIdEntity extends BaseMpEntity<String> {
 
     @Schema(description = "主键")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @SuppressFBWarnings(value = "MF_CLASS_MASKS_FIELD",
+            justification = "Concrete id type is required so MyBatis can select the correct TypeHandler "
+                    + "when id is null.")
     protected String id;
 }

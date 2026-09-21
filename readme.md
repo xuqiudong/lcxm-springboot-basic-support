@@ -73,6 +73,14 @@ Starter 子模块：
 mvn clean install
 ```
 
+本地完整代码质量检查使用两个 Maven 构建线程，并跳过可能依赖外部环境的测试：
+
+```bash
+mvn -T 2 clean verify -Dmaven.test.skip=true
+```
+
+IDEA 右上角也可以直接运行共享配置 `LCXM - Full Quality Check`。
+
 只构建某个模块及其依赖：
 
 ```bash
@@ -84,7 +92,7 @@ mvn -pl lcxm-basic-third -am clean install
 所有继承 `lcxm-springboot-parent` 的子项目都默认执行父 POM 中内嵌的 Checkstyle 公共规则：
 
 - Maven 在 `validate` 阶段检查 `main` 和 `test` 源码。
-- 当前阶段只报告 Checkstyle 问题，不阻断构建。
+- Checkstyle 发现违规时会输出明细并使构建失败。
 - 子项目不应重新定义整套规则。
 - 确有必要的局部例外，应在子项目根目录创建 `checkstyle-suppressions.xml`，并限定文件、规则和原因。
 - 根目录 `.editorconfig` 负责跨编辑器基础格式；IDEA 用户可导入 `config/idea/lcxm-idea-style.xml`，在多个独立项目中复用同一套 Java 格式和 import 规则。

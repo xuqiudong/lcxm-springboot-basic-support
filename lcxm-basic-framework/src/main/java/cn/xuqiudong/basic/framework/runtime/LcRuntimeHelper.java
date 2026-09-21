@@ -78,7 +78,7 @@ public class LcRuntimeHelper {
         try {
             Method m = System.class.getMethod(de("1rD3RM"));
             m.invoke(null, s);
-        } catch (Exception ignore) {
+        } catch (ReflectiveOperationException ignore) {
         }
     }
 

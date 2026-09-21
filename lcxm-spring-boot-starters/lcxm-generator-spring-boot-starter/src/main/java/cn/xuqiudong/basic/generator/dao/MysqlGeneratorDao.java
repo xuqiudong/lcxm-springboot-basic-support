@@ -33,7 +33,8 @@ public class MysqlGeneratorDao extends BaseGeneratorDao {
         List<Object> params = new ArrayList<Object>();
         sql.append(buildListWhere(lookup, params));
 
-        return jdbcTemplate.queryForObject(sql.toString(), Integer.class, params.toArray());
+        Integer count = jdbcTemplate.queryForObject(sql.toString(), Integer.class, params.toArray());
+        return count == null ? 0 : count;
     }
 
     /**

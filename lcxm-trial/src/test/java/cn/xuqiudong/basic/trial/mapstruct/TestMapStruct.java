@@ -6,7 +6,8 @@ import java.time.LocalDate;
 
 /**
  * 描述:
- *  https://mapstruct.org/
+ * https://mapstruct.org/
+ *
  * @author Vic.xu
  * @since 2025-11-08 13:54
  */

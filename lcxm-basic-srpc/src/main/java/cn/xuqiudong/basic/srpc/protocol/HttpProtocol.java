@@ -40,7 +40,7 @@ public class HttpProtocol implements Protocol {
 
     @Override
     public Object send(Invoker invoker) throws Exception {
-        SrpcRequestUrl url = AbstractSrpcAutoConfiguration.srpcRequestUrl;
+        SrpcRequestUrl url = AbstractSrpcAutoConfiguration.getSrpcRequestUrl();
         if (url == null) {
             throw new CommonException("Srpc provider address not configured");
         }
