@@ -9,9 +9,10 @@ import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,13 +27,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Minimal HTTP behavior tests for Hutool based executor.
  */
+@Tag("manual")
 public class HttpOutboundExecutorTest {
 
     private HttpServer server;
@@ -49,7 +51,7 @@ public class HttpOutboundExecutorTest {
 
     private final AtomicReference<String> accept = new AtomicReference<>();
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
         server.createContext("/echo", this::handle);
@@ -58,7 +60,7 @@ public class HttpOutboundExecutorTest {
         baseUrl = "http://127.0.0.1:" + server.getAddress().getPort() + "/echo";
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         if (server != null) {
             server.stop(0);

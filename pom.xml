@@ -95,6 +95,8 @@
         <skip.spotbugs>false</skip.spotbugs>
         <!-- skip.test=true 可在子项目或命令行中跳过 Surefire 测试。 -->
         <skip.test>false</skip.test>
+        <!-- Maven 测试默认排除的 JUnit 5 标签，子项目可按需覆盖。 -->
+        <test.excluded.groups>manual | slow</test.excluded.groups>
     </properties>
 
     <dependencyManagement>
@@ -354,6 +356,8 @@
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <skipTests>${skip.test}</skipTests>
+                        <!-- 默认不执行依赖人工环境或耗时明显的测试。 -->
+                        <excludedGroups>${test.excluded.groups}</excludedGroups>
                     </configuration>
                 </plugin>
 

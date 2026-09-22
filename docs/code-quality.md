@@ -151,6 +151,38 @@ Settings
 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
 ```
 
+## 测试标签
+
+JUnit 5 测试使用以下标签约定：
+
+- `manual`：依赖人工准备的数据库、Redis、网络服务或其他环境，只允许开发人员主动执行。
+- `slow`：不依赖人工环境，但执行时间明显较长，不进入日常 Maven 构建。
+- `integration`：说明测试跨越组件或依赖外部基础设施；该标签只描述测试性质，默认不作为排除条件。
+
+同一测试类中的全部方法具有相同性质时，在类上标记 `@Tag`；只有个别方法不同时，才标在方法上。普通单元测试不添加标签。`@Tag` 只负责分类，本身不会禁用测试。
+
+父 POM 通过 `test.excluded.groups` 统一定义默认排除标签：
+
+```xml
+<test.excluded.groups>manual | slow</test.excluded.groups>
+```
+
+父 POM 的 Surefire 配置统一引用该属性，子项目无需重复配置。子项目确有不同需求时，可以覆盖 `test.excluded.groups` 属性。
+
+在 IDEA 中直接运行测试类或测试方法时，不经过 Maven Surefire，因此 `manual` 和 `slow` 测试仍会执行。Maven 常规构建会排除这两类测试。需要通过 Maven 手动运行指定测试时，覆盖默认排除标签：
+
+```powershell
+mvn -pl 模块名 test "-Dtest=测试类名" "-Dtest.excluded.groups=none"
+```
+
+运行模块中全部 `manual` 测试：
+
+```powershell
+mvn -pl 模块名 test "-Dgroups=manual" "-Dtest.excluded.groups=none"
+```
+
+`none` 不是特殊关键字，表示临时改为排除一个不存在的 `none` 标签，从而允许 `manual` 和 `slow` 测试执行。
+
 ## SpotBugs
 
 SpotBugs 分析编译后的字节码，主要发现潜在程序缺陷，不负责排版和命名。

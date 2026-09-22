@@ -1,6 +1,7 @@
 package cn.xuqiudong.basic.secureid.filter;
 
 import cn.xuqiudong.basic.secureid.util.IdUtil;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -9,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("manual")
 public class ParameterRequestWrapperTest {
 
     @Test

@@ -100,6 +100,7 @@ mvn -pl lcxm-basic-third -am clean install
 - 子项目不应重新定义整套规则。
 - 确有必要的局部例外，应在子项目根目录创建 `checkstyle-suppressions.xml`，并限定文件、规则和原因。
 - 根目录 `.editorconfig` 负责跨编辑器基础格式；IDEA 用户可导入 `config/idea/lcxm-idea-style.xml`，在多个独立项目中复用同一套 Java 格式和 import 规则。
+- JUnit 5 测试使用 `manual` 和 `slow` 标签声明默认不参与 Maven 构建的测试；IDEA 直接运行不受影响。
 
 完整使用方式和规则说明见：[代码质量检测规范](docs/code-quality.md)。
 

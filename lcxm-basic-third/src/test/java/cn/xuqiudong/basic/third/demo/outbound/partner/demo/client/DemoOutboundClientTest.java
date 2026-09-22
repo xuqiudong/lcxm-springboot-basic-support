@@ -10,7 +10,8 @@ import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
 import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutorFactory;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
-import org.junit.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,12 +20,13 @@ import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * demo 出站 Client 可直接运行的参考测试。
  */
+@Tag("manual")
 public class DemoOutboundClientTest {
 
     @Test

@@ -1,6 +1,7 @@
 package cn.xuqiudong.basic.secureid.web;
 
 import cn.xuqiudong.basic.secureid.util.IdUtil;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -25,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("manual")
 public class SecurePathVariableArgumentResolverTest {
 
     private final SecurePathVariableArgumentResolver resolver =

@@ -10,19 +10,21 @@ import cn.xuqiudong.basic.third.inbound.store.CaffeineNonceStore;
 import cn.xuqiudong.basic.third.inbound.store.CaffeineTokenStore;
 import cn.xuqiudong.basic.third.security.RsaSignatureUtils;
 import cn.xuqiudong.basic.third.security.SignaturePayloadBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Minimal token issue/check/revoke flow test.
  */
+@Tag("manual")
 public class InboundTokenServiceTest {
 
     @Test

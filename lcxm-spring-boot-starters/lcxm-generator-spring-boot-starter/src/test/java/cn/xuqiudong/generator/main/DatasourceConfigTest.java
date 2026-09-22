@@ -5,16 +5,20 @@ import cn.xuqiudong.basic.generator.dao.BaseGeneratorDao;
 import cn.xuqiudong.basic.generator.enums.DatabaseType;
 import cn.xuqiudong.basic.generator.model.meta.TableMeta;
 import cn.xuqiudong.basic.generator.model.query.TableLookup;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 /**
  * 描述:
+ * 连接真实数据库的生成器集成测试，仅供手动执行。
  *
  * @author Vic.xu
  * @since 2025-09-12 15:54
  */
+@Tag("integration")
+@Tag("manual")
 public class DatasourceConfigTest {
 
 

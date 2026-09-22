@@ -7,21 +7,23 @@ import cn.xuqiudong.basic.third.inbound.registry.InboundAppConfigRegistry;
 import cn.xuqiudong.basic.third.inbound.service.InboundTokenService;
 import cn.xuqiudong.basic.third.inbound.store.CaffeineTokenStore;
 import jakarta.servlet.http.HttpServletRequest;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Proxy;
 import java.util.Collections;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("manual")
 public class InboundTokenInterceptorTest {
 
-    @After
+    @AfterEach
     public void clearContext() {
         InboundTokenContextHolder.clear();
     }

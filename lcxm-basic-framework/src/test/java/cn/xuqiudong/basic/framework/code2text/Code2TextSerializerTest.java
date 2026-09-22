@@ -11,6 +11,7 @@ import cn.xuqiudong.basic.framework.code2text.support.DemoCode2TextResolver;
 import cn.xuqiudong.basic.framework.code2text.support.TestCode2TextConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Import;
 
@@ -38,6 +39,7 @@ public class Code2TextSerializerTest extends BaseTest {
         JsonUtil.printJson(model);
     }
 
+    @Tag("slow")
     @Test
     @DisplayName("测试缓存")
     public void testCode2TextCache() {
