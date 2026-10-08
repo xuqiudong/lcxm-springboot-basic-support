@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.framework.aspect;
 
+import cn.xuqiudong.basic.core.util.JsonUtil;
 import cn.xuqiudong.basic.framework.aspect.annotation.LogPrint;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,7 +42,7 @@ public class RequestLogPrintAspect {
 
     private static final String LOG_NAME = "【request log】";
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = JsonUtil.OBJECT_MAPPER.copy();
 
 
     static {
