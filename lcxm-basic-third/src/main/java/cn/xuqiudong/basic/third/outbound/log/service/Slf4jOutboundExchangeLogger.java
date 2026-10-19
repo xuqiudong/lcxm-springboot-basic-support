@@ -54,7 +54,7 @@ public class Slf4jOutboundExchangeLogger implements OutboundExchangeLogger {
                     abbreviate(log.getErrorMessage()));
             return;
         }
-        LOGGER.info(
+        LOGGER.debug(
                 "[third-outbound] third={}, operation={}, method={}, url={}, httpStatus={}, status={}, elapsed={}ms, " +
                         "requestBody={}, responseBody={}",
                 log.getThirdCode(), log.getOperation(), log.getMethod(), log.getUrl(),
