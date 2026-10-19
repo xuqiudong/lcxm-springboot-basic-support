@@ -25,14 +25,17 @@ public class IdUtil {
     //id 后缀标示
     private static final String ID_SUFFIX = "xgIyHU";
 
-    //匹配加密id的正则表达式
-    private static final String ENCRYPTED_REGEX = ID_PREFIX + "(.*?)" + ID_SUFFIX;
+    /**
+     * 匹配字符串中被固定前后缀包裹的 Base62 密文，并通过唯一捕获组提取密文载荷。
+     * 载荷使用非贪婪匹配以停在最近的后缀，同时限定字符范围，避免跨越逗号、JSON 标点等普通内容。
+     */
+    private static final String ENCRYPTED_REGEX = Pattern.quote(ID_PREFIX)
+            + "([0-9A-Za-z]+?)"
+            + Pattern.quote(ID_SUFFIX);
 
+    /** 支持在单个密文、多个密文以及包含普通文本的字符串中逐段查找密文。 */
     private static final Pattern ENCRYPTED_PATTERN =
-            Pattern.compile(ENCRYPTED_REGEX, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-
-    private static final Pattern EXACT_ENCRYPTED_PATTERN =
-            Pattern.compile("^" + ENCRYPTED_REGEX + "$", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+            Pattern.compile(ENCRYPTED_REGEX, Pattern.CASE_INSENSITIVE);
 
 
     //默认加密盐值
@@ -74,15 +77,16 @@ public class IdUtil {
     }
 
     /**
-     * 解密id 只针对加过密的 先解包裹再解密
+     * 解密字符串中所有被固定前后缀包裹的 ID 密文。
+     * <p>
+     * 统一采用逐段查找和替换，因此支持单个密文、分隔符连接的多个密文，以及密文与普通文本混合的场景；
+     * 未包含密文的字符串保持不变。
+     *
+     * @param id 待处理的字符串
+     * @return 解密并替换全部密文后的字符串；未包含密文时返回原值
      */
     public static String decrypt(String id) {
         if (isEncrypted(id)) {
-            Matcher matcher = EXACT_ENCRYPTED_PATTERN.matcher(id);
-            if (matcher.matches()) {
-                return decodeDataInfo(matcher.group(1), getSalt());
-            }
-            //修改为全字段匹配解密其中的加密字段并替换回去
             return replacementAllHanderString(id, ENCRYPTED_REGEX, str -> decodeDataInfo(str, getSalt()));
         }
         return id;
@@ -96,8 +100,10 @@ public class IdUtil {
     }
 
     /**
-     * 是否加密过
-     * 查看是否加前后缀即可
+     * 判断字符串中是否包含符合固定前后缀及 Base62 载荷格式的密文。
+     *
+     * @param src 待检查的字符串
+     * @return 包含至少一个密文时返回 {@code true}
      */
     private static boolean isEncrypted(String src) {
         return StringUtils.isNotEmpty(src) && ENCRYPTED_PATTERN.matcher(src).find();
