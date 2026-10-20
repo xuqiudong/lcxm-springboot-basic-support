@@ -52,6 +52,11 @@ public class OutboundRequestInfoBuilder<T> {
 
     private Object body;
 
+    /**
+     * 仅用于交换日志的明文请求体；为空时按实际 HTTP 请求体记录。
+     */
+    private Object logRequestBody;
+
     private Duration timeout;
 
     private Class<T> responseType;
@@ -273,6 +278,20 @@ public class OutboundRequestInfoBuilder<T> {
     public OutboundRequestInfoBuilder<T> bytesBody(byte[] body) {
         this.body = body;
         this.requestType = body == null ? this.requestType : OutboundRequestType.BYTES;
+        return this;
+    }
+
+    /**
+     * 设置交换日志使用的业务明文请求体。
+     *
+     * <p>当实际 HTTP body 是加密报文时，可传入加密前的请求对象。该值只参与日志序列化，
+     * 不会改变实际发送内容；传入 {@code null} 表示仍按实际 HTTP 请求体记录。</p>
+     *
+     * @param logRequestBody 加密前的业务请求对象或明文
+     * @return 当前构建器
+     */
+    public OutboundRequestInfoBuilder<T> logRequestBody(Object logRequestBody) {
+        this.logRequestBody = logRequestBody;
         return this;
     }
 

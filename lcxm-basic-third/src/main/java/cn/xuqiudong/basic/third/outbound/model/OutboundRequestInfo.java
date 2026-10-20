@@ -73,6 +73,11 @@ public class OutboundRequestInfo<T> {
     private final Object body;
 
     /**
+     * 仅用于交换日志的业务明文请求体；为空时记录实际 HTTP 请求体。
+     */
+    private final Object logRequestBody;
+
+    /**
      * 本次请求超时时间；为空时使用第三方默认配置。
      */
     private final Duration timeout;
@@ -108,6 +113,7 @@ public class OutboundRequestInfo<T> {
         this.multipartParts = unmodifiableListCopy(builder.getMultipartParts());
         this.requestType = builder.getRequestType();
         this.body = builder.getBody();
+        this.logRequestBody = builder.getLogRequestBody();
         this.timeout = builder.getTimeout();
         this.responseType = builder.getResponseType();
         this.responseTypeReference = builder.getResponseTypeReference();

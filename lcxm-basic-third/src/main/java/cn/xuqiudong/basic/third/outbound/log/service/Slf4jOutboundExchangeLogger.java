@@ -47,10 +47,11 @@ public class Slf4jOutboundExchangeLogger implements OutboundExchangeLogger {
         if (OutboundExchangeStatus.FAILED.equals(log.getStatus())) {
             LOGGER.warn(
                     "[third-outbound] third={}, operation={}, method={}, url={}, httpStatus={}, status={}, " +
-                            "elapsed={}ms, requestBody={}, responseBody={}, error={}",
+                            "elapsed={}ms, requestBody={}, responseBody={}, errorType={}, error={}",
                     log.getThirdCode(), log.getOperation(), log.getMethod(), log.getUrl(),
                     log.getHttpStatus(), log.getStatus(), log.getElapsedMillis(),
                     abbreviate(log.getRequestBody()), abbreviate(log.getResponseBody()),
+                    log.getErrorType(),
                     abbreviate(log.getErrorMessage()));
             return;
         }

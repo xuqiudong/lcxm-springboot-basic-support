@@ -4,6 +4,7 @@ import cn.xuqiudong.basic.third.common.exception.ThirdException;
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
 import cn.xuqiudong.basic.third.outbound.log.model.OutboundExchangeLog;
+import cn.xuqiudong.basic.third.outbound.log.model.OutboundExchangeStatus;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestType;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
@@ -24,6 +25,7 @@ import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -211,6 +213,61 @@ public class HttpOutboundExecutorTest {
 
         assertEquals("1234567890", logRef.get().getRequestBody());
         assertEquals("ok", logRef.get().getResponseBody());
+    }
+
+    @Test
+    public void executeShouldLogPlainRequestAndParsedResponse() {
+        AtomicReference<OutboundExchangeLog> logRef = new AtomicReference<>();
+        Map<String, Object> plainRequest = new LinkedHashMap<>();
+        plainRequest.put("orderNo", "ORDER-001");
+        OutboundRequestInfo<Map<String, Object>> request =
+                OutboundRequestInfo.<Map<String, Object>>builder(ThirdIdentity.of("demo"))
+                        .url(baseUrl)
+                        .method(ThirdHttpMethod.POST)
+                        .textBody("encrypted-request")
+                        .logRequestBody(plainRequest)
+                        .responseParser(rawResponse -> {
+                            Map<String, Object> plainResponse = new LinkedHashMap<>();
+                            plainResponse.put("result", "decrypted-" + rawResponse);
+                            return plainResponse;
+                        })
+                        .build();
+
+        Map<String, Object> response = new HttpOutboundExecutor(new ThirdClientOptions(), null, logRef::set)
+                .execute(request);
+
+        assertEquals("encrypted-request", body.get());
+        assertEquals("decrypted-ok", response.get("result"));
+        assertEquals("{\"orderNo\":\"ORDER-001\"}", logRef.get().getRequestBody());
+        assertEquals("{\"result\":\"decrypted-ok\"}", logRef.get().getResponseBody());
+        assertEquals(OutboundExchangeStatus.SUCCESS, logRef.get().getStatus());
+    }
+
+    @Test
+    public void executeShouldSendResponseParserErrorToCustomLogger() {
+        AtomicReference<OutboundExchangeLog> logRef = new AtomicReference<>();
+        OutboundRequestInfo<String> request = OutboundRequestInfo.<String>builder(ThirdIdentity.of("demo"))
+                .url(baseUrl)
+                .method(ThirdHttpMethod.POST)
+                .textBody("encrypted-request")
+                .logRequestBody("plain-request")
+                .responseParser(rawResponse -> {
+                    throw new IllegalStateException("decrypt response failed");
+                })
+                .build();
+
+        try {
+            new HttpOutboundExecutor(new ThirdClientOptions(), null, logRef::set).execute(request);
+            fail("response parser error should throw ThirdException");
+        } catch (ThirdException e) {
+            assertEquals("execute outbound request failed", e.getMessage());
+        }
+
+        assertEquals(OutboundExchangeStatus.FAILED, logRef.get().getStatus());
+        assertEquals("plain-request", logRef.get().getRequestBody());
+        assertEquals("ok", logRef.get().getResponseBody());
+        assertEquals(IllegalStateException.class.getName(), logRef.get().getErrorType());
+        assertEquals("decrypt response failed", logRef.get().getErrorMessage());
     }
 
     private void handle(HttpExchange exchange) throws IOException {

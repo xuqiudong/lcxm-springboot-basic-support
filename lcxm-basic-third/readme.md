@@ -197,6 +197,8 @@ src/test/java/cn/xuqiudong/basic/third/demo
 - `execute(api, request)` 中的 `api` 用于执行后的 `afterResponse(api, response)` 厂商响应校验。
 - 文件上传使用 `requestMultipart(...)`，支持 `File`、`InputStream + fileName`；同一个 field 多个文件使用 builder 连续 `multipartFile("file", ...)` 或 `multipartFiles(...)`。
 - 需要日志落库时实现 `OutboundExchangeLogger`，并在出站配置类中覆盖 `customOutboundExchangeLogger()`。
+- 加密接口通过 builder 的 `logRequestBody(...)` 传入加密前请求，并在 `responseParser(...)` 内完成响应解密；日志将记录请求明文和解析后的响应明文。
+- HTTP、请求构建、状态码校验和响应解析异常都会进入自定义 logger，失败日志提供 `errorType`、`errorMessage`；解析失败时响应内容仍是已收到的原始报文。
 - 默认 slf4j 日志会裁剪请求体、响应体、异常信息，长度由 `outboundSlf4jExchangeLogTextMaxLength()` 控制。
 - JSON/FORM/TEXT/BYTES 请求通过 `OutboundRequestType` 明确表达，builder 也会按 body/form/query 自动推断。
 - 需要特殊响应解析时使用 `OutboundResponseParser`；包装泛型响应使用 `ResponseTypeUtils`。

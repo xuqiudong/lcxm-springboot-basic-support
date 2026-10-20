@@ -71,6 +71,11 @@ public class OutboundExchangeLog {
     private String errorMessage;
 
     /**
+     * 异常类型全限定名；成功时为空，便于自定义日志处理器分类统计。
+     */
+    private String errorType;
+
+    /**
      * 日志创建时间。
      */
     private Date createTime = DateUtil.date();

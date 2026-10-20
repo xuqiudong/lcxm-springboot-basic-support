@@ -88,15 +88,17 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         String requestBody = null;
         String responseBody = null;
         try {
+            requestBody = safeResolveLogRequestBody(request);
             HttpRequest httpRequest = buildRequest(request);
-            requestBody = resolveLogRequestBody(request);
             try (HttpResponse response = httpRequest.execute()) {
                 httpStatus = response.getStatus();
                 responseBody = response.body();
             }
             checkHttpStatus(httpStatus);
             T result = parse(responseBody, request);
-            log(request, httpStatus, DateUtil.current() - start, requestBody, responseBody, null);
+            String logResponseBody = request.getResponseParser() == null
+                    ? responseBody : safeResolveLogResponseBody(result);
+            log(request, httpStatus, DateUtil.current() - start, requestBody, logResponseBody, null);
             return result;
         } catch (Exception e) {
             log(request, httpStatus, DateUtil.current() - start, requestBody, responseBody, e);
@@ -114,8 +116,8 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         Integer httpStatus = null;
         String requestBody = null;
         try {
+            requestBody = safeResolveLogRequestBody(request);
             HttpRequest httpRequest = buildRequest(request);
-            requestBody = resolveLogRequestBody(request);
             byte[] bodyBytes;
             try (HttpResponse response = httpRequest.execute()) {
                 httpStatus = response.getStatus();
@@ -242,6 +244,9 @@ public class HttpOutboundExecutor implements OutboundExecutor {
     }
 
     private String resolveLogRequestBody(OutboundRequestInfo<?> request) throws Exception {
+        if (request.getLogRequestBody() != null) {
+            return serializeLogValue(request.getLogRequestBody());
+        }
         OutboundRequestType requestType = resolveRequestType(request);
         if (OutboundRequestType.FORM == requestType) {
             return request.getFormParams().isEmpty() ? null : request.getFormParams().toString();
@@ -257,6 +262,47 @@ public class HttpOutboundExecutor implements OutboundExecutor {
         }
         return OutboundRequestType.JSON == requestType ? resolveJsonBody(request.getBody()) : String.valueOf(
                 request.getBody());
+    }
+
+    /**
+     * 请求日志内容构建失败时仅放弃该字段，不能阻断真实 HTTP 请求。
+     */
+    private String safeResolveLogRequestBody(OutboundRequestInfo<?> request) {
+        try {
+            return resolveLogRequestBody(request);
+        } catch (Exception e) {
+            LOGGER.warn("resolve third outbound request log body failed", e);
+            return null;
+        }
+    }
+
+    /**
+     * 将已经完成解析、解密的业务响应转换为日志文本。
+     */
+    private String resolveLogResponseBody(Object response) throws Exception {
+        return serializeLogValue(response);
+    }
+
+    /**
+     * 响应日志内容构建失败时仅放弃该字段，不能改变已经完成的业务调用结果。
+     */
+    private String safeResolveLogResponseBody(Object response) {
+        try {
+            return resolveLogResponseBody(response);
+        } catch (Exception e) {
+            LOGGER.warn("resolve third outbound response log body failed", e);
+            return null;
+        }
+    }
+
+    /**
+     * 字符串保持原值，其他业务对象统一按执行器 ObjectMapper 序列化。
+     */
+    private String serializeLogValue(Object value) throws Exception {
+        if (value == null) {
+            return null;
+        }
+        return value instanceof String ? (String) value : objectMapper.writeValueAsString(value);
     }
 
     private String resolveJsonBody(Object body) throws Exception {
@@ -358,6 +404,7 @@ public class HttpOutboundExecutor implements OutboundExecutor {
                 .setRequestBody(requestBody)
                 .setResponseBody(responseBody)
                 .setStatus(resolveStatus(httpStatus, exception))
+                .setErrorType(exception == null ? null : exception.getClass().getName())
                 .setErrorMessage(exception == null ? null : exception.getMessage());
         safeLog("slf4j", slf4jLogger, log);
         safeLog("custom", customLogger, log);
