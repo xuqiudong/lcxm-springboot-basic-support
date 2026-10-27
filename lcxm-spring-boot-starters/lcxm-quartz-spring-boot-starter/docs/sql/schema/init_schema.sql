@@ -43,7 +43,7 @@ CREATE TABLE `t_task_job_log_detail`
     `id`              varchar(32) NOT NULL COMMENT 'id',
     `task_job_log_id` varchar(32)   DEFAULT NULL COMMENT '执行记录id',
     `result`          varchar(32)   DEFAULT NULL COMMENT '执行结果',
-    `result_note`     varchar(2024) DEFAULT NULL COMMENT '结果描述',
+    `result_note`     varchar(2048) DEFAULT NULL COMMENT '结果描述',
     `create_time`     datetime      DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`     datetime      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `enabled`         tinyint       DEFAULT '1' COMMENT '是否启用',
