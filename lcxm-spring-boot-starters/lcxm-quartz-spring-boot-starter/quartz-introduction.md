@@ -1,9 +1,10 @@
 ## quartz  starter
+
 > 2025-01
 
 > 虽然对quartz不甚熟悉，但是几年前还是写了个starter 在项目中使用，也没什么太大的问题，这次准备进行简单的重构，顺便了解下quartz.
 
-### 
+###
 
 ### 一 quartz简介
 
@@ -46,7 +47,7 @@ MISFIRE_INSTRUCTION_FIRE_NOW = 1;
 // 简单的说就是，错过了应该触发的时间没有按时执行，但是最终它还是以原来的重复次数执行，就是会比预计终止的时间晚。
 MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT
 
-//和上面的类似，区别就是不会立马执行，而是在下一个激活点执行，且超时期内错过的执行机会作废。        
+//和上面的类似，区别就是不会立马执行，而是在下一个激活点执行，且超时期内错过的执行机会作废。
 MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT
 
 // 这个也是重新调度任务，但是它只按照剩余次数来触发，
@@ -157,24 +158,26 @@ MISFIRE_INSTRUCTION_DO_NOTHING
 
 #### 3、表说明
 
-github下载地址：**https://github.com/quartz-scheduler/quartz/blob/quartz-2.3.x/quartz-core/src/main/resources/org/quartz/impl/jdbcjobstor**
+github下载地址：*
+*https://github.com/quartz-scheduler/quartz/blob/quartz-2.3.x/quartz-core/src/main/resources/org/quartz/impl/jdbcjobstor
+**
 
 ```
-//以Blob 类型存储的触发器。 
+//以Blob 类型存储的触发器。
 qrtz_blob_triggers
 
-//存放日历信息， quartz可配置一个日历来指定一个时间范围。 
+//存放日历信息， quartz可配置一个日历来指定一个时间范围。
 qrtz_calendars
 
-//存放cron类型的触发器。 
+//存放cron类型的触发器。
 qrtz_cron_triggers
-//存储已经触发的trigger相关信息，trigger随着时间的推移状态发生变化，直到最后trigger执行完成，从表中被删除。 
-qrtz_fired_triggers 
+//存储已经触发的trigger相关信息，trigger随着时间的推移状态发生变化，直到最后trigger执行完成，从表中被删除。
+qrtz_fired_triggers
 
-//存放一个jobDetail信息。 
+//存放一个jobDetail信息。
 qrtz_job_details
 
-//job**监听器**。 
+//job**监听器**。
 qrtz_job_listeners
 
 //Quartz提供的锁表，为多个节点调度提供分布式锁，实现分布式调度，默认有2个锁
@@ -186,10 +189,10 @@ qrtz_paused_trigger_graps
 //存储所有节点的scheduler，会定期检查scheduler是否失效
 qrtz_scheduler_state
 
-//存储SimpleTrigger 
+//存储SimpleTrigger
 qrtz_simple_triggers
 
-//触发器监听器。 
+//触发器监听器。
 qrtz_trigger_listeners
 
 //触发器的基本信息。
@@ -203,7 +206,8 @@ qrtz_simprop_triggers
 
 1. 自动注册了 `SchedulerFactoryBean`
 2. 自动注册了`Scheduler`
-   - 因为`SchedulerFactoryBean`是一个`FactoryBean`，其getObject方法返回的是`Scheduler`， 所以也自动注册了`Scheduler`到spring容器
+    - 因为`SchedulerFactoryBean`是一个`FactoryBean`，其getObject方法返回的是`Scheduler`， 所以也自动注册了`Scheduler`
+      到spring容器
 
 参考：
 
