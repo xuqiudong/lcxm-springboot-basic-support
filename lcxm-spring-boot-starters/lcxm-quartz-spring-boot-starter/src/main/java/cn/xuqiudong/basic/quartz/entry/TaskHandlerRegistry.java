@@ -3,7 +3,9 @@ package cn.xuqiudong.basic.quartz.entry;
 import cn.xuqiudong.basic.quartz.annotation.TaskJobFlag;
 import cn.xuqiudong.basic.quartz.entity.TaskJobLog;
 import cn.xuqiudong.basic.quartz.job.AbstractTaskJob;
+import cn.xuqiudong.basic.quartz.model.TaskJobExecutionResult;
 import cn.xuqiudong.basic.quartz.model.TaskJobHandlerModel;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,8 @@ public class TaskHandlerRegistry {
      *
      * @param jobs 已由 Spring 创建的任务实例
      */
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "任务注册中心必须在构造阶段完成反射扫描，避免对外暴露未初始化的任务索引")
     public TaskHandlerRegistry(List<AbstractTaskJob> jobs) {
         Map<String, TaskJobHandlerModel> registered = new HashMap<>();
         for (AbstractTaskJob job : jobs) {
@@ -47,7 +51,7 @@ public class TaskHandlerRegistry {
                 }
                 if (!isValidTaskMethod(method, flag)) {
                     LOGGER.warn("跳过无效的定时任务方法：{}，要求 public 非静态方法，"
-                                    + "接收一个 TaskJobLog 参数并返回 String，任务编码非空",
+                                    + "接收一个 TaskJobLog 参数并返回 TaskJobExecutionResult，任务编码非空",
                             method);
                     continue;
                 }
@@ -64,7 +68,7 @@ public class TaskHandlerRegistry {
     }
 
     /**
-     * 校验原有任务签名：public、非静态、单个 TaskJobLog 参数、String 返回值及非空编码。
+     * 校验任务签名：public、非静态、单个 TaskJobLog 参数、结构化执行结果及非空编码。
      *
      * @param method 待注册的方法
      * @param flag   方法上的任务标记
@@ -73,7 +77,7 @@ public class TaskHandlerRegistry {
     private boolean isValidTaskMethod(Method method, TaskJobFlag flag) {
         boolean validSignature = Modifier.isPublic(method.getModifiers())
                 && !Modifier.isStatic(method.getModifiers())
-                && method.getReturnType() == String.class
+                && method.getReturnType() == TaskJobExecutionResult.class
                 && method.getParameterCount() == 1
                 && method.getParameterTypes()[0] == TaskJobLog.class;
         return validSignature && StringUtils.isNotBlank(flag.value());

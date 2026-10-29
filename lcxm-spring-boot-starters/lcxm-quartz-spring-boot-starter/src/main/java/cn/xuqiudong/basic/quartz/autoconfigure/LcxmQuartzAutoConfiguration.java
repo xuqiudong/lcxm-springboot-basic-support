@@ -1,5 +1,6 @@
 package cn.xuqiudong.basic.quartz.autoconfigure;
 
+import cn.xuqiudong.basic.quartz.entry.TaskHandlerRegistry;
 import cn.xuqiudong.basic.quartz.entry.UnifyTaskEntry;
 import cn.xuqiudong.basic.quartz.helper.CommonJobQuartzHelper;
 import cn.xuqiudong.basic.quartz.job.AbstractTaskJob;
@@ -73,11 +74,29 @@ public class LcxmQuartzAutoConfiguration {
                 schedulerFactoryBean.setJobFactory(springBeanJobFactory);
     }
 
+    /**
+     * 启动时收集 Spring 管理的任务实例并校验注解方法。
+     *
+     * @param taskJobList Spring 中的任务实例
+     * @return 任务注册中心
+     */
     @Bean
     @ConditionalOnMissingBean
-    public UnifyTaskEntry unifyTaskEntry(List<AbstractTaskJob> taskJobList) {
+    public TaskHandlerRegistry taskHandlerRegistry(List<AbstractTaskJob> taskJobList) {
+        return new TaskHandlerRegistry(taskJobList);
+    }
+
+    /**
+     * 为 Quartz 提供统一入口，使用注册中心查找任务方法。
+     *
+     * @param registry 任务注册中心
+     * @return 统一任务入口
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public UnifyTaskEntry unifyTaskEntry(TaskHandlerRegistry registry) {
         LOGGER.info("init 通用任务入口类 UnifyTaskEntry");
-        return new UnifyTaskEntry(taskJobList);
+        return new UnifyTaskEntry(registry);
     }
 
     @Bean

@@ -27,8 +27,14 @@ import java.util.List;
 @Service
 public class TaskJobLogDetailService {
 
+    /**
+     * 单条明细说明的最大长度。
+     */
     private static final int MAX_LENGTH = 2048;
 
+    /**
+     * 业务主动记录的任务明细持久化操作。
+     */
     @Autowired
     private TaskJobLogDetailMapper mapper;
 
@@ -99,8 +105,10 @@ public class TaskJobLogDetailService {
     }
 
     /**
-     * 记录日志明细, 在新事务中执行
-     * 一般自行在业务处理中按需调用此方法
+     * 由业务按需记录关联主日志的明细，框架不缓存或自动收集。
+     * REQUIRED 会加入已有事务，无事务时才新建；不保证业务回滚后仍保留该明细。
+     * 多线程任务须自行设置和清理子线程的 JobUserHolder，并在任务返回前等待明细写入提交，
+     * 避免跳过记录删除后仍有迟到的明细写入。
      *
      * @param taskJobLog 日志主表
      * @param result     结果，可 考虑使用 TaskJobResult

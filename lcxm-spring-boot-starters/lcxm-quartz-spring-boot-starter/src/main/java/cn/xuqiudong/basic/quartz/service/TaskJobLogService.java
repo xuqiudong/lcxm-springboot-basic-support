@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -27,9 +28,15 @@ import java.util.List;
 @Service
 public class TaskJobLogService {
 
+    /**
+     * 主日志持久化操作。
+     */
     @Autowired
     private TaskJobLogMapper mapper;
 
+    /**
+     * 删除主日志时一并清理关联明细。
+     */
     @Autowired
     private TaskJobLogDetailMapper detailMapper;
 
@@ -51,13 +58,17 @@ public class TaskJobLogService {
     }
 
     /**
-     * 删除
+     * 在同一个短事务内删除本次明细和主日志，也用于忽略跳过记录。
+     * 必须通过 Spring 服务代理调用，任一删除失败时整体回滚。
+     *
+     * @param id 主日志 ID
+     * @return 删除的主日志数量
      */
+    @Transactional(rollbackFor = Exception.class)
     public int delete(String id) {
-        int num = mapper.deleteById(id);
-        // 删除关联的详情
+        // 先删明细再删主日志，保证关联清理顺序。
         detailMapper.deleteBatchByJobLogIds(new String[]{id});
-        return num;
+        return mapper.deleteById(id);
     }
 
     /**
@@ -100,14 +111,17 @@ public class TaskJobLogService {
         return mapper.save(entity);
     }
 
+    /**
+     * 主日志执行说明的最大长度。
+     */
     private static final int MAX_LENGTH = 2048;
 
 
     /**
-     * 记录定时任务开始执行
+     * 业务执行前创建 RUNNING 主日志，生成的 ID 供业务写入明细使用。
      *
      * @param taskJob 定时任务
-     * @return TaskJobLog
+     * @return 已保存并带有 ID 的本次主日志
      */
     public TaskJobLog startLog(TaskJob taskJob) {
         TaskJobLog taskJobLog = new TaskJobLog();
@@ -122,11 +136,14 @@ public class TaskJobLogService {
     }
 
     /**
-     * 记录定时任务执行结束
+     * 将本次主日志更新为 FINISHED，保存业务结论、说明和耗时。
+     * IGNORE_SKIPPED 策略下的跳过结果由调用方直接删除，不调用此方法。
      *
      * @param taskJobLog 执行记录
      * @param result     结果
      * @param resultNote 结果说明
+     * @param costTime   主日志创建及业务调用耗时，单位为毫秒
+     * @return 保存后的主日志
      */
     public TaskJobLog endLog(TaskJobLog taskJobLog, TaskJobResult result, String resultNote, Long costTime) {
         taskJobLog.setStatus(TaskJobLogStatus.FINISHED.name());
