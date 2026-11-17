@@ -30,7 +30,7 @@
 | nonce | 可选，默认关闭 |
 | RSA/HTTP | 使用 Hutool |
 | 出站业务 | 只抽公共请求骨架，不沉淀具体厂商参数 |
-| 出站厂商基类 | `AbstractOutboundPartner<C, A>` 负责 host、具体 API 枚举、配置短缓存、常用请求封装 |
+| 出站厂商基类 | `AbstractOutboundPartner<C, A>` 负责 host、具体 API 枚举、Runtime 缓存、常用请求封装 |
 | 出站高级入口 | `builder(api, responseType)` 负责复杂请求构建，最后 `execute(api, request)` |
 | 普通参数构建 | `createParams()` 返回 `OutboundParams`，只处理 query/form 普通键值参数 |
 | 出站响应钩子 | `execute(api, request)` 中的 `api` 用于 `afterResponse(api, response)` |
@@ -73,8 +73,9 @@ AbstractThirdOutboundConfiguration
 XxxOutboundPartner
   -> 继承 AbstractOutboundPartner<XxxConfig, XxxApi>
   -> 构造方法传入 OutboundExecutorFactory
-  -> 实现 thirdClientOptions() 提供当前 partner 自己的 ThirdClientOptions
-  -> 基类通过 factory.create(options) 创建 HttpOutboundExecutor
+  -> loadConfig() 返回包含 ThirdClientOptions 的厂商配置
+  -> 基类将厂商配置、HTTP 配置和执行器作为同一个 Runtime 缓存
+  -> Runtime 刷新时通过 factory.create(options) 重新创建 HttpOutboundExecutor
 ```
 
 ## ConditionalOnMissingBean
@@ -133,7 +134,7 @@ XxxOutboundPartner
    -> 可直接 @Component，或由项目自己的配置类声明 @Bean
    -> 继承 AbstractOutboundPartner<XxxConfig, XxxApi>
    -> 注入 OutboundExecutorFactory
-   -> 实现 thirdClientOptions
+   -> loadConfig 返回包含 ThirdClientOptions 的厂商配置
 
 2. 业务方定义厂商 API 和配置
    -> enum XxxApi implements ThirdApi
@@ -143,7 +144,8 @@ XxxOutboundPartner
 3. 实现 partner 细节
    -> 实现 thirdIdentity
    -> 实现 loadConfig
-   -> 默认 Caffeine 缓存配置 5 分钟；按需覆盖 configCacheTtl
+   -> 默认 Caffeine 缓存 Runtime 5 分钟；按需覆盖 configCacheTtl
+   -> 非正数 TTL 表示 Runtime 固定且不自动过期；clearRuntimeCache 可主动刷新
    -> 按需覆盖 resolveApiPath/buildHeaders/afterResponse
 
 4. 业务方法构建请求

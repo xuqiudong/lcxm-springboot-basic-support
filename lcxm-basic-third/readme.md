@@ -188,9 +188,10 @@ src/test/java/cn/xuqiudong/basic/third/demo
 - 每个第三方定义一个 API 枚举，实现 `ThirdApi`。
 - 每个第三方定义一个配置模型，实现 `OutboundPartnerConfig`，至少提供 `host`。
 - 每个第三方写一个 Client，优先继承 `AbstractOutboundPartner<C, A>`，其中 `A` 是具体 API 枚举；构造方法传入 `OutboundExecutorFactory`。
-- 每个 Client 实现 `thirdClientOptions()`，提供当前 partner 自己的 timeout、proxy、默认 header、日志开关等。
+- 在 `OutboundPartnerConfig.clientOptions` 中提供当前 partner 的 timeout、proxy、默认 header、日志开关等 HTTP 配置。
 - 实现 `thirdIdentity()` 和 `loadConfig()`，按需覆盖 `resolveApiPath(...)`、`buildHeaders(api)`、`afterResponse(...)`。
-- `loadConfig()` 的返回结果默认使用 Caffeine 缓存 5 分钟；覆盖 `configCacheTtl()` 可调整，返回小于等于 0 表示不缓存。
+- 厂商配置、HTTP 配置和执行器作为同一个 Runtime 缓存，默认有效期 5 分钟；覆盖 `configCacheTtl()` 可调整，返回小于等于 0 表示固定且不自动过期。
+- 需要主动刷新配置时调用 `clearRuntimeCache()`，下一次请求会延迟加载配置并创建新执行器。
 - 简单请求可用 `requestJson(...)`、`requestForm(...)`、`requestMultipart(...)` 等终结方法。
 - 参数较多但结构单一时，可用 `createParams()` 组织普通 query/form 参数，再传给终结方法或 builder。
 - 需要混合 query/header/form/multipart/parser/timeout 时，从 `builder(api, responseType)` 开始构建请求，最后 `execute(api, request)`。

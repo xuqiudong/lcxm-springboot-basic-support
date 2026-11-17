@@ -3,7 +3,6 @@ package cn.xuqiudong.basic.third.outbound.client;
 import cn.xuqiudong.basic.third.common.model.ThirdIdentity;
 import cn.xuqiudong.basic.third.config.model.ThirdClientOptions;
 import cn.xuqiudong.basic.third.outbound.builder.OutboundRequestInfoBuilder;
-import cn.xuqiudong.basic.third.outbound.executor.HttpOutboundExecutor;
 import cn.xuqiudong.basic.third.outbound.executor.OutboundExecutor;
 import cn.xuqiudong.basic.third.outbound.model.OutboundRequestInfo;
 import cn.xuqiudong.basic.third.outbound.model.ThirdHttpMethod;
@@ -16,29 +15,39 @@ import java.util.Map;
 /**
  * 出站第三方 Client 基类。
  *
- * <p>业务项目通常一个第三方写一个子类，在子类中实现厂商 URL、header 和具体业务方法。</p>
+ * <p>本类只维护 HTTP 请求构建和执行的公共流程，不持有配置及执行器状态。
+ * 运行时对象的加载、缓存和刷新由具体 Partner 统一管理。</p>
  *
  * @author Vic.xu
+ * @since 2026-07-29
  */
 public abstract class AbstractOutboundClient {
 
-    private ThirdClientOptions options;
-
-    private OutboundExecutor executor;
-
     /**
-     * 延迟创建出站配置和执行器。
+     * 创建不持有运行时状态的出站 Client 基类。
+     *
+     * <p>构造阶段不加载配置或创建执行器，第一次访问运行时信息时由子类完成延迟初始化。</p>
      */
     protected AbstractOutboundClient() {
     }
 
     /**
-     * 使用项目传入的出站配置和执行器。
+     * 获取当前 Client 使用的 HTTP 配置。
+     *
+     * <p>配置必须与 {@link #executor()} 来自同一个运行时快照。</p>
+     *
+     * @return 当前 HTTP 配置
      */
-    protected AbstractOutboundClient(ThirdClientOptions options, OutboundExecutor executor) {
-        this.options = options == null ? new ThirdClientOptions() : options;
-        this.executor = executor == null ? new HttpOutboundExecutor(this.options) : executor;
-    }
+    protected abstract ThirdClientOptions options();
+
+    /**
+     * 获取当前 Client 使用的出站执行器。
+     *
+     * <p>执行器必须与 {@link #options()} 来自同一个运行时快照。</p>
+     *
+     * @return 当前出站执行器
+     */
+    protected abstract OutboundExecutor executor();
 
     /**
      * 当前第三方标识，用于配置读取和日志记录。
@@ -138,34 +147,4 @@ public abstract class AbstractOutboundClient {
         return headers;
     }
 
-    /**
-     * 当前 Client 的通用 HTTP 配置。
-     */
-    protected ThirdClientOptions options() {
-        if (options == null) {
-            options = resolveOptions();
-        }
-        return options;
-    }
-
-    /**
-     * 延迟解析当前 Client 的通用 HTTP 配置。
-     */
-    protected ThirdClientOptions resolveOptions() {
-        return new ThirdClientOptions();
-    }
-
-    /**
-     * 延迟解析当前 Client 的出站执行器。
-     */
-    protected OutboundExecutor resolveExecutor(ThirdClientOptions options) {
-        return new HttpOutboundExecutor(options);
-    }
-
-    private OutboundExecutor executor() {
-        if (executor == null) {
-            executor = resolveExecutor(options());
-        }
-        return executor;
-    }
 }

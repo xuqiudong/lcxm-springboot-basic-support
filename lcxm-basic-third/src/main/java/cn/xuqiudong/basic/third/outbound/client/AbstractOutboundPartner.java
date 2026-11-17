@@ -26,7 +26,7 @@ import java.util.Map;
  * 第三方厂商出站 Client 基类。
  *
  * <p>本类在 {@link AbstractOutboundClient} 的 HTTP 执行底座上，增加厂商配置读取、host 拼接、
- * 具体 API 枚举、默认 header 合并、配置短缓存和常用请求封装。</p>
+ * 具体 API 枚举、默认 header 合并、Runtime 缓存和常用请求封装。</p>
  *
  * <p>使用场景：</p>
  * <p>1. 简单请求：直接使用 requestJson/requestForm/requestMultipart/requestText/requestBytes 这类终结方法。</p>
@@ -37,16 +37,31 @@ import java.util.Map;
  * <p>具体厂商的 token、签名、业务成功码判断、特殊响应处理仍由子类实现。</p>
  *
  * @author Vic.xu
+ * @since 2026-07-29
  */
 public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A extends ThirdApi>
         extends AbstractOutboundClient {
 
-    private static final String CONFIG_CACHE_KEY = "config";
+    /**
+     * 单个 Partner 运行时快照的固定缓存键。
+     */
+    private static final String RUNTIME_CACHE_KEY = "runtime";
 
+    /**
+     * 未指定缓存时间时使用的默认有效期。
+     */
     private static final Duration DEFAULT_CONFIG_CACHE_TTL = Duration.ofMinutes(5);
 
-    private final Cache<String, C> configCache;
+    /**
+     * 当前 Partner 的运行时快照缓存，同一时刻只保存一个有效快照。
+     *
+     * <p>缓存本身也采用延迟初始化，避免构造父类时调用子类覆盖的 {@link #configCacheTtl()}。</p>
+     */
+    private volatile Cache<String, OutboundPartnerRuntime<C>> runtimeCache;
 
+    /**
+     * 使用系统级 HTTP 组件和日志策略创建 Partner 执行器的工厂。
+     */
     private final OutboundExecutorFactory executorFactory;
 
     /**
@@ -57,25 +72,26 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
     protected AbstractOutboundPartner(OutboundExecutorFactory executorFactory) {
         super();
         this.executorFactory = executorFactory;
-        this.configCache = buildConfigCache();
     }
 
     /**
-     * 旧版 HTTP 配置扩展点。
+     * 从本次加载的厂商配置中解析 HTTP 配置。
      *
-     * @deprecated 请将配置放入 {@link OutboundPartnerConfig#getClientOptions()}，并通过 {@link #loadConfig()} 返回。
+     * <p>显式传入配置可以避免 Runtime 创建过程中通过 {@link #getConfig()} 递归访问尚未完成的缓存。</p>
+     *
+     * @param config 本次加载的厂商配置
+     * @return 对应的 HTTP 配置
      */
-    @Deprecated
-    protected ThirdClientOptions thirdClientOptions() {
-        return new ThirdClientOptions();
+    protected ThirdClientOptions resolveOptions(C config) {
+        return config.getClientOptions();
     }
 
-    @Override
-    protected ThirdClientOptions resolveOptions() {
-        return getConfig().getClientOptions();
-    }
-
-    @Override
+    /**
+     * 使用 HTTP 配置创建当前 Partner 的出站执行器。
+     *
+     * @param options 当前 Runtime 的 HTTP 配置
+     * @return 与配置绑定的出站执行器
+     */
     protected OutboundExecutor resolveExecutor(ThirdClientOptions options) {
         if (executorFactory == null) {
             throw new ThirdException("outbound executor factory can not be null");
@@ -86,14 +102,32 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
     /**
      * 获取当前第三方配置。
      *
-     * <p>默认使用 Caffeine 短缓存，减少每次请求重复读取配置。配置模型本身不作为 Spring bean。</p>
+     * <p>配置与 HTTP 配置、执行器来自同一个 Runtime 快照，三者统一创建和失效。</p>
+     *
+     * @return 当前 Runtime 中的厂商配置
      */
     protected final C getConfig() {
-        Duration ttl = configCacheTtl();
-        if (ttl == null || ttl.isZero() || ttl.isNegative()) {
-            return checkConfig(loadConfig());
-        }
-        return checkConfig(configCache.get(CONFIG_CACHE_KEY, key -> loadConfig()));
+        return currentRuntime().getConfig();
+    }
+
+    /**
+     * 获取当前 Runtime 中的 HTTP 配置。
+     *
+     * @return 当前 HTTP 配置
+     */
+    @Override
+    protected final ThirdClientOptions options() {
+        return currentRuntime().getOptions();
+    }
+
+    /**
+     * 获取当前 Runtime 中的出站执行器。
+     *
+     * @return 当前出站执行器
+     */
+    @Override
+    protected final OutboundExecutor executor() {
+        return currentRuntime().getExecutor();
     }
 
     /**
@@ -104,19 +138,27 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
     protected abstract C loadConfig();
 
     /**
-     * 第三方配置缓存时间。
+     * 第三方 Runtime 缓存时间。
      *
-     * <p>返回小于等于 0 的时间表示不缓存。</p>
+     * <p>返回 {@code null} 时使用默认 5 分钟；返回正数时按指定时间自动过期；
+     * 返回小于等于 0 的时间时 Runtime 固定且不自动过期，只能通过 {@link #clearRuntimeCache()} 刷新。</p>
+     *
+     * @return Runtime 缓存有效期
      */
     protected Duration configCacheTtl() {
         return DEFAULT_CONFIG_CACHE_TTL;
     }
 
     /**
-     * 清理当前第三方配置缓存。
+     * 清理当前 Partner 的完整 Runtime 缓存。
+     *
+     * <p>本方法不会中断已经持有旧 Runtime 的请求；下一次访问会延迟加载配置并创建新执行器。</p>
      */
-    protected void clearConfigCache() {
-        configCache.invalidate(CONFIG_CACHE_KEY);
+    protected void clearRuntimeCache() {
+        Cache<String, OutboundPartnerRuntime<C>> currentCache = runtimeCache;
+        if (currentCache != null) {
+            currentCache.invalidate(RUNTIME_CACHE_KEY);
+        }
     }
 
     /**
@@ -302,19 +344,27 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
                 .method(resolveMethod(api))
                 .url(buildUrl(api))
                 .headers(mergedHeaders(api))
-                .timeout(getConfig().getClientOptions().getRequestTimeout());
+                .timeout(options().getRequestTimeout());
     }
 
+    /**
+     * 合并当前 Runtime 的默认 Header 和 API 级 Header。
+     *
+     * @param api 当前 API
+     * @return 合并后的请求 Header
+     */
     protected Map<String, String> mergedHeaders(A api) {
-        Map<String, String> headers = new LinkedHashMap<>();
-        ThirdClientOptions options = getConfig().getClientOptions();
-        if (options != null) {
-            headers.putAll(options.getDefaultHeaders());
-        }
+        Map<String, String> headers = new LinkedHashMap<>(options().getDefaultHeaders());
         headers.putAll(buildHeaders(api));
         return headers;
     }
 
+    /**
+     * 校验配置加载结果，避免不完整 Runtime 进入缓存。
+     *
+     * @param config 待校验的厂商配置
+     * @return 非空厂商配置
+     */
     private C checkConfig(C config) {
         if (config == null) {
             throw new ThirdException("outbound partner config can not be null: " + thirdIdentity().getCode());
@@ -322,15 +372,69 @@ public abstract class AbstractOutboundPartner<C extends OutboundPartnerConfig, A
         return config;
     }
 
-    private Cache<String, C> buildConfigCache() {
+    /**
+     * 创建 Runtime 缓存。
+     *
+     * <p>非正数 TTL 表示固定 Runtime，因此不配置自动过期策略；Runtime 仍在第一次访问时延迟创建。</p>
+     *
+     * @return 空的 Runtime 缓存
+     */
+    private Cache<String, OutboundPartnerRuntime<C>> buildRuntimeCache() {
         Duration ttl = configCacheTtl();
-        if (ttl == null || ttl.isZero() || ttl.isNegative()) {
+        if (ttl == null) {
             ttl = DEFAULT_CONFIG_CACHE_TTL;
         }
-        return Caffeine.newBuilder()
-                .expireAfterWrite(ttl)
-                .maximumSize(1)
-                .build();
+        Caffeine<Object, Object> builder = Caffeine.newBuilder().maximumSize(1);
+        if (!ttl.isZero() && !ttl.isNegative()) {
+            builder.expireAfterWrite(ttl);
+        }
+        return builder.build();
+    }
+
+    /**
+     * 获取当前运行时快照，缓存未命中时原子加载一个完整 Runtime。
+     *
+     * @return 当前 Partner Runtime
+     */
+    private OutboundPartnerRuntime<C> currentRuntime() {
+        return runtimeCache().get(RUNTIME_CACHE_KEY, key -> createRuntime());
+    }
+
+    /**
+     * 延迟创建并安全发布 Runtime 缓存。
+     *
+     * <p>双重检查确保并发首次访问只构建一个缓存，同时保证 TTL 在子类构造完成后再解析。</p>
+     *
+     * @return 当前 Partner 的 Runtime 缓存
+     */
+    private Cache<String, OutboundPartnerRuntime<C>> runtimeCache() {
+        Cache<String, OutboundPartnerRuntime<C>> currentCache = runtimeCache;
+        if (currentCache != null) {
+            return currentCache;
+        }
+        synchronized (this) {
+            currentCache = runtimeCache;
+            if (currentCache == null) {
+                currentCache = buildRuntimeCache();
+                runtimeCache = currentCache;
+            }
+        }
+        return currentCache;
+    }
+
+    /**
+     * 按固定顺序创建完整运行时快照。
+     *
+     * <p>先加载厂商配置，再从同一配置解析 HTTP 参数，最后用该参数创建执行器。
+     * 只有三个步骤全部成功后，Caffeine 才会将 Runtime 放入缓存。</p>
+     *
+     * @return 新创建的 Partner Runtime
+     */
+    private OutboundPartnerRuntime<C> createRuntime() {
+        C config = checkConfig(loadConfig());
+        ThirdClientOptions options = resolveOptions(config);
+        OutboundExecutor executor = resolveExecutor(options);
+        return new OutboundPartnerRuntime<>(config, options, executor);
     }
 
     protected ThirdHttpMethod resolveMethod(A api) {
